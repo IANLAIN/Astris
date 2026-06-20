@@ -10,17 +10,20 @@ import {
 } from "lucide-react";
 import { getCurrentUser, loginUser, logoutUser, registerUser } from "../lib/supabase";
 import vibraLatinaImg from "../imports/vibralatina.png";
+import { AdminPanel } from "./components/admin/AdminPanel";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
 type Lang = "es" | "en" | "pt" | "fr";
 type ModalStep = "language" | "auth" | "role" | "register" | "login" | "none";
-type Role = "candidate" | "company" | "mentor";
+type Role = "candidate" | "company" | "mentor" | "admin";
 type CandidateScreen =
   | "onboarding" | "quiz" | "profile" | "vacancies"
   | "vacancy-detail" | "mentor-select" | "accompaniment" | "post-hire";
 type CompanyScreen =
   | "org-profile" | "post-vacancy" | "candidates" | "candidate-detail" | "post-hire";
+type AdminScreen = 
+  | "dashboard" | "companies" | "candidates" | "mentors" | "mentorships" | "activity";
 type PaletteKey = "azul" | "tierra" | "contraste" | "verde";
 type FontKey = "atkinson" | "lexend";
 type QuizAnswers = Record<number, Record<number, number | number[]>>;
@@ -51,6 +54,7 @@ const T: Record<Lang, Record<string, string>> = {
     "role.company.sub": "Quiero incorporar talento de forma genuinamente inclusiva",
     "role.mentor": "Soy mentor/a",
     "role.mentor.sub": "Acompaño procesos de inserción laboral adaptativa",
+    "role.admin": "Admin",
     "nav.home": "Inicio",
     "nav.profile": "Mi perfil",
     "nav.vacancies": "Vacantes",
@@ -149,6 +153,7 @@ const T: Record<Lang, Record<string, string>> = {
     "role.company.sub": "I want to hire talent in a genuinely inclusive way",
     "role.mentor": "I'm a Mentor",
     "role.mentor.sub": "I support adaptive employment integration processes",
+    "role.admin": "Admin",
     "nav.home": "Home",
     "nav.profile": "My profile",
     "nav.vacancies": "Vacancies",
@@ -247,6 +252,7 @@ const T: Record<Lang, Record<string, string>> = {
     "role.company.sub": "Quero contratar talento de forma genuinamente inclusiva",
     "role.mentor": "Sou mentor(a)",
     "role.mentor.sub": "Acompanho processos de inserção profissional adaptativa",
+    "role.admin": "Admin",
     "nav.home": "Início",
     "nav.profile": "Meu perfil",
     "nav.vacancies": "Vagas",
@@ -345,6 +351,7 @@ const T: Record<Lang, Record<string, string>> = {
     "role.company.sub": "Je veux recruter des talents de façon genuinement inclusive",
     "role.mentor": "Je suis mentor(e)",
     "role.mentor.sub": "J'accompagne des processus d'insertion professionnelle adaptative",
+    "role.admin": "Admin",
     "nav.home": "Accueil",
     "nav.profile": "Mon profil",
     "nav.vacancies": "Offres",
@@ -1230,6 +1237,7 @@ function LoginModal({ lang, onLogin, onBack, error, loading }: {
     { id: "candidate", label: t("role.candidate") },
     { id: "company", label: t("role.company") },
     { id: "mentor", label: t("role.mentor") },
+    { id: "admin", label: t("role.admin") },
   ];
   return (
     <Overlay>
@@ -1319,7 +1327,7 @@ function RegisterModal({ lang, role, onRegister, onBack, error, loading }: {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const ROLE_ICON: Record<Role, React.ComponentType<{ size: number }>> = { candidate: User, company: Building2, mentor: Users };
+  const ROLE_ICON: Record<Role, React.ComponentType<{ size: number }>> = { candidate: User, company: Building2, mentor: Users, admin: Shield };
   const RoleIcon = ROLE_ICON[role];
   return (
     <Overlay>
@@ -2610,8 +2618,16 @@ function NavBar({ lang, role, screen, onNav, onLang, onLogout, darkMode, onDarkT
     { id: "checkins", label: t("nav.checkins"), Icon: Calendar },
     { id: "companies", label: t("nav.companies"), Icon: Building2 },
   ];
-  const navItems = role === "candidate" ? CANDIDATE_NAV : role === "company" ? COMPANY_NAV : MENTOR_NAV;
-  const ROLE_LABELS: Record<Role, string> = { candidate: t("role.candidate"), company: t("role.company"), mentor: t("role.mentor") };
+  const ADMIN_NAV = [
+    { id: "dashboard", label: "Dashboard", Icon: BarChart2 },
+    { id: "companies", label: "Empresas", Icon: Building2 },
+    { id: "candidates", label: "Candidatos", Icon: Users },
+    { id: "mentors", label: "Mentores", Icon: Star },
+    { id: "mentorships", label: "Mentorías", Icon: Briefcase },
+    { id: "activity", label: "Actividad", Icon: Activity },
+  ];
+  const navItems = role === "candidate" ? CANDIDATE_NAV : role === "company" ? COMPANY_NAV : role === "mentor" ? MENTOR_NAV : ADMIN_NAV;
+  const ROLE_LABELS: Record<Role, string> = { candidate: t("role.candidate"), company: t("role.company"), mentor: t("role.mentor"), admin: t("role.admin") };
 
   const darkLabel = darkMode
     ? (lang === "es" ? "Modo claro" : lang === "pt" ? "Modo claro" : lang === "fr" ? "Mode clair" : "Light mode")
@@ -2926,6 +2942,9 @@ export default function App() {
                 {role === "mentor" && screen === "companies" && <MentorCompanies lang={lang} />}
                 {/* Default: dashboard for any unmatched mentor screen */}
                 {role === "mentor" && !["dashboard","checkins","companies"].includes(screen) && <MentorDashboard lang={lang} />}
+
+                {/* Admin flow */}
+                {role === "admin" && <AdminPanel lang={lang} screen={screen} />}
               </main>
             </div>
           )}
