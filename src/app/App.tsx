@@ -8,7 +8,7 @@ import {
   Shield, MapPin, Clock, Activity, Calendar, Star, BarChart2, FileText,
   Settings, LogOut, AlertCircle,
 } from "lucide-react";
-import { getCurrentUser, loginUser, logoutUser, registerUser, signInWithGoogle } from "../lib/supabase";
+import { getCurrentUser, loginUser, logoutUser, registerUser, signInWithGoogle, supabase } from "../lib/supabase";
 import vibraLatinaImg from "../imports/vibralatina.png";
 import { AdminPanel } from "./components/admin/AdminPanel";
 
@@ -2313,8 +2313,9 @@ function CompanyOrgProfile({ lang }: { lang: Lang }) {
   const [formData, setFormData] = useState({
     company_name: "",
     industry: "",
-    size: "",
-    location: "",
+    company_size: "",
+    country: "",
+    city: "",
     philosophy: "",
     noise: "",
     light: "",
@@ -2334,8 +2335,9 @@ function CompanyOrgProfile({ lang }: { lang: Lang }) {
         setFormData({
           company_name: data.company_name || "",
           industry: data.industry || "",
-          size: env.size || "",
-          location: env.location || "",
+          company_size: data.company_size || "",
+          country: data.country || "",
+          city: data.city || "",
           philosophy: data.philosophy || "",
           noise: env.noise || "",
           light: env.light || "",
@@ -2365,8 +2367,6 @@ function CompanyOrgProfile({ lang }: { lang: Lang }) {
     if (!session) return;
     
     const env = JSON.stringify({
-      size: formData.size,
-      location: formData.location,
       noise: formData.noise,
       light: formData.light,
       layout: formData.layout,
@@ -2377,6 +2377,9 @@ function CompanyOrgProfile({ lang }: { lang: Lang }) {
       user_id: session.user.id,
       company_name: formData.company_name || "Sin nombre",
       industry: formData.industry,
+      company_size: formData.company_size,
+      country: formData.country,
+      city: formData.city,
       philosophy: formData.philosophy,
       work_environment: env,
       accommodations: formData.accommodations
@@ -2414,8 +2417,9 @@ function CompanyOrgProfile({ lang }: { lang: Lang }) {
                     {[
                       { label: "Nombre de la organización", field: "company_name" },
                       { label: "Sector de actividad", field: "industry" },
-                      { label: "Tamaño de la organización", field: "size" },
-                      { label: "País / Ciudad", field: "location" }
+                      { label: "Tamaño de la organización", field: "company_size" },
+                      { label: "País", field: "country" },
+                      { label: "Ciudad", field: "city" }
                     ].map((f) => (
                       <div key={f.field}>
                         <label className="block text-sm font-semibold text-foreground mb-2">{f.label}</label>
