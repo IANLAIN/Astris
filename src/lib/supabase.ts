@@ -33,16 +33,66 @@ export async function loginUser(email: string, password: string) {
   return data.user;
 }
 
+export async function signInWithGoogle(role?: string, intent?: 'login' | 'register') {
+  if (role) {
+    localStorage.setItem("astris_pending_role", role);
+  }
+  if (intent) {
+    localStorage.setItem("astris_google_intent", intent);
+  }
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: window.location.origin,
+    },
+  });
+  if (error) throw error;
+}
+
 export async function getCurrentUser() {
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) return null;
 
   const userId = session.user.id;
-  const { data: profile, error } = await supabase
+  let { data: profile, error } = await supabase
     .from("users_profiles")
     .select("*")
     .eq("id", userId)
     .single();
+
+  const pendingRole = localStorage.getItem("astris_pending_role");
+  const intent = localStorage.getItem("astris_google_intent");
+  
+  let needsRegistration = false;
+
+  if (pendingRole || intent) {
+    if (!profile || !profile.role) {
+      needsRegistration = true; // Siempre mostrar confirmación de registro para nuevos usuarios de Google
+      
+      const roleToSet = pendingRole || "candidate";
+      const { data: updatedProfile, error: updateError } = await supabase
+        .from("users_profiles")
+        .upsert({ 
+          id: userId, 
+          role: roleToSet,
+          email: session.user.email,
+          full_name: profile?.full_name || session.user.user_metadata?.full_name || session.user.user_metadata?.name || session.user.email?.split("@")[0]
+        })
+        .select()
+        .single();
+      
+      if (updateError) {
+        console.error("Error al crear perfil en users_profiles:", updateError);
+      }
+      
+      if (!updateError && updatedProfile) {
+        profile = updatedProfile;
+        error = null;
+      }
+    }
+    localStorage.removeItem("astris_pending_role");
+    localStorage.removeItem("astris_google_intent");
+  }
 
   if (error || !profile) return null;
   return {
@@ -51,6 +101,7 @@ export async function getCurrentUser() {
     name: profile.full_name ?? session.user.email ?? "",
     role: profile.role as "candidate" | "company" | "mentor",
     completedOnboarding: profile.completed_onboarding ?? false,
+    needsRegistration,
   };
 }
 

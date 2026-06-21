@@ -8,7 +8,7 @@ import {
   Shield, MapPin, Clock, Activity, Calendar, Star, BarChart2, FileText,
   Settings, LogOut, AlertCircle,
 } from "lucide-react";
-import { getCurrentUser, loginUser, logoutUser, registerUser } from "../lib/supabase";
+import { getCurrentUser, loginUser, logoutUser, registerUser, signInWithGoogle } from "../lib/supabase";
 import vibraLatinaImg from "../imports/vibralatina.png";
 import { AdminPanel } from "./components/admin/AdminPanel";
 
@@ -1179,12 +1179,15 @@ function LanguageModal({ onSelect }: { onSelect: (l: Lang) => void }) {
 
 // ── Auth Modal ────────────────────────────────────────────────────────────────
 
-function AuthModal({ lang, onNew, onExisting, onAdmin }: { lang: Lang; onNew: () => void; onExisting: () => void; onAdmin: () => void }) {
+function AuthModal({ lang, onNew, onExisting, onAdmin, onBack }: { lang: Lang; onNew: () => void; onExisting: () => void; onAdmin: () => void; onBack: () => void }) {
   const t = useT(lang);
   return (
     <Overlay>
       <div className="w-full max-w-lg rounded-2xl overflow-hidden" style={{ backgroundColor: "var(--card)" }}>
-        <div className="px-10 py-8 border-b border-border text-center">
+        <div className="px-10 py-8 border-b border-border text-center relative">
+          <button onClick={onBack} className="absolute left-6 top-8 flex items-center gap-1.5 text-sm text-muted-foreground cursor-pointer">
+            <ChevronLeft size={15} aria-hidden="true" />{t("login.back")}
+          </button>
           <div className="text-2xl font-bold text-foreground mb-1">{t("auth.title")}</div>
           <div className="text-muted-foreground text-base mt-2">{t("auth.q")}</div>
         </div>
@@ -1240,7 +1243,6 @@ function LoginModal({ lang, onLogin, onBack, error, loading, initialRole = "cand
     { id: "candidate", label: t("role.candidate") },
     { id: "company", label: t("role.company") },
     { id: "mentor", label: t("role.mentor") },
-    { id: "admin", label: t("role.admin") },
   ];
   return (
     <Overlay>
@@ -1265,19 +1267,52 @@ function LoginModal({ lang, onLogin, onBack, error, loading, initialRole = "cand
             <label className="block text-sm font-semibold text-foreground mb-2">{t("login.pass")}</label>
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full px-4 py-3 rounded-xl border-2 border-border text-foreground text-base" style={{ backgroundColor: "var(--input-background)" }} placeholder="••••••••" />
           </div>
-          <div>
-            <label className="block text-sm font-semibold text-foreground mb-2">{t("login.role")}</label>
-            <div className="flex gap-2">
-              {ROLES.map((r) => (
-                <button key={r.id} onClick={() => setLoginRole(r.id)} className="flex-1 py-2.5 rounded-xl border-2 text-sm font-semibold cursor-pointer" style={{ borderColor: loginRole === r.id ? "var(--primary)" : "var(--border)", backgroundColor: loginRole === r.id ? "var(--secondary)" : "var(--background)", color: "var(--foreground)" }}>
-                  {r.label}
-                </button>
-              ))}
+          {initialRole !== "admin" && (
+            <div>
+              <label className="block text-sm font-semibold text-foreground mb-2">{t("login.role")}</label>
+              <div className="flex gap-2">
+                {ROLES.map((r) => (
+                  <button key={r.id} onClick={() => setLoginRole(r.id)} className="flex-1 py-2.5 rounded-xl border-2 text-sm font-semibold cursor-pointer" style={{ borderColor: loginRole === r.id ? "var(--primary)" : "var(--border)", backgroundColor: loginRole === r.id ? "var(--secondary)" : "var(--background)", color: "var(--foreground)" }}>
+                    {r.label}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
           <button onClick={() => onLogin(loginRole, email || undefined, password || undefined)} disabled={loading} className="w-full py-4 rounded-xl font-bold text-base cursor-pointer" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)", opacity: loading ? 0.6 : 1 }}>
             {loading ? "..." : t("login.submit")}
           </button>
+          
+          {loginRole !== "admin" && (
+            <>
+              <div className="relative flex items-center py-2">
+                <div className="flex-grow border-t border-border"></div>
+                <span className="flex-shrink-0 mx-4 text-muted-foreground text-sm font-medium">o</span>
+                <div className="flex-grow border-t border-border"></div>
+              </div>
+              
+              <button 
+                onClick={async () => {
+                  try {
+                    await signInWithGoogle(loginRole, 'login');
+                  } catch (e) {
+                    console.error(e);
+                  }
+                }} 
+                disabled={loading} 
+                className="w-full py-4 rounded-xl font-bold text-base flex items-center justify-center gap-3 border-2 border-border cursor-pointer hover:bg-secondary transition-colors" 
+                style={{ backgroundColor: "var(--card)", color: "var(--foreground)" }}
+              >
+                <svg className="w-5 h-5" viewBox="0 0 24 24">
+                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                </svg>
+                Continuar con Google
+              </button>
+            </>
+          )}
         </div>
       </div>
     </Overlay>
@@ -1286,7 +1321,7 @@ function LoginModal({ lang, onLogin, onBack, error, loading, initialRole = "cand
 
 // ── Role Modal ────────────────────────────────────────────────────────────────
 
-function RoleModal({ lang, onSelect }: { lang: Lang; onSelect: (r: Role) => void }) {
+function RoleModal({ lang, onSelect, onBack }: { lang: Lang; onSelect: (r: Role) => void; onBack: () => void }) {
   const t = useT(lang);
   const ROLES: Array<{ id: Role; titleKey: string; subKey: string; Icon: any }> = [
     { id: "candidate", titleKey: "role.candidate", subKey: "role.candidate.sub", Icon: User },
@@ -1296,7 +1331,10 @@ function RoleModal({ lang, onSelect }: { lang: Lang; onSelect: (r: Role) => void
   return (
     <Overlay>
       <div className="w-full max-w-lg rounded-2xl overflow-hidden" style={{ backgroundColor: "var(--card)" }}>
-        <div className="px-10 py-8 border-b border-border text-center">
+        <div className="px-10 py-8 border-b border-border text-center relative">
+          <button onClick={onBack} className="absolute left-6 top-8 flex items-center gap-1.5 text-sm text-muted-foreground cursor-pointer">
+            <ChevronLeft size={15} aria-hidden="true" />{t("login.back")}
+          </button>
           <div className="text-xl font-bold text-foreground">{t("role.title")}</div>
           <div className="text-muted-foreground text-sm mt-1.5">{t("role.sub")}</div>
         </div>
@@ -1321,10 +1359,11 @@ function RoleModal({ lang, onSelect }: { lang: Lang; onSelect: (r: Role) => void
 
 // ── Register Modal ────────────────────────────────────────────────────────────
 
-function RegisterModal({ lang, role, onRegister, onBack, error, loading }: {
+function RegisterModal({ lang, role, onRegister, onBack, error, loading, googleAuthUser, onCompleteGoogle }: {
   lang: Lang; role: Role;
   onRegister: (email: string, password: string, name: string) => Promise<void>;
   onBack: () => void; error: string | null; loading: boolean;
+  googleAuthUser?: any; onCompleteGoogle?: () => void;
 }) {
   const t = useT(lang);
   const [email, setEmail] = useState("");
@@ -1332,6 +1371,43 @@ function RegisterModal({ lang, role, onRegister, onBack, error, loading }: {
   const [name, setName] = useState("");
   const ROLE_ICON: Record<Role, any> = { candidate: User, company: Building2, mentor: Users, admin: Shield };
   const RoleIcon = ROLE_ICON[role];
+
+  if (googleAuthUser) {
+    return (
+      <Overlay>
+        <div className="w-full max-w-md rounded-2xl overflow-hidden" style={{ backgroundColor: "var(--card)" }}>
+          <div className="px-8 py-7 border-b border-border">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: "var(--primary)" }}>
+                <RoleIcon size={18} aria-hidden="true" style={{ color: "var(--primary-foreground)" } as React.CSSProperties} />
+              </div>
+              <div className="text-xl font-bold text-foreground">Completar Registro</div>
+            </div>
+          </div>
+          <div className="p-8 flex flex-col gap-5 text-center">
+            <div className="w-16 h-16 rounded-full mx-auto flex items-center justify-center border border-border bg-secondary mb-2" style={{ backgroundColor: "var(--secondary)" }}>
+               <svg className="w-8 h-8" viewBox="0 0 24 24">
+                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                 <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                 <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                 <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+               </svg>
+            </div>
+            <h3 className="text-xl font-bold text-foreground">Hola, {googleAuthUser.name}</h3>
+            <p className="text-muted-foreground text-sm">Tu cuenta de Google ha sido vinculada. Confirma para crear tu perfil como <b>{role === 'candidate' ? 'Candidato' : role === 'company' ? 'Empresa' : 'Mentor'}</b>.</p>
+            <button
+              onClick={onCompleteGoogle}
+              className="w-full mt-4 py-4 rounded-xl font-bold text-base cursor-pointer hover:opacity-90 transition-opacity"
+              style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}
+            >
+              Completar Registro
+            </button>
+          </div>
+        </div>
+      </Overlay>
+    );
+  }
+
   return (
     <Overlay>
       <div className="w-full max-w-md rounded-2xl overflow-hidden" style={{ backgroundColor: "var(--card)" }}>
@@ -1371,6 +1447,33 @@ function RegisterModal({ lang, role, onRegister, onBack, error, loading }: {
             style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)", cursor: loading || !email || !password ? "not-allowed" : "pointer", opacity: loading || !email || !password ? 0.6 : 1 }}
           >
             {loading ? "..." : C(lang, "registerSubmit")}
+          </button>
+
+          <div className="relative flex items-center py-2">
+            <div className="flex-grow border-t border-border"></div>
+            <span className="flex-shrink-0 mx-4 text-muted-foreground text-sm font-medium">o</span>
+            <div className="flex-grow border-t border-border"></div>
+          </div>
+          
+          <button 
+            onClick={async () => {
+              try {
+                await signInWithGoogle(role, 'register');
+              } catch (e) {
+                console.error(e);
+              }
+            }} 
+            disabled={loading} 
+            className="w-full py-4 rounded-xl font-bold text-base flex items-center justify-center gap-3 border-2 border-border cursor-pointer hover:bg-secondary transition-colors" 
+            style={{ backgroundColor: "var(--card)", color: "var(--foreground)" }}
+          >
+            <svg className="w-5 h-5" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+            </svg>
+            Continuar con Google
           </button>
         </div>
       </div>
@@ -2202,8 +2305,97 @@ function CompanyOrgProfile({ lang }: { lang: Lang }) {
   const sectionIds = C(lang, "orgSectionIds") as string[];
   const SECTIONS = sectionTitles.map((title, i) => ({ id: sectionIds[i], title }));
   const PRESTACIONES = ["Audífonos con cancelación de ruido", "Teclados especializados", "Pantallas anti-reflejo", "Rampas y ascensores", "Salas de descanso sensorial", "Modalidad remota e híbrida disponible"];
+  const POLITICAS = ["Pausas activas programadas", "Flexibilidad de horario"];
+
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState("");
+  const [formData, setFormData] = useState({
+    company_name: "",
+    industry: "",
+    size: "",
+    location: "",
+    philosophy: "",
+    noise: "",
+    light: "",
+    layout: "",
+    accommodations: [] as string[],
+    policies: [] as string[],
+  });
+
+  useEffect(() => {
+    async function loadData() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+      const { data } = await supabase.from("companies").select("*").eq("user_id", session.user.id).single();
+      if (data) {
+        let env: any = {};
+        try { env = JSON.parse(data.work_environment || "{}"); } catch(e){}
+        setFormData({
+          company_name: data.company_name || "",
+          industry: data.industry || "",
+          size: env.size || "",
+          location: env.location || "",
+          philosophy: data.philosophy || "",
+          noise: env.noise || "",
+          light: env.light || "",
+          layout: env.layout || "",
+          accommodations: data.accommodations || [],
+          policies: env.policies || [],
+        });
+      }
+      setLoading(false);
+    }
+    loadData();
+  }, []);
+
+  const handleChange = (field: string, val: string) => setFormData(p => ({ ...p, [field]: val }));
+
+  const toggleArray = (field: "accommodations" | "policies", item: string) => {
+    setFormData(p => ({
+      ...p,
+      [field]: p[field].includes(item) ? p[field].filter(x => x !== item) : [...p[field], item]
+    }));
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    setMessage("");
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) return;
+    
+    const env = JSON.stringify({
+      size: formData.size,
+      location: formData.location,
+      noise: formData.noise,
+      light: formData.light,
+      layout: formData.layout,
+      policies: formData.policies
+    });
+
+    const { error } = await supabase.from("companies").upsert({
+      user_id: session.user.id,
+      company_name: formData.company_name || "Sin nombre",
+      industry: formData.industry,
+      philosophy: formData.philosophy,
+      work_environment: env,
+      accommodations: formData.accommodations
+    });
+
+    setSaving(false);
+    if (!error) {
+      setMessage(lang === "es" ? "Cambios guardados exitosamente" : "Changes saved successfully");
+      setTimeout(() => setMessage(""), 3000);
+    } else {
+      setMessage(lang === "es" ? "Error al guardar" : "Error saving changes");
+      console.error(error);
+    }
+  };
+
+  if (loading) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Cargando...</div>;
+
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col pb-20">
       <div className="px-20 py-10 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
         <h1 className="text-3xl font-bold text-foreground">{t("comp.org.title")}</h1>
         <p className="text-muted-foreground mt-2 max-w-xl">{t("comp.org.sub")}</p>
@@ -2213,61 +2405,109 @@ function CompanyOrgProfile({ lang }: { lang: Lang }) {
           <div key={s.id} className="rounded-2xl border border-border overflow-hidden" style={{ backgroundColor: "var(--card)" }}>
             <button onClick={() => toggle(s.id)} className="w-full flex items-center justify-between px-7 py-5 text-left cursor-pointer">
               <span className="font-bold text-foreground">{s.title}</span>
-              <ChevronDown size={18} aria-hidden="true" className="text-muted-foreground" style={{ transform: open[s.id] ? "rotate(180deg)" : "none" }} />
+              <ChevronDown size={18} aria-hidden="true" className="text-muted-foreground" style={{ transform: open[s.id] ? "rotate(180deg)" : "none", transition: "transform 0.2s" }} />
             </button>
             {open[s.id] && (
               <div className="px-7 pb-7 border-t border-border anim-slide-down">
                 {s.id === "general" && (
                   <div className="grid grid-cols-2 gap-5 pt-5">
-                    {["Nombre de la organización", "Sector de actividad", "Tamaño de la organización", "País / Ciudad"].map((f) => (
-                      <div key={f}>
-                        <label className="block text-sm font-semibold text-foreground mb-2">{f}</label>
-                        <div className="w-full px-4 py-3 rounded-xl border border-border text-sm" style={{ backgroundColor: "var(--input-background)", color: "var(--foreground)" }}>{f === "Nombre de la organización" ? "Veritas Analytics" : f === "Sector de actividad" ? "Tecnología" : f === "Tamaño de la organización" ? "101-200 personas" : "Ciudad de México, MX"}</div>
+                    {[
+                      { label: "Nombre de la organización", field: "company_name" },
+                      { label: "Sector de actividad", field: "industry" },
+                      { label: "Tamaño de la organización", field: "size" },
+                      { label: "País / Ciudad", field: "location" }
+                    ].map((f) => (
+                      <div key={f.field}>
+                        <label className="block text-sm font-semibold text-foreground mb-2">{f.label}</label>
+                        <input 
+                          type="text" 
+                          value={(formData as any)[f.field]}
+                          onChange={(e) => handleChange(f.field, e.target.value)}
+                          className="w-full px-4 py-3 rounded-xl border border-border text-sm outline-none focus:border-primary" 
+                          style={{ backgroundColor: "var(--input-background)", color: "var(--foreground)" }} 
+                          placeholder={f.label}
+                        />
                       </div>
                     ))}
                   </div>
                 )}
-                {s.id === "cultura" && <div className="pt-5"><div className="w-full px-4 py-3 rounded-xl border border-border text-sm text-muted-foreground" style={{ backgroundColor: "var(--input-background)" }}>Empresa orientada a resultados con cultura de trabajo flexible. Creemos que el talento diverso genera equipos más creativos y resilientes.</div></div>}
+                {s.id === "cultura" && (
+                  <div className="pt-5">
+                    <textarea 
+                      value={formData.philosophy}
+                      onChange={(e) => handleChange("philosophy", e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl border border-border text-sm outline-none focus:border-primary min-h-[100px] resize-y" 
+                      style={{ backgroundColor: "var(--input-background)", color: "var(--foreground)" }}
+                      placeholder="Describe la filosofía y cultura de tu empresa..."
+                    />
+                  </div>
+                )}
                 {s.id === "entorno" && (
                   <div className="grid grid-cols-3 gap-5 pt-5">
-                    {[["Nivel de ruido habitual", "Bajo (oficina silenciosa)"], ["Tipo de iluminación", "Luz natural + LED ajustable"], ["Distribución de espacios", "Individual con opción abierta"]].map(([label, val]) => (
-                      <div key={label}>
-                        <label className="block text-sm font-semibold text-foreground mb-2">{label}</label>
-                        <div className="px-4 py-3 rounded-xl border border-border text-sm" style={{ backgroundColor: "var(--input-background)", color: "var(--foreground)" }}>{val}</div>
+                    {[
+                      { label: "Nivel de ruido habitual", field: "noise", placeholder: "Ej. Bajo (oficina silenciosa)" },
+                      { label: "Tipo de iluminación", field: "light", placeholder: "Ej. Luz natural + LED" },
+                      { label: "Distribución de espacios", field: "layout", placeholder: "Ej. Individual" }
+                    ].map((f) => (
+                      <div key={f.field}>
+                        <label className="block text-sm font-semibold text-foreground mb-2">{f.label}</label>
+                        <input 
+                          type="text" 
+                          value={(formData as any)[f.field]}
+                          onChange={(e) => handleChange(f.field, e.target.value)}
+                          className="w-full px-4 py-3 rounded-xl border border-border text-sm outline-none focus:border-primary" 
+                          style={{ backgroundColor: "var(--input-background)", color: "var(--foreground)" }} 
+                          placeholder={f.placeholder}
+                        />
                       </div>
                     ))}
                   </div>
                 )}
                 {s.id === "prestaciones" && (
                   <div className="grid grid-cols-2 gap-3 pt-5">
-                    {PRESTACIONES.map((p, i) => {
-                      const offered = [0, 1, 5].includes(i);
+                    {PRESTACIONES.map((p) => {
+                      const offered = formData.accommodations.includes(p);
                       return (
-                        <div key={p} className="flex items-center gap-3 p-3.5 rounded-xl border border-border" style={{ backgroundColor: offered ? "var(--secondary)" : "var(--background)" }}>
-                          <div className="w-5 h-5 rounded border-2 flex items-center justify-center shrink-0" style={{ borderColor: offered ? "var(--primary)" : "var(--muted-foreground)", backgroundColor: offered ? "var(--primary)" : "transparent" }} aria-hidden="true">
+                        <button key={p} onClick={() => toggleArray("accommodations", p)} className="flex items-center gap-3 p-3.5 rounded-xl border border-border cursor-pointer text-left transition-colors" style={{ backgroundColor: offered ? "var(--secondary)" : "var(--background)" }}>
+                          <div className="w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 transition-colors" style={{ borderColor: offered ? "var(--primary)" : "var(--muted-foreground)", backgroundColor: offered ? "var(--primary)" : "transparent" }} aria-hidden="true">
                             {offered && <Check size={11} style={{ color: "var(--primary-foreground)" }} />}
                           </div>
                           <span className="text-sm text-foreground">{p}</span>
-                        </div>
+                        </button>
                       );
                     })}
                   </div>
                 )}
                 {s.id === "politicas" && (
                   <div className="flex flex-col gap-4 pt-5">
-                    {["Pausas activas programadas", "Flexibilidad de horario"].map((pol) => (
-                      <div key={pol} className="flex items-center justify-between">
-                        <span className="text-sm font-semibold text-foreground">{pol}</span>
-                        <div className="w-12 h-6 rounded-full relative" style={{ backgroundColor: "var(--primary)" }} aria-hidden="true"><div className="absolute top-0.5 w-5 h-5 rounded-full bg-white" style={{ left: "calc(100% - 22px)" }} /></div>
-                      </div>
-                    ))}
+                    {POLITICAS.map((pol) => {
+                      const active = formData.policies.includes(pol);
+                      return (
+                        <div key={pol} className="flex items-center justify-between cursor-pointer" onClick={() => toggleArray("policies", pol)}>
+                          <span className="text-sm font-semibold text-foreground">{pol}</span>
+                          <div className="w-12 h-6 rounded-full relative transition-colors" style={{ backgroundColor: active ? "var(--primary)" : "var(--muted)" }} aria-hidden="true">
+                            <div className="absolute top-0.5 w-5 h-5 rounded-full bg-white transition-all" style={{ left: active ? "calc(100% - 22px)" : "2px" }} />
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
               </div>
             )}
           </div>
         ))}
-        <button className="self-end mt-2 px-8 py-4 rounded-xl font-bold cursor-pointer" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}>{t("save")}</button>
+        <div className="flex items-center justify-end gap-4 mt-2">
+          {message && <span className="text-sm text-green-500 font-medium">{message}</span>}
+          <button 
+            onClick={handleSave} 
+            disabled={saving}
+            className="px-8 py-4 rounded-xl font-bold cursor-pointer disabled:opacity-70" 
+            style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}
+          >
+            {saving ? "Guardando..." : t("save")}
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -2710,6 +2950,8 @@ export default function App() {
   const [authLoading, setAuthLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
   const [appReady, setAppReady] = useState(false);
+  const [authMessage, setAuthMessage] = useState<string | null>(null);
+  const [googleAuthUser, setGoogleAuthUser] = useState<any>(null);
 
   // Navigation
   const [screen, setScreen] = useState("home");
@@ -2770,6 +3012,17 @@ export default function App() {
       try {
         const user = await getCurrentUser();
         if (user) {
+          if ((user as any).needsRegistration) {
+            setAuthMessage("No tienes cuenta, redireccionando a registro...");
+            setAppReady(true);
+            setTimeout(() => {
+              setAuthMessage(null);
+              setGoogleAuthUser(user);
+              setPendingRole(user.role);
+              setModalStep("register");
+            }, 3000);
+            return;
+          }
           setRole(user.role);
           setLoggedIn(true);
           setModalStep("none");
@@ -2813,6 +3066,17 @@ export default function App() {
   };
 
   // ── Real Supabase register ──────────────────────────────────────────────────
+  const handleCompleteGoogleRegistration = () => {
+    if (googleAuthUser) {
+      setRole(googleAuthUser.role);
+      setLoggedIn(true);
+      setModalStep("none");
+      const first = googleAuthUser.role === "candidate" ? (googleAuthUser.completedOnboarding ? "vacancies" : "onboarding") : googleAuthUser.role === "company" ? "org-profile" : "dashboard";
+      setScreen(first);
+      setGoogleAuthUser(null);
+    }
+  };
+
   const handleRegister = async (email: string, password: string, name: string) => {
     setAuthLoading(true);
     setAuthError(null);
@@ -2883,14 +3147,25 @@ export default function App() {
     );
   }
 
+  if (authMessage) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center" style={{ fontFamily, ...(darkRootStyle as React.CSSProperties) }}>
+        <div className="p-6 rounded-2xl border border-border flex items-center gap-4 shadow-lg" style={{ backgroundColor: "var(--card)" }}>
+          <div className="w-6 h-6 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: "var(--primary)", borderTopColor: "transparent" }}></div>
+          <p className="text-foreground font-medium">{authMessage}</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background text-foreground" style={{ fontFamily, ...(darkRootStyle as React.CSSProperties) }}>
       {/* Modals */}
       {showModal && modalStep === "language" && <LanguageModal onSelect={handleLangSelect} />}
-      {showModal && modalStep === "auth" && <AuthModal lang={lang} onNew={handleAuthNew} onExisting={handleAuthExisting} onAdmin={handleAuthAdmin} />}
-      {showModal && modalStep === "role" && <RoleModal lang={lang} onSelect={handleRoleSelect} />}
+      {showModal && modalStep === "auth" && <AuthModal lang={lang} onNew={handleAuthNew} onExisting={handleAuthExisting} onAdmin={handleAuthAdmin} onBack={() => setModalStep("language")} />}
+      {showModal && modalStep === "role" && <RoleModal lang={lang} onSelect={handleRoleSelect} onBack={() => setModalStep("auth")} />}
       {showModal && modalStep === "register" && (
-        <RegisterModal lang={lang} role={pendingRole} onRegister={handleRegister} onBack={() => setModalStep("role")} error={authError} loading={authLoading} />
+        <RegisterModal lang={lang} role={pendingRole} onRegister={handleRegister} onBack={() => setModalStep("role")} error={authError} loading={authLoading} googleAuthUser={googleAuthUser} onCompleteGoogle={handleCompleteGoogleRegistration} />
       )}
       {showModal && modalStep === "login" && (
         <LoginModal lang={lang} initialRole={pendingRole} onLogin={(r, email, pass) => handleLogin(r, email, pass)} onBack={() => setModalStep("auth")} error={authError} loading={authLoading} />
