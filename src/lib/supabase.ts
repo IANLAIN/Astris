@@ -11,7 +11,7 @@ export async function registerUser(
   email: string,
   password: string,
   name: string,
-  role: "candidate" | "company" | "mentor"
+  role: "candidate" | "company" | "mentor" | "admin"
 ) {
   const { data, error } = await supabase.auth.signUp({
     email,

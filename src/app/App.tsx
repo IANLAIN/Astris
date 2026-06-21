@@ -22,7 +22,7 @@ type CandidateScreen =
   | "vacancy-detail" | "mentor-select" | "accompaniment" | "post-hire";
 type CompanyScreen =
   | "org-profile" | "post-vacancy" | "candidates" | "candidate-detail" | "post-hire";
-type AdminScreen = 
+type AdminScreen =
   | "dashboard" | "companies" | "candidates" | "mentors" | "mentorships" | "activity";
 type PaletteKey = "azul" | "tierra" | "contraste" | "verde";
 type FontKey = "atkinson" | "lexend";
@@ -1186,7 +1186,7 @@ function LanguageModal({ onSelect }: { onSelect: (l: Lang) => void }) {
 
 // ── Auth Modal ────────────────────────────────────────────────────────────────
 
-function AuthModal({ lang, onNew, onExisting }: { lang: Lang; onNew: () => void; onExisting: () => void }) {
+function AuthModal({ lang, onNew, onExisting, onAdmin }: { lang: Lang; onNew: () => void; onExisting: () => void; onAdmin: () => void }) {
   const t = useT(lang);
   return (
     <Overlay>
@@ -1214,6 +1214,15 @@ function AuthModal({ lang, onNew, onExisting }: { lang: Lang; onNew: () => void;
               <div className="text-sm text-muted-foreground mt-0.5">{t("auth.existing.sub")}</div>
             </div>
           </button>
+          <button onClick={onAdmin} className="flex items-start gap-4 p-5 rounded-xl border-2 text-left cursor-pointer" style={{ borderColor: "var(--border)", backgroundColor: "var(--background)" }}>
+            <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 mt-0.5" style={{ backgroundColor: "var(--muted)" }}>
+              <Shield size={18} aria-hidden="true" className="text-foreground" />
+            </div>
+            <div>
+              <div className="font-bold text-foreground text-base">Admin</div>
+              <div className="text-sm text-muted-foreground mt-0.5">Administrative access</div>
+            </div>
+          </button>
         </div>
       </div>
     </Overlay>
@@ -1222,15 +1231,16 @@ function AuthModal({ lang, onNew, onExisting }: { lang: Lang; onNew: () => void;
 
 // ── Login Modal ───────────────────────────────────────────────────────────────
 
-function LoginModal({ lang, onLogin, onBack, error, loading }: {
+function LoginModal({ lang, onLogin, onBack, error, loading, initialRole = "candidate" }: {
   lang: Lang;
   onLogin: (role: Role, email?: string, password?: string) => void;
   onBack: () => void;
   error?: string | null;
   loading?: boolean;
+  initialRole?: Role;
 }) {
   const t = useT(lang);
-  const [loginRole, setLoginRole] = useState<Role>("candidate");
+  const [loginRole, setLoginRole] = useState<Role>(initialRole);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const ROLES: Array<{ id: Role; label: string }> = [
@@ -1285,7 +1295,7 @@ function LoginModal({ lang, onLogin, onBack, error, loading }: {
 
 function RoleModal({ lang, onSelect }: { lang: Lang; onSelect: (r: Role) => void }) {
   const t = useT(lang);
-  const ROLES: Array<{ id: Role; titleKey: string; subKey: string; Icon: React.ComponentType<{ size: number }> }> = [
+  const ROLES: Array<{ id: Role; titleKey: string; subKey: string; Icon: any }> = [
     { id: "candidate", titleKey: "role.candidate", subKey: "role.candidate.sub", Icon: User },
     { id: "company", titleKey: "role.company", subKey: "role.company.sub", Icon: Building2 },
     { id: "mentor", titleKey: "role.mentor", subKey: "role.mentor.sub", Icon: Users },
@@ -1327,7 +1337,7 @@ function RegisterModal({ lang, role, onRegister, onBack, error, loading }: {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const ROLE_ICON: Record<Role, React.ComponentType<{ size: number }>> = { candidate: User, company: Building2, mentor: Users, admin: Shield };
+  const ROLE_ICON: Record<Role, any> = { candidate: User, company: Building2, mentor: Users, admin: Shield };
   const RoleIcon = ROLE_ICON[role];
   return (
     <Overlay>
@@ -1340,7 +1350,7 @@ function RegisterModal({ lang, role, onRegister, onBack, error, loading }: {
             <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: "var(--primary)" }}>
               <RoleIcon size={18} aria-hidden="true" style={{ color: "var(--primary-foreground)" } as React.CSSProperties} />
             </div>
-            <div className="text-xl font-bold text-foreground">{C(lang, "registerTitle")}</div>
+            <div className="text-xl font-bold text-foreground">{C(lang, "registerTitle" as any)}</div>
           </div>
         </div>
         <div className="p-8 flex flex-col gap-5">
@@ -1380,14 +1390,14 @@ function RegisterModal({ lang, role, onRegister, onBack, error, loading }: {
 function LandingPage({ lang, onOpenAuth }: { lang: Lang; onOpenAuth: (preRole?: Role) => void }) {
   const t = useT(lang);
   const PILLAR_ICONS = [User, Settings, Users, Briefcase];
-  const PILLARS  = C(lang, "pillars")  as typeof CONTENT.es.pillars;
+  const PILLARS = C(lang, "pillars") as typeof CONTENT.es.pillars;
   const PROBLEMS = C(lang, "problems") as string[];
-  const HOW      = C(lang, "how")      as typeof CONTENT.es.how;
-  const COMPARE  = C(lang, "compare")  as typeof CONTENT.es.compare;
+  const HOW = C(lang, "how") as typeof CONTENT.es.how;
+  const COMPARE = C(lang, "compare") as typeof CONTENT.es.compare;
   const IMPACT_CAND = C(lang, "impactCand") as string[];
   const IMPACT_COMP = C(lang, "impactComp") as string[];
   const compareAspect = lang === "es" ? "Aspecto" : lang === "pt" ? "Aspecto" : lang === "fr" ? "Aspect" : "Aspect";
-  const compareTrad   = lang === "es" ? "Modelo tradicional" : lang === "pt" ? "Modelo tradicional" : lang === "fr" ? "Modèle traditionnel" : "Traditional model";
+  const compareTrad = lang === "es" ? "Modelo tradicional" : lang === "pt" ? "Modelo tradicional" : lang === "fr" ? "Modèle traditionnel" : "Traditional model";
   const compareAstris = "Astris";
 
   return (
@@ -2795,7 +2805,14 @@ export default function App() {
   };
 
   const handleAuthNew = () => setModalStep("role");
-  const handleAuthExisting = () => setModalStep("login");
+  const handleAuthExisting = () => {
+    setPendingRole("candidate"); // Default for login modal
+    setModalStep("login");
+  };
+  const handleAuthAdmin = () => {
+    setPendingRole("admin");
+    setModalStep("login");
+  };
 
   const handleRoleSelect = (r: Role) => {
     setPendingRole(r);
@@ -2877,13 +2894,13 @@ export default function App() {
     <div className="min-h-screen bg-background text-foreground" style={{ fontFamily, ...(darkRootStyle as React.CSSProperties) }}>
       {/* Modals */}
       {showModal && modalStep === "language" && <LanguageModal onSelect={handleLangSelect} />}
-      {showModal && modalStep === "auth" && <AuthModal lang={lang} onNew={handleAuthNew} onExisting={handleAuthExisting} />}
+      {showModal && modalStep === "auth" && <AuthModal lang={lang} onNew={handleAuthNew} onExisting={handleAuthExisting} onAdmin={handleAuthAdmin} />}
       {showModal && modalStep === "role" && <RoleModal lang={lang} onSelect={handleRoleSelect} />}
       {showModal && modalStep === "register" && (
         <RegisterModal lang={lang} role={pendingRole} onRegister={handleRegister} onBack={() => setModalStep("role")} error={authError} loading={authLoading} />
       )}
       {showModal && modalStep === "login" && (
-        <LoginModal lang={lang} onLogin={(r, email, pass) => handleLogin(r, email, pass)} onBack={() => setModalStep("auth")} error={authError} loading={authLoading} />
+        <LoginModal lang={lang} initialRole={pendingRole} onLogin={(r, email, pass) => handleLogin(r, email, pass)} onBack={() => setModalStep("auth")} error={authError} loading={authLoading} />
       )}
 
       {/* Main content */}
@@ -2941,7 +2958,7 @@ export default function App() {
                 {role === "mentor" && screen === "checkins" && <MentorCheckins lang={lang} />}
                 {role === "mentor" && screen === "companies" && <MentorCompanies lang={lang} />}
                 {/* Default: dashboard for any unmatched mentor screen */}
-                {role === "mentor" && !["dashboard","checkins","companies"].includes(screen) && <MentorDashboard lang={lang} />}
+                {role === "mentor" && !["dashboard", "checkins", "companies"].includes(screen) && <MentorDashboard lang={lang} />}
 
                 {/* Admin flow */}
                 {role === "admin" && <AdminPanel lang={lang} screen={screen} />}

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { 
   Users, Building2, Briefcase, Star, Activity, BarChart2,
-  TrendingUp, Clock, AlertCircle, ChevronRight, Download, Filter
+  TrendingUp, Clock, AlertCircle, ChevronRight, Download, Filter, Check
 } from "lucide-react";
 import { 
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer,
