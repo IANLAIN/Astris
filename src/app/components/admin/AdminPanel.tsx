@@ -1,8 +1,8 @@
-import { 
+import {
   Users, Building2, Briefcase, Star, Activity,
   TrendingUp, Download, Filter, Check
 } from "lucide-react";
-import { 
+import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer,
   BarChart, Bar
 } from "recharts";
