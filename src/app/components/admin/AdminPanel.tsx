@@ -1,7 +1,6 @@
-import React, { useState } from "react";
 import { 
-  Users, Building2, Briefcase, Star, Activity, BarChart2,
-  TrendingUp, Clock, AlertCircle, ChevronRight, Download, Filter, Check
+  Users, Building2, Briefcase, Star, Activity,
+  TrendingUp, Download, Filter, Check
 } from "lucide-react";
 import { 
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer,
@@ -10,7 +9,7 @@ import {
 
 type Lang = "es" | "en" | "pt" | "fr";
 
-export function AdminPanel({ lang, screen }: { lang: Lang; screen: string }) {
+export function AdminPanel({ screen }: { lang: Lang; screen: string }) {
   // En un escenario real, estos datos vendrían de Supabase (users_profiles, jobs, applications)
   const mockStats = [
     { title: "Total Candidatos", value: "1,245", growth: "+12%", icon: Users, color: "#1B4B7A" },

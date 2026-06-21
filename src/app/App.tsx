@@ -17,13 +17,6 @@ import { AdminPanel } from "./components/admin/AdminPanel";
 type Lang = "es" | "en" | "pt" | "fr";
 type ModalStep = "language" | "auth" | "role" | "register" | "login" | "none";
 type Role = "candidate" | "company" | "mentor" | "admin";
-type CandidateScreen =
-  | "onboarding" | "quiz" | "profile" | "vacancies"
-  | "vacancy-detail" | "mentor-select" | "accompaniment" | "post-hire";
-type CompanyScreen =
-  | "org-profile" | "post-vacancy" | "candidates" | "candidate-detail" | "post-hire";
-type AdminScreen =
-  | "dashboard" | "companies" | "candidates" | "mentors" | "mentorships" | "activity";
 type PaletteKey = "azul" | "tierra" | "contraste" | "verde";
 type FontKey = "atkinson" | "lexend";
 type QuizAnswers = Record<number, Record<number, number | number[]>>;
