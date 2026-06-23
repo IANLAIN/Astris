@@ -9,33 +9,114 @@ import {
 
 type Lang = "es" | "en" | "pt" | "fr";
 
-export function AdminPanel({ screen }: { lang: Lang; screen: string }) {
+const ADMIN_T: Record<Lang, Record<string, string>> = {
+  es: {
+    "stats.cands": "Total Candidatos", "stats.comps": "Total Empresas", "stats.mentors": "Mentorías Activas", "stats.matches": "Matches Exitosos",
+    "dash.title": "Visión General", "dash.sub": "Monitorea el crecimiento y salud de la plataforma.", "dash.export": "Exportar Reporte",
+    "chart.users": "Crecimiento de Usuarios", "chart.matches": "Matches Exitosos Mensuales",
+    "act.title": "Actividad Reciente", "act.viewAll": "Ver toda",
+    "act.1": "Nueva empresa registrada", "act.2": "Match de alta compatibilidad (95%)", "act.3": "Nuevo candidato completó onboarding", "act.4": "Mentoría finalizada (Día 60)",
+    "act.time1": "Hace 5 minutos", "act.time2": "Hace 23 minutos", "act.time3": "Hace 1 hora", "act.time4": "Hace 2 horas",
+    "table.filters": "Filtros", "table.export": "Exportar", "table.actions": "Acciones", "table.details": "Detalles",
+    "comps.title": "Gestión de Empresas", "comps.sub": "Directorio de todas las empresas colaboradoras.",
+    "comps.col1": "Empresa", "comps.col2": "Sector", "comps.col3": "Modalidad", "comps.col4": "Estado", "comps.col5": "Retención ESG",
+    "cands.title": "Base de Candidatos", "cands.sub": "Directorio de candidatos registrados en la plataforma.",
+    "cands.col1": "Candidato", "cands.col2": "Preferencia", "cands.col3": "Ejes Fuertes", "cands.col4": "Estado", "cands.col5": "Registro",
+    "ments.title": "Seguimiento de Mentorías", "ments.sub": "Procesos de acompañamiento post-contratación activos.",
+    "ments.col1": "ID Proceso", "ments.col2": "Candidato", "ments.col3": "Empresa", "ments.col4": "Asignación", "ments.col5": "Estado",
+    "const.title": "Módulo en Construcción", "const.sub": "Esta sección está siendo conectada con Supabase.",
+    "status.remote": "Remoto", "status.hybrid": "Híbrido", "status.inperson": "Presencial", "status.any": "Cualquiera",
+    "status.active": "Activo", "status.inactive": "Inactivo", "status.searching": "Buscando", "status.hired": "Contratada", "status.completed": "Completado", "status.inProcess": "En proceso",
+    "m1": "Ene", "m2": "Feb", "m3": "Mar", "m4": "Abr", "m5": "May", "m6": "Jun"
+  },
+  en: {
+    "stats.cands": "Total Candidates", "stats.comps": "Total Companies", "stats.mentors": "Active Mentorships", "stats.matches": "Successful Matches",
+    "dash.title": "Overview", "dash.sub": "Monitor platform growth and health.", "dash.export": "Export Report",
+    "chart.users": "User Growth", "chart.matches": "Monthly Successful Matches",
+    "act.title": "Recent Activity", "act.viewAll": "View all",
+    "act.1": "New company registered", "act.2": "High compatibility match (95%)", "act.3": "New candidate completed onboarding", "act.4": "Mentorship completed (Day 60)",
+    "act.time1": "5 minutes ago", "act.time2": "23 minutes ago", "act.time3": "1 hour ago", "act.time4": "2 hours ago",
+    "table.filters": "Filters", "table.export": "Export", "table.actions": "Actions", "table.details": "Details",
+    "comps.title": "Company Management", "comps.sub": "Directory of all partner companies.",
+    "comps.col1": "Company", "comps.col2": "Sector", "comps.col3": "Modality", "comps.col4": "Status", "comps.col5": "ESG Retention",
+    "cands.title": "Candidate Database", "cands.sub": "Directory of registered candidates on the platform.",
+    "cands.col1": "Candidate", "cands.col2": "Preference", "cands.col3": "Strong Axes", "cands.col4": "Status", "cands.col5": "Registered",
+    "ments.title": "Mentorship Tracking", "ments.sub": "Active post-hire support processes.",
+    "ments.col1": "Process ID", "ments.col2": "Candidate", "ments.col3": "Company", "ments.col4": "Assignment", "ments.col5": "Status",
+    "const.title": "Module Under Construction", "const.sub": "This section is being connected to Supabase.",
+    "status.remote": "Remote", "status.hybrid": "Hybrid", "status.inperson": "In-person", "status.any": "Any",
+    "status.active": "Active", "status.inactive": "Inactive", "status.searching": "Searching", "status.hired": "Hired", "status.completed": "Completed", "status.inProcess": "In process",
+    "m1": "Jan", "m2": "Feb", "m3": "Mar", "m4": "Apr", "m5": "May", "m6": "Jun"
+  },
+  pt: {
+    "stats.cands": "Total Candidatos", "stats.comps": "Total Empresas", "stats.mentors": "Mentorias Ativas", "stats.matches": "Matches de Sucesso",
+    "dash.title": "Visão Geral", "dash.sub": "Monitore o crescimento e a saúde da plataforma.", "dash.export": "Exportar Relatório",
+    "chart.users": "Crescimento de Usuários", "chart.matches": "Matches Mensais de Sucesso",
+    "act.title": "Atividade Recente", "act.viewAll": "Ver tudo",
+    "act.1": "Nova empresa registrada", "act.2": "Match de alta compatibilidade (95%)", "act.3": "Novo candidato concluiu onboarding", "act.4": "Mentoria concluída (Dia 60)",
+    "act.time1": "Há 5 minutos", "act.time2": "Há 23 minutos", "act.time3": "Há 1 hora", "act.time4": "Há 2 horas",
+    "table.filters": "Filtros", "table.export": "Exportar", "table.actions": "Ações", "table.details": "Detalhes",
+    "comps.title": "Gestão de Empresas", "comps.sub": "Diretório de todas as empresas parceiras.",
+    "comps.col1": "Empresa", "comps.col2": "Setor", "comps.col3": "Modalidade", "comps.col4": "Status", "comps.col5": "Retenção ESG",
+    "cands.title": "Base de Candidatos", "cands.sub": "Diretório de candidatos registrados na plataforma.",
+    "cands.col1": "Candidato", "cands.col2": "Preferência", "cands.col3": "Eixos Fortes", "cands.col4": "Status", "cands.col5": "Registro",
+    "ments.title": "Acompanhamento de Mentorias", "ments.sub": "Processos ativos de apoio pós-contratação.",
+    "ments.col1": "ID Processo", "ments.col2": "Candidato", "ments.col3": "Empresa", "ments.col4": "Atribuição", "ments.col5": "Status",
+    "const.title": "Módulo em Construção", "const.sub": "Esta seção está sendo conectada ao Supabase.",
+    "status.remote": "Remoto", "status.hybrid": "Híbrido", "status.inperson": "Presencial", "status.any": "Qualquer",
+    "status.active": "Ativo", "status.inactive": "Inativo", "status.searching": "Buscando", "status.hired": "Contratada", "status.completed": "Concluído", "status.inProcess": "Em processo",
+    "m1": "Jan", "m2": "Fev", "m3": "Mar", "m4": "Abr", "m5": "Mai", "m6": "Jun"
+  },
+  fr: {
+    "stats.cands": "Total Candidats", "stats.comps": "Total Entreprises", "stats.mentors": "Mentorats Actifs", "stats.matches": "Matches Réussis",
+    "dash.title": "Vue d'ensemble", "dash.sub": "Surveiller la croissance et la santé de la plateforme.", "dash.export": "Exporter Rapport",
+    "chart.users": "Croissance Utilisateurs", "chart.matches": "Matches Réussis Mensuels",
+    "act.title": "Activité Récente", "act.viewAll": "Voir tout",
+    "act.1": "Nouvelle entreprise inscrite", "act.2": "Match à haute compatibilité (95%)", "act.3": "Nouveau candidat a terminé l'intégration", "act.4": "Mentorat terminé (Jour 60)",
+    "act.time1": "Il y a 5 minutes", "act.time2": "Il y a 23 minutes", "act.time3": "Il y a 1 heure", "act.time4": "Il y a 2 heures",
+    "table.filters": "Filtres", "table.export": "Exporter", "table.actions": "Actions", "table.details": "Détails",
+    "comps.title": "Gestion Entreprises", "comps.sub": "Répertoire de toutes les entreprises partenaires.",
+    "comps.col1": "Entreprise", "comps.col2": "Secteur", "comps.col3": "Modalité", "comps.col4": "Statut", "comps.col5": "Rétention ESG",
+    "cands.title": "Base de Candidats", "cands.sub": "Répertoire des candidats inscrits sur la plateforme.",
+    "cands.col1": "Candidat", "cands.col2": "Préférence", "cands.col3": "Axes Forts", "cands.col4": "Statut", "cands.col5": "Inscription",
+    "ments.title": "Suivi des Mentorats", "ments.sub": "Processus d'accompagnement post-embauche actifs.",
+    "ments.col1": "ID Processus", "ments.col2": "Candidat", "ments.col3": "Entreprise", "ments.col4": "Attribution", "ments.col5": "Statut",
+    "const.title": "Module en Construction", "const.sub": "Cette section est en cours de connexion à Supabase.",
+    "status.remote": "À distance", "status.hybrid": "Hybride", "status.inperson": "En personne", "status.any": "Tout",
+    "status.active": "Actif", "status.inactive": "Inactif", "status.searching": "En recherche", "status.hired": "Embauchée", "status.completed": "Terminé", "status.inProcess": "En cours",
+    "m1": "Jan", "m2": "Fév", "m3": "Mar", "m4": "Avr", "m5": "Mai", "m6": "Juin"
+  }
+};
+
+export function AdminPanel({ screen, lang }: { lang: Lang; screen: string }) {
+  const t = (key: string) => ADMIN_T[lang]?.[key] || key;
+
   // En un escenario real, estos datos vendrían de Supabase (users_profiles, jobs, applications)
   const mockStats = [
-    { title: "Total Candidatos", value: "1,245", growth: "+12%", icon: Users, color: "#1B4B7A" },
-    { title: "Total Empresas", value: "84", growth: "+5%", icon: Building2, color: "#2E7D32" },
-    { title: "Mentorías Activas", value: "312", growth: "+18%", icon: Star, color: "#B8860B" },
-    { title: "Matches Exitosos", value: "892", growth: "+24%", icon: Briefcase, color: "#4A148C" },
+    { title: t("stats.cands"), value: "1,245", growth: "+12%", icon: Users, color: "#1B4B7A" },
+    { title: t("stats.comps"), value: "84", growth: "+5%", icon: Building2, color: "#2E7D32" },
+    { title: t("stats.mentors"), value: "312", growth: "+18%", icon: Star, color: "#B8860B" },
+    { title: t("stats.matches"), value: "892", growth: "+24%", icon: Briefcase, color: "#4A148C" },
   ];
 
   const chartData = [
-    { name: "Ene", candidatos: 400, empresas: 24, matches: 150 },
-    { name: "Feb", candidatos: 550, empresas: 28, matches: 210 },
-    { name: "Mar", candidatos: 680, empresas: 35, matches: 280 },
-    { name: "Abr", candidatos: 820, empresas: 42, matches: 390 },
-    { name: "May", candidatos: 1050, empresas: 58, matches: 510 },
-    { name: "Jun", candidatos: 1245, empresas: 84, matches: 892 },
+    { name: t("m1"), candidatos: 400, empresas: 24, matches: 150 },
+    { name: t("m2"), candidatos: 550, empresas: 28, matches: 210 },
+    { name: t("m3"), candidatos: 680, empresas: 35, matches: 280 },
+    { name: t("m4"), candidatos: 820, empresas: 42, matches: 390 },
+    { name: t("m5"), candidatos: 1050, empresas: 58, matches: 510 },
+    { name: t("m6"), candidatos: 1245, empresas: 84, matches: 892 },
   ];
 
   const renderDashboard = () => (
     <div className="flex flex-col gap-8">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold text-foreground">Visión General</h2>
-          <p className="text-muted-foreground mt-1">Monitorea el crecimiento y salud de la plataforma.</p>
+          <h2 className="text-3xl font-bold text-foreground">{t("dash.title")}</h2>
+          <p className="text-muted-foreground mt-1">{t("dash.sub")}</p>
         </div>
         <button className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium text-sm hover:opacity-90 transition-opacity cursor-pointer">
-          <Download size={16} /> Exportar Reporte
+          <Download size={16} /> {t("dash.export")}
         </button>
       </div>
 
@@ -60,7 +141,7 @@ export function AdminPanel({ screen }: { lang: Lang; screen: string }) {
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
-          <h3 className="text-lg font-bold text-foreground mb-6">Crecimiento de Usuarios</h3>
+          <h3 className="text-lg font-bold text-foreground mb-6">{t("chart.users")}</h3>
           <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={chartData}>
@@ -76,7 +157,7 @@ export function AdminPanel({ screen }: { lang: Lang; screen: string }) {
         </div>
 
         <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
-          <h3 className="text-lg font-bold text-foreground mb-6">Matches Exitosos Mensuales</h3>
+          <h3 className="text-lg font-bold text-foreground mb-6">{t("chart.matches")}</h3>
           <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData}>
@@ -94,15 +175,15 @@ export function AdminPanel({ screen }: { lang: Lang; screen: string }) {
       {/* Recent Activity */}
       <div className="bg-card border border-border rounded-xl shadow-sm overflow-hidden">
         <div className="px-6 py-5 border-b border-border flex items-center justify-between">
-          <h3 className="text-lg font-bold text-foreground">Actividad Reciente</h3>
-          <button className="text-sm font-medium text-primary hover:underline cursor-pointer">Ver toda</button>
+          <h3 className="text-lg font-bold text-foreground">{t("act.title")}</h3>
+          <button className="text-sm font-medium text-primary hover:underline cursor-pointer">{t("act.viewAll")}</button>
         </div>
         <div className="divide-y divide-border">
           {[
-            { action: "Nueva empresa registrada", subject: "TechCorp Global", time: "Hace 5 minutos", icon: Building2, color: "#2E7D32" },
-            { action: "Match de alta compatibilidad (95%)", subject: "Ana G. + Innova Software", time: "Hace 23 minutos", icon: Star, color: "#B8860B" },
-            { action: "Nuevo candidato completó onboarding", subject: "Carlos M.", time: "Hace 1 hora", icon: Users, color: "#1B4B7A" },
-            { action: "Mentoría finalizada (Día 60)", subject: "Proceso #492 - TechCorp", time: "Hace 2 horas", icon: Check, color: "#4A148C" },
+            { action: t("act.1"), subject: "TechCorp Global", time: t("act.time1"), icon: Building2, color: "#2E7D32" },
+            { action: t("act.2"), subject: "Ana G. + Innova Software", time: t("act.time2"), icon: Star, color: "#B8860B" },
+            { action: t("act.3"), subject: "Carlos M.", time: t("act.time3"), icon: Users, color: "#1B4B7A" },
+            { action: t("act.4"), subject: "Proceso #492 - TechCorp", time: t("act.time4"), icon: Check, color: "#4A148C" },
           ].map((item, i) => (
             <div key={i} className="px-6 py-4 flex items-center gap-4 hover:bg-secondary/50 transition-colors">
               <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: `${item.color}15` }}>
@@ -129,10 +210,10 @@ export function AdminPanel({ screen }: { lang: Lang; screen: string }) {
         </div>
         <div className="flex gap-3">
           <button className="flex items-center gap-2 px-4 py-2 border border-border bg-card text-foreground rounded-lg font-medium text-sm hover:bg-secondary transition-colors cursor-pointer">
-            <Filter size={16} /> Filtros
+            <Filter size={16} /> {t("table.filters")}
           </button>
           <button className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium text-sm hover:opacity-90 transition-opacity cursor-pointer">
-            <Download size={16} /> Exportar
+            <Download size={16} /> {t("table.export")}
           </button>
         </div>
       </div>
@@ -144,7 +225,7 @@ export function AdminPanel({ screen }: { lang: Lang; screen: string }) {
               {columns.map((c, i) => (
                 <th key={i} className="px-6 py-4 text-xs font-bold text-muted-foreground uppercase tracking-wider">{c}</th>
               ))}
-              <th className="px-6 py-4 text-xs font-bold text-muted-foreground uppercase tracking-wider text-right">Acciones</th>
+              <th className="px-6 py-4 text-xs font-bold text-muted-foreground uppercase tracking-wider text-right">{t("table.actions")}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
@@ -156,7 +237,7 @@ export function AdminPanel({ screen }: { lang: Lang; screen: string }) {
                   </td>
                 ))}
                 <td className="px-6 py-4 text-sm text-right">
-                  <button className="text-primary hover:underline font-medium text-sm cursor-pointer">Detalles</button>
+                  <button className="text-primary hover:underline font-medium text-sm cursor-pointer">{t("table.details")}</button>
                 </td>
               </tr>
             ))}
@@ -167,33 +248,33 @@ export function AdminPanel({ screen }: { lang: Lang; screen: string }) {
   );
 
   const mockCompanies = [
-    [<div className="font-bold flex items-center gap-2"><div className="w-8 h-8 rounded bg-gray-200" />TechCorp Global</div>, "Tecnología", "Remoto", "Activo (12 vacantes)", "98%"],
-    [<div className="font-bold flex items-center gap-2"><div className="w-8 h-8 rounded bg-gray-200" />Innova Software</div>, "Software", "Híbrido", "Activo (4 vacantes)", "92%"],
-    [<div className="font-bold flex items-center gap-2"><div className="w-8 h-8 rounded bg-gray-200" />EcoLogistics</div>, "Logística", "Presencial", "Inactivo", "N/A"],
+    [<div className="font-bold flex items-center gap-2"><div className="w-8 h-8 rounded bg-gray-200" />TechCorp Global</div>, "Software / Tech", t("status.remote"), `${t("status.active")} (12)`, "98%"],
+    [<div className="font-bold flex items-center gap-2"><div className="w-8 h-8 rounded bg-gray-200" />Innova Software</div>, "Software", t("status.hybrid"), `${t("status.active")} (4)`, "92%"],
+    [<div className="font-bold flex items-center gap-2"><div className="w-8 h-8 rounded bg-gray-200" />EcoLogistics</div>, "Logistics", t("status.inperson"), t("status.inactive"), "N/A"],
   ];
 
   const mockCandidates = [
-    [<div className="font-bold">Ana G.</div>, "Remoto", "Procesamiento, T. Ambiental", "Buscando", "12 May 2026"],
-    [<div className="font-bold">Carlos M.</div>, "Híbrido", "Ejecución, Ajustes", "En proceso (Innova)", "18 May 2026"],
-    [<div className="font-bold">Laura F.</div>, "Cualquiera", "Procesamiento", "Contratada", "02 Jun 2026"],
+    [<div className="font-bold">Ana G.</div>, t("status.remote"), "Procesamiento, T. Ambiental", t("status.searching"), "12 May 2026"],
+    [<div className="font-bold">Carlos M.</div>, t("status.hybrid"), "Ejecución, Ajustes", `${t("status.inProcess")} (Innova)`, "18 May 2026"],
+    [<div className="font-bold">Laura F.</div>, t("status.any"), "Procesamiento", t("status.hired"), "02 Jun 2026"],
   ];
 
   const mockMentorships = [
-    [<div className="font-bold">Proceso #492</div>, "Ana G.", "Innova Software", "Mentor: David P.", <span className="text-blue-600 font-bold bg-blue-50 px-2 py-1 rounded">Activo (Día 15)</span>],
-    [<div className="font-bold">Proceso #381</div>, "Luis T.", "TechCorp Global", "Mentor: Sarah C.", <span className="text-green-600 font-bold bg-green-50 px-2 py-1 rounded">Completado (Día 60)</span>],
+    [<div className="font-bold">Proceso #492</div>, "Ana G.", "Innova Software", "Mentor: David P.", <span className="text-blue-600 font-bold bg-blue-50 px-2 py-1 rounded">{t("status.active")} (15)</span>],
+    [<div className="font-bold">Proceso #381</div>, "Luis T.", "TechCorp Global", "Mentor: Sarah C.", <span className="text-green-600 font-bold bg-green-50 px-2 py-1 rounded">{t("status.completed")} (60)</span>],
   ];
 
   return (
     <div className="w-full max-w-[1400px] mx-auto px-8 py-10">
       {screen === "dashboard" && renderDashboard()}
-      {screen === "companies" && renderTableLayout("Gestión de Empresas", "Directorio de todas las empresas colaboradoras.", ["Empresa", "Sector", "Modalidad", "Estado", "Retención ESG"], mockCompanies)}
-      {screen === "candidates" && renderTableLayout("Base de Candidatos", "Directorio de candidatos registrados en la plataforma.", ["Candidato", "Preferencia", "Ejes Fuertes", "Estado", "Registro"], mockCandidates)}
-      {screen === "mentorships" && renderTableLayout("Seguimiento de Mentorías", "Procesos de acompañamiento post-contratación activos.", ["ID Proceso", "Candidato", "Empresa", "Asignación", "Estado"], mockMentorships)}
+      {screen === "companies" && renderTableLayout(t("comps.title"), t("comps.sub"), [t("comps.col1"), t("comps.col2"), t("comps.col3"), t("comps.col4"), t("comps.col5")], mockCompanies)}
+      {screen === "candidates" && renderTableLayout(t("cands.title"), t("cands.sub"), [t("cands.col1"), t("cands.col2"), t("cands.col3"), t("cands.col4"), t("cands.col5")], mockCandidates)}
+      {screen === "mentorships" && renderTableLayout(t("ments.title"), t("ments.sub"), [t("ments.col1"), t("ments.col2"), t("ments.col3"), t("ments.col4"), t("ments.col5")], mockMentorships)}
       {(screen === "mentors" || screen === "activity") && (
         <div className="text-center py-20">
           <Activity size={48} className="mx-auto text-muted-foreground mb-4 opacity-50" />
-          <h2 className="text-2xl font-bold text-foreground">Módulo en Construcción</h2>
-          <p className="text-muted-foreground mt-2">Esta sección está siendo conectada con Supabase.</p>
+          <h2 className="text-2xl font-bold text-foreground">{t("const.title")}</h2>
+          <p className="text-muted-foreground mt-2">{t("const.sub")}</p>
         </div>
       )}
     </div>

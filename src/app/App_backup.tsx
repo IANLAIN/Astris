@@ -122,23 +122,6 @@ const T: Record<Lang, Record<string, string>> = {
     "comp.detail.title": "Perfil del candidato",
     "comp.posthire.title": "Seguimiento de integración",
     "mentor.dash.title": "Panel del mentor",
-
-    vacancies: [
-      { id: "V-1042", title: "Analista de Datos Junior", company: "Veritas Analytics", sector: "Tecnología", modality: "Remoto", type: "Tiempo completo", match: 94, socialLevel: "Bajo", adjustments: ["100% remoto", "Comunicación asíncrona", "Horario flexible", "Instrucciones escritas"], desc: "Análisis de bases de datos, generación de reportes y visualización de métricas clave. Ambiente de trabajo tranquilo, equipo pequeño de 6 personas.", companyDesc: "Empresa de análisis de datos con 7 años en el mercado. Cultura de trabajo orientada a resultados, no a presencia." },
-      { id: "V-0873", title: "Diseñadora UX", company: "Forma Studio", sector: "Diseño", modality: "Híbrido", type: "Tiempo completo", match: 87, socialLevel: "Medio", adjustments: ["Espacio de trabajo tranquilo", "Briefs escritos", "Evaluación por entregables"], desc: "Diseño de experiencias digitales para clientes de salud y educación. 3 días remoto, 2 en oficina con escritorio individual.", companyDesc: "Estudio de diseño boutique con enfoque en accesibilidad digital. 45 colaboradores, ambiente flexible." },
-    ],
-    mentors: [
-      { id: "M-01", name: "Carmen Ruiz", specialty: "Inclusión laboral y funciones ejecutivas", years: 8, modality: "Virtual", bio: "Psicóloga organizacional especializada en estrategias de inserción laboral para perfiles con estilos cognitivos diversos. Certificada en acompañamiento de transiciones profesionales." },
-      { id: "M-02", name: "David Morales", specialty: "Aprendizaje adaptativo en entornos corporativos", years: 5, modality: "Presencial y virtual", bio: "Consultor de inclusión con experiencia en mediación empresa-candidato. Ha acompañado más de 60 procesos de contratación adaptativa exitosos." },
-    ],
-    candAdjustments: ["Trabajo remoto o híbrido", "Comunicación asíncrona", "Flexibilidad de horario", "Instrucciones escritas", "Espacio individual silencioso"],
-    compCandsData: [
-      { id: "CAND-A7X2", match: 96, strengths: "Alto enfoque en tareas detalladas. Prefiere entorno silencioso. Requiere instrucciones escritas.", radar: [{ axis: "Procesamiento", value: 88 }, { axis: "T. Ambiental", value: 22 }, { axis: "Ejecución", value: 92 }, { axis: "Ajustes", value: 70 }], env: [{ req: "Trabajo remoto disponible", met: true }, { req: "Comunicación asíncrona", met: true }, { req: "Espacio individual silencioso", met: false }, { req: "Horario flexible", met: true }] },
-      { id: "CAND-B3M9", match: 89, strengths: "Excelente tolerancia a entornos variables. Habilidad multitarea alta. Comunicación verbal fluida.", radar: [{ axis: "Procesamiento", value: 65 }, { axis: "T. Ambiental", value: 82 }, { axis: "Ejecución", value: 68 }, { axis: "Ajustes", value: 85 }], env: [{ req: "Trabajo remoto disponible", met: true }, { req: "Comunicación asíncrona", met: false }, { req: "Instrucciones escritas", met: true }, { req: "Evaluación por entregables", met: true }] },
-    ],
-    prestaciones: ["Audífonos con cancelación de ruido", "Teclados especializados", "Pantallas anti-reflejo", "Rampas y ascensores", "Salas de descanso sensorial", "Modalidad remota e híbrida disponible"],
-    politicas: ["Pausas activas programadas", "Flexibilidad de horario"],
-    skills: ["Mecanografía", "Microsoft Office", "Lectura intensiva", "Redacción técnica", "Análisis de datos", "Diseño visual", "Comunicación verbal"],
   },
   en: {
     "lang.title": "Select your language",
@@ -238,23 +221,6 @@ const T: Record<Lang, Record<string, string>> = {
     "comp.detail.title": "Candidate profile",
     "comp.posthire.title": "Integration tracking",
     "mentor.dash.title": "Mentor dashboard",
-
-    vacancies: [
-      { id: "V-1042", title: "Junior Data Analyst", company: "Veritas Analytics", sector: "Technology", modality: "Remote", type: "Full-time", match: 94, socialLevel: "Low", adjustments: ["100% remote", "Asynchronous communication", "Flexible schedule", "Written instructions"], desc: "Database analysis, reporting, and key metrics visualization. Quiet work environment, small team of 6 people.", companyDesc: "Data analysis company with 7 years in the market. Results-oriented work culture, not presence-oriented." },
-      { id: "V-0873", title: "UX Designer", company: "Forma Studio", sector: "Design", modality: "Hybrid", type: "Full-time", match: 87, socialLevel: "Medium", adjustments: ["Quiet workspace", "Written briefs", "Deliverable-based evaluation"], desc: "Design of digital experiences for health and education clients. 3 days remote, 2 in office with individual desk.", companyDesc: "Boutique design studio focusing on digital accessibility. 45 employees, flexible environment." },
-    ],
-    mentors: [
-      { id: "M-01", name: "Carmen Ruiz", specialty: "Labor inclusion & executive functions", years: 8, modality: "Virtual", bio: "Organizational psychologist specializing in labor insertion strategies for diverse cognitive profiles. Certified in professional transition support." },
-      { id: "M-02", name: "David Morales", specialty: "Adaptive learning in corporate environments", years: 5, modality: "In-person & virtual", bio: "Inclusion consultant with experience in company-candidate mediation. Has accompanied over 60 successful adaptive hiring processes." },
-    ],
-    candAdjustments: ["Remote or hybrid work", "Asynchronous communication", "Flexible schedule", "Written instructions", "Quiet individual workspace"],
-    compCandsData: [
-      { id: "CAND-A7X2", match: 96, strengths: "High focus on detailed tasks. Prefers quiet environment. Requires written instructions.", radar: [{ axis: "Processing", value: 88 }, { axis: "Env. Tolerance", value: 22 }, { axis: "Execution", value: 92 }, { axis: "Adjustments", value: 70 }], env: [{ req: "Remote work available", met: true }, { req: "Asynchronous communication", met: true }, { req: "Quiet individual workspace", met: false }, { req: "Flexible schedule", met: true }] },
-      { id: "CAND-B3M9", match: 89, strengths: "Excellent tolerance to variable environments. High multitasking ability. Fluent verbal communication.", radar: [{ axis: "Processing", value: 65 }, { axis: "Env. Tolerance", value: 82 }, { axis: "Execution", value: 68 }, { axis: "Adjustments", value: 85 }], env: [{ req: "Remote work available", met: true }, { req: "Asynchronous communication", met: false }, { req: "Written instructions", met: true }, { req: "Deliverable-based evaluation", met: true }] },
-    ],
-    prestaciones: ["Noise-canceling headphones", "Specialized keyboards", "Anti-glare screens", "Ramps and elevators", "Sensory rest rooms", "Remote and hybrid modality available"],
-    politicas: ["Scheduled active breaks", "Flexible schedule"],
-    skills: ["Typing", "Microsoft Office", "Intensive reading", "Technical writing", "Data analysis", "Visual design", "Verbal communication"],
   },
   pt: {
     "lang.title": "Selecione seu idioma",
@@ -354,23 +320,6 @@ const T: Record<Lang, Record<string, string>> = {
     "comp.detail.title": "Perfil do candidato",
     "comp.posthire.title": "Acompanhamento de integração",
     "mentor.dash.title": "Painel do mentor",
-
-    vacancies: [
-      { id: "V-1042", title: "Junior Data Analyst", company: "Veritas Analytics", sector: "Tecnologia", modality: "Remote", type: "Full-time", match: 94, socialLevel: "Low", adjustments: ["100% remote", "Asynchronous communication", "Flexible schedule", "Written instructions"], desc: "Database analysis, reporting, and key metrics visualization. Quiet work environment, small team of 6 people.", companyDesc: "Data analysis company with 7 years in the market. Results-oriented work culture, not presence-oriented." },
-      { id: "V-0873", title: "UX Designer", company: "Forma Studio", sector: "Design", modality: "Hybrid", type: "Full-time", match: 87, socialLevel: "Medium", adjustments: ["Quiet workspace", "Written briefs", "Deliverable-based evaluation"], desc: "Design of digital experiences for health and education clients. 3 days remote, 2 in office with individual desk.", companyDesc: "Boutique design studio focusing on digital accessibility. 45 employees, flexible environment." },
-    ],
-    mentors: [
-      { id: "M-01", name: "Carmen Ruiz", specialty: "Labor inclusion & executive functions", years: 8, modality: "Virtual", bio: "Organizational psychologist specializing in labor insertion strategies for diverse cognitive profiles. Certified in professional transition support." },
-      { id: "M-02", name: "David Morales", specialty: "Adaptive learning in corporate environments", years: 5, modality: "In-person & virtual", bio: "Inclusion consultant with experience in company-candidate mediation. Has accompanied over 60 successful adaptive hiring processes." },
-    ],
-    candAdjustments: ["Remote or hybrid work", "Asynchronous communication", "Flexible schedule", "Written instructions", "Quiet individual workspace"],
-    compCandsData: [
-      { id: "CAND-A7X2", match: 96, strengths: "High focus on detailed tasks. Prefers quiet environment. Requires written instructions.", radar: [{ axis: "Processing", value: 88 }, { axis: "Env. Tolerance", value: 22 }, { axis: "Execution", value: 92 }, { axis: "Adjustments", value: 70 }], env: [{ req: "Remote work available", met: true }, { req: "Asynchronous communication", met: true }, { req: "Quiet individual workspace", met: false }, { req: "Flexible schedule", met: true }] },
-      { id: "CAND-B3M9", match: 89, strengths: "Excellent tolerance to variable environments. High multitasking ability. Fluent verbal communication.", radar: [{ axis: "Processing", value: 65 }, { axis: "Env. Tolerance", value: 82 }, { axis: "Execution", value: 68 }, { axis: "Adjustments", value: 85 }], env: [{ req: "Remote work available", met: true }, { req: "Asynchronous communication", met: false }, { req: "Written instructions", met: true }, { req: "Deliverable-based evaluation", met: true }] },
-    ],
-    prestaciones: ["Noise-canceling headphones", "Specialized keyboards", "Anti-glare screens", "Ramps and elevators", "Sensory rest rooms", "Remote and hybrid modality available"],
-    politicas: ["Scheduled active breaks", "Flexible schedule"],
-    skills: ["Typing", "Microsoft Office", "Intensive reading", "Technical writing", "Data analysis", "Visual design", "Verbal communication"],
   },
   fr: {
     "lang.title": "Choisissez votre langue",
@@ -470,23 +419,6 @@ const T: Record<Lang, Record<string, string>> = {
     "comp.detail.title": "Profil du candidat",
     "comp.posthire.title": "Suivi d'intégration",
     "mentor.dash.title": "Tableau de bord mentor",
-
-    vacancies: [
-      { id: "V-1042", title: "Junior Data Analyst", company: "Veritas Analytics", sector: "Technologie", modality: "Remote", type: "Full-time", match: 94, socialLevel: "Low", adjustments: ["100% remote", "Asynchronous communication", "Flexible schedule", "Written instructions"], desc: "Database analysis, reporting, and key metrics visualization. Quiet work environment, small team of 6 people.", companyDesc: "Data analysis company with 7 years in the market. Results-oriented work culture, not presence-oriented." },
-      { id: "V-0873", title: "UX Designer", company: "Forma Studio", sector: "Design", modality: "Hybrid", type: "Full-time", match: 87, socialLevel: "Medium", adjustments: ["Quiet workspace", "Written briefs", "Deliverable-based evaluation"], desc: "Design of digital experiences for health and education clients. 3 days remote, 2 in office with individual desk.", companyDesc: "Boutique design studio focusing on digital accessibility. 45 employees, flexible environment." },
-    ],
-    mentors: [
-      { id: "M-01", name: "Carmen Ruiz", specialty: "Labor inclusion & executive functions", years: 8, modality: "Virtual", bio: "Organizational psychologist specializing in labor insertion strategies for diverse cognitive profiles. Certified in professional transition support." },
-      { id: "M-02", name: "David Morales", specialty: "Adaptive learning in corporate environments", years: 5, modality: "In-person & virtual", bio: "Inclusion consultant with experience in company-candidate mediation. Has accompanied over 60 successful adaptive hiring processes." },
-    ],
-    candAdjustments: ["Remote or hybrid work", "Asynchronous communication", "Flexible schedule", "Written instructions", "Quiet individual workspace"],
-    compCandsData: [
-      { id: "CAND-A7X2", match: 96, strengths: "High focus on detailed tasks. Prefers quiet environment. Requires written instructions.", radar: [{ axis: "Processing", value: 88 }, { axis: "Env. Tolerance", value: 22 }, { axis: "Execution", value: 92 }, { axis: "Adjustments", value: 70 }], env: [{ req: "Remote work available", met: true }, { req: "Asynchronous communication", met: true }, { req: "Quiet individual workspace", met: false }, { req: "Flexible schedule", met: true }] },
-      { id: "CAND-B3M9", match: 89, strengths: "Excellent tolerance to variable environments. High multitasking ability. Fluent verbal communication.", radar: [{ axis: "Processing", value: 65 }, { axis: "Env. Tolerance", value: 82 }, { axis: "Execution", value: 68 }, { axis: "Adjustments", value: 85 }], env: [{ req: "Remote work available", met: true }, { req: "Asynchronous communication", met: false }, { req: "Written instructions", met: true }, { req: "Deliverable-based evaluation", met: true }] },
-    ],
-    prestaciones: ["Noise-canceling headphones", "Specialized keyboards", "Anti-glare screens", "Ramps and elevators", "Sensory rest rooms", "Remote and hybrid modality available"],
-    politicas: ["Scheduled active breaks", "Flexible schedule"],
-    skills: ["Typing", "Microsoft Office", "Intensive reading", "Technical writing", "Data analysis", "Visual design", "Verbal communication"],
   },
 };
 
