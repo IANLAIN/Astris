@@ -23,7 +23,7 @@ type QuizAnswers = Record<number, Record<number, number | number[]>>;
 
 // ── Translations ──────────────────────────────────────────────────────────────
 
-const T: Record<Lang, Record<string, string>> = {
+const T: Record<Lang, Record<string, any>> = {
   es: {
     "lang.title": "Selecciona tu idioma",
     "lang.sub": "Elige el idioma en que deseas usar Astris",
@@ -1350,7 +1350,7 @@ function LoginModal({ lang, onLogin, onBack, error, loading, initialRole = "cand
           <button onClick={() => onLogin(loginRole, email || undefined, password || undefined)} disabled={loading} className="w-full py-4 rounded-xl font-bold text-base cursor-pointer" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)", opacity: loading ? 0.6 : 1 }}>
             {loading ? "..." : t("login.submit")}
           </button>
-          
+
           {loginRole !== "admin" && (
             <>
               <div className="relative flex items-center py-2">
@@ -1358,17 +1358,17 @@ function LoginModal({ lang, onLogin, onBack, error, loading, initialRole = "cand
                 <span className="flex-shrink-0 mx-4 text-muted-foreground text-sm font-medium">o</span>
                 <div className="flex-grow border-t border-border"></div>
               </div>
-              
-              <button 
+
+              <button
                 onClick={async () => {
                   try {
                     await signInWithGoogle(loginRole, 'login');
                   } catch (e) {
                     console.error(e);
                   }
-                }} 
-                disabled={loading} 
-                className="w-full py-4 rounded-xl font-bold text-base flex items-center justify-center gap-3 border-2 border-border cursor-pointer hover:bg-secondary transition-colors" 
+                }}
+                disabled={loading}
+                className="w-full py-4 rounded-xl font-bold text-base flex items-center justify-center gap-3 border-2 border-border cursor-pointer hover:bg-secondary transition-colors"
                 style={{ backgroundColor: "var(--card)", color: "var(--foreground)" }}
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -1454,12 +1454,12 @@ function RegisterModal({ lang, role, onRegister, onBack, error, loading, googleA
           </div>
           <div className="p-8 flex flex-col gap-5 text-center">
             <div className="w-16 h-16 rounded-full mx-auto flex items-center justify-center border border-border bg-secondary mb-2" style={{ backgroundColor: "var(--secondary)" }}>
-               <svg className="w-8 h-8" viewBox="0 0 24 24">
-                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                 <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                 <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                 <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-               </svg>
+              <svg className="w-8 h-8" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+              </svg>
             </div>
             <h3 className="text-xl font-bold text-foreground">Hola, {googleAuthUser.name}</h3>
             <p className="text-muted-foreground text-sm">Tu cuenta de Google ha sido vinculada. Confirma para crear tu perfil como <b>{role === 'candidate' ? 'Candidato' : role === 'company' ? 'Empresa' : 'Mentor'}</b>.</p>
@@ -1522,17 +1522,17 @@ function RegisterModal({ lang, role, onRegister, onBack, error, loading, googleA
             <span className="flex-shrink-0 mx-4 text-muted-foreground text-sm font-medium">o</span>
             <div className="flex-grow border-t border-border"></div>
           </div>
-          
-          <button 
+
+          <button
             onClick={async () => {
               try {
                 await signInWithGoogle(role, 'register');
               } catch (e) {
                 console.error(e);
               }
-            }} 
-            disabled={loading} 
-            className="w-full py-4 rounded-xl font-bold text-base flex items-center justify-center gap-3 border-2 border-border cursor-pointer hover:bg-secondary transition-colors" 
+            }}
+            disabled={loading}
+            className="w-full py-4 rounded-xl font-bold text-base flex items-center justify-center gap-3 border-2 border-border cursor-pointer hover:bg-secondary transition-colors"
             style={{ backgroundColor: "var(--card)", color: "var(--foreground)" }}
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -2399,13 +2399,13 @@ function CompanyOrgProfile({ lang }: { lang: Lang }) {
       const { data } = await supabase.from("companies").select("*").eq("user_id", session.user.id).single();
       if (data) {
         let env: any = {};
-        try { env = JSON.parse(data.work_environment || "{}"); } catch(e){}
+        try { env = JSON.parse(data.work_environment || "{}"); } catch (e) { }
         setFormData({
           company_name: data.company_name || "",
           industry: data.industry || "",
-          company_size: data.company_size || "",
-          country: data.country || "",
-          city: data.city || "",
+          company_size: env.company_size || "",
+          country: env.country || "",
+          city: env.city || "",
           philosophy: data.philosophy || "",
           noise: env.noise || "",
           light: env.light || "",
@@ -2433,21 +2433,21 @@ function CompanyOrgProfile({ lang }: { lang: Lang }) {
     setMessage("");
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) return;
-    
+
     const env = JSON.stringify({
       noise: formData.noise,
       light: formData.light,
       layout: formData.layout,
-      policies: formData.policies
+      policies: formData.policies,
+      company_size: formData.company_size,
+      country: formData.country,
+      city: formData.city
     });
 
     const { error } = await supabase.from("companies").upsert({
       user_id: session.user.id,
       company_name: formData.company_name || "Sin nombre",
       industry: formData.industry,
-      company_size: formData.company_size,
-      country: formData.country,
-      city: formData.city,
       philosophy: formData.philosophy,
       work_environment: env,
       accommodations: formData.accommodations
@@ -2491,12 +2491,12 @@ function CompanyOrgProfile({ lang }: { lang: Lang }) {
                     ].map((f) => (
                       <div key={f.field}>
                         <label className="block text-sm font-semibold text-foreground mb-2">{f.label}</label>
-                        <input 
-                          type="text" 
+                        <input
+                          type="text"
                           value={(formData as any)[f.field]}
                           onChange={(e) => handleChange(f.field, e.target.value)}
-                          className="w-full px-4 py-3 rounded-xl border border-border text-sm outline-none focus:border-primary" 
-                          style={{ backgroundColor: "var(--input-background)", color: "var(--foreground)" }} 
+                          className="w-full px-4 py-3 rounded-xl border border-border text-sm outline-none focus:border-primary"
+                          style={{ backgroundColor: "var(--input-background)", color: "var(--foreground)" }}
                           placeholder={f.label}
                         />
                       </div>
@@ -2505,10 +2505,10 @@ function CompanyOrgProfile({ lang }: { lang: Lang }) {
                 )}
                 {s.id === "cultura" && (
                   <div className="pt-5">
-                    <textarea 
+                    <textarea
                       value={formData.philosophy}
                       onChange={(e) => handleChange("philosophy", e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl border border-border text-sm outline-none focus:border-primary min-h-[100px] resize-y" 
+                      className="w-full px-4 py-3 rounded-xl border border-border text-sm outline-none focus:border-primary min-h-[100px] resize-y"
                       style={{ backgroundColor: "var(--input-background)", color: "var(--foreground)" }}
                       placeholder="Describe la filosofía y cultura de tu empresa..."
                     />
@@ -2523,12 +2523,12 @@ function CompanyOrgProfile({ lang }: { lang: Lang }) {
                     ].map((f) => (
                       <div key={f.field}>
                         <label className="block text-sm font-semibold text-foreground mb-2">{f.label}</label>
-                        <input 
-                          type="text" 
+                        <input
+                          type="text"
                           value={(formData as any)[f.field]}
                           onChange={(e) => handleChange(f.field, e.target.value)}
-                          className="w-full px-4 py-3 rounded-xl border border-border text-sm outline-none focus:border-primary" 
-                          style={{ backgroundColor: "var(--input-background)", color: "var(--foreground)" }} 
+                          className="w-full px-4 py-3 rounded-xl border border-border text-sm outline-none focus:border-primary"
+                          style={{ backgroundColor: "var(--input-background)", color: "var(--foreground)" }}
                           placeholder={f.placeholder}
                         />
                       </div>
@@ -2571,10 +2571,10 @@ function CompanyOrgProfile({ lang }: { lang: Lang }) {
         ))}
         <div className="flex items-center justify-end gap-4 mt-2">
           {message && <span className="text-sm text-green-500 font-medium">{message}</span>}
-          <button 
-            onClick={handleSave} 
+          <button
+            onClick={handleSave}
             disabled={saving}
-            className="px-8 py-4 rounded-xl font-bold cursor-pointer disabled:opacity-70" 
+            className="px-8 py-4 rounded-xl font-bold cursor-pointer disabled:opacity-70"
             style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}
           >
             {saving ? "Guardando..." : t("save")}
