@@ -995,21 +995,24 @@ function getPaletteDesc(p: PaletteKey, lang: Lang) {
   return lang === "es" ? PALETTES[p].descEs : PALETTES[p].descEn;
 }
 
-// ── Mock Data ─────────────────────────────────────────────────────────────────
+// ── Mock Data (fallback) ──────────────────────────────────────────────────────
 
-const VACANCIES = [
-  { id: "V-1042", title: "Analista de Datos Junior", company: "Veritas Analytics", sector: "Tecnología", modality: "Remoto", type: "Tiempo completo", match: 94, socialLevel: "Bajo", adjustments: ["100% remoto", "Comunicación asíncrona", "Horario flexible", "Instrucciones escritas"], desc: "Análisis de bases de datos, generación de reportes y visualización de métricas clave. Ambiente de trabajo tranquilo, equipo pequeño de 6 personas.", companyDesc: "Empresa de análisis de datos con 7 años en el mercado. Cultura de trabajo orientada a resultados, no a presencia." },
-  { id: "V-0873", title: "Diseñadora UX", company: "Forma Studio", sector: "Diseño", modality: "Híbrido", type: "Tiempo completo", match: 87, socialLevel: "Medio", adjustments: ["Espacio de trabajo tranquilo", "Briefs escritos", "Evaluación por entregables"], desc: "Diseño de experiencias digitales para clientes de salud y educación. 3 días remoto, 2 en oficina con escritorio individual.", companyDesc: "Estudio de diseño boutique con enfoque en accesibilidad digital. 45 colaboradores, ambiente flexible." },
-  { id: "V-1155", title: "Redactor/a Técnico/a", company: "Kestrel Systems", sector: "Software", modality: "Remoto", type: "Contrato", match: 81, socialLevel: "Bajo", adjustments: ["Trabajo 100% remoto", "Sin oficina abierta", "Onboarding estructurado"], desc: "Documentación técnica para plataformas de software empresarial. Trabajo autónomo con revisiones semanales escritas.", companyDesc: "Empresa de software empresarial con 280 personas. Política de trabajo remoto establecida desde 2019." },
-  { id: "V-0991", title: "Coordinador/a de Proyectos", company: "Novael Group", sector: "Consultoría", modality: "Híbrido", type: "Tiempo completo", match: 76, socialLevel: "Medio", adjustments: ["Briefs de tareas escritos", "Reuniones con agenda previa", "Escritorio individual"], desc: "Coordinación de proyectos de transformación digital. 2 días en oficina, 3 días remoto. Equipo de 10 personas.", companyDesc: "Consultora de transformación organizacional con 90 colaboradores. Políticas de accesibilidad en actualización." },
+type VacancyItem = { id: string; title: string; company: string; sector: string; modality: string; type: string; match: number; socialLevel: string; adjustments: string[]; desc: string; companyDesc: string; };
+type MentorItem = { id: string; name: string; specialty: string; years: number; modality: string; bio: string; };
+
+const VACANCIES_FALLBACK: VacancyItem[] = [
+  { id: "V-1042", title: "Analista de Datos Junior", company: "Veritas Analytics", sector: "Tecnología", modality: "Remoto", type: "Tiempo completo", match: 94, socialLevel: "Bajo", adjustments: ["100% remoto", "Comunicación asíncrona", "Horario flexible", "Instrucciones escritas"], desc: "Análisis de bases de datos, generación de reportes y visualización de métricas clave.", companyDesc: "Empresa de análisis de datos con 7 años en el mercado." },
+  { id: "V-0873", title: "Diseñadora UX", company: "Forma Studio", sector: "Diseño", modality: "Híbrido", type: "Tiempo completo", match: 87, socialLevel: "Medio", adjustments: ["Espacio de trabajo tranquilo", "Briefs escritos", "Evaluación por entregables"], desc: "Diseño de experiencias digitales para clientes de salud y educación.", companyDesc: "Estudio de diseño boutique con enfoque en accesibilidad digital." },
 ];
 
-const MENTORS = [
-  { id: "M-01", name: "Carmen Ruiz", specialty: "Inclusión laboral y funciones ejecutivas", years: 8, modality: "Virtual", bio: "Psicóloga organizacional especializada en estrategias de inserción laboral para perfiles con estilos cognitivos diversos. Certificada en acompañamiento de transiciones profesionales." },
-  { id: "M-02", name: "David Morales", specialty: "Aprendizaje adaptativo en entornos corporativos", years: 5, modality: "Presencial y virtual", bio: "Consultor de inclusión con experiencia en mediación empresa-candidato. Ha acompañado más de 60 procesos de contratación adaptativa exitosos." },
-  { id: "M-03", name: "Sofía Andrade", specialty: "Integración sensorial y entorno laboral", years: 6, modality: "Virtual", bio: "Terapeuta ocupacional con posgrado en accesibilidad laboral. Especialista en ajustes razonables y adaptación de entornos de trabajo." },
-  { id: "M-04", name: "Luis Torres", specialty: "Transición laboral y autonomía profesional", years: 10, modality: "Presencial", bio: "Coach laboral y educador especializado en autonomía profesional. Fundador del programa de mentoring Puentes de Empleo con presencia en 4 países." },
+const MENTORS_FALLBACK: MentorItem[] = [
+  { id: "M-01", name: "Carmen Ruiz", specialty: "Inclusión laboral y funciones ejecutivas", years: 8, modality: "Virtual", bio: "Psicóloga organizacional especializada en estrategias de inserción laboral para perfiles con estilos cognitivos diversos." },
+  { id: "M-02", name: "David Morales", specialty: "Aprendizaje adaptativo en entornos corporativos", years: 5, modality: "Presencial y virtual", bio: "Consultor de inclusión con experiencia en mediación empresa-candidato." },
+  { id: "M-03", name: "Sofía Andrade", specialty: "Integración sensorial y entorno laboral", years: 6, modality: "Virtual", bio: "Terapeuta ocupacional con posgrado en accesibilidad laboral." },
+  { id: "M-04", name: "Luis Torres", specialty: "Transición laboral y autonomía profesional", years: 10, modality: "Presencial", bio: "Coach laboral y educador especializado en autonomía profesional." },
 ];
+
+// Keep COMPANY_CANDIDATES_DATA below
 
 const CANDIDATE_RADAR_FINAL = [
   { axis: "Procesamiento", value: 82 },
@@ -2075,8 +2078,50 @@ function CandidateProfile({ lang, answers }: { lang: Lang; answers: QuizAnswers 
 function CandidateVacancies({ lang, onSelect }: { lang: Lang; onSelect: (id: string) => void }) {
   const t = useT(lang);
   const [modalityFilter, setModalityFilter] = useState("all");
-  const filtered = modalityFilter === "all" ? VACANCIES : VACANCIES.filter((v) => v.modality.toLowerCase().includes(modalityFilter));
-  const MODALITIES = [["all", lang === "es" ? "Todas" : "All"], ["remoto", lang === "es" ? "Remoto" : "Remote"], ["híbrido", lang === "es" ? "Híbrido" : "Hybrid"]];
+  const [vacancies, setVacancies] = useState<VacancyItem[]>([]);
+  const [loadingVac, setLoadingVac] = useState(true);
+
+  useEffect(() => {
+    async function loadJobs() {
+      const { data, error } = await supabase
+        .from("vacancies")
+        .select(`id, title, description, company_id, status, work_modality, location_text, contract_type, offered_accommodations`)
+        .eq("status", "active");
+      if (!error && data && data.length > 0) {
+        // Resolve company information for all vacancies in a single follow-up query
+        const companyIds = Array.from(new Set(data.map((j: any) => j.company_id).filter(Boolean)));
+        let companiesMap: Record<string, any> = {};
+        if (companyIds.length > 0) {
+          const { data: comps1 } = await supabase.from("companies").select("id, user_id, company_name, industry, philosophy").in("id", companyIds);
+          const { data: comps2 } = await supabase.from("companies").select("id, user_id, company_name, industry, philosophy").in("user_id", companyIds);
+          (comps1 || []).forEach((c: any) => (companiesMap[c.id] = c));
+          (comps2 || []).forEach((c: any) => (companiesMap[c.user_id] = c));
+        }
+
+        const mapped: VacancyItem[] = data.map((j: any) => ({
+          id: j.id,
+          title: j.title,
+          company: (companiesMap[j.company_id]?.company_name) || "Empresa",
+          sector: (companiesMap[j.company_id]?.industry) || "-",
+          modality: j.work_modality === "remote" ? (lang === "es" ? "Remoto" : "Remote") : j.work_modality === "hybrid" ? (lang === "es" ? "Híbrido" : "Hybrid") : (lang === "es" ? "Presencial" : "In-person"),
+          type: j.contract_type ?? (lang === "es" ? "Tiempo completo" : "Full-time"),
+          match: 90,
+          socialLevel: "Bajo",
+          adjustments: j.offered_accommodations ?? [],
+          desc: j.description ?? "",
+          companyDesc: (companiesMap[j.company_id]?.philosophy) || "",
+        }));
+        setVacancies(mapped);
+      } else {
+        setVacancies(VACANCIES_FALLBACK);
+      }
+      setLoadingVac(false);
+    }
+    loadJobs();
+  }, [lang]);
+
+  const filtered = modalityFilter === "all" ? vacancies : vacancies.filter((v) => v.modality.toLowerCase().includes(modalityFilter));
+  const MODALITIES = [["all", lang === "es" ? "Todas" : "All"], ["remoto", lang === "es" ? "Remoto" : "Remote"], ["remote", "Remote"], ["híbrido", lang === "es" ? "Híbrido" : "Hybrid"]];
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -2092,7 +2137,7 @@ function CandidateVacancies({ lang, onSelect }: { lang: Lang; onSelect: (id: str
             <div className="mb-5">
               <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">{t("vacancies.modality")}</div>
               <div className="flex flex-col gap-2">
-                {MODALITIES.map(([val, label]) => (
+                {[["all", lang === "es" ? "Todas" : "All"], ["remote", lang === "es" ? "Remoto" : "Remote"], ["hybrid", lang === "es" ? "Híbrido" : "Hybrid"]].map(([val, label]) => (
                   <button key={val} onClick={() => setModalityFilter(val)} className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm cursor-pointer" style={{ backgroundColor: modalityFilter === val ? "var(--secondary)" : "transparent", color: "var(--foreground)", fontWeight: modalityFilter === val ? 600 : 400 }}>
                     {modalityFilter === val && <div className="w-2 h-2 rounded-full bg-primary shrink-0" aria-hidden="true" />}
                     {label}
@@ -2110,7 +2155,9 @@ function CandidateVacancies({ lang, onSelect }: { lang: Lang; onSelect: (id: str
         </div>
         {/* Vacancy cards */}
         <div className="flex-1 flex flex-col gap-5">
-          {filtered.map((v) => (
+          {loadingVac ? (
+            <div className="flex items-center justify-center py-20 text-muted-foreground">{lang === "es" ? "Cargando vacantes..." : "Loading jobs..."}</div>
+          ) : filtered.map((v) => (
             <article key={v.id} className="rounded-2xl border border-border p-7 flex items-center gap-7" style={{ backgroundColor: "var(--card)" }}>
               <MatchBadge value={v.match} size="lg" />
               <div className="flex-1 min-w-0">
@@ -2147,8 +2194,56 @@ function CandidateVacancies({ lang, onSelect }: { lang: Lang; onSelect: (id: str
 
 function VacancyDetail({ lang, vacancyId, onStart, onBack }: { lang: Lang; vacancyId: string; onStart: () => void; onBack: () => void }) {
   const t = useT(lang);
-  const v = VACANCIES.find((x) => x.id === vacancyId) ?? VACANCIES[0];
+  const [v, setV] = useState<VacancyItem | null>(null);
+
+  useEffect(() => {
+    // Check if it's a static ID (starts with "V-")
+    if (vacancyId.startsWith("V-")) {
+      setV(VACANCIES_FALLBACK.find((x) => x.id === vacancyId) ?? VACANCIES_FALLBACK[0]);
+      return;
+    }
+    // Otherwise fetch from Supabase
+    supabase
+      .from("vacancies")
+      .select(`id, title, description, company_id, work_modality, location_text, contract_type, offered_accommodations`)
+      .eq("id", vacancyId)
+      .single()
+      .then(async ({ data }) => {
+        if (data) {
+          const j: any = data;
+          // Resolve company
+          let companyName = "Empresa";
+          let companyPhilosophy = "";
+          if (j.company_id) {
+            const { data: comp } = await supabase.from("companies").select("id, user_id, company_name, philosophy").or(`id.eq.${j.company_id},user_id.eq.${j.company_id}`).single();
+            if (comp) {
+              companyName = comp.company_name ?? companyName;
+              companyPhilosophy = comp.philosophy ?? "";
+            }
+          }
+          setV({
+            id: j.id,
+            title: j.title,
+            company: companyName,
+            sector: "-",
+            modality: j.work_modality === "remote" ? (lang === "es" ? "Remoto" : "Remote") : j.work_modality === "hybrid" ? (lang === "es" ? "Híbrido" : "Hybrid") : "Presencial",
+            type: j.contract_type ?? (lang === "es" ? "Tiempo completo" : "Full-time"),
+            match: 90,
+            socialLevel: "Bajo",
+            adjustments: j.offered_accommodations ?? [],
+            desc: j.description ?? "",
+            companyDesc: companyPhilosophy,
+          });
+        } else {
+          setV(VACANCIES_FALLBACK[0]);
+        }
+      });
+  }, [vacancyId, lang]);
+
   const COMPAT = [{ label: "Modalidad de trabajo", match: true }, { label: "Comunicación asíncrona", match: true }, { label: "Instrucciones escritas", match: true }, { label: "Espacio individual silencioso", match: false }, { label: "Horario flexible", match: true }];
+
+  if (!v) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">{lang === "es" ? "Cargando..." : "Loading..."}</div>;
+
   return (
     <div className="min-h-screen flex flex-col">
       <div className="px-20 py-8 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
@@ -2215,6 +2310,47 @@ function VacancyDetail({ lang, vacancyId, onStart, onBack }: { lang: Lang; vacan
 function MentorSelect({ lang, onSelect }: { lang: Lang; onSelect: () => void }) {
   const t = useT(lang);
   const [chosen, setChosen] = useState<string | null>(null);
+  const [mentors, setMentors] = useState<MentorItem[]>([]);
+  const [loadingMent, setLoadingMent] = useState(true);
+
+  useEffect(() => {
+    async function loadMentors() {
+      try {
+        const { data: mentorsData, error: mentorsErr } = await supabase
+          .from("mentors")
+          .select("user_id, expertise, availability_status")
+          .eq("availability_status", "available");
+
+        if (mentorsErr || !mentorsData || mentorsData.length === 0) {
+          setMentors(MENTORS_FALLBACK);
+          setLoadingMent(false);
+          return;
+        }
+
+        const userIds = mentorsData.map((m: any) => m.user_id).filter(Boolean);
+        const { data: profiles } = await supabase.from("users_profiles").select("id, full_name, bio").in("id", userIds);
+
+        const profileMap: Record<string, any> = {};
+        (profiles || []).forEach((p: any) => { profileMap[p.id] = p; });
+
+        const mapped: MentorItem[] = mentorsData.map((m: any) => ({
+          id: m.user_id,
+          name: profileMap[m.user_id]?.full_name ?? "Mentor",
+          specialty: (m.expertise ?? []).join(", "),
+          years: 5,
+          modality: "Virtual",
+          bio: profileMap[m.user_id]?.bio ?? "",
+        }));
+        setMentors(mapped);
+      } catch (e) {
+        setMentors(MENTORS_FALLBACK);
+      } finally {
+        setLoadingMent(false);
+      }
+    }
+    loadMentors();
+  }, []);
+
   return (
     <div className="min-h-screen flex flex-col">
       <div className="px-20 py-10 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
@@ -2222,31 +2358,35 @@ function MentorSelect({ lang, onSelect }: { lang: Lang; onSelect: () => void }) 
         <p className="text-muted-foreground mt-2">{t("mentor.sub")}</p>
       </div>
       <div className="max-w-7xl mx-auto w-full px-20 py-10">
-        <div className="grid grid-cols-4 gap-6">
-          {MENTORS.map((m) => (
-            <article key={m.id} className="rounded-2xl border-2 flex flex-col overflow-hidden" style={{ borderColor: chosen === m.id ? "var(--primary)" : "var(--border)", backgroundColor: "var(--card)" }}>
-              <div className="px-6 pt-8 pb-5">
-                <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: "var(--secondary)" }} aria-hidden="true">
-                  <User size={28} style={{ color: "var(--primary)" }} />
+        {loadingMent ? (
+          <div className="flex items-center justify-center py-20 text-muted-foreground">{lang === "es" ? "Cargando mentores..." : "Loading mentors..."}</div>
+        ) : (
+          <div className="grid grid-cols-4 gap-6">
+            {mentors.map((m) => (
+              <article key={m.id} className="rounded-2xl border-2 flex flex-col overflow-hidden" style={{ borderColor: chosen === m.id ? "var(--primary)" : "var(--border)", backgroundColor: "var(--card)" }}>
+                <div className="px-6 pt-8 pb-5">
+                  <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: "var(--secondary)" }} aria-hidden="true">
+                    <User size={28} style={{ color: "var(--primary)" }} />
+                  </div>
+                  <div className="text-center">
+                    <div className="font-bold text-foreground">{m.name}</div>
+                    <div className="text-xs text-muted-foreground mt-1 leading-tight">{m.specialty}</div>
+                  </div>
                 </div>
-                <div className="text-center">
-                  <div className="font-bold text-foreground">{m.name}</div>
-                  <div className="text-xs text-muted-foreground mt-1 leading-tight">{m.specialty}</div>
+                <div className="px-6 pb-5 flex flex-col gap-2 border-t border-border pt-4">
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground"><Star size={12} aria-hidden="true" style={{ color: "var(--accent)" }} />{m.years} {lang === "es" ? "años de experiencia" : "years experience"}</div>
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground"><MapPin size={12} aria-hidden="true" />{m.modality}</div>
+                  {m.bio && <p className="text-xs text-muted-foreground leading-relaxed mt-1">{m.bio}</p>}
                 </div>
-              </div>
-              <div className="px-6 pb-5 flex flex-col gap-2 border-t border-border pt-4">
-                <div className="flex items-center gap-2 text-xs text-muted-foreground"><Star size={12} aria-hidden="true" style={{ color: "var(--accent)" }} />{m.years} {lang === "es" ? "años de experiencia" : "years experience"}</div>
-                <div className="flex items-center gap-2 text-xs text-muted-foreground"><MapPin size={12} aria-hidden="true" />{m.modality}</div>
-                <p className="text-xs text-muted-foreground leading-relaxed mt-1">{m.bio}</p>
-              </div>
-              <div className="px-6 pb-6 mt-auto">
-                <button onClick={() => { setChosen(m.id); setTimeout(onSelect, 300); }} className="w-full py-3 rounded-xl font-semibold cursor-pointer text-sm" style={{ backgroundColor: chosen === m.id ? "var(--primary)" : "var(--secondary)", color: chosen === m.id ? "var(--primary-foreground)" : "var(--foreground)" }}>
-                  {chosen === m.id ? <span className="flex items-center justify-center gap-1.5"><Check size={14} aria-hidden="true" /> {lang === "es" ? "Seleccionado" : "Selected"}</span> : t("mentor.choose")}
-                </button>
-              </div>
-            </article>
-          ))}
-        </div>
+                <div className="px-6 pb-6 mt-auto">
+                  <button onClick={() => { setChosen(m.id); setTimeout(onSelect, 300); }} className="w-full py-3 rounded-xl font-semibold cursor-pointer text-sm" style={{ backgroundColor: chosen === m.id ? "var(--primary)" : "var(--secondary)", color: chosen === m.id ? "var(--primary-foreground)" : "var(--foreground)" }}>
+                    {chosen === m.id ? <span className="flex items-center justify-center gap-1.5"><Check size={14} aria-hidden="true" /> {lang === "es" ? "Seleccionado" : "Selected"}</span> : t("mentor.choose")}
+                  </button>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

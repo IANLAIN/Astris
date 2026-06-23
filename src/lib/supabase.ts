@@ -24,12 +24,49 @@ export async function registerUser(
     },
   });
   if (error) throw error;
+  // Ensure a profile row exists in `users_profiles` for this user
+  try {
+    if (data?.user?.id) {
+      const upsertBody: any = {
+        id: data.user.id,
+        email: email,
+        full_name: name || data.user.user_metadata?.full_name || email.split("@")[0],
+        role,
+        completed_onboarding: false,
+      };
+      const { error: upsertErr } = await supabase.from("users_profiles").upsert(upsertBody);
+      if (upsertErr) console.error("Error upserting users_profiles after register:", upsertErr);
+    }
+  } catch (e) {
+    console.error("Unexpected error ensuring users_profiles on register:", e);
+  }
+
   return data.user;
 }
 
 export async function loginUser(email: string, password: string) {
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) throw error;
+  // Ensure profile exists for signed-in user
+  try {
+    const userId = data?.user?.id;
+    if (userId) {
+      const { data: profile } = await supabase.from("users_profiles").select("id").eq("id", userId).single();
+      if (!profile) {
+        const { error: upsertErr } = await supabase.from("users_profiles").upsert({
+          id: userId,
+          email: email,
+          full_name: data.user.user_metadata?.full_name || data.user.user_metadata?.name || email.split("@")[0],
+          role: data.user.user_metadata?.role ?? null,
+          completed_onboarding: false,
+        });
+        if (upsertErr) console.error("Error upserting users_profiles after login:", upsertErr);
+      }
+    }
+  } catch (e) {
+    console.error("Unexpected error ensuring users_profiles on login:", e);
+  }
+
   return data.user;
 }
 
@@ -92,6 +129,28 @@ export async function getCurrentUser() {
     }
     localStorage.removeItem("astris_pending_role");
     localStorage.removeItem("astris_google_intent");
+  }
+
+  // If no profile exists at all, try to create one from auth metadata
+  if (!profile) {
+    try {
+      const fallback = {
+        id: userId,
+        email: session.user.email,
+        full_name: session.user.user_metadata?.full_name || session.user.user_metadata?.name || session.user.email?.split("@")[0],
+        role: session.user.user_metadata?.role ?? null,
+        completed_onboarding: false,
+      };
+      const { data: created, error: createErr } = await supabase.from("users_profiles").upsert(fallback).select().single();
+      if (createErr) {
+        console.error("Error creating fallback users_profiles:", createErr);
+      } else {
+        profile = created;
+        error = null;
+      }
+    } catch (e) {
+      console.error("Unexpected error creating fallback users_profiles:", e);
+    }
   }
 
   if (error || !profile) return null;
