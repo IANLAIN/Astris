@@ -1,6 +1,22 @@
 {
     "liveServer.settings.port": 5501,
     "chat.tools.terminal.autoApprove": {
-        "npm install": true
+        "npm install": true,
+        "Get-Item": true,
+        "Get-Member": true,
+        "Out-Null": true,
+        "Set-Content": true,
+        "/^node check_db\\.mjs$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^node -e \"import \\{ createClient \\} from '@supabase/supabase-js'; const supabase = createClient\\('https://oupbptgzfevkzzvscekj\\.supabase\\.co','sb_publishable_Obya200r1UbgWVnMbuhhiw_Xto1ETSE'\\); \\(async \\(\\)=>\\{ const t = await supabase\\.rpc\\('get_tables'\\); console\\.log\\('rpc get_tables', t\\); const q = await supabase\\.from\\('pg_catalog\\.pg_tables'\\)\\.select\\('\\*'\\)\\.limit\\(10\\); console\\.log\\('pg_catalog\\.pg_tables', q\\.error \\? q\\.error : q\\.data\\?\\.slice\\(0,10\\)\\); const q2 = await supabase\\.from\\('information_schema\\.tables'\\)\\.select\\('table_schema,table_name'\\)\\.eq\\('table_schema','public'\\)\\.limit\\(50\\); console\\.log\\('information_schema\\.tables public', q2\\.error \\? q2\\.error : q2\\.data\\); \\}\\)\\(\\);\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^node check_db2\\.mjs$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
     }
 }

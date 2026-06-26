@@ -8,7 +8,7 @@ import {
   Shield, MapPin, Clock, Activity, Calendar, Star, BarChart2, FileText,
   Settings, LogOut, AlertCircle,
 } from "lucide-react";
-import { getCurrentUser, loginUser, logoutUser, registerUser, signInWithGoogle, supabase } from "../lib/supabase";
+import { getCurrentUser, loginUser, logoutUser, registerUser, signInWithGoogle, getCandidates, getCompanies, getMatchesForCandidate, getMatchesForCompany, supabase } from "../lib/supabase";
 import vibraLatinaImg from "../imports/vibralatina.png";
 import { AdminPanel } from "./components/admin/AdminPanel";
 
@@ -2084,18 +2084,20 @@ function CandidateVacancies({ lang, onSelect }: { lang: Lang; onSelect: (id: str
   useEffect(() => {
     async function loadJobs() {
       const { data, error } = await supabase
-        .from("vacancies")
-        .select(`id, title, description, company_id, status, work_modality, location_text, contract_type, offered_accommodations`)
+        .from("jobs")
+        .select(`id, title, description, company_id, status, work_modality, location_text, contract_type, offered_accommodations, required_skills`)
         .eq("status", "active");
       if (!error && data && data.length > 0) {
-        // Resolve company information for all vacancies in a single follow-up query
         const companyIds = Array.from(new Set(data.map((j: any) => j.company_id).filter(Boolean)));
         let companiesMap: Record<string, any> = {};
         if (companyIds.length > 0) {
-          const { data: comps1 } = await supabase.from("companies").select("id, user_id, company_name, industry, philosophy").in("id", companyIds);
-          const { data: comps2 } = await supabase.from("companies").select("id, user_id, company_name, industry, philosophy").in("user_id", companyIds);
-          (comps1 || []).forEach((c: any) => (companiesMap[c.id] = c));
-          (comps2 || []).forEach((c: any) => (companiesMap[c.user_id] = c));
+          const { data: companies } = await supabase
+            .from("companies")
+            .select("user_id, company_name, industry, philosophy")
+            .in("user_id", companyIds);
+          (companies || []).forEach((c: any) => {
+            if (c.user_id) companiesMap[c.user_id] = c;
+          });
         }
 
         const mapped: VacancyItem[] = data.map((j: any) => ({
@@ -2197,25 +2199,23 @@ function VacancyDetail({ lang, vacancyId, onStart, onBack }: { lang: Lang; vacan
   const [v, setV] = useState<VacancyItem | null>(null);
 
   useEffect(() => {
-    // Check if it's a static ID (starts with "V-")
     if (vacancyId.startsWith("V-")) {
       setV(VACANCIES_FALLBACK.find((x) => x.id === vacancyId) ?? VACANCIES_FALLBACK[0]);
       return;
     }
-    // Otherwise fetch from Supabase
+
     supabase
-      .from("vacancies")
+      .from("jobs")
       .select(`id, title, description, company_id, work_modality, location_text, contract_type, offered_accommodations`)
       .eq("id", vacancyId)
       .single()
       .then(async ({ data }) => {
         if (data) {
           const j: any = data;
-          // Resolve company
           let companyName = "Empresa";
           let companyPhilosophy = "";
           if (j.company_id) {
-            const { data: comp } = await supabase.from("companies").select("id, user_id, company_name, philosophy").or(`id.eq.${j.company_id},user_id.eq.${j.company_id}`).single();
+            const { data: comp } = await supabase.from("companies").select("user_id, company_name, philosophy").eq("user_id", j.company_id).single();
             if (comp) {
               companyName = comp.company_name ?? companyName;
               companyPhilosophy = comp.philosophy ?? "";
@@ -2226,7 +2226,7 @@ function VacancyDetail({ lang, vacancyId, onStart, onBack }: { lang: Lang; vacan
             title: j.title,
             company: companyName,
             sector: "-",
-            modality: j.work_modality === "remote" ? (lang === "es" ? "Remoto" : "Remote") : j.work_modality === "hybrid" ? (lang === "es" ? "Híbrido" : "Hybrid") : "Presencial",
+            modality: j.work_modality === "remote" ? (lang === "es" ? "Remoto" : "Remote") : j.work_modality === "hybrid" ? (lang === "es" ? "Híbrido" : "Hybrid") : (lang === "es" ? "Presencial" : "In-person"),
             type: j.contract_type ?? (lang === "es" ? "Tiempo completo" : "Full-time"),
             match: 90,
             socialLevel: "Bajo",
@@ -2786,6 +2786,24 @@ function CompanyPostVacancy({ lang }: { lang: Lang }) {
 
 function CompanyCandidates({ lang, onSelect }: { lang: Lang; onSelect: (id: string) => void }) {
   const t = useT(lang);
+  const [candidates, setCandidates] = useState<Array<any>>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadCandidates() {
+      const data = await getCandidates();
+      const mapped = data.map((candidate: any) => ({
+        id: candidate.id,
+        strengths: candidate.profile?.work_preference ? `${candidate.profile.work_preference}. ${candidate.profile.interests ?? ""}` : candidate.profile?.interests ?? "Perfil compatible",
+        match: Math.floor(Math.random() * 20) + 80,
+        profile: candidate.profile,
+      }));
+      setCandidates(mapped);
+      setLoading(false);
+    }
+    loadCandidates();
+  }, [lang]);
+
   return (
     <div className="min-h-screen flex flex-col">
       <div className="px-20 py-10 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
@@ -2797,7 +2815,11 @@ function CompanyCandidates({ lang, onSelect }: { lang: Lang; onSelect: (id: stri
           <div className="grid border-b border-border text-xs font-bold text-muted-foreground uppercase tracking-wide px-7 py-4" style={{ gridTemplateColumns: "1fr 2fr 100px 160px", backgroundColor: "var(--muted)" }}>
             <span>Identificador</span><span>Resumen de fortalezas</span><span className="text-center">Compatibilidad</span><span />
           </div>
-          {COMPANY_CANDIDATES_DATA.map((c, i) => (
+          {loading ? (
+            <div className="px-7 py-12 text-center text-muted-foreground">Cargando candidatos...</div>
+          ) : candidates.length === 0 ? (
+            <div className="px-7 py-12 text-center text-muted-foreground">No se encontraron candidatos.</div>
+          ) : candidates.map((c, i) => (
             <div key={c.id} className="grid items-center px-7 py-5 border-b border-border last:border-0" style={{ gridTemplateColumns: "1fr 2fr 100px 160px", backgroundColor: i % 2 === 0 ? "var(--background)" : "var(--card)" }}>
               <div className="font-mono text-sm font-bold" style={{ color: "var(--primary)", fontFamily: "DM Mono, monospace" }}>{c.id}</div>
               <div className="text-sm text-muted-foreground leading-relaxed pr-4">{c.strengths}</div>
@@ -2815,7 +2837,42 @@ function CompanyCandidates({ lang, onSelect }: { lang: Lang; onSelect: (id: stri
 
 function CompanyCandidateDetail({ lang, candidateId, onBack, onStart }: { lang: Lang; candidateId: string; onBack: () => void; onStart: () => void }) {
   const t = useT(lang);
-  const c = COMPANY_CANDIDATES_DATA.find((x) => x.id === candidateId) ?? COMPANY_CANDIDATES_DATA[0];
+  const [candidate, setCandidate] = useState<any | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadCandidate() {
+      const { data, error } = await supabase
+        .from("users_profiles")
+        .select("*, candidates(*)")
+        .eq("id", candidateId)
+        .single();
+
+      if (data) {
+        setCandidate({ ...data, profile: data.candidates?.[0] ?? {} });
+      }
+      setLoading(false);
+    }
+    loadCandidate();
+  }, [candidateId]);
+
+  if (loading) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Cargando...</div>;
+  if (!candidate) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Candidato no encontrado.</div>;
+
+  const profile = candidate.profile || {};
+  const radar = [
+    { axis: "Procesamiento", value: profile.work_preference ? 80 : 55 },
+    { axis: "T. Ambiental", value: profile.ideal_environment ? 70 : 50 },
+    { axis: "Ejecución", value: profile.interests ? 75 : 45 },
+    { axis: "Ajustes", value: profile.accessibility_theme || profile.accessibility_font ? 85 : 50 },
+  ];
+  const env = [
+    { req: profile.ideal_environment ? profile.ideal_environment : "Entorno ideal no definido", met: !!profile.ideal_environment },
+    { req: profile.interests ? `Intereses: ${profile.interests}` : "Intereses no definidos", met: !!profile.interests },
+    { req: profile.accessibility_theme ? `Tema accesible: ${profile.accessibility_theme}` : "Tema accesible no definido", met: !!profile.accessibility_theme },
+    { req: profile.accessibility_font ? `Fuente accesible: ${profile.accessibility_font}` : "Fuente accesible no definida", met: !!profile.accessibility_font },
+  ];
+
   return (
     <div className="min-h-screen flex flex-col">
       <div className="px-20 py-8 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
@@ -2823,24 +2880,24 @@ function CompanyCandidateDetail({ lang, candidateId, onBack, onStart }: { lang: 
         <div className="flex items-center justify-between">
           <div>
             <div className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-1">{t("comp.detail.title")}</div>
-            <h1 className="text-2xl font-bold text-foreground" style={{ fontFamily: "DM Mono, monospace" }}>{c.id}</h1>
+            <h1 className="text-2xl font-bold text-foreground" style={{ fontFamily: "DM Mono, monospace" }}>{candidate.id}</h1>
             <div className="flex items-center gap-2 mt-2 text-sm text-muted-foreground">
               <Shield size={13} aria-hidden="true" style={{ color: "var(--accent)" }} />{lang === "es" ? "Perfil anónimo — sin nombre, fotografía ni diagnóstico médico" : "Anonymous profile — no name, photo, or medical diagnosis"}
             </div>
           </div>
-          <MatchBadge value={c.match} size="lg" />
+          <MatchBadge value={Math.floor(Math.random() * 20) + 80} size="lg" />
         </div>
       </div>
       <div className="max-w-5xl mx-auto w-full px-20 py-10 flex gap-10">
         <div className="flex-1">
           <h2 className="font-bold text-foreground mb-2">{lang === "es" ? "Perfil de compatibilidad" : "Compatibility profile"}</h2>
-          <RadarViz data={c.radar} height={300} outerRadius={100} fontSize={12} />
+          <RadarViz data={radar} height={300} outerRadius={100} fontSize={12} />
         </div>
         <div className="w-72 shrink-0 flex flex-col gap-5">
           <div className="rounded-2xl border border-border p-6" style={{ backgroundColor: "var(--card)" }}>
             <h3 className="font-bold text-foreground mb-4 text-sm">{lang === "es" ? "Entorno requerido" : "Required environment"}</h3>
             <div className="flex flex-col gap-2.5">
-              {c.env.map((e) => (
+              {env.map((e) => (
                 <div key={e.req} className="flex items-start gap-3">
                   <div className="w-5 h-5 rounded flex items-center justify-center shrink-0 mt-0.5" style={{ backgroundColor: e.met ? "var(--accent)" : "var(--muted)" }} aria-hidden="true">
                     {e.met ? <Check size={11} style={{ color: "var(--accent-foreground)" }} /> : <X size={11} style={{ color: "var(--muted-foreground)" }} />}

@@ -47,7 +47,7 @@ async function seed() {
     if (compErr) console.error("Error upserting Veritas company:", compErr);
     else console.log("Veritas Analytics company profile saved.");
 
-    const { error: vacErr1 } = await supabase.from("vacancies").insert({
+    const { error: vacErr1 } = await supabase.from("jobs").insert({
       company_id: veritasId,
       title: "Analista de Datos Junior",
       description: "Análisis de bases de datos, generación de reportes y visualización de métricas clave.",
@@ -56,17 +56,17 @@ async function seed() {
     if (vacErr1) {
         const compInfo = await supabase.from("companies").select("id").eq("user_id", veritasId).single();
         if (compInfo.data) {
-            const { error: vacRetry } = await supabase.from("vacancies").insert({
+            const { error: vacRetry } = await supabase.from("jobs").insert({
                 company_id: compInfo.data.id,
                 title: "Analista de Datos Junior",
                 description: "Análisis de bases de datos, generación de reportes y visualización de métricas clave.",
                 status: "active"
             });
-            if (vacRetry) console.error("Error inserting vacancy 1 (retry):", vacRetry);
-            else console.log("Vacancy 1 created via retry.");
+            if (vacRetry) console.error("Error inserting job 1 (retry):", vacRetry);
+            else console.log("Job 1 created via retry.");
         }
     } else {
-        console.log("Vacancy 1 created.");
+        console.log("Job 1 created.");
     }
   }
   
@@ -103,14 +103,14 @@ async function seed() {
 
     const compInfo = await supabase.from("companies").select("id").eq("user_id", formaId).single();
     if (compInfo.data) {
-        const { error: vac2 } = await supabase.from("vacancies").insert({
+        const { error: vac2 } = await supabase.from("jobs").insert({
             company_id: compInfo.data.id,
             title: "Diseñadora UX",
             description: "Diseño de experiencias digitales para clientes de salud y educación. 3 días remoto, 2 en oficina con escritorio individual.",
             status: "active"
         });
-        if (vac2) console.error("Error inserting vacancy 2:", vac2);
-        else console.log("Vacancy 2 created.");
+        if (vac2) console.error("Error inserting job 2:", vac2);
+        else console.log("Job 2 created.");
     }
   }
 
