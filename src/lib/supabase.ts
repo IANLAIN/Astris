@@ -164,6 +164,39 @@ export async function getCurrentUser() {
   };
 }
 
+export async function getCandidates() {
+  const { data, error } = await supabase
+    .from("users_profiles")
+    .select("*")
+    .eq("role", "candidate");
+
+  if (error) {
+    console.error("Error fetching candidates:", error);
+    return [];
+  }
+
+  return (data ?? []).map((profile: any) => ({ id: profile.id, profile }));
+}
+
+export async function getCompanies() {
+  const { data, error } = await supabase.from("companies").select("*");
+  if (error) {
+    console.error("Error fetching companies:", error);
+    return [];
+  }
+  return data ?? [];
+}
+
+export async function getMatchesForCandidate(candidateId: string) {
+  // Placeholder: return no matches by default.
+  return [];
+}
+
+export async function getMatchesForCompany(companyId: string) {
+  // Placeholder: return no matches by default.
+  return [];
+}
+
 export async function logoutUser() {
   await supabase.auth.signOut();
 }
