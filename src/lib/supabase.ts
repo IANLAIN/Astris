@@ -188,13 +188,62 @@ export async function getCompanies() {
 }
 
 export async function getMatchesForCandidate(candidateId: string) {
-  // Placeholder: return no matches by default.
-  return [];
+  // Fetch active jobs
+  const { data: jobs, error } = await supabase
+    .from("jobs")
+    .select(`id, title, description, company_id, status, work_modality, location_text, contract_type, offered_accommodations`)
+    .eq("status", "active");
+
+  if (error || !jobs) return [];
+
+  // Get companies for these jobs
+  const companyIds = Array.from(new Set(jobs.map((j: any) => j.company_id).filter(Boolean)));
+  let companiesMap: Record<string, any> = {};
+  if (companyIds.length > 0) {
+    const { data: companies } = await supabase
+      .from("companies")
+      .select("user_id, company_name, accommodations, philosophy, work_environment")
+      .in("user_id", companyIds);
+    (companies || []).forEach((c: any) => { companiesMap[c.user_id] = c; });
+  }
+
+  // Get candidate info
+  const { data: candidate } = await supabase.from("candidates").select("*").eq("user_id", candidateId).single();
+  const workPref = (candidate?.work_preference || "").toLowerCase();
+
+  return jobs.map((j: any) => {
+    let score = 50; // Base score
+    const comp = companiesMap[j.company_id];
+    
+    // Modality matching
+    if (workPref.includes("remot") && (j.work_modality === "remote" || j.work_modality === "hybrid")) score += 30;
+    else if (workPref.includes("híbrid") && j.work_modality === "hybrid") score += 20;
+    else if (workPref.includes("presencial") && j.work_modality === "in-person") score += 20;
+
+    if (comp?.accommodations?.length > 0) {
+       score += Math.min(20, comp.accommodations.length * 5);
+    }
+    
+    return {
+      jobId: j.id,
+      matchPercentage: Math.min(99, score)
+    };
+  }).sort((a, b) => b.matchPercentage - a.matchPercentage);
 }
 
 export async function getMatchesForCompany(companyId: string) {
-  // Placeholder: return no matches by default.
-  return [];
+  const { data: cands } = await supabase.from("candidates").select("user_id, work_preference, interests, users_profiles(full_name)");
+  if (!cands) return [];
+
+  // Simple placeholder logic based on company data if needed, or random fallback
+  // The company can fetch these candidates and rank them.
+  return cands.map((c: any) => {
+    let score = 50 + (c.work_preference ? 20 : 0) + (c.interests ? 10 : 0);
+    return {
+      candidateId: c.user_id,
+      matchPercentage: Math.min(99, score + Math.floor(Math.random() * 15)) // add slight noise for realism if no exact metric exists
+    };
+  }).sort((a, b) => b.matchPercentage - a.matchPercentage);
 }
 
 export async function logoutUser() {

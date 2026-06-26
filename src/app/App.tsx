@@ -2083,39 +2083,53 @@ function CandidateVacancies({ lang, onSelect }: { lang: Lang; onSelect: (id: str
 
   useEffect(() => {
     async function loadJobs() {
-      const { data, error } = await supabase
-        .from("jobs")
-        .select(`id, title, description, company_id, status, work_modality, location_text, contract_type, offered_accommodations, required_skills`)
-        .eq("status", "active");
-      if (!error && data && data.length > 0) {
-        const companyIds = Array.from(new Set(data.map((j: any) => j.company_id).filter(Boolean)));
-        let companiesMap: Record<string, any> = {};
-        if (companyIds.length > 0) {
-          const { data: companies } = await supabase
-            .from("companies")
-            .select("user_id, company_name, industry, philosophy")
-            .in("user_id", companyIds);
-          (companies || []).forEach((c: any) => {
-            if (c.user_id) companiesMap[c.user_id] = c;
-          });
-        }
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+      const matches = await getMatchesForCandidate(session.user.id);
+      
+      if (matches.length > 0) {
+        // We already have the jobs in the matches response by ID, but we need the details.
+        // Let's refetch or map them.
+        const { data } = await supabase
+          .from("jobs")
+          .select(`id, title, description, company_id, status, work_modality, location_text, contract_type, offered_accommodations, required_skills`)
+          .in("id", matches.map(m => m.jobId));
+          
+        if (data && data.length > 0) {
+          const companyIds = Array.from(new Set(data.map((j: any) => j.company_id).filter(Boolean)));
+          let companiesMap: Record<string, any> = {};
+          if (companyIds.length > 0) {
+            const { data: companies } = await supabase
+              .from("companies")
+              .select("user_id, company_name, industry, philosophy")
+              .in("user_id", companyIds);
+            (companies || []).forEach((c: any) => {
+              if (c.user_id) companiesMap[c.user_id] = c;
+            });
+          }
 
-        const mapped: VacancyItem[] = data.map((j: any) => ({
-          id: j.id,
-          title: j.title,
-          company: (companiesMap[j.company_id]?.company_name) || "Empresa",
-          sector: (companiesMap[j.company_id]?.industry) || "-",
-          modality: j.work_modality === "remote" ? (lang === "es" ? "Remoto" : "Remote") : j.work_modality === "hybrid" ? (lang === "es" ? "Híbrido" : "Hybrid") : (lang === "es" ? "Presencial" : "In-person"),
-          type: j.contract_type ?? (lang === "es" ? "Tiempo completo" : "Full-time"),
-          match: 90,
-          socialLevel: "Bajo",
-          adjustments: j.offered_accommodations ?? [],
-          desc: j.description ?? "",
-          companyDesc: (companiesMap[j.company_id]?.philosophy) || "",
-        }));
-        setVacancies(mapped);
+          const mapped: VacancyItem[] = data.map((j: any) => {
+            const matchScore = matches.find(m => m.jobId === j.id)?.matchPercentage || 0;
+            return {
+              id: j.id,
+              title: j.title,
+              company: (companiesMap[j.company_id]?.company_name) || "Empresa",
+              sector: (companiesMap[j.company_id]?.industry) || "-",
+              modality: j.work_modality === "remote" ? (lang === "es" ? "Remoto" : "Remote") : j.work_modality === "hybrid" ? (lang === "es" ? "Híbrido" : "Hybrid") : (lang === "es" ? "Presencial" : "In-person"),
+              type: j.contract_type ?? (lang === "es" ? "Tiempo completo" : "Full-time"),
+              match: matchScore,
+              socialLevel: "Bajo",
+              adjustments: j.offered_accommodations ?? [],
+              desc: j.description ?? "",
+              companyDesc: (companiesMap[j.company_id]?.philosophy) || "",
+            };
+          });
+          setVacancies(mapped.sort((a,b) => b.match - a.match));
+        } else {
+          setVacancies([]);
+        }
       } else {
-        setVacancies(VACANCIES_FALLBACK);
+        setVacancies([]);
       }
       setLoadingVac(false);
     }
@@ -2199,45 +2213,55 @@ function VacancyDetail({ lang, vacancyId, onStart, onBack }: { lang: Lang; vacan
   const [v, setV] = useState<VacancyItem | null>(null);
 
   useEffect(() => {
-    if (vacancyId.startsWith("V-")) {
-      setV(VACANCIES_FALLBACK.find((x) => x.id === vacancyId) ?? VACANCIES_FALLBACK[0]);
-      return;
-    }
+    async function loadData() {
+      let currentMatch = 90;
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        const matches = await getMatchesForCandidate(session.user.id);
+        const m = matches.find((x: any) => x.jobId === vacancyId);
+        if (m) currentMatch = m.matchPercentage;
+      }
 
-    supabase
-      .from("jobs")
-      .select(`id, title, description, company_id, work_modality, location_text, contract_type, offered_accommodations`)
-      .eq("id", vacancyId)
-      .single()
-      .then(async ({ data }) => {
-        if (data) {
-          const j: any = data;
-          let companyName = "Empresa";
-          let companyPhilosophy = "";
-          if (j.company_id) {
-            const { data: comp } = await supabase.from("companies").select("user_id, company_name, philosophy").eq("user_id", j.company_id).single();
-            if (comp) {
-              companyName = comp.company_name ?? companyName;
-              companyPhilosophy = comp.philosophy ?? "";
-            }
+      if (vacancyId.startsWith("V-")) {
+        setV(VACANCIES_FALLBACK.find((x) => x.id === vacancyId) ?? { ...VACANCIES_FALLBACK[0], match: currentMatch });
+        return;
+      }
+
+      const { data } = await supabase
+        .from("jobs")
+        .select(`id, title, description, company_id, work_modality, location_text, contract_type, offered_accommodations`)
+        .eq("id", vacancyId)
+        .single();
+
+      if (data) {
+        const j: any = data;
+        let companyName = "Empresa";
+        let companyPhilosophy = "";
+        if (j.company_id) {
+          const { data: comp } = await supabase.from("companies").select("user_id, company_name, philosophy").eq("user_id", j.company_id).single();
+          if (comp) {
+            companyName = comp.company_name ?? companyName;
+            companyPhilosophy = comp.philosophy ?? "";
           }
-          setV({
-            id: j.id,
-            title: j.title,
-            company: companyName,
-            sector: "-",
-            modality: j.work_modality === "remote" ? (lang === "es" ? "Remoto" : "Remote") : j.work_modality === "hybrid" ? (lang === "es" ? "Híbrido" : "Hybrid") : (lang === "es" ? "Presencial" : "In-person"),
-            type: j.contract_type ?? (lang === "es" ? "Tiempo completo" : "Full-time"),
-            match: 90,
-            socialLevel: "Bajo",
-            adjustments: j.offered_accommodations ?? [],
-            desc: j.description ?? "",
-            companyDesc: companyPhilosophy,
-          });
-        } else {
-          setV(VACANCIES_FALLBACK[0]);
         }
-      });
+        setV({
+          id: j.id,
+          title: j.title,
+          company: companyName,
+          sector: "-",
+          modality: j.work_modality === "remote" ? (lang === "es" ? "Remoto" : "Remote") : j.work_modality === "hybrid" ? (lang === "es" ? "Híbrido" : "Hybrid") : (lang === "es" ? "Presencial" : "In-person"),
+          type: j.contract_type ?? (lang === "es" ? "Tiempo completo" : "Full-time"),
+          match: currentMatch,
+          socialLevel: "Bajo",
+          adjustments: j.offered_accommodations ?? [],
+          desc: j.description ?? "",
+          companyDesc: companyPhilosophy,
+        });
+      } else {
+        setV({ ...VACANCIES_FALLBACK[0], match: currentMatch });
+      }
+    }
+    loadData();
   }, [vacancyId, lang]);
 
   const COMPAT = [{ label: "Modalidad de trabajo", match: true }, { label: "Comunicación asíncrona", match: true }, { label: "Instrucciones escritas", match: true }, { label: "Espacio individual silencioso", match: false }, { label: "Horario flexible", match: true }];
@@ -2318,32 +2342,25 @@ function MentorSelect({ lang, onSelect }: { lang: Lang; onSelect: () => void }) 
       try {
         const { data: mentorsData, error: mentorsErr } = await supabase
           .from("mentors")
-          .select("user_id, expertise, availability_status")
-          .eq("availability_status", "available");
+          .select("user_id, full_name, specialty, years_experience, modality, bio");
 
         if (mentorsErr || !mentorsData || mentorsData.length === 0) {
-          setMentors(MENTORS_FALLBACK);
+          setMentors([]);
           setLoadingMent(false);
           return;
         }
 
-        const userIds = mentorsData.map((m: any) => m.user_id).filter(Boolean);
-        const { data: profiles } = await supabase.from("users_profiles").select("id, full_name, bio").in("id", userIds);
-
-        const profileMap: Record<string, any> = {};
-        (profiles || []).forEach((p: any) => { profileMap[p.id] = p; });
-
         const mapped: MentorItem[] = mentorsData.map((m: any) => ({
           id: m.user_id,
-          name: profileMap[m.user_id]?.full_name ?? "Mentor",
-          specialty: (m.expertise ?? []).join(", "),
-          years: 5,
-          modality: "Virtual",
-          bio: profileMap[m.user_id]?.bio ?? "",
+          name: m.full_name ?? "Mentor",
+          specialty: m.specialty ?? "",
+          years: m.years_experience ?? 5,
+          modality: m.modality ?? "Virtual",
+          bio: m.bio ?? "",
         }));
         setMentors(mapped);
       } catch (e) {
-        setMentors(MENTORS_FALLBACK);
+        setMentors([]);
       } finally {
         setLoadingMent(false);
       }
@@ -2454,8 +2471,33 @@ function CandidateAccompaniment({ lang }: { lang: Lang }) {
 
 function CandidatePostHire({ lang }: { lang: Lang }) {
   const t = useT(lang);
-  const [status] = useState(1);
+  const [status, setStatus] = useState(1);
   const STATUS_LABELS = C(lang, "statusLabels") as string[];
+  const [q1, setQ1] = useState("");
+  const [q2, setQ2] = useState("");
+  const [history, setHistory] = useState(C(lang, "postHireHistory") as any[]);
+  const [sending, setSending] = useState(false);
+
+  const handleSend = async () => {
+    if (!q1.trim() && !q2.trim()) return;
+    setSending(true);
+    // Simulate save to DB
+    const newEntry = {
+      date: new Date().toLocaleDateString(),
+      note: `${q1 ? 'Q1: ' + q1 : ''} ${q2 ? '| Q2: ' + q2 : ''}`
+    };
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+         await supabase.from("checkins").insert({ user_id: session.user.id, role: "candidate", note: newEntry.note });
+      }
+    } catch (e) {}
+    setHistory([newEntry, ...history]);
+    setQ1("");
+    setQ2("");
+    setSending(false);
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <div className="px-20 py-10 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
@@ -2479,20 +2521,36 @@ function CandidatePostHire({ lang }: { lang: Lang }) {
         <div className="rounded-2xl border border-border p-8" style={{ backgroundColor: "var(--card)" }}>
           <h2 className="font-bold text-foreground mb-4">{lang === "es" ? "Reporte de esta semana" : lang === "pt" ? "Relatório desta semana" : lang === "fr" ? "Rapport de cette semaine" : "This week's report"}</h2>
           <div className="flex flex-col gap-4">
-            {[C(lang, "postHireQ1") as string, C(lang, "postHireQ2") as string].map((q, i) => (
-              <div key={i}>
-                <label className="block text-sm font-semibold text-foreground mb-2">{q}</label>
-                <div className="w-full px-4 py-3 rounded-xl border border-border text-sm text-muted-foreground" style={{ backgroundColor: "var(--input-background)" }}>{C(lang, "postHireTextPlaceholder") as string}</div>
-              </div>
-            ))}
-            <button className="self-start px-6 py-3 rounded-xl font-semibold cursor-pointer text-sm" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}>{C(lang, "postHireSend") as string}</button>
+            <div>
+              <label className="block text-sm font-semibold text-foreground mb-2">{C(lang, "postHireQ1") as string}</label>
+              <textarea 
+                value={q1}
+                onChange={(e) => setQ1(e.target.value)}
+                className="w-full px-4 py-3 rounded-xl border border-border text-sm text-foreground outline-none focus:border-primary resize-y min-h-[80px]" 
+                style={{ backgroundColor: "var(--input-background)" }} 
+                placeholder={C(lang, "postHireTextPlaceholder") as string}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-foreground mb-2">{C(lang, "postHireQ2") as string}</label>
+              <textarea 
+                value={q2}
+                onChange={(e) => setQ2(e.target.value)}
+                className="w-full px-4 py-3 rounded-xl border border-border text-sm text-foreground outline-none focus:border-primary resize-y min-h-[80px]" 
+                style={{ backgroundColor: "var(--input-background)" }} 
+                placeholder={C(lang, "postHireTextPlaceholder") as string}
+              />
+            </div>
+            <button onClick={handleSend} disabled={sending || (!q1.trim() && !q2.trim())} className="self-start px-6 py-3 rounded-xl font-semibold cursor-pointer text-sm disabled:opacity-50" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}>
+              {sending ? "Enviando..." : (C(lang, "postHireSend") as string)}
+            </button>
           </div>
         </div>
         {/* History */}
         <div className="rounded-2xl border border-border p-8" style={{ backgroundColor: "var(--card)" }}>
           <h2 className="font-bold text-foreground mb-4">{C(lang, "postHireCheckins") as string}</h2>
-          {(C(lang, "postHireHistory") as typeof CONTENT.es.postHireHistory).map((h) => (
-            <div key={h.date} className="flex gap-4 py-4 border-b border-border last:border-0">
+          {history.map((h, i) => (
+            <div key={i} className="flex gap-4 py-4 border-b border-border last:border-0">
               <span className="text-xs text-muted-foreground w-24 shrink-0 pt-0.5" style={{ fontFamily: "DM Mono, monospace" }}>{h.date}</span>
               <p className="text-sm text-foreground leading-relaxed">{h.note}</p>
             </div>
@@ -2791,12 +2849,15 @@ function CompanyCandidates({ lang, onSelect }: { lang: Lang; onSelect: (id: stri
 
   useEffect(() => {
     async function loadCandidates() {
-      const data = await getCandidates();
-      const mapped = data.map((candidate: any) => ({
-        id: candidate.id,
-        strengths: candidate.profile?.work_preference ? `${candidate.profile.work_preference}. ${candidate.profile.interests ?? ""}` : candidate.profile?.interests ?? "Perfil compatible",
-        match: Math.floor(Math.random() * 20) + 80,
-        profile: candidate.profile,
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+      const matches = await getMatchesForCompany(session.user.id);
+      
+      const mapped = matches.map((m: any) => ({
+        id: m.candidateId,
+        strengths: "Perfil compatible evaluado",
+        match: m.matchPercentage,
+        profile: null,
       }));
       setCandidates(mapped);
       setLoading(false);
@@ -2842,6 +2903,14 @@ function CompanyCandidateDetail({ lang, candidateId, onBack, onStart }: { lang: 
 
   useEffect(() => {
     async function loadCandidate() {
+      let currentMatch = 80;
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        const matches = await getMatchesForCompany(session.user.id);
+        const m = matches.find((x: any) => x.candidateId === candidateId);
+        if (m) currentMatch = m.matchPercentage;
+      }
+
       const { data, error } = await supabase
         .from("users_profiles")
         .select("*, candidates(*)")
@@ -2849,7 +2918,7 @@ function CompanyCandidateDetail({ lang, candidateId, onBack, onStart }: { lang: 
         .single();
 
       if (data) {
-        setCandidate({ ...data, profile: data.candidates?.[0] ?? {} });
+        setCandidate({ ...data, profile: data.candidates?.[0] ?? {}, match: currentMatch });
       }
       setLoading(false);
     }
@@ -2918,6 +2987,24 @@ function CompanyCandidateDetail({ lang, candidateId, onBack, onStart }: { lang: 
 
 function CompanyPostHire({ lang }: { lang: Lang }) {
   const t = useT(lang);
+  const [obs, setObs] = useState("");
+  const [sending, setSending] = useState(false);
+  const [sentObs, setSentObs] = useState<string[]>([]);
+
+  const handleSend = async () => {
+    if (!obs.trim()) return;
+    setSending(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+         await supabase.from("checkins").insert({ user_id: session.user.id, role: "company", note: obs });
+      }
+    } catch (e) {}
+    setSentObs([obs, ...sentObs]);
+    setObs("");
+    setSending(false);
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <div className="px-20 py-10 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
@@ -2936,8 +3023,27 @@ function CompanyPostHire({ lang }: { lang: Lang }) {
         </div>
         <div className="rounded-2xl border border-border p-7" style={{ backgroundColor: "var(--card)" }}>
           <h2 className="font-bold text-foreground mb-4">{C(lang, "compPostHireObs") as string}</h2>
-          <div className="w-full px-4 py-4 rounded-xl border border-border text-sm text-muted-foreground min-h-[80px]" style={{ backgroundColor: "var(--input-background)" }}>{C(lang, "compPostHireObsPlaceholder") as string}</div>
-          <button className="mt-4 px-6 py-3 rounded-xl font-semibold cursor-pointer text-sm" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}>{C(lang, "compPostHireSend") as string}</button>
+          <textarea 
+            value={obs}
+            onChange={(e) => setObs(e.target.value)}
+            className="w-full px-4 py-4 rounded-xl border border-border text-sm text-foreground outline-none focus:border-primary min-h-[80px] resize-y" 
+            style={{ backgroundColor: "var(--input-background)" }} 
+            placeholder={C(lang, "compPostHireObsPlaceholder") as string}
+          />
+          <button onClick={handleSend} disabled={sending || !obs.trim()} className="mt-4 px-6 py-3 rounded-xl font-semibold cursor-pointer text-sm disabled:opacity-50" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}>
+            {sending ? "Enviando..." : (C(lang, "compPostHireSend") as string)}
+          </button>
+          
+          {sentObs.length > 0 && (
+            <div className="mt-6 pt-6 border-t border-border">
+              <h3 className="font-bold text-sm mb-3">Observaciones enviadas</h3>
+              <div className="flex flex-col gap-3">
+                {sentObs.map((o, i) => (
+                   <div key={i} className="text-sm text-muted-foreground p-3 rounded-lg border border-border" style={{ backgroundColor: "var(--background)" }}>{o}</div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
         <div className="rounded-2xl border border-border p-7" style={{ backgroundColor: "var(--card)" }}>
           <h2 className="font-bold text-foreground mb-4">{C(lang, "compPostHireContact") as string}</h2>

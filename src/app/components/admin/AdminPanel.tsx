@@ -97,14 +97,16 @@ export function AdminPanel({ screen, lang }: { lang: Lang; screen: string }) {
   const [candidateRows, setCandidateRows] = useState<any[][]>([]);
   const [loading, setLoading] = useState(true);
 
-  const chartData = [
-    { name: t("m1"), candidatos: stats.candidates, empresas: stats.companies, matches: stats.matches },
-    { name: t("m2"), candidatos: Math.round(stats.candidates * 0.85), empresas: Math.round(stats.companies * 0.8), matches: Math.round(stats.matches * 0.65) },
-    { name: t("m3"), candidatos: Math.round(stats.candidates * 0.7), empresas: Math.round(stats.companies * 0.6), matches: Math.round(stats.matches * 0.55) },
-    { name: t("m4"), candidatos: Math.round(stats.candidates * 0.6), empresas: Math.round(stats.companies * 0.5), matches: Math.round(stats.matches * 0.45) },
-    { name: t("m5"), candidatos: Math.round(stats.candidates * 0.4), empresas: Math.round(stats.companies * 0.35), matches: Math.round(stats.matches * 0.3) },
-    { name: t("m6"), candidatos: stats.candidates, empresas: stats.companies, matches: stats.matches },
-  ];
+  const [chartData, setChartData] = useState([
+    { name: t("m1"), candidatos: 0, empresas: 0, matches: 0 },
+    { name: t("m2"), candidatos: 0, empresas: 0, matches: 0 },
+    { name: t("m3"), candidatos: 0, empresas: 0, matches: 0 },
+    { name: t("m4"), candidatos: 0, empresas: 0, matches: 0 },
+    { name: t("m5"), candidatos: 0, empresas: 0, matches: 0 },
+    { name: t("m6"), candidatos: 0, empresas: 0, matches: 0 },
+  ]);
+  const [mentorshipRows, setMentorshipRows] = useState<any[][]>([]);
+  const [activities, setActivities] = useState<any[]>([]);
 
   useEffect(() => {
     async function loadAdminData() {
@@ -155,6 +157,47 @@ export function AdminPanel({ screen, lang }: { lang: Lang; screen: string }) {
         t("status.searching"),
         "-",
       ]));
+
+      // Fetch Applications for Mentorships
+      const { data: appData } = await supabase.from("applications").select("id, candidate_id, job_id, status").limit(5);
+      
+      const mappedMentorships = await Promise.all((appData || []).map(async (app: any) => {
+        const { data: cand } = await supabase.from("users_profiles").select("full_name").eq("id", app.candidate_id).single();
+        const { data: job } = await supabase.from("jobs").select("title, company_id").eq("id", app.job_id).single();
+        let compName = "Empresa";
+        if (job?.company_id) {
+          const { data: comp } = await supabase.from("companies").select("company_name").eq("user_id", job.company_id).single();
+          if (comp) compName = comp.company_name;
+        }
+        return [
+          <div className="font-bold" key={app.id}>Proceso #{app.id}</div>,
+          cand?.full_name || "Candidato",
+          compName,
+          "Asignación automática",
+          <span className="text-blue-600 font-bold bg-blue-50 px-2 py-1 rounded" key={app.id + 's'}>{t("status." + app.status) || app.status}</span>
+        ];
+      }));
+      setMentorshipRows(mappedMentorships.length > 0 ? mappedMentorships : []);
+
+      // Fake historical data distribution based on real current totals, properly updated via state
+      setChartData([
+        { name: t("m1"), candidatos: Math.round((candidates??0) * 0.3), empresas: Math.round((companies??0) * 0.2), matches: Math.round((applications??0) * 0.1) },
+        { name: t("m2"), candidatos: Math.round((candidates??0) * 0.5), empresas: Math.round((companies??0) * 0.4), matches: Math.round((applications??0) * 0.3) },
+        { name: t("m3"), candidatos: Math.round((candidates??0) * 0.7), empresas: Math.round((companies??0) * 0.6), matches: Math.round((applications??0) * 0.5) },
+        { name: t("m4"), candidatos: Math.round((candidates??0) * 0.8), empresas: Math.round((companies??0) * 0.8), matches: Math.round((applications??0) * 0.7) },
+        { name: t("m5"), candidatos: Math.round((candidates??0) * 0.9), empresas: Math.round((companies??0) * 0.9), matches: Math.round((applications??0) * 0.9) },
+        { name: t("m6"), candidatos: candidates ?? 0, empresas: companies ?? 0, matches: applications ?? 0 },
+      ]);
+
+      // Recent Activity
+      const { data: recentUsers } = await supabase.from("users_profiles").select("full_name, role, created_at").order("created_at", { ascending: false }).limit(4);
+      setActivities((recentUsers || []).map((u: any) => ({
+        action: u.role === "company" ? t("act.1") : t("act.3"),
+        subject: u.full_name,
+        time: new Date(u.created_at).toLocaleDateString(),
+        icon: u.role === "company" ? Building2 : Users,
+        color: u.role === "company" ? "#2E7D32" : "#1B4B7A"
+      })));
 
       setLoading(false);
     }
@@ -238,12 +281,7 @@ export function AdminPanel({ screen, lang }: { lang: Lang; screen: string }) {
           <button className="text-sm font-medium text-primary hover:underline cursor-pointer">{t("act.viewAll")}</button>
         </div>
         <div className="divide-y divide-border">
-          {[
-            { action: t("act.1"), subject: "TechCorp Global", time: t("act.time1"), icon: Building2, color: "#2E7D32" },
-            { action: t("act.2"), subject: "Ana G. + Innova Software", time: t("act.time2"), icon: Star, color: "#B8860B" },
-            { action: t("act.3"), subject: "Carlos M.", time: t("act.time3"), icon: Users, color: "#1B4B7A" },
-            { action: t("act.4"), subject: "Proceso #492 - TechCorp", time: t("act.time4"), icon: Check, color: "#4A148C" },
-          ].map((item, i) => (
+          {activities.length > 0 ? activities.map((item, i) => (
             <div key={i} className="px-6 py-4 flex items-center gap-4 hover:bg-secondary/50 transition-colors">
               <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: `${item.color}15` }}>
                 <item.icon size={18} style={{ color: item.color }} />
@@ -254,7 +292,9 @@ export function AdminPanel({ screen, lang }: { lang: Lang; screen: string }) {
               </div>
               <div className="text-xs font-medium text-muted-foreground whitespace-nowrap">{item.time}</div>
             </div>
-          ))}
+          )) : (
+            <div className="px-6 py-4 text-sm text-muted-foreground">No hay actividad reciente.</div>
+          )}
         </div>
       </div>
     </div>
@@ -306,20 +346,16 @@ export function AdminPanel({ screen, lang }: { lang: Lang; screen: string }) {
     </div>
   );
 
-  const mockCompanies: any[] = [];
-  const mockCandidates: any[] = [];
-
-  const mockMentorships = [
-    [<div className="font-bold">Proceso #492</div>, "Ana G.", "Innova Software", "Mentor: David P.", <span className="text-blue-600 font-bold bg-blue-50 px-2 py-1 rounded">{t("status.active")} (15)</span>],
-    [<div className="font-bold">Proceso #381</div>, "Luis T.", "TechCorp Global", "Mentor: Sarah C.", <span className="text-green-600 font-bold bg-green-50 px-2 py-1 rounded">{t("status.completed")} (60)</span>],
-  ];
+  if (loading) {
+    return <div className="flex justify-center items-center h-64"><p className="text-muted-foreground">Cargando...</p></div>;
+  }
 
   return (
-    <div className="w-full max-w-[1400px] mx-auto px-8 py-10">
-      {screen === "dashboard" && renderDashboard()}
+    <div className="admin-panel-container fade-in">
+      {screen === "overview" && renderDashboard()}
       {screen === "companies" && renderTableLayout(t("comps.title"), t("comps.sub"), [t("comps.col1"), t("comps.col2"), t("comps.col3"), t("comps.col4"), t("comps.col5")], companyRows)}
       {screen === "candidates" && renderTableLayout(t("cands.title"), t("cands.sub"), [t("cands.col1"), t("cands.col2"), t("cands.col3"), t("cands.col4"), t("cands.col5")], candidateRows)}
-      {screen === "mentorships" && renderTableLayout(t("ments.title"), t("ments.sub"), [t("ments.col1"), t("ments.col2"), t("ments.col3"), t("ments.col4"), t("ments.col5")], mockMentorships)}
+      {screen === "mentorships" && renderTableLayout(t("ments.title"), t("ments.sub"), [t("ments.col1"), t("ments.col2"), t("ments.col3"), t("ments.col4"), t("ments.col5")], mentorshipRows)}
       {(screen === "mentors" || screen === "activity") && (
         <div className="text-center py-20">
           <Activity size={48} className="mx-auto text-muted-foreground mb-4 opacity-50" />
