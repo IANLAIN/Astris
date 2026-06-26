@@ -352,7 +352,7 @@ export function AdminPanel({ screen, lang }: { lang: Lang; screen: string }) {
 
   return (
     <div className="admin-panel-container fade-in">
-      {screen === "overview" && renderDashboard()}
+      {screen === "dashboard" && renderDashboard()}
       {screen === "companies" && renderTableLayout(t("comps.title"), t("comps.sub"), [t("comps.col1"), t("comps.col2"), t("comps.col3"), t("comps.col4"), t("comps.col5")], companyRows)}
       {screen === "candidates" && renderTableLayout(t("cands.title"), t("cands.sub"), [t("cands.col1"), t("cands.col2"), t("cands.col3"), t("cands.col4"), t("cands.col5")], candidateRows)}
       {screen === "mentorships" && renderTableLayout(t("ments.title"), t("ments.sub"), [t("ments.col1"), t("ments.col2"), t("ments.col3"), t("ments.col4"), t("ments.col5")], mentorshipRows)}
