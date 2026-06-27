@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="dist/assets/logo.png" alt="Astris — Plataforma de Transición Laboral Adaptativa" width="180" />
+  <img src="dist/assets/astris.png" alt="Astris — Plataforma de Transición Laboral Adaptativa" width="180" />
 </p>
 
 # Astris
