@@ -10,6 +10,8 @@ import {
 } from "lucide-react";
 import { getCurrentUser, loginUser, logoutUser, registerUser, signInWithGoogle, getCandidates, getCompanies, getMatchesForCandidate, getMatchesForCompany, supabase } from "../lib/supabase";
 import vibraLatinaImg from "../imports/vibralatina.png";
+import astrisImg from "../imports/astris.png";
+import genuineImg from "../imports/genuine.png";
 import { AdminPanel } from "./components/admin/AdminPanel";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -60,9 +62,9 @@ const T: Record<Lang, Record<string, any>> = {
     "nav.checkins": "Check-ins",
     "nav.companies": "Empresas",
     "nav.logout": "Cerrar sesión",
-    "landing.nav.how": "Cómo funciona",
-    "landing.nav.companies": "Para empresas",
-    "landing.nav.candidates": "Para candidatos",
+    "landing.nav.about": "Sobre nosotros",
+    "landing.nav.support": "Soporte y contacto",
+    "landing.nav.partners": "Aliados",
     "landing.nav.login": "Iniciar sesión",
     "landing.nav.register": "Registrarme",
     "landing.hero.t1": "No preguntamos qué condición tienes.",
@@ -176,9 +178,9 @@ const T: Record<Lang, Record<string, any>> = {
     "nav.checkins": "Check-ins",
     "nav.companies": "Companies",
     "nav.logout": "Sign out",
-    "landing.nav.how": "How it works",
-    "landing.nav.companies": "For companies",
-    "landing.nav.candidates": "For candidates",
+    "landing.nav.about": "About us",
+    "landing.nav.support": "Support & Contact",
+    "landing.nav.partners": "Partners",
     "landing.nav.login": "Sign in",
     "landing.nav.register": "Register",
     "landing.hero.t1": "We don't ask what condition you have.",
@@ -292,9 +294,9 @@ const T: Record<Lang, Record<string, any>> = {
     "nav.checkins": "Check-ins",
     "nav.companies": "Empresas",
     "nav.logout": "Sair",
-    "landing.nav.how": "Como funciona",
-    "landing.nav.companies": "Para empresas",
-    "landing.nav.candidates": "Para candidatos",
+    "landing.nav.about": "Sobre nós",
+    "landing.nav.support": "Suporte e contato",
+    "landing.nav.partners": "Aliados",
     "landing.nav.login": "Entrar",
     "landing.nav.register": "Cadastrar-me",
     "landing.hero.t1": "Não perguntamos que condição você tem.",
@@ -408,9 +410,9 @@ const T: Record<Lang, Record<string, any>> = {
     "nav.checkins": "Check-ins",
     "nav.companies": "Entreprises",
     "nav.logout": "Se déconnecter",
-    "landing.nav.how": "Comment ça marche",
-    "landing.nav.companies": "Pour les entreprises",
-    "landing.nav.candidates": "Pour les candidats",
+    "landing.nav.about": "À propos",
+    "landing.nav.support": "Support et contact",
+    "landing.nav.partners": "Partenaires",
     "landing.nav.login": "Se connecter",
     "landing.nav.register": "S'inscrire",
     "landing.hero.t1": "Nous ne demandons pas quelle condition vous avez.",
@@ -607,7 +609,6 @@ const QUIZ_AXES = [
 
 const CONTENT = {
   es: {
-    badge: "Inclusión laboral adaptativa",
     pillars: [
       { num: "01", title: "Preparar", body: "Caracterizamos cómo trabaja cada persona y qué entorno necesita. Sin diagnósticos, sin etiquetas clínicas." },
       { num: "02", title: "Adaptar", body: "La empresa define exactamente qué ajustes puede ofrecer antes de iniciar cualquier proceso de selección." },
@@ -691,7 +692,6 @@ const CONTENT = {
     companiesPageSub: "Empresas activas en procesos de inclusión",
   },
   en: {
-    badge: "Adaptive employment inclusion",
     pillars: [
       { num: "01", title: "Prepare", body: "We characterize how each person works and what environment they need. No diagnoses, no clinical labels." },
       { num: "02", title: "Adapt", body: "The company defines exactly what adjustments it can offer before starting any selection process." },
@@ -775,7 +775,6 @@ const CONTENT = {
     companiesPageSub: "Companies active in inclusion processes",
   },
   pt: {
-    badge: "Inclusão profissional adaptativa",
     pillars: [
       { num: "01", title: "Preparar", body: "Caracterizamos como cada pessoa trabalha e qual ambiente precisa. Sem diagnósticos, sem rótulos clínicos." },
       { num: "02", title: "Adaptar", body: "A empresa define exatamente quais ajustes pode oferecer antes de iniciar qualquer processo de seleção." },
@@ -859,7 +858,6 @@ const CONTENT = {
     companiesPageSub: "Empresas ativas em processos de inclusão",
   },
   fr: {
-    badge: "Inclusion professionnelle adaptative",
     pillars: [
       { num: "01", title: "Préparer", body: "Nous caractérisons comment chaque personne travaille et quel environnement elle nécessite. Sans diagnostics, sans étiquettes cliniques." },
       { num: "02", title: "Adapter", body: "L'entreprise définit exactement quels aménagements elle peut offrir avant de démarrer tout processus de sélection." },
@@ -1195,6 +1193,21 @@ function Watermark() {
           Microsoft
         </span>
       </div>
+
+      {/* Genuine Foundation row */}
+      <div className="flex items-center gap-2" style={{ opacity: 0.8 }}>
+        <img
+          src={genuineImg}
+          alt="The Genuine Foundation"
+          style={{ height: 32, objectFit: "contain" }}
+        />
+        <span
+          className="text-sm font-semibold"
+          style={{ color: "var(--muted-foreground)" }}
+        >
+          The Genuine Foundation
+        </span>
+      </div>
     </div>
   );
 }
@@ -1390,43 +1403,7 @@ function LoginModal({ lang, onLogin, onBack, error, loading, initialRole = "cand
   );
 }
 
-// ── Role Modal ────────────────────────────────────────────────────────────────
 
-function RoleModal({ lang, onSelect, onBack }: { lang: Lang; onSelect: (r: Role) => void; onBack: () => void }) {
-  const t = useT(lang);
-  const ROLES: Array<{ id: Role; titleKey: string; subKey: string; Icon: any }> = [
-    { id: "candidate", titleKey: "role.candidate", subKey: "role.candidate.sub", Icon: User },
-    { id: "company", titleKey: "role.company", subKey: "role.company.sub", Icon: Building2 },
-    { id: "mentor", titleKey: "role.mentor", subKey: "role.mentor.sub", Icon: Users },
-  ];
-  return (
-    <Overlay>
-      <div className="w-full max-w-lg rounded-2xl overflow-hidden" style={{ backgroundColor: "var(--card)" }}>
-        <div className="px-10 py-8 border-b border-border text-center relative">
-          <button onClick={onBack} className="absolute left-6 top-8 flex items-center gap-1.5 text-sm text-muted-foreground cursor-pointer">
-            <ChevronLeft size={15} aria-hidden="true" />{t("login.back")}
-          </button>
-          <div className="text-xl font-bold text-foreground">{t("role.title")}</div>
-          <div className="text-muted-foreground text-sm mt-1.5">{t("role.sub")}</div>
-        </div>
-        <div className="p-8 flex flex-col gap-4">
-          {ROLES.map((r) => (
-            <button key={r.id} onClick={() => onSelect(r.id)} className="flex items-center gap-5 p-5 rounded-xl border-2 text-left cursor-pointer" style={{ borderColor: "var(--border)", backgroundColor: "var(--background)" }}>
-              <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: "var(--primary)" }}>
-                <r.Icon size={22} aria-hidden="true" style={{ color: "var(--primary-foreground)" } as React.CSSProperties} />
-              </div>
-              <div>
-                <div className="font-bold text-foreground text-base">{t(r.titleKey)}</div>
-                <div className="text-sm text-muted-foreground mt-0.5">{t(r.subKey)}</div>
-              </div>
-              <ChevronRight size={18} aria-hidden="true" className="text-muted-foreground ml-auto" />
-            </button>
-          ))}
-        </div>
-      </div>
-    </Overlay>
-  );
-}
 
 // ── Register Modal ────────────────────────────────────────────────────────────
 
@@ -1554,7 +1531,7 @@ function RegisterModal({ lang, role, onRegister, onBack, error, loading, googleA
 
 // ── Landing Page ──────────────────────────────────────────────────────────────
 
-function LandingPage({ lang, onOpenAuth }: { lang: Lang; onOpenAuth: (preRole?: Role) => void }) {
+function LandingPage({ lang, onOpenAuth, onLang }: { lang: Lang; onOpenAuth: (preRole?: Role) => void; onLang: () => void }) {
   const t = useT(lang);
   const PILLAR_ICONS = [User, Settings, Users, Briefcase];
   const PILLARS = C(lang, "pillars") as typeof CONTENT.es.pillars;
@@ -1572,13 +1549,19 @@ function LandingPage({ lang, onOpenAuth }: { lang: Lang; onOpenAuth: (preRole?: 
       {/* Fixed header */}
       <header className="fixed top-0 left-0 right-0 z-40 border-b border-border" style={{ backgroundColor: "var(--background)" }}>
         <div className="max-w-7xl mx-auto px-8 h-16 flex items-center justify-between">
-          <span className="text-xl font-bold text-foreground tracking-tight">Astris</span>
+          <div className="flex items-center gap-3">
+            <img src={astrisImg} alt="Astris Logo" className="w-14 h-14 object-contain" />
+            <span className="text-xl font-bold text-foreground tracking-tight">Astris</span>
+          </div>
           <nav className="flex items-center gap-6">
-            {["landing.nav.how", "landing.nav.companies", "landing.nav.candidates"].map((k) => (
-              <span key={k} className="text-sm text-muted-foreground cursor-pointer font-medium">{t(k)}</span>
+            {["landing.nav.about", "landing.nav.support", "landing.nav.partners"].map((k) => (
+              <span key={k} className="text-sm text-muted-foreground cursor-pointer font-medium hover:text-foreground transition-colors">{t(k)}</span>
             ))}
           </nav>
           <div className="flex items-center gap-3">
+            <button onClick={onLang} className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium border border-border cursor-pointer hover:bg-secondary" aria-label="Cambiar idioma">
+              <Globe size={16} />{lang.toUpperCase()}
+            </button>
             <button onClick={() => onOpenAuth()} className="px-5 py-2.5 rounded-xl text-sm font-semibold border-2 border-border cursor-pointer" style={{ backgroundColor: "var(--background)", color: "var(--foreground)" }}>{t("landing.nav.login")}</button>
             <button onClick={() => onOpenAuth()} className="px-5 py-2.5 rounded-xl text-sm font-semibold cursor-pointer" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}>{t("landing.nav.register")}</button>
           </div>
@@ -1587,23 +1570,27 @@ function LandingPage({ lang, onOpenAuth }: { lang: Lang; onOpenAuth: (preRole?: 
 
       <div className="pt-16">
         {/* Hero */}
-        <section className="px-20 py-28 max-w-7xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border mb-8" style={{ backgroundColor: "var(--card)" }}>
-            <div className="w-2 h-2 rounded-full bg-accent" aria-hidden="true" />
-            <span className="text-sm text-muted-foreground font-medium">{C(lang, "badge")}</span>
+        <section className="px-20 py-28 max-w-7xl mx-auto flex items-center justify-between gap-12">
+          <div className="max-w-3xl">
+            <h1 className="text-[58px] font-bold text-foreground leading-[1.1] mb-6">
+              {t("landing.hero.t1")}<br />
+              <span style={{ color: "var(--primary)" }}>{t("landing.hero.t2")}</span>
+            </h1>
+            <p className="text-xl text-muted-foreground leading-relaxed mb-14">{t("landing.hero.sub")}</p>
+            <div className="flex flex-col gap-4 items-start">
+              <button onClick={() => onOpenAuth("candidate")} className="flex items-center gap-3 px-6 py-4 rounded-xl text-lg font-bold border-2 cursor-pointer" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)", borderColor: "var(--primary)" }}>
+                <User size={22} aria-hidden="true" />{t("landing.hero.cand")}<ArrowRight size={18} aria-hidden="true" />
+              </button>
+              <button onClick={() => onOpenAuth("company")} className="flex items-center gap-3 px-6 py-4 rounded-xl text-lg font-bold border-2 cursor-pointer" style={{ backgroundColor: "var(--card)", color: "var(--foreground)", borderColor: "var(--border)" }}>
+                <Building2 size={22} aria-hidden="true" />{t("landing.hero.comp")}<ArrowRight size={18} aria-hidden="true" />
+              </button>
+              <button onClick={() => onOpenAuth("mentor")} className="flex items-center gap-3 px-6 py-4 rounded-xl text-lg font-bold border-2 cursor-pointer" style={{ backgroundColor: "var(--card)", color: "var(--foreground)", borderColor: "var(--border)" }}>
+                <Star size={22} aria-hidden="true" />{t("role.mentor")}<ArrowRight size={18} aria-hidden="true" />
+              </button>
+            </div>
           </div>
-          <h1 className="text-[58px] font-bold text-foreground leading-[1.1] max-w-3xl mb-6">
-            {t("landing.hero.t1")}<br />
-            <span style={{ color: "var(--primary)" }}>{t("landing.hero.t2")}</span>
-          </h1>
-          <p className="text-xl text-muted-foreground max-w-xl leading-relaxed mb-14">{t("landing.hero.sub")}</p>
-          <div className="flex gap-5">
-            <button onClick={() => onOpenAuth("candidate")} className="flex items-center gap-3 px-8 py-5 rounded-xl text-lg font-bold border-2 cursor-pointer" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)", borderColor: "var(--primary)" }}>
-              <User size={22} aria-hidden="true" />{t("landing.hero.cand")}<ArrowRight size={18} aria-hidden="true" />
-            </button>
-            <button onClick={() => onOpenAuth("company")} className="flex items-center gap-3 px-8 py-5 rounded-xl text-lg font-bold border-2 cursor-pointer" style={{ backgroundColor: "var(--card)", color: "var(--foreground)", borderColor: "var(--border)" }}>
-              <Building2 size={22} aria-hidden="true" />{t("landing.hero.comp")}<ArrowRight size={18} aria-hidden="true" />
-            </button>
+          <div className="shrink-0 flex items-center justify-center anim-float">
+            <img src={astrisImg} alt="Astris Logo" className="w-[380px] h-auto object-contain drop-shadow-2xl" />
           </div>
         </section>
 
@@ -1729,16 +1716,36 @@ function LandingPage({ lang, onOpenAuth }: { lang: Lang; onOpenAuth: (preRole?: 
           </div>
         </section>
 
-        <footer className="border-t border-border px-20 py-10">
-          <div className="max-w-7xl mx-auto flex items-center justify-between">
-            <div>
-              <div className="text-lg font-bold text-foreground">Astris</div>
-              <div className="text-xs text-muted-foreground mt-1">{t("landing.footer.program")}</div>
-            </div>
-            <div className="flex items-center gap-6 text-sm text-muted-foreground">
-              {(C(lang, "footerLinks") as string[]).map((link) => (
-                <span key={link} className="cursor-pointer">{link}</span>
-              ))}
+        <footer className="border-t border-border px-20 py-10" style={{ backgroundColor: "var(--card)" }}>
+          <div className="max-w-7xl mx-auto flex flex-col gap-8">
+            <div className="flex items-start justify-between">
+              <div>
+                <div className="text-xl font-bold flex items-center gap-3 text-foreground mb-2">
+                  <img src={astrisImg} alt="Astris" className="w-10 h-10 object-contain" /> Astris
+                </div>
+                <div className="text-sm text-muted-foreground max-w-sm mb-4">{t("landing.footer.program")}</div>
+                <div className="text-xs text-muted-foreground">&copy; {new Date().getFullYear()} Astris. Todos los derechos reservados.</div>
+              </div>
+              
+              <div className="flex gap-16">
+                <div className="flex flex-col gap-4">
+                  <span className="font-bold text-foreground text-sm uppercase tracking-wider">Enlaces</span>
+                  <div className="flex flex-col gap-3 text-sm text-muted-foreground">
+                    {(C(lang, "footerLinks") as string[]).map((link) => (
+                      <span key={link} className="cursor-pointer hover:text-primary transition-colors">{link}</span>
+                    ))}
+                  </div>
+                </div>
+                
+                <div className="flex flex-col gap-4">
+                  <span className="font-bold text-foreground text-sm uppercase tracking-wider">Soporte y Contacto</span>
+                  <div className="flex flex-col gap-3 text-sm text-muted-foreground">
+                    <a href="https://www.vibralatinatx.com/contact-1" target="_blank" rel="noreferrer" className="hover:text-primary transition-colors flex items-center gap-2"><ArrowRight size={14} />Vibra Latina</a>
+                    <a href="https://support.microsoft.com/es-us/contactus/" target="_blank" rel="noreferrer" className="hover:text-primary transition-colors flex items-center gap-2"><ArrowRight size={14} />Microsoft Support</a>
+                    <a href="https://genuinecup.org/" target="_blank" rel="noreferrer" className="hover:text-primary transition-colors flex items-center gap-2"><ArrowRight size={14} />The Genuine Foundation</a>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </footer>
@@ -3254,7 +3261,10 @@ function NavBar({ lang, role, screen, onNav, onLang, onLogout, darkMode, onDarkT
   return (
     <header className="sticky top-0 z-40 border-b border-border" style={{ backgroundColor: "var(--background)" }}>
       <div className="px-8 h-16 flex items-center gap-2">
-        <button onClick={() => onNav("home")} className="text-lg font-bold text-foreground tracking-tight mr-6 cursor-pointer">Astris</button>
+        <button onClick={() => onNav("home")} className="flex items-center gap-2 text-lg font-bold text-foreground tracking-tight mr-6 cursor-pointer">
+          <img src={astrisImg} alt="Astris Logo" className="w-10 h-10 object-contain" />
+          <span>Astris</span>
+        </button>
 
         {navItems.map((item) => {
           const active = screen === item.id;
@@ -3317,7 +3327,7 @@ function NavBar({ lang, role, screen, onNav, onLang, onLogout, darkMode, onDarkT
 
 export default function App() {
   // Modal flow
-  const [modalStep, setModalStep] = useState<ModalStep>("language");
+  const [modalStep, setModalStep] = useState<ModalStep>("none");
   const [lang, setLang] = useState<Lang>("es");
   const [role, setRole] = useState<Role | null>(null);
   const [pendingRole, setPendingRole] = useState<Role>("candidate");
@@ -3422,22 +3432,20 @@ export default function App() {
   // ── FIX: language change when logged in must NOT restart auth flow ──────────
   const handleLangSelect = (l: Lang) => {
     setLang(l);
-    setModalStep(loggedIn ? "none" : "auth");
+    setModalStep("none");
   };
 
-  const handleAuthNew = () => setModalStep("role");
+  const handleAuthNew = () => {
+    if (!pendingRole) setPendingRole("candidate");
+    setModalStep("register");
+  };
   const handleAuthExisting = () => {
-    setPendingRole("candidate"); // Default for login modal
+    if (!pendingRole) setPendingRole("candidate"); // Default for login modal
     setModalStep("login");
   };
   const handleAuthAdmin = () => {
     setPendingRole("admin");
     setModalStep("login");
-  };
-
-  const handleRoleSelect = (r: Role) => {
-    setPendingRole(r);
-    setModalStep("register");
   };
 
   // ── Real Supabase register ──────────────────────────────────────────────────
@@ -3537,10 +3545,9 @@ export default function App() {
     <div className="min-h-screen bg-background text-foreground" style={{ fontFamily, ...(darkRootStyle as React.CSSProperties) }}>
       {/* Modals */}
       {showModal && modalStep === "language" && <LanguageModal onSelect={handleLangSelect} />}
-      {showModal && modalStep === "auth" && <AuthModal lang={lang} onNew={handleAuthNew} onExisting={handleAuthExisting} onAdmin={handleAuthAdmin} onBack={() => setModalStep("language")} />}
-      {showModal && modalStep === "role" && <RoleModal lang={lang} onSelect={handleRoleSelect} onBack={() => setModalStep("auth")} />}
+      {showModal && modalStep === "auth" && <AuthModal lang={lang} onNew={handleAuthNew} onExisting={handleAuthExisting} onAdmin={handleAuthAdmin} onBack={() => setModalStep("none")} />}
       {showModal && modalStep === "register" && (
-        <RegisterModal lang={lang} role={pendingRole} onRegister={handleRegister} onBack={() => setModalStep("role")} error={authError} loading={authLoading} googleAuthUser={googleAuthUser} onCompleteGoogle={handleCompleteGoogleRegistration} />
+        <RegisterModal lang={lang} role={pendingRole} onRegister={handleRegister} onBack={() => setModalStep("auth")} error={authError} loading={authLoading} googleAuthUser={googleAuthUser} onCompleteGoogle={handleCompleteGoogleRegistration} />
       )}
       {showModal && modalStep === "login" && (
         <LoginModal lang={lang} initialRole={pendingRole} onLogin={(r, email, pass) => handleLogin(r, email, pass)} onBack={() => setModalStep("auth")} error={authError} loading={authLoading} />
@@ -3553,7 +3560,7 @@ export default function App() {
             <LandingPage lang={lang} onOpenAuth={(preRole) => {
               if (preRole) { setPendingRole(preRole); }
               setModalStep("auth");
-            }} />
+            }} onLang={reopenLang} />
           )}
           {loggedIn && role && (
             <div>
