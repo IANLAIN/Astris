@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { LayoutDashboard, Users, Briefcase, FileText, LogOut, Loader2, Shield, Building2 } from "lucide-react";
 import { getCurrentUser } from "../../lib/supabase";
 import { getDashboardStats, getAdminUsers, softDeleteUser, updateUserRole } from "../../lib/supabase-admin";

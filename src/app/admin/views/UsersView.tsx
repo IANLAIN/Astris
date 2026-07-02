@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Search, Trash2, RotateCcw } from "lucide-react";
 
 interface UserProfile {

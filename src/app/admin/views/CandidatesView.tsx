@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Search, User, Edit, Brain } from "lucide-react";
 import { getAdminCandidates } from "../../../lib/supabase-admin";
 
