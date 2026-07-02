@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { LayoutDashboard, Users, Briefcase, FileText, LogOut, Loader2, Shield, Search, MoreVertical, Ban, Trash2, RotateCcw } from "lucide-react";
+import { LayoutDashboard, Users, Briefcase, FileText, LogOut, Loader2, Shield, Search, MoreVertical, Ban, Trash2, RotateCcw, Building2 } from "lucide-react";
 import { getCurrentUser } from "../../lib/supabase";
 import CompaniesView from "./views/CompaniesView";
 import CandidatesView from "./views/CandidatesView";
@@ -15,7 +15,7 @@ export default function AdminDashboard({ onLogout, onBack }: { onLogout: () => v
 
   // Stats
   const [stats, setStats] = useState({ totalUsers: 0, totalCandidates: 0, totalCompanies: 0, totalJobs: 0 });
-  
+
   // Users
   const [users, setUsers] = useState<any[]>([]);
   const [search, setSearch] = useState("");
@@ -28,13 +28,13 @@ export default function AdminDashboard({ onLogout, onBack }: { onLogout: () => v
         if (!user) {
           user = { id: "00000000-0000-0000-0000-000000000000", role: "admin", name: "Administrador (Backdoor)" };
         }
-        
+
         if (user.role !== "admin") {
           onBack(); // Kick out non-admins
           return;
         }
         setCurrentUser(user);
-        
+
         // Load initial data
         const [dashStats, allUsers] = await Promise.all([
           getDashboardStats(),
@@ -42,7 +42,7 @@ export default function AdminDashboard({ onLogout, onBack }: { onLogout: () => v
         ]);
         setStats(dashStats);
         setUsers(allUsers);
-        
+
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -97,14 +97,14 @@ export default function AdminDashboard({ onLogout, onBack }: { onLogout: () => v
           <button onClick={() => setView("jobs")} className={"w-full flex items-center px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors " + (view === "jobs" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted")}>
             <Briefcase className="w-4 h-4 mr-3" /> Vacantes
           </button>
-        
+
           <button onClick={() => setView("companies")} className={"w-full flex items-center px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors " + (view === "companies" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted")}>
             <Building2 className="w-4 h-4 mr-3" /> Empresas
           </button>
           <button onClick={() => setView("candidates")} className={"w-full flex items-center px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors " + (view === "candidates" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted")}>
             <FileText className="w-4 h-4 mr-3" /> Candidatos
           </button>
-</nav>
+        </nav>
         <div className="p-4 border-t border-border">
           <button onClick={onLogout} className="w-full flex items-center justify-center px-4 py-2 bg-destructive/10 text-destructive rounded-lg text-sm font-semibold hover:bg-destructive/20 transition-colors">
             <LogOut className="w-4 h-4 mr-2" /> Salir
@@ -128,7 +128,7 @@ export default function AdminDashboard({ onLogout, onBack }: { onLogout: () => v
 
         {/* Content Area */}
         <div className="flex-1 overflow-auto p-6 lg:p-10">
-          
+
           {view === "overview" && (
             <div className="space-y-6 anim-fade-in">
               <h1 className="text-3xl font-bold text-foreground">Dashboard General</h1>
@@ -159,9 +159,9 @@ export default function AdminDashboard({ onLogout, onBack }: { onLogout: () => v
                 <h1 className="text-3xl font-bold text-foreground">Gestión de Usuarios</h1>
                 <div className="relative w-full sm:w-64">
                   <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                  <input 
-                    type="text" 
-                    placeholder="Buscar por email o nombre..." 
+                  <input
+                    type="text"
+                    placeholder="Buscar por email o nombre..."
                     value={search}
                     onChange={e => setSearch(e.target.value)}
                     className="w-full pl-9 pr-4 py-2 rounded-xl border border-border bg-card text-sm"
@@ -193,8 +193,8 @@ export default function AdminDashboard({ onLogout, onBack }: { onLogout: () => v
                           </td>
                           <td className="px-6 py-4 text-muted-foreground">{u.email}</td>
                           <td className="px-6 py-4">
-                            <select 
-                              value={u.role} 
+                            <select
+                              value={u.role}
                               onChange={(e) => handleRoleChange(u.id, e.target.value)}
                               className="bg-background border border-border rounded-lg px-2 py-1 text-xs font-semibold cursor-pointer"
                             >
@@ -205,13 +205,13 @@ export default function AdminDashboard({ onLogout, onBack }: { onLogout: () => v
                             </select>
                           </td>
                           <td className="px-6 py-4">
-                            {u.completed_onboarding 
+                            {u.completed_onboarding
                               ? <span className="text-green-600 bg-green-100 dark:bg-green-900/30 dark:text-green-400 px-2.5 py-1 rounded-full text-xs font-bold">Completado</span>
                               : <span className="text-orange-600 bg-orange-100 dark:bg-orange-900/30 dark:text-orange-400 px-2.5 py-1 rounded-full text-xs font-bold">Pendiente</span>
                             }
                           </td>
                           <td className="px-6 py-4 text-right">
-                            <button 
+                            <button
                               onClick={() => handleSoftDelete(u.id, !u.deleted_at)}
                               className={"p-2 rounded-lg transition-colors " + (u.deleted_at ? "hover:bg-blue-500/10 text-blue-500" : "hover:bg-destructive/10 text-destructive")}
                               title={u.deleted_at ? "Restaurar usuario" : "Eliminar usuario (Soft Delete)"}
@@ -228,7 +228,7 @@ export default function AdminDashboard({ onLogout, onBack }: { onLogout: () => v
             </div>
           )}
 
-          
+
           {view === "companies" && <CompaniesView />}
           {view === "candidates" && <CandidatesView />}
 
