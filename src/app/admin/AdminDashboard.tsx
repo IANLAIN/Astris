@@ -7,17 +7,37 @@ import { getDashboardStats, getAdminUsers, softDeleteUser, updateUserRole } from
 
 type ViewType = "overview" | "users" | "jobs" | "companies" | "candidates";
 
-export default function AdminDashboard({ onLogout, onBack }: { onLogout: () => void, onBack: () => void }) {
+interface AdminDashboardProps {
+  onLogout: () => void;
+  onBack: () => void;
+}
+
+export default function AdminDashboard({ onLogout, onBack }: AdminDashboardProps) {
+  interface CurrentUser {
+    id: string;
+    role: string;
+    name?: string;
+  }
+
+  interface UserProfile {
+    id: string;
+    full_name: string;
+    email: string;
+    role: string;
+    completed_onboarding: boolean;
+    deleted_at: string | null;
+  }
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [view, setView] = useState<ViewType>("overview");
-  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
 
   // Stats
   const [stats, setStats] = useState({ totalUsers: 0, totalCandidates: 0, totalCompanies: 0, totalJobs: 0 });
 
   // Users
-  const [users, setUsers] = useState<any[]>([]);
+  const [users, setUsers] = useState<UserProfile[]>([]);
   const [search, setSearch] = useState("");
 
   useEffect(() => {
