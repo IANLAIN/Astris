@@ -73,6 +73,7 @@ export default function AdminDashboard({ onLogout, onBack }: AdminDashboardProps
   }, [onBack]);
 
   const handleRoleChange = async (userId: string, newRole: string) => {
+    if (!currentUser) return;
     try {
       await updateUserRole(currentUser.id, userId, newRole);
       setUsers(users.map(u => u.id === userId ? { ...u, role: newRole } : u));
@@ -82,6 +83,7 @@ export default function AdminDashboard({ onLogout, onBack }: AdminDashboardProps
   };
 
   const handleSoftDelete = async (userId: string, isDeleted: boolean) => {
+    if (!currentUser) return;
     try {
       await softDeleteUser(currentUser.id, userId, isDeleted);
       setUsers(users.map(u => u.id === userId ? { ...u, deleted_at: isDeleted ? new Date().toISOString() : null } : u));
