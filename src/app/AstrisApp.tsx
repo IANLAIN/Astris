@@ -1729,6 +1729,7 @@ function PartnersPage({ lang, onNavigate, onOpenAuth, onLang }: { lang: Lang; on
 
 function LandingPage({ lang, onOpenAuth, onLang, onNavigate }: { lang: Lang; onOpenAuth: (preRole?: Role, step?: "auth" | "login" | "register") => void; onLang: () => void; onNavigate: (view: PublicView) => void }) {
   const t = useT(lang);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <div className="min-h-screen w-full overflow-x-hidden bg-background">
@@ -1736,10 +1737,10 @@ function LandingPage({ lang, onOpenAuth, onLang, onNavigate }: { lang: Lang; onO
       <header className="fixed top-0 left-0 right-0 z-40 border-b border-border backdrop-blur-sm" style={{ backgroundColor: "var(--background)", opacity: 0.97 }}>
         <div className="max-w-7xl mx-auto px-4 md:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src={astrisImg} alt="Astris Logo" className="w-12 h-12 object-contain" />
-            <span className="text-xl font-bold text-foreground tracking-tight">Astris</span>
+            <img src={astrisImg} alt="Astris Logo" className="w-10 h-10 md:w-12 md:h-12 object-contain" />
+            <span className="text-lg md:text-xl font-bold text-foreground tracking-tight">Astris</span>
           </div>
-          <nav className="flex items-center gap-3 md:gap-6">
+          <nav className="hidden lg:flex items-center gap-6">
             {[
               { key: "about", label: t("landing.nav.about") },
               { key: "support", label: t("landing.nav.support") },
@@ -1748,14 +1749,49 @@ function LandingPage({ lang, onOpenAuth, onLang, onNavigate }: { lang: Lang; onO
               <button key={item.key} onClick={() => onNavigate(item.key as PublicView)} className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">{item.label}</button>
             ))}
           </nav>
-          <div className="flex items-center gap-3">
+          <div className="hidden lg:flex items-center gap-3">
             <button onClick={onLang} className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium border border-border cursor-pointer hover:bg-secondary" aria-label="Cambiar idioma">
               <Globe size={16} />{lang.toUpperCase()}
             </button>
             <button onClick={() => onOpenAuth(undefined, "login")} className="px-5 py-2.5 rounded-xl text-sm font-semibold border-2 border-border cursor-pointer" style={{ backgroundColor: "var(--background)", color: "var(--foreground)" }}>{t("landing.nav.login")}</button>
             <button onClick={() => onOpenAuth(undefined, "register")} className="px-5 py-2.5 rounded-xl text-sm font-semibold cursor-pointer" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}>{t("landing.nav.register")}</button>
           </div>
+          
+          {/* Mobile menu toggle */}
+          <div className="flex lg:hidden items-center gap-2">
+            <button onClick={onLang} className="flex items-center justify-center p-2 rounded-lg border border-border hover:bg-secondary">
+               <Globe size={18} />
+            </button>
+            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2 -mr-2 text-foreground">
+              {mobileMenuOpen ? <X size={24} /> : <div className="space-y-1.5"><div className="w-6 h-0.5 bg-foreground"></div><div className="w-6 h-0.5 bg-foreground"></div><div className="w-6 h-0.5 bg-foreground"></div></div>}
+            </button>
+          </div>
         </div>
+        
+        {/* Mobile menu dropdown */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden border-t border-border bg-background px-4 py-6 space-y-6 shadow-xl h-screen overflow-y-auto pb-24">
+            <nav className="flex flex-col gap-4">
+              {[
+                { key: "about", label: t("landing.nav.about") },
+                { key: "support", label: t("landing.nav.support") },
+                { key: "partners", label: t("landing.nav.partners") },
+              ].map((item) => (
+                <button
+                  key={item.key}
+                  onClick={() => { onNavigate(item.key as PublicView); setMobileMenuOpen(false); }}
+                  className="text-lg text-left font-medium text-muted-foreground hover:text-foreground"
+                >
+                  {item.label}
+                </button>
+              ))}
+            </nav>
+            <div className="flex flex-col gap-3 pt-4 border-t border-border">
+              <button onClick={() => { onOpenAuth(undefined, "login"); setMobileMenuOpen(false); }} className="w-full rounded-xl border-2 border-border px-5 py-3 text-center text-base font-semibold" style={{ backgroundColor: "var(--background)", color: "var(--foreground)" }}>{t("landing.nav.login")}</button>
+              <button onClick={() => { onOpenAuth(undefined, "register"); setMobileMenuOpen(false); }} className="w-full rounded-xl px-5 py-3 text-center text-base font-semibold" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}>{t("landing.nav.register")}</button>
+            </div>
+          </div>
+        )}
       </header>
 
       <div className="pt-16">
@@ -1765,21 +1801,21 @@ function LandingPage({ lang, onOpenAuth, onLang, onNavigate }: { lang: Lang; onO
           <div className="pointer-events-none absolute -top-32 -right-32 h-[520px] w-[520px] rounded-full opacity-20" style={{ background: "radial-gradient(circle, var(--primary), transparent 70%)" }} />
           <div className="pointer-events-none absolute -bottom-20 -left-20 h-[340px] w-[340px] rounded-full opacity-10" style={{ background: "radial-gradient(circle, var(--accent), transparent 70%)" }} />
 
-          <div className="relative max-w-7xl mx-auto px-5 md:px-10 py-14 flex items-center justify-between gap-12">
+          <div className="relative max-w-7xl mx-auto px-5 md:px-10 py-14 flex flex-col lg:flex-row items-center justify-between gap-12">
             <div className="max-w-2xl">
-              <h1 className="text-[52px] font-bold text-foreground leading-[1.1] mb-5" style={{ letterSpacing: "-0.02em" }}>
+              <h1 className="text-4xl md:text-[52px] font-bold text-foreground leading-[1.1] mb-5" style={{ letterSpacing: "-0.02em" }}>
                 {t("landing.hero.t1")}<br />
                 <span style={{ color: "var(--primary)" }}>{t("landing.hero.t2")}</span>
               </h1>
               <p className="text-lg text-muted-foreground leading-relaxed mb-10 whitespace-pre-line italic max-w-xl">{t("landing.hero.sub")}</p>
-              <div className="flex flex-wrap gap-3">
-                <button onClick={() => onOpenAuth("candidate")} className="flex items-center gap-3 px-6 py-3.5 rounded-xl text-base font-bold border-2 cursor-pointer transition-transform hover:scale-[1.02]" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)", borderColor: "var(--primary)" }}>
+              <div className="flex flex-col sm:flex-row flex-wrap gap-3 w-full sm:w-auto">
+                <button onClick={() => onOpenAuth("candidate")} className="flex items-center justify-center sm:justify-start gap-3 w-full sm:w-auto px-6 py-3.5 rounded-xl text-base font-bold border-2 cursor-pointer transition-transform hover:scale-[1.02]" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)", borderColor: "var(--primary)" }}>
                   <User size={20} aria-hidden="true" />{t("landing.hero.cand")}<ArrowRight size={16} aria-hidden="true" />
                 </button>
-                <button onClick={() => onOpenAuth("company")} className="flex items-center gap-3 px-6 py-3.5 rounded-xl text-base font-bold border-2 cursor-pointer transition-transform hover:scale-[1.02]" style={{ backgroundColor: "var(--card)", color: "var(--foreground)", borderColor: "var(--border)" }}>
+                <button onClick={() => onOpenAuth("company")} className="flex items-center justify-center sm:justify-start gap-3 w-full sm:w-auto px-6 py-3.5 rounded-xl text-base font-bold border-2 cursor-pointer transition-transform hover:scale-[1.02]" style={{ backgroundColor: "var(--card)", color: "var(--foreground)", borderColor: "var(--border)" }}>
                   <Building2 size={20} aria-hidden="true" />{t("landing.hero.comp")}<ArrowRight size={16} aria-hidden="true" />
                 </button>
-                <button onClick={() => onOpenAuth("mentor")} className="flex items-center gap-3 px-6 py-3.5 rounded-xl text-base font-bold border-2 cursor-pointer transition-transform hover:scale-[1.02]" style={{ backgroundColor: "var(--card)", color: "var(--foreground)", borderColor: "var(--border)" }}>
+                <button onClick={() => onOpenAuth("mentor")} className="flex items-center justify-center sm:justify-start gap-3 w-full sm:w-auto px-6 py-3.5 rounded-xl text-base font-bold border-2 cursor-pointer transition-transform hover:scale-[1.02]" style={{ backgroundColor: "var(--card)", color: "var(--foreground)", borderColor: "var(--border)" }}>
                   <Star size={20} aria-hidden="true" />{t("role.mentor")}<ArrowRight size={16} aria-hidden="true" />
                 </button>
               </div>
