@@ -1,15 +1,29 @@
 import React, { useEffect, useState } from "react";
-import { Search, Building2, Edit, Trash2, CheckCircle, XCircle } from "lucide-react";
+import { Search, Building2, Edit } from "lucide-react";
 import { getAdminCompanies } from "../../../lib/supabase-admin";
 
+interface CompanyProfile {
+  user_id: string;
+  company_name: string;
+  industry: string;
+  city: string;
+  country: string;
+  esg_retention_rate: number;
+  esg_wellness_index: number;
+  users_profiles?: {
+    email: string;
+    deleted_at: string | null;
+  };
+}
+
 export default function CompaniesView() {
-  const [companies, setCompanies] = useState<any[]>([]);
+  const [companies, setCompanies] = useState<CompanyProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
   useEffect(() => {
     getAdminCompanies().then(data => {
-      setCompanies(data);
+      setCompanies(data as CompanyProfile[]);
       setLoading(false);
     }).catch(err => {
       console.error(err);

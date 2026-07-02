@@ -1,15 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { Search, User, Edit, FileText, CheckCircle, Brain } from "lucide-react";
+import { Search, User, Edit, Brain } from "lucide-react";
 import { getAdminCandidates } from "../../../lib/supabase-admin";
 
+interface CandidateProfile {
+  user_id: string;
+  neurotype: string;
+  work_preference: string;
+  interests: string[];
+  users_profiles?: {
+    full_name: string;
+    email: string;
+    deleted_at: string | null;
+  };
+}
+
 export default function CandidatesView() {
-  const [candidates, setCandidates] = useState<any[]>([]);
+  const [candidates, setCandidates] = useState<CandidateProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
   useEffect(() => {
     getAdminCandidates().then(data => {
-      setCandidates(data);
+      setCandidates(data as CandidateProfile[]);
       setLoading(false);
     }).catch(err => {
       console.error(err);
