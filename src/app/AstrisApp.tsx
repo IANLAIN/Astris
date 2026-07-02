@@ -9,6 +9,8 @@ import {
   Settings, LogOut, AlertCircle,
 } from "lucide-react";
 import { getCurrentUser, loginUser, logoutUser, registerUser, signInWithGoogle, getCandidates, getCompanies, getMatchesForCandidate, getMatchesForCompany, supabase, saveCandidateProfile } from "../lib/supabase";
+import AdminDashboard from "./admin/AdminDashboard";
+
 import astrisImg from "../imports/astris.png";
 import genuineImg from "../imports/genuine.png";
 import vibralatinaImg from "../imports/vibralatina.png";
@@ -3825,7 +3827,15 @@ export default function App() {
                 {role === "company" && (screen === "comp-post-hire" || screen === "post-hire") && <CompanyPostHire lang={lang} />}
 
                 {/* Mentor flow — FIX: each nav item renders its own screen */}
-                {role === "mentor" && screen === "dashboard" && <MentorDashboard lang={lang} />}
+                
+        {role === "admin" && screen === "dashboard" && (
+          <AdminDashboard 
+             onLogout={handleLogout} 
+             onBack={() => setScreen("landing")} 
+          />
+        )}
+
+        {role === "mentor" && screen === "dashboard" && <MentorDashboard lang={lang} />}
                 {role === "mentor" && screen === "checkins" && <MentorCheckins lang={lang} />}
                 {role === "mentor" && screen === "companies" && <MentorCompanies lang={lang} />}
                 {/* Default: dashboard for any unmatched mentor screen */}
