@@ -1185,15 +1185,15 @@ function LanguageModal({ onSelect }: { onSelect: (l: Lang) => void }) {
   ];
   return (
     <Overlay>
-      <div className="w-full max-w-md rounded-2xl overflow-hidden" style={{ backgroundColor: "var(--card)" }}>
-        <div className="px-10 pt-10 pb-6 text-center border-b border-border">
-          <div className="text-3xl font-bold text-foreground mb-1">Astris</div>
+      <div className="w-full w-[95%] md:w-full md:max-w-md rounded-2xl overflow-hidden" style={{ backgroundColor: "var(--card)" }}>
+        <div className="px-5 md:px-10 pt-10 pb-6 text-center border-b border-border">
+          <div className="text-2xl md:text-3xl font-bold text-foreground mb-1">Astris</div>
           <div className="flex items-center justify-center gap-2 mt-4 mb-2">
             <Globe size={18} aria-hidden="true" className="text-muted-foreground" />
             <span className="text-sm text-muted-foreground">Select your language / Selecciona tu idioma</span>
           </div>
         </div>
-        <div className="p-6 grid grid-cols-2 gap-3">
+        <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-3">
           {LANGS.map((l) => (
             <button
               key={l.code}
@@ -1227,14 +1227,14 @@ function LoginModal({ lang, onLogin, onBack, error, loading }: {
   const [password, setPassword] = useState("");
   return (
     <Overlay>
-      <div className="w-full max-w-md rounded-2xl overflow-hidden" style={{ backgroundColor: "var(--card)" }}>
-        <div className="px-8 py-7 border-b border-border">
+      <div className="w-full w-[95%] md:w-full md:max-w-md rounded-2xl overflow-hidden" style={{ backgroundColor: "var(--card)" }}>
+        <div className="px-4 md:px-8 py-7 border-b border-border">
           <button onClick={onBack} className="flex items-center gap-1.5 text-sm text-muted-foreground cursor-pointer mb-4">
             <ChevronLeft size={15} aria-hidden="true" />{t("login.back")}
           </button>
           <div className="text-xl font-bold text-foreground">{t("login.title")}</div>
         </div>
-        <div className="p-8 flex flex-col gap-5">
+        <div className="p-4 md:p-8 flex flex-col gap-5">
           {error && (
             <div className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm" style={{ backgroundColor: "#FEF2F2", color: "#C0392B" }}>
               <AlertCircle size={15} aria-hidden="true" />{error}
@@ -1304,8 +1304,8 @@ function RegisterModal({ lang, role, onRegister, onBack, error, loading, googleA
   if (googleAuthUser) {
     return (
       <Overlay>
-        <div className="w-full max-w-md rounded-2xl overflow-hidden" style={{ backgroundColor: "var(--card)" }}>
-          <div className="px-8 py-7 border-b border-border">
+        <div className="w-full w-[95%] md:w-full md:max-w-md rounded-2xl overflow-hidden" style={{ backgroundColor: "var(--card)" }}>
+          <div className="px-4 md:px-8 py-7 border-b border-border">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: "var(--primary)" }}>
                 <RoleIcon size={18} aria-hidden="true" style={{ color: "var(--primary-foreground)" } as React.CSSProperties} />
@@ -1313,7 +1313,7 @@ function RegisterModal({ lang, role, onRegister, onBack, error, loading, googleA
               <div className="text-xl font-bold text-foreground">Completar Registro</div>
             </div>
           </div>
-          <div className="p-8 flex flex-col gap-5 text-center">
+          <div className="p-4 md:p-8 flex flex-col gap-5 text-center">
             <div className="w-16 h-16 rounded-full mx-auto flex items-center justify-center border border-border bg-secondary mb-2" style={{ backgroundColor: "var(--secondary)" }}>
               <svg className="w-8 h-8" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -1339,8 +1339,8 @@ function RegisterModal({ lang, role, onRegister, onBack, error, loading, googleA
 
   return (
     <Overlay>
-      <div className="w-full max-w-md rounded-2xl overflow-hidden" style={{ backgroundColor: "var(--card)" }}>
-        <div className="px-8 py-7 border-b border-border">
+      <div className="w-full w-[95%] md:w-full md:max-w-md rounded-2xl overflow-hidden" style={{ backgroundColor: "var(--card)" }}>
+        <div className="px-4 md:px-8 py-7 border-b border-border">
           <button onClick={onBack} className="flex items-center gap-1.5 text-sm text-muted-foreground cursor-pointer mb-4">
             <ChevronLeft size={15} aria-hidden="true" />{t("back")}
           </button>
@@ -1351,7 +1351,7 @@ function RegisterModal({ lang, role, onRegister, onBack, error, loading, googleA
             <div className="text-xl font-bold text-foreground">{C(lang, "registerTitle" as any)}</div>
           </div>
         </div>
-        <div className="p-8 flex flex-col gap-5">
+        <div className="p-4 md:p-8 flex flex-col gap-5">
           {error && (
             <div className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm" style={{ backgroundColor: "#FEF2F2", color: "#C0392B" }}>
               <AlertCircle size={15} aria-hidden="true" />{error}
@@ -1424,12 +1424,12 @@ function PublicPageShell({ lang, currentView, onNavigate, onOpenAuth, onLang, ti
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-40 border-b border-border" style={{ backgroundColor: "var(--background)" }}>
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-8">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-8">
           <button onClick={() => onNavigate("landing")} className="flex items-center gap-3">
             <img src={astrisImg} alt="Astris Logo" className="h-14 w-14 object-contain" />
             <span className="text-xl font-bold tracking-tight text-foreground">Astris</span>
           </button>
-          <nav className="flex items-center gap-6">
+          <nav className="flex items-center gap-3 md:gap-6">
             {[
               { key: "about", label: t("landing.nav.about") },
               { key: "support", label: t("landing.nav.support") },
@@ -1454,11 +1454,11 @@ function PublicPageShell({ lang, currentView, onNavigate, onOpenAuth, onLang, ti
         </div>
       </header>
 
-      <main className="px-8 py-12 md:px-16 lg:px-20">
+      <main className="px-4 md:px-8 py-6 md:py-12 md:px-4 md:px-16 lg:px-4 lg:px-20">
         <div className="mx-auto max-w-6xl">
           <div className="mb-10">
             <p className="mb-2 text-sm font-semibold uppercase tracking-[0.3em] text-muted-foreground">Astris</p>
-            <h1 className="text-4xl font-bold tracking-tight text-foreground">{title}</h1>
+            <h1 className="text-2xl md:text-3xl md:text-4xl font-bold tracking-tight text-foreground">{title}</h1>
             {subtitle && <p className="mt-3 max-w-3xl text-lg leading-relaxed text-muted-foreground">{subtitle}</p>}
           </div>
           {children}
@@ -1484,9 +1484,9 @@ function AboutPage({ lang, onNavigate, onOpenAuth, onLang }: { lang: Lang; onNav
   return (
     <PublicPageShell lang={lang} currentView="about" onNavigate={onNavigate} onOpenAuth={onOpenAuth} onLang={onLang} title={t("landing.nav.about")} subtitle="Una visión integral del problema que resuelve Astris, las formas de trabajo que impulsa y las organizaciones que la acompañan.">
       <div className="space-y-10">
-        <section className="rounded-3xl border border-border bg-card p-8">
-          <h2 className="mb-6 text-3xl font-bold text-foreground">{t("landing.prob.title")}</h2>
-          <div className="grid gap-6 md:grid-cols-2">
+        <section className="rounded-3xl border border-border bg-card p-4 md:p-8">
+          <h2 className="mb-6 text-2xl md:text-3xl font-bold text-foreground">{t("landing.prob.title")}</h2>
+          <div className="grid gap-3 md:gap-6 md:grid-cols-1 md:grid-cols-2">
             {PROBLEMS.map((p, i) => (
               <div key={i} className="flex gap-4 rounded-2xl border border-border bg-background p-6">
                 <div className="shrink-0 text-2xl font-bold" style={{ color: "var(--accent)", fontFamily: "DM Mono, monospace" }}>0{i + 1}</div>
@@ -1496,14 +1496,14 @@ function AboutPage({ lang, onNavigate, onOpenAuth, onLang }: { lang: Lang; onNav
           </div>
         </section>
 
-        <section className="rounded-3xl border border-border bg-background p-8">
-          <h2 className="mb-8 text-3xl font-bold text-foreground">{t("landing.pillars.title")}</h2>
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+        <section className="rounded-3xl border border-border bg-background p-4 md:p-8">
+          <h2 className="mb-8 text-2xl md:text-3xl font-bold text-foreground">{t("landing.pillars.title")}</h2>
+          <div className="grid gap-3 md:gap-6 md:grid-cols-1 md:grid-cols-2 xl:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
             {PILLARS.map((p, pi) => {
               const PIcon = PILLAR_ICONS[pi];
               return (
                 <div key={p.num} className="flex flex-col gap-5 rounded-2xl border border-border bg-card p-7">
-                  <div className="text-4xl font-bold" style={{ color: "var(--muted)", fontFamily: "DM Mono, monospace" }}>{p.num}</div>
+                  <div className="text-2xl md:text-3xl md:text-4xl font-bold" style={{ color: "var(--muted)", fontFamily: "DM Mono, monospace" }}>{p.num}</div>
                   <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg" style={{ backgroundColor: "var(--secondary)" }}>
                       <PIcon size={20} aria-hidden="true" style={{ color: "var(--primary)" }} />
@@ -1517,9 +1517,9 @@ function AboutPage({ lang, onNavigate, onOpenAuth, onLang }: { lang: Lang; onNav
           </div>
         </section>
 
-        <section className="rounded-3xl border border-border bg-card p-8">
-          <h2 className="mb-8 text-3xl font-bold text-foreground">{t("landing.how.title")}</h2>
-          <div className="grid gap-6 lg:grid-cols-4">
+        <section className="rounded-3xl border border-border bg-card p-4 md:p-8">
+          <h2 className="mb-8 text-2xl md:text-3xl font-bold text-foreground">{t("landing.how.title")}</h2>
+          <div className="grid gap-3 md:gap-6 lg:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
             {HOW.map((h, i) => (
               <div key={i} className="rounded-2xl border border-border bg-background p-6">
                 <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl text-xl font-bold" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)", fontFamily: "DM Mono, monospace" }}>{i + 1}</div>
@@ -1530,16 +1530,16 @@ function AboutPage({ lang, onNavigate, onOpenAuth, onLang }: { lang: Lang; onNav
           </div>
         </section>
 
-        <section className="rounded-3xl border border-border bg-background p-8">
-          <h2 className="mb-8 text-3xl font-bold text-foreground">{t("landing.compare.title")}</h2>
+        <section className="rounded-3xl border border-border bg-background p-4 md:p-8">
+          <h2 className="mb-8 text-2xl md:text-3xl font-bold text-foreground">{t("landing.compare.title")}</h2>
           <div className="overflow-hidden rounded-2xl border border-border">
-            <div className="grid grid-cols-3 border-b border-border" style={{ backgroundColor: "var(--primary)" }}>
+            <div className="grid grid-cols-1 md:grid-cols-3 border-b border-border" style={{ backgroundColor: "var(--primary)" }}>
               <div className="px-6 py-4 text-sm font-bold" style={{ color: "var(--primary-foreground)" }}>{compareAspect}</div>
               <div className="border-l border-white/20 px-6 py-4 text-sm font-bold" style={{ color: "var(--primary-foreground)" }}>{compareTrad}</div>
               <div className="border-l border-white/20 px-6 py-4 text-sm font-bold" style={{ color: "var(--primary-foreground)" }}>{compareAstris}</div>
             </div>
             {COMPARE.map((row, i) => (
-              <div key={i} className="grid grid-cols-3 border-b border-border last:border-0" style={{ backgroundColor: i % 2 === 0 ? "var(--background)" : "var(--card)" }}>
+              <div key={i} className="grid grid-cols-1 md:grid-cols-3 border-b border-border last:border-0" style={{ backgroundColor: i % 2 === 0 ? "var(--background)" : "var(--card)" }}>
                 <div className="px-6 py-4 text-sm font-semibold text-foreground">{row.aspect}</div>
                 <div className="border-l border-border px-6 py-4 text-sm text-muted-foreground">{row.trad}</div>
                 <div className="flex items-center gap-2 border-l border-border px-6 py-4 text-sm font-medium" style={{ color: "var(--primary)" }}><Check size={14} aria-hidden="true" style={{ color: "var(--accent)" }} />{row.astris}</div>
@@ -1548,9 +1548,9 @@ function AboutPage({ lang, onNavigate, onOpenAuth, onLang }: { lang: Lang; onNav
           </div>
         </section>
 
-        <section className="rounded-3xl border border-border bg-card p-8">
-          <h2 className="mb-8 text-3xl font-bold text-foreground">{t("landing.impact.title")}</h2>
-          <div className="grid gap-8 lg:grid-cols-2">
+        <section className="rounded-3xl border border-border bg-card p-4 md:p-8">
+          <h2 className="mb-8 text-2xl md:text-3xl font-bold text-foreground">{t("landing.impact.title")}</h2>
+          <div className="grid gap-4 md:gap-8 lg:grid-cols-1 md:grid-cols-2">
             <div className="rounded-2xl border border-border bg-background p-7">
               <h3 className="mb-5 text-lg font-bold text-foreground">{t("landing.impact.cand")}</h3>
               <ul className="space-y-3">
@@ -1570,7 +1570,7 @@ function AboutPage({ lang, onNavigate, onOpenAuth, onLang }: { lang: Lang; onNav
           </div>
         </section>
 
-        <section className="rounded-3xl border border-primary/20 bg-primary/5 p-8">
+        <section className="rounded-3xl border border-primary/20 bg-primary/5 p-4 md:p-8">
           <h2 className="mb-3 text-2xl font-bold text-foreground">Organizaciones que acompañan Astris</h2>
           <p className="mb-6 max-w-2xl text-muted-foreground">El proyecto se apoya en comunidades y organizaciones que aportan visibilidad, acompañamiento y una mirada práctica de inclusión.</p>
           <div className="flex flex-wrap items-center gap-4">
@@ -1608,7 +1608,7 @@ function SupportPage({ lang, onNavigate, onOpenAuth, onLang }: { lang: Lang; onN
 
   return (
     <PublicPageShell lang={lang} currentView="support" onNavigate={onNavigate} onOpenAuth={onOpenAuth} onLang={onLang} title={t("landing.nav.support")} subtitle="Recursos de contacto y apoyo para quienes quieren conocer más sobre Astris, trabajar con nosotros o participar de la red.">
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="grid gap-3 md:gap-6 md:grid-cols-1 md:grid-cols-3">
         {orgs.map((org) => (
           <div key={org.name} className="rounded-3xl border border-border bg-card p-7">
             <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10">
@@ -1638,8 +1638,8 @@ function PartnersPage({ lang, onNavigate, onOpenAuth, onLang }: { lang: Lang; on
 
   return (
     <PublicPageShell lang={lang} currentView="partners" onNavigate={onNavigate} onOpenAuth={onOpenAuth} onLang={onLang} title={t("landing.nav.partners")} subtitle="Si tu empresa quiere participar de Astris, completa este formulario y nos pondremos en contacto para conversar sobre colaboración.">
-      <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
-        <div className="rounded-3xl border border-border bg-card p-8">
+      <div className="grid gap-4 md:gap-8 lg:grid-cols-[1.15fr_0.85fr]">
+        <div className="rounded-3xl border border-border bg-card p-4 md:p-8">
           <h2 className="mb-4 text-2xl font-bold text-foreground">¿Por qué unirse a Astris?</h2>
           <p className="mb-6 text-base leading-relaxed text-muted-foreground">Astris ayuda a las empresas a descubrir talento compatible, diseñar entornos de trabajo más inclusivos y reducir la rotación desde el primer mes.</p>
           <div className="space-y-4">
@@ -1656,7 +1656,7 @@ function PartnersPage({ lang, onNavigate, onOpenAuth, onLang }: { lang: Lang; on
           </div>
         </div>
 
-        <div className="rounded-3xl border border-border bg-background p-8 shadow-sm">
+        <div className="rounded-3xl border border-border bg-background p-4 md:p-8 shadow-sm">
           {submitted ? (
             <div className="rounded-2xl border border-primary/20 bg-primary/5 p-6 text-center">
               <h3 className="mb-2 text-xl font-bold text-foreground">Gracias por tu interés</h3>
@@ -1698,12 +1698,12 @@ function LandingPage({ lang, onOpenAuth, onLang, onNavigate }: { lang: Lang; onO
     <div className="min-h-screen bg-background">
       {/* Fixed header */}
       <header className="fixed top-0 left-0 right-0 z-40 border-b border-border backdrop-blur-sm" style={{ backgroundColor: "var(--background)", opacity: 0.97 }}>
-        <div className="max-w-7xl mx-auto px-8 h-16 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img src={astrisImg} alt="Astris Logo" className="w-12 h-12 object-contain" />
             <span className="text-xl font-bold text-foreground tracking-tight">Astris</span>
           </div>
-          <nav className="flex items-center gap-6">
+          <nav className="flex items-center gap-3 md:gap-6">
             {[
               { key: "about", label: t("landing.nav.about") },
               { key: "support", label: t("landing.nav.support") },
@@ -1729,7 +1729,7 @@ function LandingPage({ lang, onOpenAuth, onLang, onNavigate }: { lang: Lang; onO
           <div className="pointer-events-none absolute -top-32 -right-32 h-[520px] w-[520px] rounded-full opacity-20" style={{ background: "radial-gradient(circle, var(--primary), transparent 70%)" }} />
           <div className="pointer-events-none absolute -bottom-20 -left-20 h-[340px] w-[340px] rounded-full opacity-10" style={{ background: "radial-gradient(circle, var(--accent), transparent 70%)" }} />
 
-          <div className="relative max-w-7xl mx-auto px-10 py-14 flex items-center justify-between gap-12">
+          <div className="relative max-w-7xl mx-auto px-5 md:px-10 py-14 flex items-center justify-between gap-12">
             <div className="max-w-2xl">
               <h1 className="text-[52px] font-bold text-foreground leading-[1.1] mb-5" style={{ letterSpacing: "-0.02em" }}>
                 {t("landing.hero.t1")}<br />
@@ -1760,7 +1760,7 @@ function LandingPage({ lang, onOpenAuth, onLang, onNavigate }: { lang: Lang; onO
         </section>
 
         {/* Partners strip — visible above the fold */}
-        <section className="border-y border-border px-10" style={{ backgroundColor: "var(--card)", paddingTop: "clamp(2rem, 5vh, 4rem)", paddingBottom: "clamp(2rem, 5vh, 4rem)" }}>
+        <section className="border-y border-border px-5 md:px-10" style={{ backgroundColor: "var(--card)", paddingTop: "clamp(2rem, 5vh, 4rem)", paddingBottom: "clamp(2rem, 5vh, 4rem)" }}>
           <div className="max-w-7xl mx-auto">
             <p className="text-center text-[10px] font-bold uppercase tracking-[0.22em] text-muted-foreground mb-10">
               {lang === "es" ? "Respaldado y apoyado por" : lang === "pt" ? "Apoiado por" : lang === "fr" ? "Soutenu par" : "Supported by"}
@@ -1805,8 +1805,8 @@ function LandingPage({ lang, onOpenAuth, onLang, onNavigate }: { lang: Lang; onO
         </section>
 
         {/* Footer */}
-        <footer className="border-t border-border px-10 py-10" style={{ backgroundColor: "var(--background)" }}>
-          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start justify-between gap-8">
+        <footer className="border-t border-border px-5 md:px-10 py-10" style={{ backgroundColor: "var(--background)" }}>
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start justify-between gap-4 md:gap-8">
             <div>
               <div className="text-xl font-bold flex items-center gap-3 text-foreground mb-2">
                 <img src={astrisImg} alt="Astris" className="w-9 h-9 object-contain" /> Astris
@@ -1860,13 +1860,13 @@ function CandidateOnboarding({ lang, palette, darkMode, font, onPalette, onDark,
 
   return (
     <div className="min-h-screen flex flex-col">
-      <div className="px-20 py-10 border-b border-border">
-        <h1 className="text-3xl font-bold text-foreground">{t("palette.title")}</h1>
+      <div className="px-4 lg:px-20 py-10 border-b border-border">
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground">{t("palette.title")}</h1>
         <p className="text-muted-foreground mt-2 text-base max-w-xl">{t("palette.sub")}</p>
       </div>
       <div className="flex flex-1">
         {/* Controls */}
-        <div className="w-[420px] shrink-0 border-r border-border px-10 py-10 flex flex-col gap-8 overflow-y-auto">
+        <div className="w-[420px] shrink-0 border-r border-border px-5 md:px-10 py-10 flex flex-col gap-4 md:gap-8 overflow-y-auto">
           {/* Dark mode */}
           <div>
             <h3 className="text-sm font-bold text-foreground mb-3 uppercase tracking-wide flex items-center gap-2"><Sun size={14} aria-hidden="true" /> {t("palette.dark")}</h3>
@@ -1937,7 +1937,7 @@ function CandidateOnboarding({ lang, palette, darkMode, font, onPalette, onDark,
             }}
           >
             <div
-              className="px-8 py-4 border-b flex items-center justify-between"
+              className="px-4 md:px-8 py-4 border-b flex items-center justify-between"
               style={{
                 borderColor: border, backgroundColor: card,
                 transition: "background-color 320ms ease, border-color 320ms ease",
@@ -1946,7 +1946,7 @@ function CandidateOnboarding({ lang, palette, darkMode, font, onPalette, onDark,
               <span style={{ fontWeight: 700, fontSize: 16, color: fg }}>Astris</span>
               <div className="flex gap-5">{(C(lang, "previewNav") as string[]).map((item) => <span key={item} style={{ fontSize: 13, color: fg, opacity: 0.6 }}>{item}</span>)}</div>
             </div>
-            <div className="p-8">
+            <div className="p-4 md:p-8">
               <div style={{ fontWeight: 700, fontSize: 22, color: fg, marginBottom: 4 }}>{C(lang, "previewTitle")}</div>
               <div style={{ fontSize: 14, color: fg, opacity: 0.55, marginBottom: 20 }}>{C(lang, "previewSubtitle")}</div>
               {[{ title: "Analista de Datos Junior", co: "Veritas Analytics", pct: 94 }, { title: "Diseñadora UX", co: "Forma Studio", pct: 87 }, { title: "Redactor/a Técnico/a", co: "Kestrel Systems", pct: 81 }].map((v) => (
@@ -1998,7 +1998,7 @@ function CandidateQuiz({ lang, axisIndex, answers, onAnswer, onPrev, onNext }: {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Progress */}
-      <div className="px-20 py-8 border-b border-border">
+      <div className="px-4 lg:px-20 py-4 md:py-8 border-b border-border">
         <div className="flex items-center gap-4 mb-3">
           <span className="text-sm font-semibold text-muted-foreground" style={{ fontFamily: "DM Mono, monospace" }}>{t("quiz.step")} {axisIndex + 1} {t("quiz.of")} {QUIZ_AXES.length}</span>
           <div className="flex gap-2" role="progressbar" aria-valuenow={axisIndex + 1} aria-valuemax={QUIZ_AXES.length}>
@@ -2020,7 +2020,7 @@ function CandidateQuiz({ lang, axisIndex, answers, onAnswer, onPrev, onNext }: {
 
       <div className="flex flex-1">
         {/* Questions — key forces remount + fade on every axis change */}
-        <div key={axisIndex} className="flex-1 px-20 py-10 overflow-y-auto anim-slide-up">
+        <div key={axisIndex} className="flex-1 px-4 lg:px-20 py-10 overflow-y-auto anim-slide-up">
           <div className="max-w-xl">
             {axis.questions.map((q, qi) => {
               const ans = axisAnswers[qi];
@@ -2088,7 +2088,7 @@ function CandidateQuiz({ lang, axisIndex, answers, onAnswer, onPrev, onNext }: {
         </div>
 
         {/* Radar */}
-        <div className="w-[360px] shrink-0 border-l border-border px-10 py-10" style={{ backgroundColor: "var(--card)" }}>
+        <div className="w-[360px] shrink-0 border-l border-border px-5 md:px-10 py-10" style={{ backgroundColor: "var(--card)" }}>
           <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1">{t("quiz.radar.title")}</div>
           <p className="text-xs text-muted-foreground mb-4">{t("quiz.radar.sub")}</p>
           <RadarViz data={radarData} height={260} outerRadius={85} fontSize={10} />
@@ -2124,15 +2124,15 @@ function CandidateProfile({ lang, answers }: { lang: Lang; answers: QuizAnswers 
   const radarData = Object.keys(answers).length > 0 ? computeRadar(answers) : CANDIDATE_RADAR_FINAL;
   return (
     <div className="min-h-screen flex flex-col">
-      <div className="px-20 py-10 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
-        <h1 className="text-3xl font-bold text-foreground">{t("profile.title")}</h1>
+      <div className="px-4 lg:px-20 py-10 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground">{t("profile.title")}</h1>
         <div className="flex items-center gap-2 mt-3 text-sm text-muted-foreground max-w-xl">
           <Shield size={14} aria-hidden="true" className="text-accent shrink-0" />
           <span>{t("profile.privacy")}</span>
         </div>
       </div>
 
-      <div className="flex flex-1 max-w-7xl mx-auto w-full px-20 py-12 gap-12">
+      <div className="flex flex-1 max-w-7xl mx-auto w-full px-4 lg:px-20 py-6 md:py-12 gap-12">
         <div className="flex-1">
           <RadarViz data={radarData} height={380} outerRadius={130} fontSize={13} />
           <div className="mt-4 flex flex-col gap-3">
@@ -2147,7 +2147,7 @@ function CandidateProfile({ lang, answers }: { lang: Lang; answers: QuizAnswers 
             ))}
           </div>
         </div>
-        <div className="w-80 shrink-0">
+        <div className="w-full md:w-80 shrink-0">
           <div className="rounded-2xl border border-border p-7" style={{ backgroundColor: "var(--card)" }}>
             <h3 className="font-bold text-foreground mb-4">{t("profile.adjustments")}</h3>
             <div className="flex flex-col gap-2.5">
@@ -2235,11 +2235,11 @@ function CandidateVacancies({ lang, onSelect }: { lang: Lang; onSelect: (id: str
 
   return (
     <div className="min-h-screen flex flex-col">
-      <div className="px-20 py-10 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
-        <h1 className="text-3xl font-bold text-foreground">{t("vacancies.title")}</h1>
+      <div className="px-4 lg:px-20 py-10 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground">{t("vacancies.title")}</h1>
         <p className="text-muted-foreground mt-1">{filtered.length} {lang === "es" ? "vacantes compatibles" : "compatible vacancies"}</p>
       </div>
-      <div className="flex flex-1 max-w-7xl mx-auto w-full px-20 py-10 gap-8">
+      <div className="flex flex-1 max-w-7xl mx-auto w-full px-4 lg:px-20 py-10 gap-4 md:gap-8">
         {/* Filters */}
         <div className="w-60 shrink-0">
           <div className="rounded-2xl border border-border p-6" style={{ backgroundColor: "var(--card)" }}>
@@ -2364,9 +2364,9 @@ function VacancyDetail({ lang, vacancyId, onStart, onBack }: { lang: Lang; vacan
 
   return (
     <div className="min-h-screen flex flex-col">
-      <div className="px-20 py-8 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
+      <div className="px-4 lg:px-20 py-4 md:py-8 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
         <button onClick={onBack} className="flex items-center gap-1.5 text-sm text-muted-foreground cursor-pointer mb-4"><ChevronLeft size={15} aria-hidden="true" />{t("back")}</button>
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-3 md:gap-6">
           <div className="flex-1">
             <h1 className="text-2xl font-bold text-foreground">{v.title}</h1>
             <p className="text-muted-foreground mt-0.5">{v.company} · {v.sector}</p>
@@ -2374,13 +2374,13 @@ function VacancyDetail({ lang, vacancyId, onStart, onBack }: { lang: Lang; vacan
           <MatchBadge value={v.match} size="lg" />
         </div>
       </div>
-      <div className="max-w-7xl mx-auto w-full px-20 py-10 flex gap-10">
+      <div className="max-w-7xl mx-auto w-full px-4 lg:px-20 py-10 flex gap-5 md:gap-10">
         <div className="flex-1">
-          <div className="rounded-2xl border border-border p-8 mb-6" style={{ backgroundColor: "var(--card)" }}>
+          <div className="rounded-2xl border border-border p-4 md:p-8 mb-6" style={{ backgroundColor: "var(--card)" }}>
             <h2 className="font-bold text-foreground mb-3">{lang === "es" ? "Sobre la empresa" : "About the company"}</h2>
             <p className="text-muted-foreground leading-relaxed">{v.companyDesc}</p>
           </div>
-          <div className="rounded-2xl border border-border p-8 mb-6" style={{ backgroundColor: "var(--card)" }}>
+          <div className="rounded-2xl border border-border p-4 md:p-8 mb-6" style={{ backgroundColor: "var(--card)" }}>
             <h2 className="font-bold text-foreground mb-3">{lang === "es" ? "El cargo" : "The role"}</h2>
             <p className="text-muted-foreground leading-relaxed">{v.desc}</p>
             <div className="flex gap-4 mt-4">
@@ -2388,7 +2388,7 @@ function VacancyDetail({ lang, vacancyId, onStart, onBack }: { lang: Lang; vacan
               <span className="flex items-center gap-1.5 text-sm text-muted-foreground"><MapPin size={13} aria-hidden="true" />{v.modality}</span>
             </div>
           </div>
-          <div className="rounded-2xl border border-border p-8" style={{ backgroundColor: "var(--card)" }}>
+          <div className="rounded-2xl border border-border p-4 md:p-8" style={{ backgroundColor: "var(--card)" }}>
             <h2 className="font-bold text-foreground mb-4">{t("vacancy.why")}</h2>
             <div className="flex flex-col gap-2.5">
               {COMPAT.map((c) => (
@@ -2464,15 +2464,15 @@ function MentorSelect({ lang, onSelect }: { lang: Lang; onSelect: () => void }) 
 
   return (
     <div className="min-h-screen flex flex-col">
-      <div className="px-20 py-10 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
-        <h1 className="text-3xl font-bold text-foreground">{t("mentor.title")}</h1>
+      <div className="px-4 lg:px-20 py-10 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground">{t("mentor.title")}</h1>
         <p className="text-muted-foreground mt-2">{t("mentor.sub")}</p>
       </div>
-      <div className="max-w-7xl mx-auto w-full px-20 py-10">
+      <div className="max-w-7xl mx-auto w-full px-4 lg:px-20 py-10">
         {loadingMent ? (
           <div className="flex items-center justify-center py-20 text-muted-foreground">{lang === "es" ? "Cargando mentores..." : "Loading mentors..."}</div>
         ) : (
-          <div className="grid grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
             {mentors.map((m) => (
               <article key={m.id} className="rounded-2xl border-2 flex flex-col overflow-hidden" style={{ borderColor: chosen === m.id ? "var(--primary)" : "var(--border)", backgroundColor: "var(--card)" }}>
                 <div className="px-6 pt-8 pb-5">
@@ -2510,17 +2510,17 @@ function CandidateAccompaniment({ lang }: { lang: Lang }) {
   const STAGES = C(lang, "accompStages") as typeof CONTENT.es.accompStages;
   return (
     <div className="min-h-screen flex flex-col">
-      <div className="px-20 py-10 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
-        <h1 className="text-3xl font-bold text-foreground">{t("accomp.title")}</h1>
+      <div className="px-4 lg:px-20 py-10 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground">{t("accomp.title")}</h1>
         <p className="text-muted-foreground mt-2">{t("accomp.sub")}</p>
       </div>
-      <div className="max-w-5xl mx-auto w-full px-20 py-12 flex gap-12">
+      <div className="max-w-5xl mx-auto w-full px-4 lg:px-20 py-6 md:py-12 flex gap-12">
         {/* Timeline */}
         <div className="flex-1">
           <div className="relative">
             <div className="absolute left-5 top-0 bottom-0 w-0.5" style={{ backgroundColor: "var(--border)" }} aria-hidden="true" />
             {STAGES.map((s, i) => (
-              <div key={i} className="relative flex gap-6 pb-8 last:pb-0">
+              <div key={i} className="relative flex gap-3 md:gap-6 pb-8 last:pb-0">
                 <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 border-2 relative z-10" style={{ borderColor: s.current ? "var(--accent)" : s.done ? "var(--primary)" : "var(--muted)", backgroundColor: s.current ? "var(--accent)" : s.done ? "var(--primary)" : "var(--background)" }}>
                   {s.done ? <Check size={16} aria-hidden="true" style={{ color: "var(--primary-foreground)" }} /> : s.current ? <div className="w-3 h-3 rounded-full bg-white" aria-hidden="true" /> : <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: "var(--muted)" }} aria-hidden="true" />}
                 </div>
@@ -2594,13 +2594,13 @@ function CandidatePostHire({ lang }: { lang: Lang }) {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <div className="px-20 py-10 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
-        <h1 className="text-3xl font-bold text-foreground">{t("posthire.title")}</h1>
+      <div className="px-4 lg:px-20 py-10 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground">{t("posthire.title")}</h1>
         <p className="text-muted-foreground mt-1">Veritas Analytics · {lang === "es" ? "Analista de Datos Junior" : "Junior Data Analyst"} · {lang === "es" ? "Día 14 de 60" : "Day 14 of 60"}</p>
       </div>
-      <div className="max-w-5xl mx-auto w-full px-20 py-10 flex flex-col gap-8">
+      <div className="max-w-5xl mx-auto w-full px-4 lg:px-20 py-10 flex flex-col gap-4 md:gap-8">
         {/* Status */}
-        <div className="rounded-2xl border border-border p-8" style={{ backgroundColor: "var(--card)" }}>
+        <div className="rounded-2xl border border-border p-4 md:p-8" style={{ backgroundColor: "var(--card)" }}>
           <h2 className="font-bold text-foreground mb-6">{t("posthire.status")}</h2>
           <div className="flex gap-4">
             {STATUS_LABELS.map((label, i) => (
@@ -2612,7 +2612,7 @@ function CandidatePostHire({ lang }: { lang: Lang }) {
           </div>
         </div>
         {/* Report */}
-        <div className="rounded-2xl border border-border p-8" style={{ backgroundColor: "var(--card)" }}>
+        <div className="rounded-2xl border border-border p-4 md:p-8" style={{ backgroundColor: "var(--card)" }}>
           <h2 className="font-bold text-foreground mb-4">{lang === "es" ? "Reporte de esta semana" : lang === "pt" ? "Relatório desta semana" : lang === "fr" ? "Rapport de cette semaine" : "This week's report"}</h2>
           <div className="flex flex-col gap-4">
             <div>
@@ -2641,7 +2641,7 @@ function CandidatePostHire({ lang }: { lang: Lang }) {
           </div>
         </div>
         {/* History */}
-        <div className="rounded-2xl border border-border p-8" style={{ backgroundColor: "var(--card)" }}>
+        <div className="rounded-2xl border border-border p-4 md:p-8" style={{ backgroundColor: "var(--card)" }}>
           <h2 className="font-bold text-foreground mb-4">{C(lang, "postHireCheckins") as string}</h2>
           {history.map((h, i) => (
             <div key={i} className="flex gap-4 py-4 border-b border-border last:border-0">
@@ -2759,11 +2759,11 @@ function CompanyOrgProfile({ lang }: { lang: Lang }) {
 
   return (
     <div className="min-h-screen flex flex-col pb-20">
-      <div className="px-20 py-10 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
-        <h1 className="text-3xl font-bold text-foreground">{t("comp.org.title")}</h1>
+      <div className="px-4 lg:px-20 py-10 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground">{t("comp.org.title")}</h1>
         <p className="text-muted-foreground mt-2 max-w-xl">{t("comp.org.sub")}</p>
       </div>
-      <div className="max-w-4xl mx-auto w-full px-20 py-10 flex flex-col gap-3">
+      <div className="w-[95%] md:w-full md:max-w-4xl mx-auto w-full px-4 lg:px-20 py-10 flex flex-col gap-3">
         {SECTIONS.map((s) => (
           <div key={s.id} className="rounded-2xl border border-border overflow-hidden" style={{ backgroundColor: "var(--card)" }}>
             <button onClick={() => toggle(s.id)} className="w-full flex items-center justify-between px-7 py-5 text-left cursor-pointer">
@@ -2773,7 +2773,7 @@ function CompanyOrgProfile({ lang }: { lang: Lang }) {
             {open[s.id] && (
               <div className="px-7 pb-7 border-t border-border anim-slide-down">
                 {s.id === "general" && (
-                  <div className="grid grid-cols-2 gap-5 pt-5">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-5">
                     {[
                       { label: "Nombre de la organización", field: "company_name" },
                       { label: "Sector de actividad", field: "industry" },
@@ -2807,7 +2807,7 @@ function CompanyOrgProfile({ lang }: { lang: Lang }) {
                   </div>
                 )}
                 {s.id === "entorno" && (
-                  <div className="grid grid-cols-3 gap-5 pt-5">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-5 pt-5">
                     {[
                       { label: "Nivel de ruido habitual", field: "noise", placeholder: "Ej. Bajo (oficina silenciosa)" },
                       { label: "Tipo de iluminación", field: "light", placeholder: "Ej. Luz natural + LED" },
@@ -2828,7 +2828,7 @@ function CompanyOrgProfile({ lang }: { lang: Lang }) {
                   </div>
                 )}
                 {s.id === "prestaciones" && (
-                  <div className="grid grid-cols-2 gap-3 pt-5">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-5">
                     {PRESTACIONES.map((p) => {
                       const offered = formData.accommodations.includes(p);
                       return (
@@ -2866,7 +2866,7 @@ function CompanyOrgProfile({ lang }: { lang: Lang }) {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="px-8 py-4 rounded-xl font-bold cursor-pointer disabled:opacity-70"
+            className="px-4 md:px-8 py-4 rounded-xl font-bold cursor-pointer disabled:opacity-70"
             style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}
           >
             {saving ? "Guardando..." : t("save")}
@@ -2882,10 +2882,10 @@ function CompanyPostVacancy({ lang }: { lang: Lang }) {
   const SKILLS = ["Mecanografía", "Microsoft Office", "Lectura intensiva", "Redacción técnica", "Análisis de datos", "Diseño visual", "Comunicación verbal"];
   return (
     <div className="min-h-screen flex flex-col">
-      <div className="px-20 py-10 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
-        <h1 className="text-3xl font-bold text-foreground">{t("comp.vacancy.title")}</h1>
+      <div className="px-4 lg:px-20 py-10 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground">{t("comp.vacancy.title")}</h1>
       </div>
-      <div className="max-w-3xl mx-auto w-full px-20 py-10 flex flex-col gap-7">
+      <div className="max-w-3xl mx-auto w-full px-4 lg:px-20 py-10 flex flex-col gap-7">
         {[["Título del cargo", "Analista de Datos Junior"], ["Descripción de funciones", ""], ["Tipo de comunicación predominante", "Escrita — asíncrona"]].map(([label, val]) => (
           <div key={label as string}>
             <label className="block text-sm font-semibold text-foreground mb-2">{label as string}</label>
@@ -2920,7 +2920,7 @@ function CompanyPostVacancy({ lang }: { lang: Lang }) {
             })}
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div>
             <label className="block text-sm font-semibold text-foreground mb-2">{lang === "es" ? "Modalidad" : "Modality"}</label>
             <div className="px-4 py-3 rounded-xl border border-border text-sm" style={{ backgroundColor: "var(--input-background)", color: "var(--foreground)" }}>100% Remoto</div>
@@ -2930,7 +2930,7 @@ function CompanyPostVacancy({ lang }: { lang: Lang }) {
             <div className="px-4 py-3 rounded-xl border border-border text-sm" style={{ backgroundColor: "var(--input-background)", color: "var(--foreground)" }}>Flexible — 8h diarias</div>
           </div>
         </div>
-        <button className="self-end px-8 py-4 rounded-xl font-bold cursor-pointer" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}>{lang === "es" ? "Publicar vacante" : "Post vacancy"}</button>
+        <button className="self-end px-4 md:px-8 py-4 rounded-xl font-bold cursor-pointer" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}>{lang === "es" ? "Publicar vacante" : "Post vacancy"}</button>
       </div>
     </div>
   );
@@ -2961,19 +2961,19 @@ function CompanyCandidates({ lang, onSelect }: { lang: Lang; onSelect: (id: stri
 
   return (
     <div className="min-h-screen flex flex-col">
-      <div className="px-20 py-10 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
-        <h1 className="text-3xl font-bold text-foreground">{t("comp.candidates.title")}</h1>
+      <div className="px-4 lg:px-20 py-10 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground">{t("comp.candidates.title")}</h1>
         <p className="text-muted-foreground mt-2">{t("comp.candidates.sub")}</p>
       </div>
-      <div className="max-w-7xl mx-auto w-full px-20 py-10">
+      <div className="max-w-7xl mx-auto w-full px-4 lg:px-20 py-10">
         <div className="rounded-2xl border border-border overflow-hidden">
           <div className="grid border-b border-border text-xs font-bold text-muted-foreground uppercase tracking-wide px-7 py-4" style={{ gridTemplateColumns: "1fr 2fr 100px 160px", backgroundColor: "var(--muted)" }}>
             <span>Identificador</span><span>Resumen de fortalezas</span><span className="text-center">Compatibilidad</span><span />
           </div>
           {loading ? (
-            <div className="px-7 py-12 text-center text-muted-foreground">Cargando candidatos...</div>
+            <div className="px-7 py-6 md:py-12 text-center text-muted-foreground">Cargando candidatos...</div>
           ) : candidates.length === 0 ? (
-            <div className="px-7 py-12 text-center text-muted-foreground">No se encontraron candidatos.</div>
+            <div className="px-7 py-6 md:py-12 text-center text-muted-foreground">No se encontraron candidatos.</div>
           ) : candidates.map((c, i) => (
             <div key={c.id} className="grid items-center px-7 py-5 border-b border-border last:border-0" style={{ gridTemplateColumns: "1fr 2fr 100px 160px", backgroundColor: i % 2 === 0 ? "var(--background)" : "var(--card)" }}>
               <div className="font-mono text-sm font-bold" style={{ color: "var(--primary)", fontFamily: "DM Mono, monospace" }}>{c.id}</div>
@@ -3038,7 +3038,7 @@ function CompanyCandidateDetail({ lang, candidateId, onBack, onStart }: { lang: 
 
   return (
     <div className="min-h-screen flex flex-col">
-      <div className="px-20 py-8 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
+      <div className="px-4 lg:px-20 py-4 md:py-8 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
         <button onClick={onBack} className="flex items-center gap-1.5 text-sm text-muted-foreground cursor-pointer mb-4"><ChevronLeft size={15} aria-hidden="true" />{t("back")}</button>
         <div className="flex items-center justify-between">
           <div>
@@ -3051,7 +3051,7 @@ function CompanyCandidateDetail({ lang, candidateId, onBack, onStart }: { lang: 
           <MatchBadge value={Math.floor(Math.random() * 20) + 80} size="lg" />
         </div>
       </div>
-      <div className="max-w-5xl mx-auto w-full px-20 py-10 flex gap-10">
+      <div className="max-w-5xl mx-auto w-full px-4 lg:px-20 py-10 flex gap-5 md:gap-10">
         <div className="flex-1">
           <h2 className="font-bold text-foreground mb-2">{lang === "es" ? "Perfil de compatibilidad" : "Compatibility profile"}</h2>
           <RadarViz data={radar} height={300} outerRadius={100} fontSize={12} />
@@ -3101,11 +3101,11 @@ function CompanyPostHire({ lang }: { lang: Lang }) {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <div className="px-20 py-10 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
-        <h1 className="text-3xl font-bold text-foreground">{t("comp.posthire.title")}</h1>
+      <div className="px-4 lg:px-20 py-10 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground">{t("comp.posthire.title")}</h1>
         <p className="text-muted-foreground mt-1">CAND-A7X2 · {lang === "es" ? "Analista de Datos Junior · Día 14 de 60" : "Junior Data Analyst · Day 14 of 60"}</p>
       </div>
-      <div className="max-w-4xl mx-auto w-full px-20 py-10 flex flex-col gap-6">
+      <div className="w-[95%] md:w-full md:max-w-4xl mx-auto w-full px-4 lg:px-20 py-10 flex flex-col gap-3 md:gap-6">
         <div className="rounded-2xl border border-border p-7" style={{ backgroundColor: "var(--card)" }}>
           <h2 className="font-bold text-foreground mb-5">{C(lang, "compPostHireStatus") as string}</h2>
           <div className="flex gap-3 mb-6">
@@ -3159,14 +3159,14 @@ function MentorDashboard({ lang }: { lang: Lang }) {
   return (
     <div className="min-h-screen flex flex-col">
       <div className="border-b border-border" style={{ backgroundColor: "var(--card)" }}>
-        <div className="px-20 py-10 max-w-7xl mx-auto">
+        <div className="px-4 lg:px-20 py-10 max-w-7xl mx-auto">
           <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1">{t("mentor.dash.title")}</div>
           <h2 className="text-2xl font-bold text-foreground">Carmen Ruiz</h2>
           <p className="text-muted-foreground mt-1">Inclusión laboral y funciones ejecutivas</p>
         </div>
       </div>
       <div className="border-b border-border" style={{ backgroundColor: "var(--background)" }}>
-        <div className="px-20 py-5 max-w-7xl mx-auto flex gap-10">
+        <div className="px-4 lg:px-20 py-5 max-w-7xl mx-auto flex gap-5 md:gap-10">
           {([["3", C(lang, "mentorProcesses"), "var(--primary)"], ["2", lang === "es" ? "Sesiones pendientes" : lang === "pt" ? "Sessões pendentes" : lang === "fr" ? "Sessions en attente" : "Pending sessions", "var(--accent)"], ["12", lang === "es" ? "Completados este año" : lang === "pt" ? "Concluídos este ano" : lang === "fr" ? "Complétés cette année" : "Completed this year", "var(--muted-foreground)"], ["91%", lang === "es" ? "Retención promedio" : lang === "pt" ? "Retenção média" : lang === "fr" ? "Rétention moyenne" : "Average retention", "var(--accent)"]] as const).map(([val, label, color]) => (
             <div key={label as string} className="flex flex-col gap-1">
               <div className="text-2xl font-bold" style={{ color: color as string, fontFamily: "DM Mono, monospace" }}>{val}</div>
@@ -3175,7 +3175,7 @@ function MentorDashboard({ lang }: { lang: Lang }) {
           ))}
         </div>
       </div>
-      <div className="flex flex-1 max-w-7xl mx-auto w-full px-20 py-10 gap-8">
+      <div className="flex flex-1 max-w-7xl mx-auto w-full px-4 lg:px-20 py-10 gap-4 md:gap-8">
         <div className="flex-1 min-w-0">
           <h3 className="text-xl font-bold text-foreground mb-6">{C(lang, "mentorProcesses") as string}</h3>
           <div className="flex flex-col gap-5">
@@ -3242,17 +3242,17 @@ function MentorDashboard({ lang }: { lang: Lang }) {
 function MentorCheckins({ lang }: { lang: Lang }) {
   return (
     <div className="min-h-screen flex flex-col">
-      <div className="px-20 py-10 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
-        <h1 className="text-3xl font-bold text-foreground">{C(lang, "checkinPageTitle") as string}</h1>
+      <div className="px-4 lg:px-20 py-10 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground">{C(lang, "checkinPageTitle") as string}</h1>
         <p className="text-muted-foreground mt-2">{C(lang, "checkinPageSub") as string}</p>
       </div>
-      <div className="max-w-4xl mx-auto w-full px-20 py-10 flex flex-col gap-5">
+      <div className="w-[95%] md:w-full md:max-w-4xl mx-auto w-full px-4 lg:px-20 py-10 flex flex-col gap-5">
         {[
           { date: "Jun 18, 2025", cand: "CAND-A7X2", company: "Veritas Analytics", type: lang === "es" ? "Onboarding — Semana 2" : lang === "pt" ? "Onboarding — Semana 2" : lang === "fr" ? "Onboarding — Semaine 2" : "Onboarding — Week 2", time: "10:00 AM" },
           { date: "Jun 20, 2025", cand: "CAND-B3M9", company: "Forma Studio", type: lang === "es" ? "Preparación de entrevista" : lang === "pt" ? "Preparação de entrevista" : lang === "fr" ? "Préparation entretien" : "Interview preparation", time: "2:00 PM" },
           { date: "Jun 24, 2025", cand: "CAND-C1K4", company: "Kestrel Systems", type: lang === "es" ? "Revisión de 30 días" : lang === "pt" ? "Revisão de 30 dias" : lang === "fr" ? "Révision de 30 jours" : "30-day review", time: "11:30 AM" },
         ].map((item) => (
-          <article key={item.cand} className="rounded-2xl border border-border p-6 flex items-center gap-6" style={{ backgroundColor: "var(--card)" }}>
+          <article key={item.cand} className="rounded-2xl border border-border p-6 flex items-center gap-3 md:gap-6" style={{ backgroundColor: "var(--card)" }}>
             <div className="w-14 h-14 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: "var(--secondary)" }}>
               <Calendar size={24} aria-hidden="true" style={{ color: "var(--primary)" }} />
             </div>
@@ -3275,11 +3275,11 @@ function MentorCheckins({ lang }: { lang: Lang }) {
 function MentorCompanies({ lang }: { lang: Lang }) {
   return (
     <div className="min-h-screen flex flex-col">
-      <div className="px-20 py-10 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
-        <h1 className="text-3xl font-bold text-foreground">{C(lang, "companiesPageTitle") as string}</h1>
+      <div className="px-4 lg:px-20 py-10 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground">{C(lang, "companiesPageTitle") as string}</h1>
         <p className="text-muted-foreground mt-2">{C(lang, "companiesPageSub") as string}</p>
       </div>
-      <div className="max-w-4xl mx-auto w-full px-20 py-10 grid grid-cols-3 gap-5">
+      <div className="w-[95%] md:w-full md:max-w-4xl mx-auto w-full px-4 lg:px-20 py-10 grid grid-cols-1 md:grid-cols-3 gap-5">
         {[
           { name: "Veritas Analytics", contact: "RRHH · Ana García", status: lang === "es" ? "Activa" : lang === "pt" ? "Ativa" : lang === "fr" ? "Active" : "Active", processes: 1, color: "#2D7D5F" },
           { name: "Forma Studio", contact: "Hiring · Daniel Reyes", status: lang === "es" ? "En proceso" : lang === "pt" ? "Em processo" : lang === "fr" ? "En cours" : "In process", processes: 1, color: "#1B4B7A" },
@@ -3347,7 +3347,7 @@ function NavBar({ lang, role, screen, onNav, onLang, onLogout, darkMode, onDarkT
 
   return (
     <header className="sticky top-0 z-40 border-b border-border" style={{ backgroundColor: "var(--background)" }}>
-      <div className="px-8 h-16 flex items-center gap-2">
+      <div className="px-4 md:px-8 h-16 flex items-center gap-2">
         <button onClick={() => onNav("home")} className="flex items-center gap-2 text-lg font-bold text-foreground tracking-tight mr-6 cursor-pointer">
           <img src={astrisImg} alt="Astris Logo" className="w-10 h-10 object-contain" />
           <span>Astris</span>
