@@ -1185,7 +1185,7 @@ function LanguageModal({ onSelect }: { onSelect: (l: Lang) => void }) {
   ];
   return (
     <Overlay>
-      <div className="w-full w-[95%] md:w-full md:max-w-md rounded-2xl overflow-hidden" style={{ backgroundColor: "var(--card)" }}>
+      <div className="w-[95%] sm:w-full max-w-md rounded-2xl overflow-hidden mx-auto" style={{ backgroundColor: "var(--card)" }}>
         <div className="px-5 md:px-10 pt-10 pb-6 text-center border-b border-border">
           <div className="text-2xl md:text-3xl font-bold text-foreground mb-1">Astris</div>
           <div className="flex items-center justify-center gap-2 mt-4 mb-2">
@@ -1227,7 +1227,7 @@ function LoginModal({ lang, onLogin, onBack, error, loading }: {
   const [password, setPassword] = useState("");
   return (
     <Overlay>
-      <div className="w-full w-[95%] md:w-full md:max-w-md rounded-2xl overflow-hidden" style={{ backgroundColor: "var(--card)" }}>
+      <div className="w-[95%] sm:w-full max-w-md rounded-2xl overflow-hidden mx-auto" style={{ backgroundColor: "var(--card)" }}>
         <div className="px-4 md:px-8 py-7 border-b border-border">
           <button onClick={onBack} className="flex items-center gap-1.5 text-sm text-muted-foreground cursor-pointer mb-4">
             <ChevronLeft size={15} aria-hidden="true" />{t("login.back")}
@@ -1304,7 +1304,7 @@ function RegisterModal({ lang, role, onRegister, onBack, error, loading, googleA
   if (googleAuthUser) {
     return (
       <Overlay>
-        <div className="w-full w-[95%] md:w-full md:max-w-md rounded-2xl overflow-hidden" style={{ backgroundColor: "var(--card)" }}>
+        <div className="w-[95%] sm:w-full max-w-md rounded-2xl overflow-hidden mx-auto" style={{ backgroundColor: "var(--card)" }}>
           <div className="px-4 md:px-8 py-7 border-b border-border">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: "var(--primary)" }}>
@@ -1339,7 +1339,7 @@ function RegisterModal({ lang, role, onRegister, onBack, error, loading, googleA
 
   return (
     <Overlay>
-      <div className="w-full w-[95%] md:w-full md:max-w-md rounded-2xl overflow-hidden" style={{ backgroundColor: "var(--card)" }}>
+      <div className="w-[95%] sm:w-full max-w-md rounded-2xl overflow-hidden mx-auto" style={{ backgroundColor: "var(--card)" }}>
         <div className="px-4 md:px-8 py-7 border-b border-border">
           <button onClick={onBack} className="flex items-center gap-1.5 text-sm text-muted-foreground cursor-pointer mb-4">
             <ChevronLeft size={15} aria-hidden="true" />{t("back")}
@@ -1936,7 +1936,7 @@ function CandidateOnboarding({ lang, palette, darkMode, font, onPalette, onDark,
         <h1 className="text-2xl md:text-3xl font-bold text-foreground">{t("palette.title")}</h1>
         <p className="text-muted-foreground mt-2 text-base max-w-xl">{t("palette.sub")}</p>
       </div>
-      <div className="flex flex-1">
+      <div className="flex flex-col lg:flex-row flex-1">
         {/* Controls */}
         <div className="w-[420px] shrink-0 border-r border-border px-5 md:px-10 py-10 flex flex-col gap-4 md:gap-8 overflow-y-auto">
           {/* Dark mode */}
@@ -1960,7 +1960,7 @@ function CandidateOnboarding({ lang, palette, darkMode, font, onPalette, onDark,
                 const p = PALETTES[key];
                 const sel = palette === key;
                 return (
-                  <button key={key} onClick={() => onPalette(key)} className="w-full flex items-center gap-3 p-3.5 rounded-xl border-2 cursor-pointer text-left" style={{ borderColor: sel ? "var(--primary)" : "var(--border)", backgroundColor: sel ? "var(--secondary)" : "var(--background)" }}>
+                  <button key={key} onClick={() => onPalette(key)} className="w-full flex items-center gap-3 p-3.5 rounded-xl border-2 cursor-pointer text-left" style={{ borderColor: sel ? "var(--primary)" : "var(--border)", backgroundColor: sel ? "var(--card)" : "var(--background)", boxShadow: sel ? "0 4px 12px rgba(0,0,0,0.1)" : "none" }}>
                     <div className="w-9 h-9 rounded-lg shrink-0 border" style={{ backgroundColor: p.bg, borderColor: p.border }} aria-hidden="true" />
                     <div className="flex-1 min-w-0">
                       <div className="font-semibold text-foreground text-sm">{getPaletteName(key, lang)}</div>
@@ -1975,10 +1975,10 @@ function CandidateOnboarding({ lang, palette, darkMode, font, onPalette, onDark,
           {/* Font */}
           <div>
             <h3 className="text-sm font-bold text-foreground mb-3 uppercase tracking-wide flex items-center gap-2"><Type size={14} aria-hidden="true" /> {t("palette.font")}</h3>
-            {([["atkinson", "Atkinson Hyperlegible", lang === "es" ? "Alta legibilidad — baja visión" : "High readability — low vision"], ["lexend", "Lexend", lang === "es" ? "Reduce fricción lectora — dislexia" : "Reduces reading friction — dyslexia"]] as const).map(([fk, fname, fdesc]) => {
+            {([["atkinson", "Atkinson Hyperlegible", lang === "es" ? "Alta legibilidad — baja visión" : "High readability — low vision"], ["lexend", lang === "es" ? "Modo Dislexia (Lexend)" : "Dyslexia Mode", lang === "es" ? "Tipografía amigable y espaciada" : "Dyslexia friendly typography"]] as const).map(([fk, fname, fdesc]) => {
               const sel = font === fk;
               return (
-                <button key={fk} onClick={() => onFont(fk)} className="w-full flex items-center gap-3 p-3.5 rounded-xl border-2 cursor-pointer text-left mb-2.5" style={{ borderColor: sel ? "var(--primary)" : "var(--border)", backgroundColor: sel ? "var(--secondary)" : "var(--background)" }}>
+                <button key={fk} onClick={() => onFont(fk)} className="w-full flex items-center gap-3 p-3.5 rounded-xl border-2 cursor-pointer text-left mb-2.5" style={{ borderColor: sel ? "var(--primary)" : "var(--border)", backgroundColor: sel ? "var(--card)" : "var(--background)", boxShadow: sel ? "0 4px 12px rgba(0,0,0,0.1)" : "none" }}>
                   <div className="flex-1">
                     <div className="font-semibold text-foreground text-sm" style={{ fontFamily: fk === "lexend" ? "'Lexend', sans-serif" : "'Atkinson Hyperlegible', sans-serif" }}>{fname}</div>
                     <div className="text-xs text-muted-foreground mt-0.5">{fdesc}</div>
@@ -1995,7 +1995,7 @@ function CandidateOnboarding({ lang, palette, darkMode, font, onPalette, onDark,
           </div>
         </div>
         {/* Preview */}
-        <div className="flex-1 px-14 py-10">
+        <div className="w-full lg:flex-1 px-4 lg:px-14 py-10 bg-muted/20">
           <div className="flex items-center gap-2 mb-5">
             <div className="w-2 h-2 rounded-full bg-accent" aria-hidden="true" />
             <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">{lang === "es" ? "Vista previa en tiempo real" : lang === "pt" ? "Visualização em tempo real" : lang === "fr" ? "Aperçu en temps réel" : "Real-time preview"}</span>
@@ -2094,34 +2094,39 @@ function CandidateQuiz({ lang, axisIndex, answers, onAnswer, onPrev, onNext }: {
         {/* Questions — key forces remount + fade on every axis change */}
         <div key={axisIndex} className="flex-1 px-4 lg:px-20 py-10 overflow-y-auto anim-slide-up">
           <div className="max-w-xl">
-            {axis.questions.map((q, qi) => {
+            {(() => {
+              const q = axis.questions[questionIndex];
+              const qi = questionIndex;
               const ans = axisAnswers[qi];
               const opts = q.opts[lang] ?? q.opts.es;
               return (
-                <div key={qi} className="mb-8">
-                  <p className="text-base font-semibold text-foreground mb-4 leading-relaxed">{q.stems[lang] ?? q.stems.es}</p>
+                <div key={qi} className="mb-8 anim-slide-up">
+                  <div className="flex items-center gap-3 mb-6">
+                     <span className="text-xs font-bold px-3 py-1 rounded-full bg-primary/10 text-primary">Pregunta {questionIndex + 1} de {axis.questions.length}</span>
+                  </div>
+                  <p className="text-xl md:text-2xl font-semibold text-foreground mb-8 leading-relaxed">{q.stems[lang] ?? q.stems.es}</p>
                   {q.type === "single" ? (
-                    <div className="flex flex-col gap-2.5" role="radiogroup">
+                    <div className="flex flex-col gap-3" role="radiogroup">
                       {opts.map((opt, oi) => {
                         const sel = ans === oi;
                         return (
-                          <button key={oi} onClick={() => onAnswer(axisIndex, qi, oi)} className="flex items-center gap-4 p-4 rounded-xl border-2 text-left cursor-pointer" style={{ borderColor: sel ? "var(--primary)" : "var(--border)", backgroundColor: sel ? "var(--secondary)" : "var(--background)" }} role="radio" aria-checked={sel}>
-                            <div className="w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0" style={{ borderColor: sel ? "var(--primary)" : "var(--muted-foreground)", backgroundColor: sel ? "var(--primary)" : "transparent" }} aria-hidden="true">
-                              {sel && <div className="w-2 h-2 rounded-full bg-white" />}
+                          <button key={oi} onClick={() => onAnswer(axisIndex, qi, oi)} className="flex items-center gap-4 p-5 rounded-2xl border-2 text-left cursor-pointer transition-all hover:scale-[1.01]" style={{ borderColor: sel ? "var(--primary)" : "var(--border)", backgroundColor: sel ? "var(--card)" : "var(--background)", boxShadow: sel ? "0 4px 14px rgba(0,0,0,0.05)" : "none" }} role="radio" aria-checked={sel}>
+                            <div className="w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0" style={{ borderColor: sel ? "var(--primary)" : "var(--muted-foreground)", backgroundColor: sel ? "var(--primary)" : "transparent" }} aria-hidden="true">
+                              {sel && <div className="w-2.5 h-2.5 rounded-full bg-white" />}
                             </div>
-                            <span className="text-foreground text-sm leading-snug">{opt}</span>
+                            <span className="text-foreground text-base md:text-lg leading-snug font-medium">{opt}</span>
                           </button>
                         );
                       })}
                     </div>
                   ) : (
-                    <div className="flex flex-col gap-2.5">
+                    <div className="flex flex-col gap-3">
                       {opts.map((opt, oi) => {
                         const selected = Array.isArray(ans) ? (ans as number[]).includes(oi) : false;
                         const isNone = oi === opts.length - 1;
                         const toggleMulti = () => {
-                          const prev: number[] = Array.isArray(ans) ? (ans as number[]) : [];
-                          let next: number[];
+                          const prev = Array.isArray(ans) ? (ans) : [];
+                          let next;
                           if (isNone) { next = selected ? [] : [oi]; }
                           else {
                             const withoutNone = prev.filter((x) => x !== opts.length - 1);
@@ -2130,11 +2135,11 @@ function CandidateQuiz({ lang, axisIndex, answers, onAnswer, onPrev, onNext }: {
                           onAnswer(axisIndex, qi, next);
                         };
                         return (
-                          <button key={oi} onClick={toggleMulti} className="flex items-center gap-4 p-4 rounded-xl border-2 text-left cursor-pointer" style={{ borderColor: selected ? "var(--primary)" : "var(--border)", backgroundColor: selected ? "var(--secondary)" : "var(--background)" }}>
-                            <div className="w-5 h-5 rounded flex items-center justify-center shrink-0 border-2" style={{ borderColor: selected ? "var(--primary)" : "var(--muted-foreground)", backgroundColor: selected ? "var(--primary)" : "transparent" }} aria-hidden="true">
-                              {selected && <Check size={11} style={{ color: "var(--primary-foreground)" }} />}
+                          <button key={oi} onClick={toggleMulti} className="flex items-center gap-4 p-5 rounded-2xl border-2 text-left cursor-pointer transition-all hover:scale-[1.01]" style={{ borderColor: selected ? "var(--primary)" : "var(--border)", backgroundColor: selected ? "var(--card)" : "var(--background)", boxShadow: selected ? "0 4px 14px rgba(0,0,0,0.05)" : "none" }}>
+                            <div className="w-6 h-6 rounded flex items-center justify-center shrink-0 border-2" style={{ borderColor: selected ? "var(--primary)" : "var(--muted-foreground)", backgroundColor: selected ? "var(--primary)" : "transparent" }} aria-hidden="true">
+                              {selected && <Check size={14} style={{ color: "var(--primary-foreground)" }} />}
                             </div>
-                            <span className="text-foreground text-sm leading-snug">{opt}</span>
+                            <span className="text-foreground text-base md:text-lg leading-snug font-medium">{opt}</span>
                           </button>
                         );
                       })}
@@ -2142,25 +2147,49 @@ function CandidateQuiz({ lang, axisIndex, answers, onAnswer, onPrev, onNext }: {
                   )}
                 </div>
               );
-            })}
+            })()}
 
             {/* Nav buttons */}
-            <div className="flex gap-4 mt-4">
-              {axisIndex > 0 && (
-                <button onClick={onPrev} className="flex items-center gap-2 px-6 py-3.5 rounded-xl border-2 font-semibold cursor-pointer" style={{ borderColor: "var(--border)", backgroundColor: "var(--background)", color: "var(--foreground)" }}>
-                  <ChevronLeft size={18} aria-hidden="true" />{t("back")}
-                </button>
-              )}
-              <button onClick={onNext} disabled={!allAnswered} className="flex items-center gap-2 px-7 py-3.5 rounded-xl border-2 font-bold" style={{ borderColor: allAnswered ? "var(--primary)" : "var(--muted)", backgroundColor: allAnswered ? "var(--primary)" : "var(--muted)", color: allAnswered ? "var(--primary-foreground)" : "var(--muted-foreground)", cursor: allAnswered ? "pointer" : "not-allowed", opacity: allAnswered ? 1 : 0.55 }}>
-                {axisIndex === QUIZ_AXES.length - 1 ? (lang === "es" ? "Completar perfil" : lang === "pt" ? "Concluir perfil" : lang === "fr" ? "Compléter le profil" : "Complete profile") : t("next")}
-                <ChevronRight size={18} aria-hidden="true" />
+            <div className="flex gap-4 mt-8 pt-6 border-t border-border">
+              <button 
+                onClick={() => {
+                  if (questionIndex > 0) {
+                    setQuestionIndex(questionIndex - 1);
+                  } else if (axisIndex > 0) {
+                    onPrev();
+                    // We can't easily know the length of the previous axis without passing it down, but assuming standard lengths, we'll reset to 0
+                    setQuestionIndex(0); 
+                  }
+                }} 
+                disabled={axisIndex === 0 && questionIndex === 0}
+                className="flex items-center gap-2 px-6 py-4 rounded-xl border-2 font-bold cursor-pointer transition-all" 
+                style={{ borderColor: "var(--border)", backgroundColor: "var(--card)", color: "var(--foreground)", opacity: (axisIndex === 0 && questionIndex === 0) ? 0.4 : 1 }}
+              >
+                <ChevronLeft size={20} aria-hidden="true" />{t("back")}
+              </button>
+              
+              <button 
+                onClick={() => {
+                  if (questionIndex < axis.questions.length - 1) {
+                    setQuestionIndex(questionIndex + 1);
+                  } else {
+                    onNext();
+                    setQuestionIndex(0);
+                  }
+                }} 
+                disabled={axisAnswers[questionIndex] === undefined || (Array.isArray(axisAnswers[questionIndex]) && axisAnswers[questionIndex].length === 0)} 
+                className="flex-1 flex items-center justify-center gap-2 px-7 py-4 rounded-xl border-2 font-bold transition-all hover:opacity-90" 
+                style={{ borderColor: "var(--primary)", backgroundColor: "var(--primary)", color: "var(--primary-foreground)", cursor: (axisAnswers[questionIndex] === undefined || (Array.isArray(axisAnswers[questionIndex]) && axisAnswers[questionIndex].length === 0)) ? "not-allowed" : "pointer", opacity: (axisAnswers[questionIndex] === undefined || (Array.isArray(axisAnswers[questionIndex]) && axisAnswers[questionIndex].length === 0)) ? 0.5 : 1 }}
+              >
+                {questionIndex === axis.questions.length - 1 && axisIndex === 3 ? (lang === "es" ? "Completar perfil" : "Complete profile") : t("next")}
+                <ChevronRight size={20} aria-hidden="true" />
               </button>
             </div>
           </div>
         </div>
 
         {/* Radar */}
-        <div className="w-[360px] shrink-0 border-l border-border px-5 md:px-10 py-10" style={{ backgroundColor: "var(--card)" }}>
+        <div className="w-full lg:w-[360px] shrink-0 lg:border-l border-t lg:border-t-0 border-border px-5 md:px-10 py-10" style={{ backgroundColor: "var(--card)" }}>
           <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1">{t("quiz.radar.title")}</div>
           <p className="text-xs text-muted-foreground mb-4">{t("quiz.radar.sub")}</p>
           <RadarViz data={radarData} height={260} outerRadius={85} fontSize={10} />
