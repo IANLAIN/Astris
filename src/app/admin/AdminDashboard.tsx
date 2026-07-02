@@ -81,13 +81,13 @@ export default function AdminDashboard({ onLogout, onBack }: { onLogout: () => v
           <span className="font-bold text-lg text-foreground tracking-tight">Astris Admin</span>
         </div>
         <nav className="flex-1 py-6 px-3 space-y-1">
-          <button onClick={() => setView("overview")} className={\`w-full flex items-center px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors \${view === 'overview' ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted'}\`}>
+          <button onClick={() => setView("overview")} className={`w-full flex items-center px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors ${view === 'overview' ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted'}`} >
             <LayoutDashboard className="w-4 h-4 mr-3" /> Dashboard
           </button>
-          <button onClick={() => setView("users")} className={\`w-full flex items-center px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors \${view === 'users' ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted'}\`}>
+          <button onClick={() => setView("users")} className={`w-full flex items-center px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors ${view === 'users' ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted'}`} >
             <Users className="w-4 h-4 mr-3" /> Usuarios & Perfiles
           </button>
-          <button onClick={() => setView("jobs")} className={\`w-full flex items-center px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors \${view === 'jobs' ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted'}\`}>
+          <button onClick={() => setView("jobs")} className={`w-full flex items-center px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors ${view === 'jobs' ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted'}`} >
             <Briefcase className="w-4 h-4 mr-3" /> Vacantes
           </button>
         </nav>
@@ -126,7 +126,7 @@ export default function AdminDashboard({ onLogout, onBack }: { onLogout: () => v
                   { label: "Vacantes", val: stats.totalJobs, icon: Briefcase, color: "text-orange-500", bg: "bg-orange-500/10" }
                 ].map((s, i) => (
                   <div key={i} className="p-6 rounded-2xl bg-card border border-border shadow-sm flex items-center gap-4">
-                    <div className={\`w-12 h-12 rounded-xl flex items-center justify-center \${s.bg} \${s.color}\`}>
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${s.bg} ${s.color}`}>
                       <s.icon className="w-6 h-6" />
                     </div>
                     <div>
@@ -169,7 +169,7 @@ export default function AdminDashboard({ onLogout, onBack }: { onLogout: () => v
                     </thead>
                     <tbody className="divide-y divide-border">
                       {users.filter(u => u.full_name.toLowerCase().includes(search.toLowerCase()) || u.email.toLowerCase().includes(search.toLowerCase())).map(u => (
-                        <tr key={u.id} className={\`hover:bg-muted/30 transition-colors \${u.deleted_at ? 'opacity-50' : ''}\`}>
+                        <tr key={u.id} className={`hover:bg-muted/30 transition-colors ${u.deleted_at ? 'opacity-50' : ''}\`}>
                           <td className="px-6 py-4 font-medium flex items-center gap-3">
                             <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs">
                               {u.full_name.charAt(0)}
@@ -199,7 +199,7 @@ export default function AdminDashboard({ onLogout, onBack }: { onLogout: () => v
                           <td className="px-6 py-4 text-right">
                             <button 
                               onClick={() => handleSoftDelete(u.id, !u.deleted_at)}
-                              className={\`p-2 rounded-lg transition-colors \${u.deleted_at ? 'hover:bg-blue-500/10 text-blue-500' : 'hover:bg-destructive/10 text-destructive'}\`}
+                              className={`p-2 rounded-lg transition-colors ${u.deleted_at ? 'hover:bg-blue-500/10 text-blue-500' : 'hover:bg-destructive/10 text-destructive'}`}
                               title={u.deleted_at ? 'Restaurar usuario' : 'Eliminar usuario (Soft Delete)'}
                             >
                               {u.deleted_at ? <RotateCcw className="w-4 h-4" /> : <Trash2 className="w-4 h-4" />}
