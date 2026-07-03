@@ -1,0 +1,64 @@
+import { Shield } from "lucide-react";
+import { Lang, QuizAnswers } from "../../types";
+import { useT, computeRadar } from "../../i18n/useT";
+import { CANDIDATE_RADAR_FINAL } from "../../mockData";
+import { RadarViz } from "../../components/common/RadarViz";
+import { QUIZ_AXES } from "../../i18n/content";
+
+export function CandidateProfile({ lang, answers }: { lang: Lang; answers: QuizAnswers }) {
+  const t = useT(lang);
+  const radarData = Object.keys(answers).length > 0 ? computeRadar(answers) : CANDIDATE_RADAR_FINAL;
+  return (
+    <div className="min-h-screen w-full overflow-x-hidden flex flex-col">
+      <div className="px-4 lg:px-20 py-10 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">{t("profile.title")}</h1>
+        <div className="flex items-center gap-2 text-sm text-muted-foreground mt-4">
+          <Shield size={16} aria-hidden="true" />
+          <p>{t("profile.privacy")}</p>
+        </div>
+      </div>
+
+      <div className="flex-1 px-4 lg:px-20 py-10 flex flex-col lg:flex-row gap-10">
+        {/* Radar */}
+        <div className="flex-1 max-w-xl rounded-[2rem] border border-border p-6 md:p-8" style={{ backgroundColor: "var(--card)", boxShadow: "0 10px 40px rgba(0,0,0,0.05)" }}>
+          <RadarViz data={radarData} height={340} outerRadius={110} fontSize={11} />
+        </div>
+
+        {/* Adjustments */}
+        <div className="w-full lg:w-[400px] shrink-0 space-y-6">
+          <div className="rounded-[2rem] border border-border p-6 md:p-8" style={{ backgroundColor: "var(--card)", boxShadow: "0 10px 40px rgba(0,0,0,0.05)" }}>
+            <h2 className="text-lg font-bold text-foreground mb-5">{t("profile.adjustments")}</h2>
+            <div>
+              {(() => {
+                const active: string[] = [];
+                const axis = QUIZ_AXES[3];
+                if (answers[3] && Object.keys(answers[3]).length > 0) {
+                  [0, 1].forEach((qi) => {
+                    const ans = answers[3][qi];
+                    if (Array.isArray(ans)) {
+                      ans.forEach((oi) => {
+                        const oText = axis.questions[qi].opts[lang]?.[oi] ?? axis.questions[qi].opts.es[oi];
+                        if (oText && oi !== axis.questions[qi].opts.es.length - 1) {
+                          active.push(oText);
+                        }
+                      });
+                    }
+                  });
+                }
+                return active.length > 0 ? (
+                  <div className="flex flex-wrap gap-2">
+                    {active.map((adj, idx) => (
+                      <span key={idx} className="text-sm font-semibold px-4 py-2 rounded-xl bg-primary/10 text-primary border border-primary/20">{adj}</span>
+                    ))}
+                  </div>
+                ) : (
+                  <span className="text-sm text-muted-foreground">—</span>
+                );
+              })()}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

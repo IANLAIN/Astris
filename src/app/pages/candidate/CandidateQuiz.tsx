@@ -1,21 +1,50 @@
-const fs = require('fs');
-const file = 'src/app/AstrisApp.tsx';
-let content = fs.readFileSync(file, 'utf8');
+import { useState } from "react";
+import { ChevronLeft, ChevronRight, Check } from "lucide-react";
+import { Lang, QuizAnswers } from "../../types";
+import { useT, computeRadar } from "../../i18n/useT";
+import { QUIZ_AXES } from "../../i18n/content";
+import { RadarViz } from "../../components/common/RadarViz";
 
-// 1. REFACTOR CANDIDATE QUIZ to be a step-by-step wizard per question
+export function CandidateQuiz({ lang, axisIndex, answers, onAnswer, onPrev, onNext }: {
+  lang: Lang; axisIndex: number; answers: QuizAnswers;
+  onAnswer: (ai: number, qi: number, val: number | number[]) => void;
+  onPrev: () => void; onNext: () => void;
+}) {
+  const t = useT(lang);
+  const [questionIndex, setQuestionIndex] = useState(0);
+  const axis = QUIZ_AXES[axisIndex];
+  const axisAnswers = answers[axisIndex] ?? {};
+  const radarData = computeRadar(answers);
+  const AXIS_KEYS = ["quiz.axis1", "quiz.axis2", "quiz.axis3", "quiz.axis4"];
 
-// Replace the start of CandidateQuiz to add questionIndex state
-content = content.replace(/function CandidateQuiz\(\{([^}]*)\}\)\s*\{([\s\S]*?)const AXIS_KEYS = \["quiz\.axis1", "quiz\.axis2", "quiz\.axis3", "quiz\.axis4"\];/, (match, props, inner) => {
-  return match + '\n  const [questionIndex, setQuestionIndex] = useState(0);';
-});
+  return (
+    <div className="min-h-screen w-full overflow-x-hidden flex flex-col">
+      {/* Progress */}
+      <div className="px-4 lg:px-20 py-4 md:py-8 border-b border-border">
+        <div className="flex items-center gap-4 mb-3">
+          <span className="text-sm font-semibold text-muted-foreground" style={{ fontFamily: "DM Mono, monospace" }}>{t("quiz.step")} {axisIndex + 1} {t("quiz.of")} {QUIZ_AXES.length}</span>
+          <div className="flex gap-2" role="progressbar" aria-valuenow={axisIndex + 1} aria-valuemax={QUIZ_AXES.length}>
+            {QUIZ_AXES.map((_, i) => (
+              <div
+                key={i}
+                className="h-2 rounded-full"
+                style={{
+                  width: i === axisIndex ? 44 : i < axisIndex ? 36 : 22,
+                  backgroundColor: i <= axisIndex ? "var(--primary)" : "var(--muted)",
+                  transition: "width 250ms ease, background-color 250ms ease",
+                }}
+              />
+            ))}
+          </div>
+        </div>
+        <h1 className="text-2xl font-bold text-foreground">{t(AXIS_KEYS[axisIndex])}</h1>
+      </div>
 
-// We need to modify the rendering of questions. 
-// Currently it is: `{axis.questions.map((q, qi) => { ... })}`
-// We will replace it with rendering just `axis.questions[questionIndex]`.
-const quizQuestionsRegex = /\{axis\.questions\.map\(\(q, qi\) => \{[\s\S]*?return \([\s\S]*?<div key=\{qi\} className="mb-8">([\s\S]*?)<\/div>\s*\);\s*\}\)\}/;
-
-content = content.replace(quizQuestionsRegex, (match) => {
-  return `{(() => {
+      <div className="flex flex-1">
+        {/* Questions — key forces remount + fade on every axis change */}
+        <div key={axisIndex} className="flex-1 px-4 lg:px-20 py-10 overflow-y-auto anim-slide-up">
+          <div className="max-w-xl">
+            {(() => {
               const q = axis.questions[questionIndex];
               const qi = questionIndex;
               const ans = axisAnswers[qi];
@@ -68,21 +97,16 @@ content = content.replace(quizQuestionsRegex, (match) => {
                   )}
                 </div>
               );
-            })()}`;
-});
+            })()}
 
-
-// Replace the Nav buttons logic in CandidateQuiz to advance questionIndex instead of axisIndex immediately
-const navButtonsRegex = /<div className="flex gap-4 mt-4">[\s\S]*?<\/div>/;
-
-const newNavButtons = `<div className="flex gap-4 mt-8 pt-6 border-t border-border">
+            {/* Nav buttons */}
+            <div className="flex gap-4 mt-8 pt-6 border-t border-border">
               <button 
                 onClick={() => {
                   if (questionIndex > 0) {
                     setQuestionIndex(questionIndex - 1);
                   } else if (axisIndex > 0) {
                     onPrev();
-                    // We can't easily know the length of the previous axis without passing it down, but assuming standard lengths, we'll reset to 0
                     setQuestionIndex(0); 
                   }
                 }} 
@@ -102,39 +126,43 @@ const newNavButtons = `<div className="flex gap-4 mt-8 pt-6 border-t border-bord
                     setQuestionIndex(0);
                   }
                 }} 
-                disabled={axisAnswers[questionIndex] === undefined || (Array.isArray(axisAnswers[questionIndex]) && axisAnswers[questionIndex].length === 0)} 
+                disabled={axisAnswers[questionIndex] === undefined || (Array.isArray(axisAnswers[questionIndex]) && (axisAnswers[questionIndex] as number[]).length === 0)} 
                 className="flex-1 flex items-center justify-center gap-2 px-7 py-4 rounded-xl border-2 font-bold transition-all hover:opacity-90" 
-                style={{ borderColor: "var(--primary)", backgroundColor: "var(--primary)", color: "var(--primary-foreground)", cursor: (axisAnswers[questionIndex] === undefined || (Array.isArray(axisAnswers[questionIndex]) && axisAnswers[questionIndex].length === 0)) ? "not-allowed" : "pointer", opacity: (axisAnswers[questionIndex] === undefined || (Array.isArray(axisAnswers[questionIndex]) && axisAnswers[questionIndex].length === 0)) ? 0.5 : 1 }}
+                style={{ borderColor: "var(--primary)", backgroundColor: "var(--primary)", color: "var(--primary-foreground)", cursor: (axisAnswers[questionIndex] === undefined || (Array.isArray(axisAnswers[questionIndex]) && (axisAnswers[questionIndex] as number[]).length === 0)) ? "not-allowed" : "pointer", opacity: (axisAnswers[questionIndex] === undefined || (Array.isArray(axisAnswers[questionIndex]) && (axisAnswers[questionIndex] as number[]).length === 0)) ? 0.5 : 1 }}
               >
                 {questionIndex === axis.questions.length - 1 && axisIndex === 3 ? (lang === "es" ? "Completar perfil" : "Complete profile") : t("next")}
                 <ChevronRight size={20} aria-hidden="true" />
               </button>
-            </div>`;
+            </div>
+          </div>
+        </div>
 
-content = content.replace(navButtonsRegex, newNavButtons);
-
-
-// Make CandidateQuiz responsive wrapper flex-col on mobile instead of flex-row
-content = content.replace(/<div className="flex flex-1">/, '<div className="flex flex-col lg:flex-row flex-1">');
-content = content.replace(/<div className="w-\[360px\] shrink-0 border-l border-border px-5 md:px-10 py-10"/, '<div className="w-full lg:w-[360px] shrink-0 lg:border-l border-t lg:border-t-0 border-border px-5 md:px-10 py-10"');
-
-
-// 2. REFACTOR CANDIDATE ONBOARDING (Theme Selection Contrast & Responsive Layout)
-// Fix the flex layout of CandidateOnboarding
-content = content.replace(/<div className="flex flex-1 overflow-hidden">/, '<div className="flex flex-col lg:flex-row flex-1 overflow-hidden lg:overflow-visible h-auto lg:h-full">');
-content = content.replace(/<div className="flex-1 px-4 lg:px-14 py-10 overflow-y-auto"/, '<div className="w-full lg:w-[45%] shrink-0 px-4 lg:px-14 py-10 overflow-y-auto"');
-content = content.replace(/<div className="flex-1 px-14 py-10">/, '<div className="w-full lg:flex-1 px-4 lg:px-14 py-10 bg-muted/20">');
-
-// Fix theme palette selection buttons contrast
-content = content.replace(/backgroundColor: sel \? "var\(--secondary\)" : "var\(--background\)"/g, 'backgroundColor: sel ? "var(--card)" : "var(--background)", boxShadow: sel ? "0 4px 12px rgba(0,0,0,0.1)" : "none"');
-content = content.replace(/backgroundColor: sel \? "var\(--primary\)" : "var\(--background\)"/g, 'backgroundColor: sel ? "var(--primary)" : "var(--background)"');
-
-// Explicitly label Dyslexia Mode font to be extremely clear
-content = content.replace(/\["lexend", "Lexend", lang === "es" \? "Reduce fricción lectora — dislexia" : "Reduces reading friction — dyslexia"\]/, '["lexend", lang === "es" ? "Modo Dislexia (Lexend)" : "Dyslexia Mode", lang === "es" ? "Tipografía amigable y espaciada" : "Dyslexia friendly typography"]');
-
-// Ensure forms in RegisterModal are full width
-content = content.replace(/<div className="w-full w-\[95%\] md:w-full md:max-w-md rounded-2xl overflow-hidden"/g, '<div className="w-[95%] sm:w-full max-w-md rounded-2xl overflow-hidden mx-auto"');
-
-
-fs.writeFileSync(file, content);
-console.log("Quiz and Onboarding Refactored!");
+        {/* Radar */}
+        <div className="w-full lg:w-[360px] shrink-0 lg:border-l border-t lg:border-t-0 border-border px-5 md:px-10 py-10" style={{ backgroundColor: "var(--card)" }}>
+          <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1">{t("quiz.radar.title")}</div>
+          <p className="text-xs text-muted-foreground mb-4">{t("quiz.radar.sub")}</p>
+          <RadarViz data={radarData} height={260} outerRadius={85} fontSize={10} />
+          <div className="mt-4 flex flex-col gap-3">
+            {radarData.map((d, i) => (
+              <div key={d.axis} className="flex items-center gap-3">
+                <span className="text-xs text-foreground w-28 shrink-0">{d.axis}</span>
+                <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ backgroundColor: "var(--muted)" }}>
+                  <div
+                    className="h-full rounded-full"
+                    style={{
+                      width: `${d.value}%`,
+                      backgroundColor: answers[i] && Object.keys(answers[i]).length > 0 ? "var(--primary)" : "var(--muted-foreground)",
+                      opacity: answers[i] && Object.keys(answers[i]).length > 0 ? 1 : 0.3,
+                      transition: "width 450ms ease, background-color 300ms ease, opacity 300ms ease",
+                    }}
+                  />
+                </div>
+                <span className="text-xs text-muted-foreground w-6 text-right" style={{ fontFamily: "DM Mono, monospace" }}>{answers[i] && Object.keys(answers[i]).length > 0 ? d.value : "—"}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

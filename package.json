@@ -105,5 +105,9 @@
   "bugs": {
     "url": "https://github.com/IANLAIN/Astris/issues"
   },
-  "homepage": "https://astris.port0.org"
+  "homepage": "https://astris.port0.org",
+  "allowScripts": {
+    "esbuild@0.25.12": true,
+    "@tailwindcss/oxide@4.1.12": true
+  }
 }
