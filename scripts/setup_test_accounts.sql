@@ -22,6 +22,15 @@ VALUES
   ('00000000-0000-0000-0000-000000000000', '10000000-0000-0000-0000-000000000004', 'authenticated', 'authenticated', 'mentor@astris.org', crypt('Astris2026', gen_salt('bf')), now(), '{"provider":"email","providers":["email"]}', '{}', now(), now())
 ON CONFLICT (id) DO NOTHING;
 
+-- 2.1 Insertar en auth.identities (requerido por Supabase para iniciar sesión)
+INSERT INTO auth.identities (id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at)
+VALUES
+  (gen_random_uuid(), '10000000-0000-0000-0000-000000000001', format('{"sub":"%s","email":"%s"}', '10000000-0000-0000-0000-000000000001', 'admin@astris.org')::jsonb, 'email', now(), now(), now()),
+  (gen_random_uuid(), '10000000-0000-0000-0000-000000000002', format('{"sub":"%s","email":"%s"}', '10000000-0000-0000-0000-000000000002', 'candidato@astris.org')::jsonb, 'email', now(), now(), now()),
+  (gen_random_uuid(), '10000000-0000-0000-0000-000000000003', format('{"sub":"%s","email":"%s"}', '10000000-0000-0000-0000-000000000003', 'empresa@astris.org')::jsonb, 'email', now(), now(), now()),
+  (gen_random_uuid(), '10000000-0000-0000-0000-000000000004', format('{"sub":"%s","email":"%s"}', '10000000-0000-0000-0000-000000000004', 'mentor@astris.org')::jsonb, 'email', now(), now(), now())
+ON CONFLICT (id) DO NOTHING;
+
 -- 3. Insertar en users_profiles
 INSERT INTO public.users_profiles (id, email, full_name, role, completed_onboarding, vocation)
 VALUES 

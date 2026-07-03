@@ -272,7 +272,15 @@ export default function App() {
   };
 
   const handleNav = (s: string) => {
-    if (s === "home") { setLoggedIn(false); setRole(null); setScreen("home"); return; }
+    if (s === "home") {
+      if (loggedIn && role) {
+        const first = role === "candidate" ? "vacancies" : role === "company" ? "candidates" : "dashboard";
+        setScreen(first);
+      } else {
+        setScreen("home");
+      }
+      return;
+    }
     if (s === "tracking") { setScreen(role === "candidate" ? "post-hire" : "comp-post-hire"); return; }
     setScreen(s);
   };
