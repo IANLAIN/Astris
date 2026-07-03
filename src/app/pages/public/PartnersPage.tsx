@@ -16,24 +16,7 @@ export function PartnersPage({ lang, onNavigate, onOpenAuth, onLang }: { lang: L
 
   return (
     <PublicPageShell lang={lang} currentView="partners" onNavigate={onNavigate} onOpenAuth={onOpenAuth} onLang={onLang} title={t("landing.nav.partners")} subtitle="Si tu empresa quiere participar de Astris, completa este formulario y nos pondremos en contacto para conversar sobre colaboración.">
-      <div className="grid gap-4 md:gap-8 lg:grid-cols-[1.15fr_0.85fr]">
-        <div className="rounded-3xl border border-border bg-card p-4 md:p-8">
-          <h2 className="mb-4 text-2xl font-bold text-foreground">¿Por qué unirse a Astris?</h2>
-          <p className="mb-6 text-base leading-relaxed text-muted-foreground">Astris ayuda a las empresas a descubrir talento compatible, diseñar entornos de trabajo más inclusivos y reducir la rotación desde el primer mes.</p>
-          <div className="space-y-4">
-            {[
-              "Ampliar el talento accesible y muy motivado",
-              "Implementar ajustes razonables con claridad y estructura",
-              "Acompañar procesos de incorporación con mentoría humana",
-            ].map((item) => (
-              <div key={item} className="flex items-start gap-3 rounded-2xl border border-border bg-background px-4 py-3">
-                <Check size={16} aria-hidden="true" className="mt-0.5 shrink-0" style={{ color: "var(--accent)" }} />
-                <span className="text-sm text-foreground">{item}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
+      <div className="max-w-2xl mx-auto w-full">
         <div className="rounded-3xl border border-border bg-background p-4 md:p-8 shadow-sm">
           {submitted ? (
             <div className="rounded-2xl border border-primary/20 bg-primary/5 p-6 text-center">

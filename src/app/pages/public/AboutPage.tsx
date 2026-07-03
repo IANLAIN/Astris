@@ -4,6 +4,7 @@ import { useT, C } from "../../i18n/useT";
 import { PublicPageShell } from "./PublicPageShell";
 import genuineImg from "../../../imports/genuine.png";
 import vibralatinaImg from "../../../imports/vibralatina.png";
+import closerImg from "../../../imports/closertothestars.png";
 
 export function AboutPage({ lang, onNavigate, onOpenAuth, onLang }: { lang: Lang; onNavigate: (view: PublicView) => void; onOpenAuth: (preRole?: Role, step?: "auth" | "login" | "register") => void; onLang: () => void }) {
   const t = useT(lang);
@@ -118,9 +119,13 @@ export function AboutPage({ lang, onNavigate, onOpenAuth, onLang }: { lang: Lang
 
         {/* Partners section */}
         <section className="rounded-3xl border border-primary/20 bg-primary/5 p-4 md:p-8">
-          <h2 className="mb-3 text-2xl font-bold text-foreground">Organizaciones que acompañan Astris</h2>
-          <p className="mb-6 max-w-2xl text-muted-foreground">El proyecto se apoya en comunidades y organizaciones que aportan visibilidad, acompañamiento y una mirada práctica de inclusión.</p>
+          <h2 className="mb-3 text-2xl font-bold text-foreground">{t("about.orgsTitle")}</h2>
+          <p className="mb-6 max-w-2xl text-muted-foreground">{t("about.orgsSub")}</p>
           <div className="flex flex-wrap items-center gap-4">
+            <div className="flex items-center gap-3 rounded-full border border-border bg-background px-4 py-2">
+              <img src={closerImg} alt="Closer To The Stars Foundation" className="h-8 w-8 object-contain" />
+              <span className="font-semibold text-foreground">Closer To The Stars Fundation</span>
+            </div>
             <div className="flex items-center gap-3 rounded-full border border-border bg-background px-4 py-2">
               <img src={vibralatinaImg} alt="Vibra Latina" className="h-8 w-8 object-contain" />
               <span className="font-semibold text-foreground">Vibra Latina</span>

@@ -33,6 +33,7 @@ import { CandidateAccompaniment } from "./pages/candidate/CandidateAccompaniment
 import { CandidatePostHire } from "./pages/candidate/CandidatePostHire";
 
 import { SettingsPage } from "./pages/shared/SettingsPage";
+import { NotFoundPage } from "./pages/shared/NotFoundPage";
 import { CompanyOrgProfile } from "./pages/company/CompanyOrgProfile";
 import { CompanyPostVacancy } from "./pages/company/CompanyPostVacancy";
 import { CompanyCandidates } from "./pages/company/CompanyCandidates";
@@ -326,6 +327,9 @@ export default function App() {
               setModalStep(step === "register" ? "register" : "login");
             }} onLang={reopenLang} onNavigate={setPublicView} />
           )}
+          {!loggedIn && !["about", "support", "partners", "landing"].includes(publicView) && (
+            <NotFoundPage lang={lang} onGoHome={() => setPublicView("landing")} />
+          )}
           {loggedIn && role && (
             <div>
               <NavBar lang={lang} role={role} screen={screen} onNav={handleNav} onLang={reopenLang} onLogout={handleLogout} darkMode={darkMode} onDarkToggle={() => setDarkMode((d) => !d)} />
@@ -399,6 +403,15 @@ export default function App() {
                     onFont={setFont} 
                     onLogout={handleLogout}
                   />
+                )}
+                
+                {/* 404 Not Found Catch-All */}
+                {screen !== "settings" && 
+                 !(role === "candidate" && ["onboarding", "quiz", "profile", "vacancies", "vacancy-detail", "mentor-select", "accompaniment", "post-hire", "tracking"].includes(screen)) &&
+                 !(role === "company" && ["org-profile", "post-vacancy", "candidates", "candidate-detail", "comp-post-hire", "post-hire"].includes(screen)) &&
+                 !(role === "mentor" && ["dashboard", "checkins", "companies"].includes(screen)) &&
+                 !(role === "admin" && ["dashboard", "companies", "candidates", "mentors", "mentorships", "activity"].includes(screen)) && (
+                  <NotFoundPage lang={lang} onGoHome={() => handleNav("home")} />
                 )}
               </main>
             </div>
