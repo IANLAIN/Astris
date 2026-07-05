@@ -45,7 +45,6 @@ import { MentorCheckins } from "./pages/mentor/MentorCheckins";
 import { MentorCompanies } from "./pages/mentor/MentorCompanies";
 
 import AdminDashboard from "./admin/AdminDashboard";
-import { AdminPanel } from "./components/admin/AdminPanel";
 
 export default function App() {
   // Modal flow
@@ -408,10 +407,9 @@ export default function App() {
                 {role === "mentor" && !["dashboard", "checkins", "companies"].includes(screen) && <MentorDashboard lang={lang} />}
 
                 {/* Admin flow */}
-                {role === "admin" && screen === "dashboard" && (
+                {role === "admin" && (
                   <AdminDashboard onLogout={handleLogout} onBack={() => setScreen("landing")} />
                 )}
-                {role === "admin" && <AdminPanel lang={lang} screen={screen} />}
 
                 {/* Shared Settings Screen */}
                 {screen === "settings" && (

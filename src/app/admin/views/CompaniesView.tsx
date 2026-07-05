@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Search, Building2, Edit } from "lucide-react";
+import { Search, Building2, Edit, Filter, Download } from "lucide-react";
 import { getAdminCompanies } from "../../../lib/supabase-admin";
 
 interface CompanyProfile {
@@ -39,15 +39,29 @@ export default function CompaniesView() {
     <div className="space-y-6 anim-fade-in flex flex-col h-full">
       <div className="flex sm:flex-row flex-col justify-between items-start sm:items-center gap-4">
         <h1 className="text-3xl font-bold text-foreground">Gestión de Empresas</h1>
-        <div className="relative w-full sm:w-64">
-          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-          <input 
-            type="text" 
-            placeholder="Buscar por nombre..." 
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 rounded-xl border border-border bg-card text-sm"
-          />
+        <div className="flex gap-3 w-full sm:w-auto">
+          <div className="relative w-full sm:w-64">
+            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <input 
+              type="text" 
+              placeholder="Buscar por nombre..." 
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              className="w-full pl-9 pr-4 py-2 rounded-xl border border-border bg-card text-sm"
+            />
+          </div>
+          <button 
+            onClick={() => alert("Filtros avanzados en desarrollo")}
+            className="flex items-center gap-2 px-4 py-2 border border-border bg-card text-foreground rounded-xl font-medium text-sm hover:bg-secondary transition-colors cursor-pointer"
+          >
+            <Filter size={16} /> Filtros
+          </button>
+          <button 
+            onClick={() => alert("Exportando datos a CSV...")}
+            className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-xl font-medium text-sm hover:opacity-90 transition-opacity cursor-pointer"
+          >
+            <Download size={16} /> Exportar
+          </button>
         </div>
       </div>
 
@@ -84,7 +98,13 @@ export default function CompaniesView() {
                     </div>
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <button className="p-2 rounded-lg hover:bg-muted text-muted-foreground transition-colors mr-2">
+                    <button 
+                      onClick={() => alert(`Detalles de ${c.company_name || 'la empresa'}`)}
+                      className="text-primary hover:underline font-medium text-sm cursor-pointer mr-4"
+                    >
+                      Detalles
+                    </button>
+                    <button className="p-2 rounded-lg hover:bg-muted text-muted-foreground transition-colors mr-2 cursor-pointer">
                       <Edit className="w-4 h-4" />
                     </button>
                   </td>
