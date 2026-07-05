@@ -31,7 +31,7 @@ export default function CandidatesView() {
 
   if (loading) return <div className="p-8 text-center text-muted-foreground font-medium anim-pulse">Cargando candidatos...</div>;
 
-  const filtered = candidates.filter(c => c.users_profiles?.full_name?.toLowerCase().includes(search.toLowerCase()) || c.users_profiles?.email?.toLowerCase().includes(search.toLowerCase()));
+  const filtered = candidates.filter(c => (c.users_profiles?.full_name || "").toLowerCase().includes(search.toLowerCase()) || (c.users_profiles?.email || "").toLowerCase().includes(search.toLowerCase()));
 
   return (
     <div className="space-y-6 anim-fade-in flex flex-col h-full">

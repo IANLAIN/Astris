@@ -20,8 +20,8 @@ export default function UsersView({ users, onRoleChange, onSoftDelete }: UsersPr
   const [search, setSearch] = useState("");
 
   const filtered = users.filter(u => 
-    u.full_name?.toLowerCase().includes(search.toLowerCase()) || 
-    u.email?.toLowerCase().includes(search.toLowerCase())
+    (u.full_name || "").toLowerCase().includes(search.toLowerCase()) || 
+    (u.email || "").toLowerCase().includes(search.toLowerCase())
   );
 
   return (
