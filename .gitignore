@@ -1,1 +1,15 @@
-node_modules
+node_modules/
+dist/
+build/
+.env
+.env.local
+*.log
+logs/
+.DS_Store
+coverage/
+.vscode/
+temp/
+tmp/
+backup/
+*.bak
+refactor_notes.md
