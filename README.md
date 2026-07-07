@@ -48,8 +48,15 @@ Para comenzar a desarrollar en local:
    npm run build
    ```
 
-## Notas de Desarrollo (Guía Rápida)
+## Normas de Desarrollo
 
-- **Alias de Importación**: Se ha configurado el alias `@/` para apuntar a la carpeta `src/`. Usa `@/components/...` o `@/services/...` en lugar de rutas relativas complejas como `../../../`.
-- **Hooks Globales**: La lógica del tema (colores, fuentes) y de la sesión (login, roles) ha sido desacoplada de la interfaz gráfica y movida a `src/hooks/useTheme.ts` y `src/hooks/useAuth.ts`.
-- **Sin Dependencia de Figma**: Todos los componentes exportados automáticamente por Figma y archivos temporales residuales han sido completamente eliminados. Utiliza los componentes base en `src/components/ui/` (construidos con Tailwind y Radix) para mantener un ecosistema limpio.
+Todo agente o desarrollador que colabore en Astris debe leer y acatar estrictamente los documentos de gobierno del proyecto antes de modificar código:
+
+1. **[CONTRIBUTING.md](./CONTRIBUTING.md)**: Guía detallada sobre la estructura de archivos, convenciones de nomenclatura (PascalCase para componentes, camelCase para hooks), prohibición estricta de archivos temporales/basura, política de imágenes optimizadas (< 200 KB) y requerimientos para commits.
+2. **[ARCHITECTURE.md](./ARCHITECTURE.md)**: Explicación de las decisiones de diseño clave, como el uso del ecosistema Vite + React, ruteo mediante estado (con Code Splitting obligatorio usando `React.lazy`), la centralización de traducciones (4 idiomas), y la filosofía de diseño ético del perfil de 4 ejes.
+3. **[.cursorrules](./.cursorrules)**: Reglas core automatizadas para agentes de Inteligencia Artificial que resumen las normativas de DRy, i18n y limpieza de código.
+
+**Puntos Clave:**
+- **DRY (Don't Repeat Yourself)**: La lógica redundante debe ser extraída a custom hooks (`src/hooks/`) o utilidades compartidas.
+- **Limpieza Absoluta**: Nunca dejes código comentado sin justificación, archivos `.bak`, `.old`, o copias sin procesar de Figma.
+- **Validación Continua**: Es obligatorio ejecutar `npm run build` y asegurar la compilación completa antes de realizar cualquier commit en el repositorio.
