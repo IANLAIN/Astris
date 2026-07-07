@@ -1,5 +1,6 @@
+import { useState } from "react";
 import {
-  BarChart2, Briefcase, Users, Activity, Building2, FileText, Calendar, Star, Sun, Moon, Globe, LogOut, Settings, User
+  BarChart2, Briefcase, Users, Activity, Building2, FileText, Calendar, Sun, Moon, Globe, LogOut, Settings, User, X
 } from "lucide-react";
 import { Lang, Role } from "@/types";
 import { useT } from "@/i18n/useT";
@@ -13,6 +14,8 @@ export function NavBar({ lang, role, screen, onNav, onLang, onLogout, darkMode, 
   userName?: string; userAvatar?: string;
 }) {
   const t = useT(lang);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   const CANDIDATE_NAV = [
     { id: "profile", label: t("nav.profile"), Icon: BarChart2 },
     { id: "vacancies", label: t("nav.vacancies"), Icon: Briefcase },
@@ -42,32 +45,36 @@ export function NavBar({ lang, role, screen, onNav, onLang, onLogout, darkMode, 
 
   return (
     <header className="sticky top-0 z-40 border-b border-border" style={{ backgroundColor: "var(--background)" }}>
-      <div className="px-4 md:px-8 h-16 flex items-center gap-2">
-        <button onClick={() => onNav("home")} className="flex items-center gap-2 text-lg font-bold text-foreground tracking-tight mr-6 cursor-pointer">
-          <img src={astrisImg} alt="Astris Logo" className="w-10 h-10 object-contain" />
-          <span>Astris</span>
-        </button>
+      <div className="px-4 md:px-8 h-16 flex items-center justify-between">
+        <div className="flex items-center gap-6">
+          <button onClick={() => onNav("home")} className="flex items-center gap-2 text-lg font-bold text-foreground tracking-tight cursor-pointer bg-transparent border-0 p-0">
+            <img src={astrisImg} alt="Astris Logo" className="w-10 h-10 object-contain" />
+            <span>Astris</span>
+          </button>
 
-        {navItems.map((item) => {
-          const active = screen === item.id;
-          return (
-            <button
-              key={item.id}
-              onClick={() => onNav(item.id)}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium cursor-pointer"
-              style={{ backgroundColor: active ? "var(--secondary)" : "transparent", color: active ? "var(--foreground)" : "var(--muted-foreground)" }}
-              aria-current={active ? "page" : undefined}
-            >
-              <item.Icon size={14} aria-hidden="true" />{item.label}
-            </button>
-          );
-        })}
+          <nav className="hidden lg:flex items-center gap-2">
+            {navItems.map((item) => {
+              const active = screen === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => onNav(item.id)}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium cursor-pointer border-0"
+                  style={{ backgroundColor: active ? "var(--secondary)" : "transparent", color: active ? "var(--foreground)" : "var(--muted-foreground)" }}
+                  aria-current={active ? "page" : undefined}
+                >
+                  <item.Icon size={14} aria-hidden="true" />{item.label}
+                </button>
+              );
+            })}
+          </nav>
+        </div>
 
-        <div className="ml-auto flex items-center gap-2">
-          {/* ── Dark / Light mode toggle ── */}
+        <div className="flex items-center gap-2">
+          {/* Dark / Light mode toggle */}
           <button
             onClick={onDarkToggle}
-            className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold cursor-pointer border-2"
+            className="flex items-center justify-center p-2 lg:px-3 lg:py-2 rounded-xl text-sm font-semibold cursor-pointer border-2"
             style={{
               borderColor: darkMode ? "rgba(245,196,66,0.55)" : "var(--border)",
               backgroundColor: darkMode ? "rgba(245,196,66,0.12)" : "var(--card)",
@@ -77,29 +84,29 @@ export function NavBar({ lang, role, screen, onNav, onLang, onLogout, darkMode, 
             title={darkLabel}
           >
             {darkMode
-              ? <Sun size={15} aria-hidden="true" />
-              : <Moon size={15} aria-hidden="true" />
+              ? <Sun size={16} aria-hidden="true" />
+              : <Moon size={16} aria-hidden="true" />
             }
-            <span className="hidden sm:inline">{darkLabel}</span>
+            <span className="hidden lg:inline ml-2">{darkLabel}</span>
           </button>
 
           {/* Language */}
           <button
             onClick={onLang}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm text-muted-foreground cursor-pointer border border-border"
+            className="flex items-center justify-center gap-1.5 p-2 lg:px-3 lg:py-2 rounded-xl text-sm text-muted-foreground cursor-pointer border border-border"
             style={{ backgroundColor: "var(--background)" }}
           >
-            <Globe size={14} aria-hidden="true" />{lang.toUpperCase()}
+            <Globe size={16} aria-hidden="true" /><span className="hidden lg:inline">{lang.toUpperCase()}</span>
           </button>
 
           {/* User Profile Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-border cursor-pointer transition-colors hover:bg-secondary" style={{ backgroundColor: "var(--card)" }}>
+              <button className="flex items-center justify-center gap-2 p-2 lg:px-3 lg:py-1.5 rounded-xl border border-border cursor-pointer transition-colors hover:bg-secondary" style={{ backgroundColor: "var(--card)" }}>
                 {userAvatar ? (
                   <img src={userAvatar} alt={userName} className="w-6 h-6 rounded-full object-cover" />
                 ) : (
-                  <User size={15} aria-hidden="true" style={{ color: "var(--primary)" }} />
+                  <User size={16} aria-hidden="true" style={{ color: "var(--primary)" }} />
                 )}
                 <span className="text-xs font-semibold text-foreground hidden sm:inline max-w-[120px] truncate" title={userName || ROLE_LABELS[role]}>
                   {userName || ROLE_LABELS[role]}
@@ -122,8 +129,42 @@ export function NavBar({ lang, role, screen, onNav, onLang, onLogout, darkMode, 
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+
+          {/* Mobile Menu Toggle */}
+          <button 
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)} 
+            className="flex lg:hidden items-center justify-center p-2 rounded-xl border border-border bg-transparent text-foreground cursor-pointer"
+            aria-label="Toggle Menu"
+          >
+            {mobileMenuOpen ? <X size={20} /> : (
+              <div className="space-y-1.5">
+                <div className="w-5 h-0.5 bg-foreground rounded-full"></div>
+                <div className="w-5 h-0.5 bg-foreground rounded-full"></div>
+                <div className="w-5 h-0.5 bg-foreground rounded-full"></div>
+              </div>
+            )}
+          </button>
         </div>
       </div>
+
+      {/* Mobile Menu Dropdown */}
+      {mobileMenuOpen && (
+        <div className="lg:hidden border-t border-border px-4 py-4 space-y-2 shadow-lg" style={{ backgroundColor: "var(--background)" }}>
+          {navItems.map((item) => {
+            const active = screen === item.id;
+            return (
+              <button
+                key={item.id}
+                onClick={() => { onNav(item.id); setMobileMenuOpen(false); }}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-base font-semibold cursor-pointer border-0"
+                style={{ backgroundColor: active ? "var(--secondary)" : "transparent", color: active ? "var(--foreground)" : "var(--muted-foreground)" }}
+              >
+                <item.Icon size={18} aria-hidden="true" />{item.label}
+              </button>
+            );
+          })}
+        </div>
+      )}
     </header>
   );
 }

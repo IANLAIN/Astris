@@ -82,7 +82,7 @@ export default function App() {
   const handleNav = (s: string) => {
     if (s === "home") {
       if (loggedIn && role) {
-        const first = role === "candidate" ? "vacancies" : role === "company" ? "candidates" : "dashboard";
+        const first = role === "candidate" ? "profile" : role === "company" ? "candidates" : "dashboard";
         setScreen(first);
       } else {
         setScreen("home");
