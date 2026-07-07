@@ -27,7 +27,7 @@ export function LoginModal({ lang, onLogin, onBack, error, loading }: {
 
   const handleLoginSubmit = () => {
     if (!email || !password) {
-      setLocalError(t("auto.por_favor_ingre._93"));
+      setLocalError(t("login.emailError"));
       return;
     }
     setLocalError(null);
@@ -43,7 +43,7 @@ export function LoginModal({ lang, onLogin, onBack, error, loading }: {
 
   const handleReset = async () => {
     if (!email) {
-      setLocalError(t("auto.por_favor_ingre._94"));
+      setLocalError(t("login.emailError"));
       return;
     }
     setLocalLoading(true);
@@ -66,9 +66,9 @@ export function LoginModal({ lang, onLogin, onBack, error, loading }: {
             if (mode === "forgot") { setMode("login"); setResetSent(false); setLocalError(null); }
             else onBack();
           }} className="flex items-center gap-1.5 text-sm text-muted-foreground cursor-pointer mb-4">
-            <ChevronLeft size={15} aria-hidden="true" />{mode === "forgot" ? (t("auto.volver_a_inicia._95")) : t("login.back")}
+            <ChevronLeft size={15} aria-hidden="true" />{mode === "forgot" ? (t("login.backLogin")) : t("login.back")}
           </button>
-          <div className="text-xl font-bold text-foreground">{mode === "forgot" ? (t("auto.recuperar_contr._96")) : t("login.title")}</div>
+          <div className="text-xl font-bold text-foreground">{mode === "forgot" ? (t("login.forgotTitle")) : t("login.title")}</div>
         </div>
         <div className="p-4 md:p-8 flex flex-col gap-5">
           {displayError && (
@@ -79,7 +79,7 @@ export function LoginModal({ lang, onLogin, onBack, error, loading }: {
           {resetSent && mode === "forgot" && (
             <div className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm" style={{ backgroundColor: "#F0FDF4", color: "#166534" }}>
               <AlertCircle size={15} aria-hidden="true" />
-              {t("auto.enlace_de_recup._97")}
+              {t("login.recoverySent")}
             </div>
           )}
           <div>
@@ -92,7 +92,7 @@ export function LoginModal({ lang, onLogin, onBack, error, loading }: {
               <PasswordInput id="login-password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={handleKeyDown} className="w-full px-4 py-3 rounded-xl border-2 border-border text-foreground text-base mb-2" style={{ backgroundColor: "var(--input-background)" }} placeholder="••••••••" />
               <div className="flex justify-end">
                 <button onClick={() => { setMode("forgot"); setLocalError(null); }} className="text-sm text-primary font-medium cursor-pointer hover:underline">
-                  {t("auto._olvidaste_tu_c._98")}
+                  {t("login.forgot")}
                 </button>
               </div>
             </div>
@@ -131,7 +131,7 @@ export function LoginModal({ lang, onLogin, onBack, error, loading }: {
             </>
           ) : (
             <button onClick={handleReset} disabled={isBusy || resetSent} className="w-full py-4 rounded-xl font-bold text-base cursor-pointer" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)", opacity: (isBusy || resetSent) ? 0.6 : 1 }}>
-              {isBusy ? "..." : (t("auto.enviar_enlace._99"))}
+              {isBusy ? "..." : (t("login.sendLink"))}
             </button>
           )}
         </div>

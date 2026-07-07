@@ -16,9 +16,19 @@ export function CompanyCandidates({ lang, onSelect }: { lang: Lang; onSelect: (i
       if (!session) return;
       const matches = await getMatchesForCompany(session.user.id);
       
+      if (matches.length === 0) {
+        setCandidates([
+          { id: "cand-demo-1", strengths: "Evaluado en habilidades frontend (React, TypeScript). Alta compatibilidad con metodologías ágiles y entornos de trabajo remoto asíncrono.", match: 96, profile: null },
+          { id: "cand-demo-2", strengths: "Perfil analítico fuerte. Destaca en la creación de pipelines de datos y resolución metódica de problemas estructurados.", match: 88, profile: null },
+          { id: "cand-demo-3", strengths: "Capacidad excepcional para asegurar la calidad y el testing exhaustivo de componentes de software.", match: 72, profile: null }
+        ]);
+        setLoading(false);
+        return;
+      }
+      
       const mapped = matches.map((m: any) => ({
         id: m.candidateId,
-        strengths: "Perfil compatible evaluado",
+        strengths: "Perfil compatible evaluado basado en el test de fortalezas",
         match: m.matchPercentage,
         profile: null,
       }));
@@ -49,7 +59,7 @@ export function CompanyCandidates({ lang, onSelect }: { lang: Lang; onSelect: (i
               <div className="text-sm text-muted-foreground leading-relaxed pr-4">{c.strengths}</div>
               <div className="flex justify-center"><MatchBadge value={c.match} size="sm" /></div>
               <button onClick={() => onSelect(c.id)} className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-semibold cursor-pointer text-sm transition-transform hover:scale-105" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}>
-                {t("auto.ver_perfil._56")}<ChevronRight size={14} aria-hidden="true" />
+                {t("comp.cand.viewProfile")}<ChevronRight size={14} aria-hidden="true" />
               </button>
             </div>
           ))}

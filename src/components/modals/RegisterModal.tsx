@@ -104,7 +104,7 @@ export function RegisterModal({ lang, role, onRegister, onBack, error, loading, 
               </div>
               <div className="flex-1">
                 <h3 className="text-lg font-bold text-foreground mb-1">{t("landing.hero.cand")}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{t("auto.busco_oportunid._88")}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">{t("role.candidate.sub")}</p>
               </div>
               <ArrowRight size={20} className="text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
             </button>
@@ -115,7 +115,7 @@ export function RegisterModal({ lang, role, onRegister, onBack, error, loading, 
               </div>
               <div className="flex-1">
                 <h3 className="text-lg font-bold text-foreground mb-1">{t("landing.hero.comp")}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{t("auto.quiero_publicar._89")}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">{t("role.company.sub")}</p>
               </div>
               <ArrowRight size={20} className="text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
             </button>
@@ -126,7 +126,7 @@ export function RegisterModal({ lang, role, onRegister, onBack, error, loading, 
               </div>
               <div className="flex-1">
                 <h3 className="text-lg font-bold text-foreground mb-1">{t("role.mentor")}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{t("auto.deseo_acompa_ar._90")}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">{t("role.mentor.sub")}</p>
               </div>
               <ArrowRight size={20} className="text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
             </button>
@@ -170,9 +170,9 @@ export function RegisterModal({ lang, role, onRegister, onBack, error, loading, 
           </div>
           <div>
             <label htmlFor="register-vocation" className="block text-sm font-semibold text-foreground mb-2">
-              {t("auto.perfil_profesio._91")}
+              {"Perfil profesional"}
             </label>
-            <input id="register-vocation" name="vocation" type="text" value={vocation} onChange={(e) => setVocation(e.target.value)} onKeyDown={handleKeyDown} className="w-full px-4 py-3 rounded-xl border-2 border-border text-foreground text-base" style={{ backgroundColor: "var(--input-background)" }} placeholder={t("auto.ej__desarrollad._92")} />
+            <input id="register-vocation" name="vocation" type="text" value={vocation} onChange={(e) => setVocation(e.target.value)} onKeyDown={handleKeyDown} className="w-full px-4 py-3 rounded-xl border-2 border-border text-foreground text-base" style={{ backgroundColor: "var(--input-background)" }} placeholder={"Ej: Desarrollador Frontend"} />
           </div>
           <button
             onClick={() => onRegister(email, password, name, selectedRole!, vocation)}

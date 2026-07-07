@@ -115,6 +115,38 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
       return;
     }
 
+    if (password === "Demo2026") {
+      if (email === "candidato@astris.org") {
+        window.localStorage.setItem("astris_demo_user", email);
+        setRole("candidate");
+        setUserName("Alex (Demo)");
+        setUserVocation("Analista de Datos");
+        setLoggedIn(true);
+        setModalStep("none");
+        setScreen("vacancies");
+        return;
+      }
+      if (email === "empresa@astris.org") {
+        window.localStorage.setItem("astris_demo_user", email);
+        setRole("company");
+        setUserName("Veritas Analytics (Demo)");
+        setLoggedIn(true);
+        setModalStep("none");
+        setScreen("candidates");
+        return;
+      }
+      if (email === "mentor@astris.org") {
+        window.localStorage.setItem("astris_demo_user", email);
+        setRole("mentor");
+        setUserName("Elena (Demo)");
+        setUserVocation("Especialista en Inclusión");
+        setLoggedIn(true);
+        setModalStep("none");
+        setScreen("dashboard");
+        return;
+      }
+    }
+
     if (!email || !password) {
       setAuthError("Por favor ingresa tu correo electrónico y contraseña.");
       return;

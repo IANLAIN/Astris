@@ -57,6 +57,10 @@ export function CandidateProfile({ lang, answers, userName, userAvatar, vocation
                     }
                   });
                 }
+                if (active.length === 0) {
+                  active.push("Horarios flexibles", "Comunicación asíncrona", "Entorno silencioso");
+                }
+                
                 return active.length > 0 ? (
                   <div className="flex flex-wrap gap-2">
                     {active.map((adj, idx) => (

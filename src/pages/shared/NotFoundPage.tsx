@@ -10,10 +10,10 @@ export function NotFoundPage({ lang, onGoHome }: { lang: Lang; onGoHome: () => v
       </div>
       <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">404</h1>
       <h2 className="text-xl md:text-2xl font-semibold text-muted-foreground mb-8">
-        {t("auto.p_gina_no_encon._66")}
+        {t("notfound.title")}
       </h2>
       <p className="text-muted-foreground mb-8 max-w-md">
-        {t("auto.lo_sentimos__la._67")}
+        {t("notfound.sub")}
       </p>
       <button 
         onClick={onGoHome}
@@ -21,7 +21,7 @@ export function NotFoundPage({ lang, onGoHome }: { lang: Lang; onGoHome: () => v
         style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}
       >
         <Home size={18} />
-        {t("auto.volver_al_inici._68")}
+        {t("notfound.home")}
       </button>
     </div>
   );

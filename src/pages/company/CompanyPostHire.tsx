@@ -28,7 +28,7 @@ export function CompanyPostHire({ lang }: { lang: Lang }) {
     <div className="min-h-screen w-full overflow-x-hidden flex flex-col">
       <div className="px-4 lg:px-20 py-10 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
         <h1 className="text-2xl md:text-3xl font-bold text-foreground">{t("comp.posthire.title")}</h1>
-        <p className="text-muted-foreground mt-1">CAND-A7X2 · {t("auto.analista_de_dat._54")}</p>
+        <p className="text-muted-foreground mt-1">CAND-A7X2 · {"Analista de Datos Junior"}</p>
       </div>
       <div className="w-[95%] md:w-full md:max-w-4xl mx-auto w-full px-4 lg:px-20 py-10 flex flex-col gap-3 md:gap-6">
         <div className="rounded-2xl border border-border p-7" style={{ backgroundColor: "var(--card)" }}>
@@ -38,7 +38,7 @@ export function CompanyPostHire({ lang }: { lang: Lang }) {
               <div key={s} className="flex-1 py-4 rounded-xl border-2 text-center text-sm font-semibold" style={{ borderColor: i === 1 ? "var(--primary)" : "var(--border)", backgroundColor: i === 1 ? "var(--secondary)" : "var(--background)", color: "var(--foreground)" }}>{s}</div>
             ))}
           </div>
-          <p className="text-sm text-muted-foreground leading-relaxed">{t("auto.el_colaborador_._55")}</p>
+          <p className="text-sm text-muted-foreground leading-relaxed">{t("comp.posthire.candObs")}</p>
         </div>
         <div className="rounded-2xl border border-border p-7" style={{ backgroundColor: "var(--card)" }}>
           <h2 className="font-bold text-foreground mb-4">{C(lang, "compPostHireObs") as string}</h2>

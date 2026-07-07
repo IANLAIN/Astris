@@ -24,6 +24,16 @@ export function VacancyDetail({ lang, vacancyId, onStart, onBack }: { lang: Lang
         setV(VACANCIES_FALLBACK.find((x) => x.id === vacancyId) ?? { ...VACANCIES_FALLBACK[0], match: currentMatch });
         return;
       }
+      
+      if (vacancyId.startsWith("demo-vac-")) {
+        const demoVacancies = [
+          { id: "demo-vac-1", title: "Desarrollador Web Frontend", company: "Tech Solutions", sector: "Tecnología", modality: t("auto.remoto._6"), type: t("auto.tiempo_completo._9"), match: 94, socialLevel: "Bajo", adjustments: ["Horarios flexibles", "Comunicación asíncrona"], desc: "Buscamos desarrollador React...", companyDesc: "Talento sin barreras" },
+          { id: "demo-vac-2", title: "Analista de Datos Junior", company: "Veritas Analytics", sector: "Análisis de Datos", modality: t("auto.h_brido._7"), type: t("auto.tiempo_completo._9"), match: 88, socialLevel: "Medio", adjustments: ["Entorno silencioso", "Luz tenue"], desc: "Análisis con Python y SQL...", companyDesc: "Innovación inclusiva" },
+          { id: "demo-vac-3", title: "Especialista QA", company: "QualityCorp", sector: "Tecnología", modality: t("auto.remoto._6"), type: "Medio tiempo", match: 75, socialLevel: "Bajo", adjustments: ["Trabajo por objetivos"], desc: "Pruebas de software...", companyDesc: "Calidad de software" }
+        ];
+        setV(demoVacancies.find((x) => x.id === vacancyId) as VacancyItem);
+        return;
+      }
 
       const { data } = await supabase
         .from("jobs")

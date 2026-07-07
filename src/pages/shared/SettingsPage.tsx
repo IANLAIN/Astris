@@ -45,7 +45,7 @@ export function SettingsPage({ lang, palette, darkMode, font, onPalette, onDark,
     setMessage(null);
     try {
       await updateProfile(userId, name, avatarUrl, vocation);
-      setMessage({ text: t("auto.perfil_actualiz._69"), type: "success" });
+      setMessage({ text: t("settings.saveSuccess"), type: "success" });
     } catch (e: any) {
       setMessage({ text: e.message || "Error al actualizar perfil.", type: "error" });
     } finally {
@@ -61,7 +61,7 @@ export function SettingsPage({ lang, palette, darkMode, font, onPalette, onDark,
       onLogout(); // Forzar cierre
     } catch (e: any) {
       console.error(e);
-      setMessage({ text: t("auto.error_al_elimin._70"), type: "error" });
+      setMessage({ text: t("settings.deleteError"), type: "error" });
       setShowDeleteConfirm(false);
       setSaving(false);
     }
@@ -71,7 +71,7 @@ export function SettingsPage({ lang, palette, darkMode, font, onPalette, onDark,
 
   return (
     <div className="max-w-4xl mx-auto w-full px-4 lg:px-8 py-10">
-      <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-8">{t("auto.configuraci_n_d._71")}</h1>
+      <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-8">{t("settings.title")}</h1>
 
       {message && (
         <div className="mb-6 p-4 rounded-xl flex items-center gap-2 font-medium" style={{ backgroundColor: message.type === 'success' ? '#F0FDF4' : '#FEF2F2', color: message.type === 'success' ? '#166534' : '#C0392B' }}>
@@ -82,9 +82,9 @@ export function SettingsPage({ lang, palette, darkMode, font, onPalette, onDark,
       <div className="space-y-8">
         {/* Profile Info */}
         <section className="p-6 md:p-8 rounded-[2rem] border border-border" style={{ backgroundColor: "var(--card)", boxShadow: "0 10px 40px rgba(0,0,0,0.05)" }}>
-          <h2 className="text-lg font-bold text-foreground mb-5">{t("auto.informaci_n_per._72")}</h2>
+          <h2 className="text-lg font-bold text-foreground mb-5">{t("settings.personal")}</h2>
           <div className="max-w-md">
-            <label htmlFor="settings-name" className="block text-sm font-semibold text-foreground mb-2">{t("auto.nombre_completo._73")}</label>
+            <label htmlFor="settings-name" className="block text-sm font-semibold text-foreground mb-2">{t("settings.name")}</label>
             <input 
               id="settings-name"
               name="name"
@@ -95,7 +95,7 @@ export function SettingsPage({ lang, palette, darkMode, font, onPalette, onDark,
               style={{ backgroundColor: "var(--input-background)" }} 
             />
             
-            <label htmlFor="settings-vocation" className="block text-sm font-semibold text-foreground mb-2">{t("auto.perfil_profesio._74")}</label>
+            <label htmlFor="settings-vocation" className="block text-sm font-semibold text-foreground mb-2">{t("comp.post.techReq")}</label>
             <input 
               id="settings-vocation"
               name="vocation"
@@ -104,10 +104,10 @@ export function SettingsPage({ lang, palette, darkMode, font, onPalette, onDark,
               onChange={(e) => setVocation(e.target.value)} 
               className="w-full px-4 py-3 rounded-xl border-2 border-border text-foreground text-base mb-4" 
               style={{ backgroundColor: "var(--input-background)" }} 
-              placeholder={t("auto.ej__desarrollad._75")}
+              placeholder={"Ej: Desarrollador Frontend"}
             />
 
-            <label htmlFor="settings-avatarUrl" className="block text-sm font-semibold text-foreground mb-2">{t("auto.url_de_foto_de_._76")}</label>
+            <label htmlFor="settings-avatarUrl" className="block text-sm font-semibold text-foreground mb-2">{"URL de foto de perfil"}</label>
             <div className="flex gap-4 items-center mb-6">
               {avatarUrl && (
                 <img src={avatarUrl} alt="Avatar Preview" className="w-12 h-12 rounded-full object-cover shrink-0 border border-border" />
@@ -125,14 +125,14 @@ export function SettingsPage({ lang, palette, darkMode, font, onPalette, onDark,
             </div>
 
             <button onClick={handleSaveProfile} disabled={saving} className="flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm cursor-pointer transition-all hover:scale-[1.02]" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}>
-              <Save size={16} /> {saving ? "..." : (t("auto.guardar_cambios._77"))}
+              <Save size={16} /> {saving ? "..." : (t("save"))}
             </button>
           </div>
         </section>
 
         {/* Visual Preferences */}
         <section className="p-6 md:p-8 rounded-[2rem] border border-border" style={{ backgroundColor: "var(--card)", boxShadow: "0 10px 40px rgba(0,0,0,0.05)" }}>
-          <h2 className="text-lg font-bold text-foreground mb-5">{t("auto.preferencias_vi._78")}</h2>
+          <h2 className="text-lg font-bold text-foreground mb-5">{t("settings.visual")}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             
             {/* Dark Mode */}
@@ -141,7 +141,7 @@ export function SettingsPage({ lang, palette, darkMode, font, onPalette, onDark,
               <button onClick={() => onDark(!darkMode)} className="w-full flex items-center justify-between p-4 rounded-2xl border-2 cursor-pointer transition-all hover:scale-[1.02]" style={{ borderColor: "var(--border)", backgroundColor: "var(--background)" }}>
                 <div className="flex items-center gap-3">
                   {darkMode ? <Moon size={18} aria-hidden="true" /> : <Sun size={18} aria-hidden="true" />}
-                  <span className="font-semibold text-foreground">{darkMode ? (t("auto.modo_oscuro._79")) : (t("auto.modo_claro._80"))}</span>
+                  <span className="font-semibold text-foreground">{darkMode ? (t("settings.dark")) : (t("settings.light"))}</span>
                 </div>
                 <div className="w-12 h-6 rounded-full relative shrink-0" style={{ backgroundColor: darkMode ? "var(--primary)" : "var(--muted)" }}>
                   <div className="absolute top-0.5 w-5 h-5 rounded-full bg-white" style={{ left: darkMode ? "calc(100% - 22px)" : "2px", transition: "left 200ms ease" }} />
@@ -165,7 +165,7 @@ export function SettingsPage({ lang, palette, darkMode, font, onPalette, onDark,
 
             {/* Palettes */}
             <div className="md:col-span-2">
-              <h3 className="text-sm font-bold text-foreground mb-3 uppercase tracking-wide flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-accent" /> {t("auto.paleta_de_color._81")}</h3>
+              <h3 className="text-sm font-bold text-foreground mb-3 uppercase tracking-wide flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-accent" /> {t("settings.palette")}</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                 {(Object.keys(PALETTES) as PaletteKey[]).map((key) => {
                   const p = PALETTES[key];
@@ -188,26 +188,26 @@ export function SettingsPage({ lang, palette, darkMode, font, onPalette, onDark,
 
         {/* Danger Zone */}
         <section className="p-6 md:p-8 rounded-[2rem] border-2 border-red-500/20 bg-red-500/5">
-          <h2 className="text-lg font-bold text-red-600 dark:text-red-400 mb-2 flex items-center gap-2"><AlertTriangle size={20} /> {t("auto.zona_de_peligro._82")}</h2>
+          <h2 className="text-lg font-bold text-red-600 dark:text-red-400 mb-2 flex items-center gap-2"><AlertTriangle size={20} /> {t("settings.danger")}</h2>
           <p className="text-sm text-red-600/80 dark:text-red-400/80 mb-5 max-w-xl">
-            {t("auto.una_vez_que_eli._83")}
+            {t("settings.deleteWarn")}
           </p>
           
           {!showDeleteConfirm ? (
             <button onClick={() => setShowDeleteConfirm(true)} className="flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm cursor-pointer transition-all bg-red-500 text-white hover:bg-red-600">
-              <Trash2 size={16} /> {t("auto.eliminar_cuenta._84")}
+              <Trash2 size={16} /> {t("settings.delete")}
             </button>
           ) : (
             <div className="p-5 rounded-2xl border border-red-200 bg-red-50 dark:bg-red-950/20 dark:border-red-900 flex flex-col gap-4 max-w-md">
               <p className="font-bold text-red-600 dark:text-red-400 text-sm">
-                {t("auto._est_s_absoluta._85")}
+                {t("settings.deleteConfirm")}
               </p>
               <div className="flex gap-3">
                 <button onClick={handleDeleteAccount} disabled={saving} className="flex-1 py-2.5 rounded-lg font-bold text-sm bg-red-600 text-white hover:bg-red-700 disabled:opacity-50">
-                  {saving ? "..." : (t("auto.s___eliminar_mi._86"))}
+                  {saving ? "..." : (t("settings.deleteYes"))}
                 </button>
                 <button onClick={() => setShowDeleteConfirm(false)} disabled={saving} className="flex-1 py-2.5 rounded-lg font-bold text-sm bg-gray-200 text-gray-800 hover:bg-gray-300 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700">
-                  {t("auto.cancelar._87")}
+                  {t("settings.deleteCancel")}
                 </button>
               </div>
             </div>

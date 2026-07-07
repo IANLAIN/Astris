@@ -23,7 +23,7 @@ export function UpdatePasswordModal({ lang, onComplete }: {
 
   const handleSubmit = async () => {
     if (!password || password.length < 6) {
-      setError(t("auto.la_contrase_a_d._100"));
+      setError(t("updatePass.errorLength"));
       return;
     }
     setLoading(true);
@@ -41,8 +41,8 @@ export function UpdatePasswordModal({ lang, onComplete }: {
     <Overlay>
       <div className="w-[95%] sm:w-full max-w-md rounded-2xl overflow-hidden mx-auto" style={{ backgroundColor: "var(--card)" }}>
         <div className="px-4 md:px-8 py-7 border-b border-border">
-          <div className="text-xl font-bold text-foreground">{t("auto.nueva_contrase_._101")}</div>
-          <p className="text-sm text-muted-foreground mt-2">{t("auto.ingresa_tu_nuev._102")}</p>
+          <div className="text-xl font-bold text-foreground">{t("updatePass.title")}</div>
+          <p className="text-sm text-muted-foreground mt-2">{t("updatePass.sub")}</p>
         </div>
         <div className="p-4 md:p-8 flex flex-col gap-5">
           {error && (
@@ -55,7 +55,7 @@ export function UpdatePasswordModal({ lang, onComplete }: {
             <PasswordInput id="update-password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={handleKeyDown} className="w-full px-4 py-3 rounded-xl border-2 border-border text-foreground text-base" style={{ backgroundColor: "var(--input-background)" }} placeholder="••••••••" />
           </div>
           <button onClick={handleSubmit} disabled={loading} className="w-full py-4 rounded-xl font-bold text-base cursor-pointer" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)", opacity: loading ? 0.6 : 1 }}>
-            {loading ? "..." : (t("auto.guardar_y_conti._103"))}
+            {loading ? "..." : (t("updatePass.save"))}
           </button>
         </div>
       </div>

@@ -101,7 +101,7 @@ export function LandingPage({ lang, onOpenAuth, onLang, onNavigate, darkMode, on
               <p className="text-lg text-muted-foreground leading-relaxed mb-10 whitespace-pre-line italic max-w-xl">{t("landing.hero.sub")}</p>
               <div className="flex flex-col sm:flex-row flex-wrap gap-3 w-full sm:w-auto mt-8">
                 <button onClick={() => onOpenAuth(undefined, "register")} className="flex items-center justify-center sm:justify-start gap-3 w-full sm:w-auto px-8 py-4 rounded-xl text-lg font-bold cursor-pointer transition-transform hover:scale-[1.02] border-0" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}>
-                  {t("auto._nete_a_astris._64")}<ArrowRight size={20} aria-hidden="true" />
+                  {lang === "en" ? "Join Astris" : "Únete a Astris"}<ArrowRight size={20} aria-hidden="true" />
                 </button>
               </div>
             </div>
@@ -120,9 +120,9 @@ export function LandingPage({ lang, onOpenAuth, onLang, onNavigate, darkMode, on
         <section className="border-y border-border px-5 md:px-10" style={{ backgroundColor: "var(--card)", paddingTop: "clamp(2rem, 5vh, 4rem)", paddingBottom: "clamp(2rem, 5vh, 4rem)" }}>
           <div className="max-w-7xl mx-auto">
             <p className="text-center text-[10px] font-bold uppercase tracking-[0.22em] text-muted-foreground mb-10">
-              {t("auto.respaldado_y_ap._65")}
+              {t("landing.supported")}
             </p>
-            <div className="flex flex-wrap items-center justify-end gap-6 md:gap-12">
+            <div className="flex flex-wrap items-center justify-center gap-6 md:gap-12">
               {/* Closer to the Stars */}
               <a href="https://closertothestars.org/" target="_blank" rel="noreferrer" title="Closer To The Stars"
                 className="group flex items-center justify-center rounded-3xl border-2 border-border bg-background transition-all hover:border-primary/60 hover:shadow-xl hover:-translate-y-1 hover:scale-105 shrink-0"
@@ -153,7 +153,7 @@ export function LandingPage({ lang, onOpenAuth, onLang, onNavigate, darkMode, on
               <a href="https://genuinecup.org/" target="_blank" rel="noreferrer" title="The Genuine Foundation"
                 className="group flex items-center justify-center rounded-3xl border-2 border-border bg-background transition-all hover:border-primary/60 hover:shadow-xl hover:-translate-y-1 hover:scale-105 shrink-0"
                 style={{ width: 120, height: 120 }}>
-                <img src={genuineImg} alt="The Genuine Foundation" className="object-contain transition-transform group-hover:scale-110" style={{ width: 80, height: 80 }} />
+                <img src={genuineImg} alt="The Genuine Foundation" className="object-contain transition-transform group-hover:scale-110" style={{ width: 80, height: 80, marginLeft: "15px" }} />
               </a>
             </div>
           </div>

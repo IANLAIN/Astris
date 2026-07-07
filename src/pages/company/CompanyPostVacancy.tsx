@@ -22,7 +22,7 @@ export function CompanyPostVacancy({ lang }: { lang: Lang }) {
           </div>
         ))}
         <div>
-          <label className="block text-sm font-semibold text-foreground mb-3">{t("auto.nivel_de_social._59")}</label>
+          <label className="block text-sm font-semibold text-foreground mb-3">{t("comp.post.socialReq")}</label>
           <div className="flex gap-3">
             {["Bajo", "Medio", "Alto"].map((lvl, i) => (
               <button key={lvl} className="flex-1 py-3 rounded-xl border-2 text-sm font-semibold cursor-pointer" style={{ borderColor: i === 0 ? "var(--primary)" : "var(--border)", backgroundColor: i === 0 ? "var(--secondary)" : "var(--background)", color: "var(--foreground)" }}>{lvl}</button>
@@ -30,7 +30,7 @@ export function CompanyPostVacancy({ lang }: { lang: Lang }) {
           </div>
         </div>
         <div>
-          <label className="block text-sm font-semibold text-foreground mb-3">{t("auto.habilidades_t_c._60")}</label>
+          <label className="block text-sm font-semibold text-foreground mb-3">{t("comp.post.techReq")}</label>
           <div className="flex flex-wrap gap-2.5">
             {SKILLS.map((sk, i) => {
               const checked = [0, 1, 3, 4].includes(i);
@@ -47,15 +47,15 @@ export function CompanyPostVacancy({ lang }: { lang: Lang }) {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div>
-            <label className="block text-sm font-semibold text-foreground mb-2">{t("auto.modalidad._61")}</label>
+            <label className="block text-sm font-semibold text-foreground mb-2">{t("comp.post.modality")}</label>
             <div className="px-4 py-3 rounded-xl border border-border text-sm" style={{ backgroundColor: "var(--input-background)", color: "var(--foreground)" }}>100% Remoto</div>
           </div>
           <div>
-            <label className="block text-sm font-semibold text-foreground mb-2">{t("auto.horario._62")}</label>
+            <label className="block text-sm font-semibold text-foreground mb-2">{t("comp.post.schedule")}</label>
             <div className="px-4 py-3 rounded-xl border border-border text-sm" style={{ backgroundColor: "var(--input-background)", color: "var(--foreground)" }}>Flexible — 8h diarias</div>
           </div>
         </div>
-        <button className="self-end px-4 md:px-8 py-4 rounded-xl font-bold cursor-pointer" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}>{t("auto.publicar_vacant._63")}</button>
+        <button className="self-end px-4 md:px-8 py-4 rounded-xl font-bold cursor-pointer" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}>{t("comp.post.submit")}</button>
       </div>
     </div>
   );

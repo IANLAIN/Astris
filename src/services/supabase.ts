@@ -1,8 +1,8 @@
 import { createClient } from "@supabase/supabase-js";
 
 export const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL || "",
-  import.meta.env.VITE_SUPABASE_ANON_KEY || ""
+  import.meta.env.VITE_SUPABASE_URL || "https://placeholder.supabase.co",
+  import.meta.env.VITE_SUPABASE_ANON_KEY || "placeholder"
 );
 
 // ── Auth helpers (adapted from auth.js for the React/TS context) ──────────────
@@ -89,6 +89,17 @@ export async function signInWithGoogle(role?: string, intent?: 'login' | 'regist
 }
 
 export async function getCurrentUser() {
+  const demoEmail = typeof window !== "undefined" ? window.localStorage.getItem("astris_demo_user") : null;
+  if (demoEmail === "candidato@astris.org") {
+    return { id: "demo-cand", email: demoEmail, name: "Alex (Demo)", role: "candidate", avatarUrl: "", vocation: "Analista de Datos", completedOnboarding: true, needsRegistration: false };
+  }
+  if (demoEmail === "empresa@astris.org") {
+    return { id: "demo-comp", email: demoEmail, name: "Veritas Analytics (Demo)", role: "company", avatarUrl: "", vocation: "", completedOnboarding: true, needsRegistration: false };
+  }
+  if (demoEmail === "mentor@astris.org") {
+    return { id: "demo-ment", email: demoEmail, name: "Elena (Demo)", role: "mentor", avatarUrl: "", vocation: "Especialista en Inclusión", completedOnboarding: true, needsRegistration: false };
+  }
+
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) return null;
 
@@ -265,6 +276,9 @@ export async function getMatchesForCompany(companyId: string) {
 }
 
 export async function logoutUser() {
+  if (typeof window !== "undefined") {
+    window.localStorage.removeItem("astris_demo_user");
+  }
   await supabase.auth.signOut();
 }
 

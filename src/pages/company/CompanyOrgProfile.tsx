@@ -52,6 +52,22 @@ export function CompanyOrgProfile({ lang }: { lang: Lang }) {
           accommodations: data.accommodations || [],
           policies: env.policies || [],
         });
+      } else {
+        if (session.user.id === "demo-comp" || session.user.email === "empresa@astris.org") {
+          setFormData({
+            company_name: "Veritas Analytics (Demo)",
+            industry: "Análisis de Datos",
+            company_size: "50-200 empleados",
+            country: "España",
+            city: "Madrid",
+            philosophy: "Creemos fervientemente en el talento sin barreras. Nos esforzamos por crear un entorno inclusivo donde la neurodiversidad sea vista como nuestra mayor fortaleza competitiva.",
+            noise: "Bajo (oficina silenciosa)",
+            light: "Luz natural abundante",
+            layout: "Cubículos individuales y zonas silenciosas",
+            accommodations: ["Modalidad remota e híbrida disponible", "Salas de descanso sensorial"],
+            policies: ["Flexibilidad de horario", "Pausas activas programadas"],
+          });
+        }
       }
       setLoading(false);
     }
@@ -101,10 +117,10 @@ export function CompanyOrgProfile({ lang }: { lang: Lang }) {
 
     setSaving(false);
     if (!error) {
-      setMessage(t("auto.cambios_guardad._57"));
+      setMessage(t("comp.org.saveSuccess"));
       setTimeout(() => setMessage(""), 3000);
     } else {
-      setMessage(t("auto.error_al_guarda._58"));
+      setMessage(t("comp.org.saveError"));
       console.error(error);
     }
   };

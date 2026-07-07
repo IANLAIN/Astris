@@ -54,10 +54,20 @@ export function CandidateVacancies({ lang, onSelect }: { lang: Lang; onSelect: (
           });
           setVacancies(mapped.sort((a,b) => b.match - a.match));
         } else {
-          setVacancies([]);
+          // DEMO DATA FALLBACK
+          setVacancies([
+            { id: "demo-vac-1", title: "Desarrollador Web Frontend", company: "Tech Solutions", sector: "Tecnología", modality: t("auto.remoto._26"), type: t("auto.tiempo_completo._29"), match: 94, socialLevel: "Bajo", adjustments: ["Horarios flexibles", "Comunicación asíncrona"], desc: "Buscamos desarrollador React...", companyDesc: "Talento sin barreras" },
+            { id: "demo-vac-2", title: "Analista de Datos Junior", company: "Veritas Analytics", sector: "Análisis de Datos", modality: t("auto.h_brido._27"), type: t("auto.tiempo_completo._29"), match: 88, socialLevel: "Medio", adjustments: ["Entorno silencioso", "Luz tenue"], desc: "Análisis con Python y SQL...", companyDesc: "Innovación inclusiva" },
+            { id: "demo-vac-3", title: "Especialista QA", company: "QualityCorp", sector: "Tecnología", modality: t("auto.remoto._26"), type: "Medio tiempo", match: 75, socialLevel: "Bajo", adjustments: ["Trabajo por objetivos"], desc: "Pruebas de software...", companyDesc: "Calidad de software" }
+          ]);
         }
       } else {
-        setVacancies([]);
+        // DEMO DATA FALLBACK
+        setVacancies([
+            { id: "demo-vac-1", title: "Desarrollador Web Frontend", company: "Tech Solutions", sector: "Tecnología", modality: t("auto.remoto._26"), type: t("auto.tiempo_completo._29"), match: 94, socialLevel: "Bajo", adjustments: ["Horarios flexibles", "Comunicación asíncrona"], desc: "Buscamos desarrollador React...", companyDesc: "Talento sin barreras" },
+            { id: "demo-vac-2", title: "Analista de Datos Junior", company: "Veritas Analytics", sector: "Análisis de Datos", modality: t("auto.h_brido._27"), type: t("auto.tiempo_completo._29"), match: 88, socialLevel: "Medio", adjustments: ["Entorno silencioso", "Luz tenue"], desc: "Análisis con Python y SQL...", companyDesc: "Innovación inclusiva" },
+            { id: "demo-vac-3", title: "Especialista QA", company: "QualityCorp", sector: "Tecnología", modality: t("auto.remoto._26"), type: "Medio tiempo", match: 75, socialLevel: "Bajo", adjustments: ["Trabajo por objetivos"], desc: "Pruebas de software...", companyDesc: "Calidad de software" }
+        ]);
       }
       setLoadingVac(false);
     }
