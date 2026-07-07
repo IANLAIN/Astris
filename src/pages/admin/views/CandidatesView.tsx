@@ -41,6 +41,9 @@ export default function CandidatesView() {
           <div className="relative w-full sm:w-64">
             <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <input 
+              id="search-candidates"
+              name="search"
+              aria-label="Buscar candidatos"
               type="text" 
               placeholder="Buscar por email o nombre..." 
               value={search}

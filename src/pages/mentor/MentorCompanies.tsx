@@ -11,9 +11,9 @@ export function MentorCompanies({ lang }: { lang: Lang }) {
       </div>
       <div className="w-[95%] md:w-full md:max-w-4xl mx-auto w-full px-4 lg:px-20 py-10 grid grid-cols-1 md:grid-cols-3 gap-5">
         {[
-          { name: "Veritas Analytics", contact: "RRHH · Ana García", status: lang === "es" ? "Activa" : lang === "pt" ? "Ativa" : lang === "fr" ? "Active" : "Active", processes: 1, color: "#2D7D5F" },
-          { name: "Forma Studio", contact: "Hiring · Daniel Reyes", status: lang === "es" ? "En proceso" : lang === "pt" ? "Em processo" : lang === "fr" ? "En cours" : "In process", processes: 1, color: "#1B4B7A" },
-          { name: "Kestrel Systems", contact: "People · Laura Mena", status: lang === "es" ? "Período de prueba" : lang === "pt" ? "Período de avaliação" : lang === "fr" ? "Période d'essai" : "Trial period", processes: 1, color: "#8B5C3A" },
+          { name: "Veritas Analytics", contact: "RRHH · Ana García", status: t("auto.activa._36"), processes: 1, color: "#2D7D5F" },
+          { name: "Forma Studio", contact: "Hiring · Daniel Reyes", status: t("auto.en_proceso._37"), processes: 1, color: "#1B4B7A" },
+          { name: "Kestrel Systems", contact: "People · Laura Mena", status: t("auto.per_odo_de_prue._38"), processes: 1, color: "#8B5C3A" },
         ].map((co) => (
           <article key={co.name} className="rounded-2xl border border-border p-6 flex flex-col gap-4" style={{ backgroundColor: "var(--card)" }}>
             <div className="flex items-start justify-between">
@@ -23,7 +23,7 @@ export function MentorCompanies({ lang }: { lang: Lang }) {
               </div>
               <span className="text-xs font-semibold px-2.5 py-1 rounded-full" style={{ backgroundColor: co.color + "22", color: co.color }}>{co.status}</span>
             </div>
-            <div className="text-xs text-muted-foreground">{co.processes} {lang === "es" ? "proceso activo" : lang === "pt" ? "processo ativo" : lang === "fr" ? "processus actif" : "active process"}</div>
+            <div className="text-xs text-muted-foreground">{co.processes} {t("auto.proceso_activo._39")}</div>
             <button className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl font-semibold cursor-pointer text-sm border border-border" style={{ backgroundColor: "var(--background)", color: "var(--foreground)" }}>
               <MessageSquare size={13} aria-hidden="true" />
               {C(lang, "compPostHireSendMsg") as string}

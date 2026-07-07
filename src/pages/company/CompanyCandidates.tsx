@@ -49,7 +49,7 @@ export function CompanyCandidates({ lang, onSelect }: { lang: Lang; onSelect: (i
               <div className="text-sm text-muted-foreground leading-relaxed pr-4">{c.strengths}</div>
               <div className="flex justify-center"><MatchBadge value={c.match} size="sm" /></div>
               <button onClick={() => onSelect(c.id)} className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-semibold cursor-pointer text-sm transition-transform hover:scale-105" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}>
-                {lang === "es" ? "Ver perfil" : "View profile"}<ChevronRight size={14} aria-hidden="true" />
+                {t("auto.ver_perfil._56")}<ChevronRight size={14} aria-hidden="true" />
               </button>
             </div>
           ))}

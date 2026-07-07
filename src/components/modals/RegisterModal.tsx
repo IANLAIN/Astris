@@ -4,6 +4,7 @@ import { Lang, Role } from "@/types";
 import { useT, C } from "@/i18n/useT";
 import { Overlay } from "../common/Overlay";
 import { signInWithGoogle } from "@/services/supabase";
+import { PasswordInput } from "../ui/PasswordInput";
 
 export function RegisterModal({ lang, role, onRegister, onBack, error, loading, googleAuthUser, onCompleteGoogle }: {
   lang: Lang; role: Role | null;
@@ -103,7 +104,7 @@ export function RegisterModal({ lang, role, onRegister, onBack, error, loading, 
               </div>
               <div className="flex-1">
                 <h3 className="text-lg font-bold text-foreground mb-1">{t("landing.hero.cand")}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{lang === "es" ? "Busco oportunidades laborales accesibles y libres de sesgos." : "I'm looking for accessible and bias-free job opportunities."}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">{t("auto.busco_oportunid._88")}</p>
               </div>
               <ArrowRight size={20} className="text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
             </button>
@@ -114,7 +115,7 @@ export function RegisterModal({ lang, role, onRegister, onBack, error, loading, 
               </div>
               <div className="flex-1">
                 <h3 className="text-lg font-bold text-foreground mb-1">{t("landing.hero.comp")}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{lang === "es" ? "Quiero publicar vacantes inclusivas y encontrar el mejor talento." : "I want to post inclusive vacancies and find the best talent."}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">{t("auto.quiero_publicar._89")}</p>
               </div>
               <ArrowRight size={20} className="text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
             </button>
@@ -125,7 +126,7 @@ export function RegisterModal({ lang, role, onRegister, onBack, error, loading, 
               </div>
               <div className="flex-1">
                 <h3 className="text-lg font-bold text-foreground mb-1">{t("role.mentor")}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{lang === "es" ? "Deseo acompañar y orientar a talentos y empresas." : "I want to guide and support talents and companies."}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">{t("auto.deseo_acompa_ar._90")}</p>
               </div>
               <ArrowRight size={20} className="text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
             </button>
@@ -156,22 +157,22 @@ export function RegisterModal({ lang, role, onRegister, onBack, error, loading, 
             </div>
           )}
           <div>
-            <label className="block text-sm font-semibold text-foreground mb-2">{C(lang, "registerName")}</label>
-            <input type="text" value={name} onChange={(e) => setName(e.target.value)} onKeyDown={handleKeyDown} className="w-full px-4 py-3 rounded-xl border-2 border-border text-foreground text-base" style={{ backgroundColor: "var(--input-background)" }} placeholder="Jane Doe" />
+            <label htmlFor="register-name" className="block text-sm font-semibold text-foreground mb-2">{C(lang, "registerName")}</label>
+            <input id="register-name" name="name" type="text" value={name} onChange={(e) => setName(e.target.value)} onKeyDown={handleKeyDown} className="w-full px-4 py-3 rounded-xl border-2 border-border text-foreground text-base" style={{ backgroundColor: "var(--input-background)" }} placeholder="Jane Doe" />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-foreground mb-2">{t("login.email")}</label>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} onKeyDown={handleKeyDown} className="w-full px-4 py-3 rounded-xl border-2 border-border text-foreground text-base" style={{ backgroundColor: "var(--input-background)" }} placeholder="nombre@correo.com" />
+            <label htmlFor="register-email" className="block text-sm font-semibold text-foreground mb-2">{t("login.email")}</label>
+            <input id="register-email" name="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} onKeyDown={handleKeyDown} className="w-full px-4 py-3 rounded-xl border-2 border-border text-foreground text-base" style={{ backgroundColor: "var(--input-background)" }} placeholder="nombre@correo.com" />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-foreground mb-2">{t("login.pass")}</label>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={handleKeyDown} className="w-full px-4 py-3 rounded-xl border-2 border-border text-foreground text-base" style={{ backgroundColor: "var(--input-background)" }} placeholder="••••••••" />
+            <label htmlFor="register-password" className="block text-sm font-semibold text-foreground mb-2">{t("login.pass")}</label>
+            <PasswordInput id="register-password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={handleKeyDown} className="w-full px-4 py-3 rounded-xl border-2 border-border text-foreground text-base" style={{ backgroundColor: "var(--input-background)" }} placeholder="••••••••" />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-foreground mb-2">
-              {lang === "es" ? "Perfil Profesional / Área de Especialidad" : "Professional Profile / Specialty"}
+            <label htmlFor="register-vocation" className="block text-sm font-semibold text-foreground mb-2">
+              {t("auto.perfil_profesio._91")}
             </label>
-            <input type="text" value={vocation} onChange={(e) => setVocation(e.target.value)} onKeyDown={handleKeyDown} className="w-full px-4 py-3 rounded-xl border-2 border-border text-foreground text-base" style={{ backgroundColor: "var(--input-background)" }} placeholder={lang === "es" ? "Ej. Desarrollador Web, Psicóloga" : "e.g. Web Developer, Psychologist"} />
+            <input id="register-vocation" name="vocation" type="text" value={vocation} onChange={(e) => setVocation(e.target.value)} onKeyDown={handleKeyDown} className="w-full px-4 py-3 rounded-xl border-2 border-border text-foreground text-base" style={{ backgroundColor: "var(--input-background)" }} placeholder={t("auto.ej__desarrollad._92")} />
           </div>
           <button
             onClick={() => onRegister(email, password, name, selectedRole!, vocation)}

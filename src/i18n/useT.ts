@@ -19,8 +19,11 @@ export function getInitialModalStep() {
   return window.localStorage.getItem("astris_lang") ? "none" : "language";
 }
 
-export function useT(lang: Lang) {
-  return (key: string) => T[lang]?.[key] ?? key;
+import { useTranslation } from "react-i18next";
+
+export function useT(lang?: Lang) {
+  const { t } = useTranslation();
+  return t;
 }
 
 export type ContentKey = keyof typeof CONTENT.es;

@@ -101,10 +101,10 @@ export function CompanyOrgProfile({ lang }: { lang: Lang }) {
 
     setSaving(false);
     if (!error) {
-      setMessage(lang === "es" ? "Cambios guardados exitosamente" : "Changes saved successfully");
+      setMessage(t("auto.cambios_guardad._57"));
       setTimeout(() => setMessage(""), 3000);
     } else {
-      setMessage(lang === "es" ? "Error al guardar" : "Error saving changes");
+      setMessage(t("auto.error_al_guarda._58"));
       console.error(error);
     }
   };
@@ -136,8 +136,10 @@ export function CompanyOrgProfile({ lang }: { lang: Lang }) {
                       { label: "Ciudad", field: "city" }
                     ].map((f) => (
                       <div key={f.field}>
-                        <label className="block text-sm font-semibold text-foreground mb-2">{f.label}</label>
+                        <label htmlFor={`org-${f.field}`} className="block text-sm font-semibold text-foreground mb-2">{f.label}</label>
                         <input
+                          id={`org-${f.field}`}
+                          name={f.field}
                           type="text"
                           value={(formData as any)[f.field]}
                           onChange={(e) => handleChange(f.field, e.target.value)}
@@ -152,7 +154,10 @@ export function CompanyOrgProfile({ lang }: { lang: Lang }) {
                 )}
                 {s.id === "cultura" && (
                   <div className="pt-5">
+                    <label htmlFor="org-philosophy" className="sr-only">Cultura de la empresa</label>
                     <textarea
+                      id="org-philosophy"
+                      name="philosophy"
                       value={formData.philosophy}
                       onChange={(e) => handleChange("philosophy", e.target.value)}
                       onKeyDown={(e) => {
@@ -174,8 +179,10 @@ export function CompanyOrgProfile({ lang }: { lang: Lang }) {
                       { label: "Distribución de espacios", field: "layout", placeholder: "Ej. Individual" }
                     ].map((f) => (
                       <div key={f.field}>
-                        <label className="block text-sm font-semibold text-foreground mb-2">{f.label}</label>
+                        <label htmlFor={`org-${f.field}`} className="block text-sm font-semibold text-foreground mb-2">{f.label}</label>
                         <input
+                          id={`org-${f.field}`}
+                          name={f.field}
                           type="text"
                           value={(formData as any)[f.field]}
                           onChange={(e) => handleChange(f.field, e.target.value)}

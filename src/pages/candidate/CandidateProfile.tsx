@@ -13,7 +13,7 @@ export function CandidateProfile({ lang, answers, userName, userAvatar, vocation
       <div className="px-4 lg:px-20 py-10 border-b border-border flex items-center justify-between" style={{ backgroundColor: "var(--card)" }}>
         <div>
           <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">Tu perfil</h1>
-          <p className="text-muted-foreground mt-2 max-w-xl">{lang === "es" ? "Aquí tienes un resumen de tu perfil profesional y tus preferencias." : "Here is a summary of your professional profile and preferences."}</p>
+          <p className="text-muted-foreground mt-2 max-w-xl">{t("auto.aqu__tienes_un_._14")}</p>
         </div>
         <div className="hidden sm:flex items-center gap-4 text-right">
           <div>

@@ -33,7 +33,7 @@ export function CandidateOnboarding({ lang, palette, darkMode, font, onPalette, 
             <button onClick={() => onDark(!darkMode)} className="w-full flex items-center justify-between p-4 rounded-2xl border-2 cursor-pointer transition-all hover:scale-[1.02] hover:shadow-sm" style={{ borderColor: "var(--border)", backgroundColor: "var(--card)" }}>
               <div className="flex items-center gap-3">
                 {darkMode ? <Moon size={18} aria-hidden="true" /> : <Sun size={18} aria-hidden="true" />}
-                <span className="font-semibold text-foreground">{darkMode ? (lang === "es" ? "Modo oscuro" : lang === "pt" ? "Modo escuro" : lang === "fr" ? "Mode sombre" : "Dark mode") : (lang === "es" ? "Modo claro" : lang === "pt" ? "Modo claro" : lang === "fr" ? "Mode clair" : "Light mode")}</span>
+                <span className="font-semibold text-foreground">{darkMode ? (t("auto.modo_oscuro._15")) : (t("auto.modo_claro._16"))}</span>
               </div>
               <div className="w-12 h-6 rounded-full relative shrink-0" style={{ backgroundColor: darkMode ? "var(--primary)" : "var(--muted)" }} aria-hidden="true">
                 <div className="absolute top-0.5 w-5 h-5 rounded-full bg-white" style={{ left: darkMode ? "calc(100% - 22px)" : "2px", transition: "left 200ms ease" }} />
@@ -42,7 +42,7 @@ export function CandidateOnboarding({ lang, palette, darkMode, font, onPalette, 
           </div>
           {/* Palettes */}
           <div>
-            <h3 className="text-sm font-bold text-foreground mb-3 uppercase tracking-wide flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-accent" aria-hidden="true" /> {lang === "es" ? "Paleta de color" : lang === "pt" ? "Paleta de cores" : lang === "fr" ? "Palette de couleur" : "Color palette"}</h3>
+            <h3 className="text-sm font-bold text-foreground mb-3 uppercase tracking-wide flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-accent" aria-hidden="true" /> {t("auto.paleta_de_color._17")}</h3>
             <div className="flex flex-col gap-2.5">
               {(Object.keys(PALETTES) as PaletteKey[]).map((key) => {
                 const p = PALETTES[key];
@@ -63,7 +63,7 @@ export function CandidateOnboarding({ lang, palette, darkMode, font, onPalette, 
           {/* Font */}
           <div>
             <h3 className="text-sm font-bold text-foreground mb-3 uppercase tracking-wide flex items-center gap-2"><Type size={14} aria-hidden="true" /> {t("palette.font")}</h3>
-            {([["atkinson", "Atkinson Hyperlegible", lang === "es" ? "Alta legibilidad — baja visión" : "High readability — low vision"], ["lexend", lang === "es" ? "Modo Dislexia (Lexend)" : "Dyslexia Mode", lang === "es" ? "Tipografía amigable y espaciada" : "Dyslexia friendly typography"]] as const).map(([fk, fname, fdesc]) => {
+            {([["atkinson", "Atkinson Hyperlegible", t("auto.alta_legibilida._19")], ["lexend", t("auto.modo_dislexia__._20"), t("auto.tipograf_a_amig._21")]] as const).map(([fk, fname, fdesc]) => {
               const sel = font === fk;
               return (
                 <button key={fk} onClick={() => onFont(fk)} className="w-full flex items-center gap-4 p-4 rounded-2xl border-2 cursor-pointer text-left mb-3 transition-all hover:scale-[1.02]" style={{ borderColor: sel ? "var(--primary)" : "var(--border)", backgroundColor: sel ? "var(--card)" : "var(--background)", boxShadow: sel ? "0 4px 16px rgba(0,0,0,0.06)" : "none" }}>
@@ -86,7 +86,7 @@ export function CandidateOnboarding({ lang, palette, darkMode, font, onPalette, 
         <div className="w-full lg:flex-1 px-4 lg:px-14 py-10 bg-muted/20">
           <div className="flex items-center gap-2 mb-5">
             <div className="w-2 h-2 rounded-full bg-accent" aria-hidden="true" />
-            <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">{lang === "es" ? "Vista previa en tiempo real" : lang === "pt" ? "Visualização em tempo real" : lang === "fr" ? "Aperçu en temps réel" : "Real-time preview"}</span>
+            <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">{t("auto.vista_previa_en._18")}</span>
           </div>
           <div
             className="rounded-3xl border overflow-hidden"

@@ -121,7 +121,7 @@ export function AboutPage({ lang, onNavigate, onOpenAuth, onLang, darkMode, onDa
         <section className="rounded-3xl border border-primary/20 bg-primary/5 p-4 md:p-8">
           <h2 className="mb-3 text-2xl font-bold text-foreground">{t("about.orgsTitle")}</h2>
           <p className="mb-6 max-w-2xl text-muted-foreground">{t("about.orgsSub")}</p>
-          <div className="flex flex-wrap items-center gap-4">
+          <div className="flex flex-wrap items-center justify-end gap-4">
             <div className="flex items-center gap-3 rounded-full border border-border bg-background px-4 py-2">
               <img src={closerImg} alt="Closer To The Stars Foundation" className="h-8 w-8 object-contain" />
               <span className="font-semibold text-foreground">Closer To The Stars Fundation</span>

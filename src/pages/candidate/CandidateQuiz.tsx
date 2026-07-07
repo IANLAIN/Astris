@@ -130,7 +130,7 @@ export function CandidateQuiz({ lang, axisIndex, answers, onAnswer, onPrev, onNe
                 className="flex-1 flex items-center justify-center gap-2 px-7 py-4 rounded-xl border-2 font-bold transition-all hover:opacity-90" 
                 style={{ borderColor: "var(--primary)", backgroundColor: "var(--primary)", color: "var(--primary-foreground)", cursor: (axisAnswers[questionIndex] === undefined || (Array.isArray(axisAnswers[questionIndex]) && (axisAnswers[questionIndex] as number[]).length === 0)) ? "not-allowed" : "pointer", opacity: (axisAnswers[questionIndex] === undefined || (Array.isArray(axisAnswers[questionIndex]) && (axisAnswers[questionIndex] as number[]).length === 0)) ? 0.5 : 1 }}
               >
-                {questionIndex === axis.questions.length - 1 && axisIndex === 3 ? (lang === "es" ? "Completar perfil" : "Complete profile") : t("next")}
+                {questionIndex === axis.questions.length - 1 && axisIndex === 3 ? (t("auto.completar_perfi._25")) : t("next")}
                 <ChevronRight size={20} aria-hidden="true" />
               </button>
             </div>

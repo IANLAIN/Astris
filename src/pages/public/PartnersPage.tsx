@@ -26,20 +26,20 @@ export function PartnersPage({ lang, onNavigate, onOpenAuth, onLang, darkMode, o
           ) : (
             <form className="space-y-4" onSubmit={handleSubmit}>
               <div>
-                <label className="mb-1 block text-sm font-semibold text-foreground">Nombre de la empresa</label>
-                <input value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} required className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm outline-none focus:border-primary" style={{ color: "var(--foreground)" }} />
+                <label htmlFor="partner-company" className="mb-1 block text-sm font-semibold text-foreground">Nombre de la empresa</label>
+                <input id="partner-company" name="company" value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} required className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm outline-none focus:border-primary" style={{ color: "var(--foreground)" }} />
               </div>
               <div>
-                <label className="mb-1 block text-sm font-semibold text-foreground">Tu nombre</label>
-                <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm outline-none focus:border-primary" style={{ color: "var(--foreground)" }} />
+                <label htmlFor="partner-name" className="mb-1 block text-sm font-semibold text-foreground">Tu nombre</label>
+                <input id="partner-name" name="name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm outline-none focus:border-primary" style={{ color: "var(--foreground)" }} />
               </div>
               <div>
-                <label className="mb-1 block text-sm font-semibold text-foreground">Correo electrónico</label>
-                <input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm outline-none focus:border-primary" style={{ color: "var(--foreground)" }} />
+                <label htmlFor="partner-email" className="mb-1 block text-sm font-semibold text-foreground">Correo electrónico</label>
+                <input id="partner-email" name="email" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm outline-none focus:border-primary" style={{ color: "var(--foreground)" }} />
               </div>
               <div>
-                <label className="mb-1 block text-sm font-semibold text-foreground">¿Por qué quieren ser parte de Astris?</label>
-                <textarea value={form.why} onChange={(e) => setForm({ ...form, why: e.target.value })} required rows={5} className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm outline-none focus:border-primary resize-y" style={{ color: "var(--foreground)" }} />
+                <label htmlFor="partner-why" className="mb-1 block text-sm font-semibold text-foreground">¿Por qué quieren ser parte de Astris?</label>
+                <textarea id="partner-why" name="why" value={form.why} onChange={(e) => setForm({ ...form, why: e.target.value })} required rows={5} className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm outline-none focus:border-primary resize-y" style={{ color: "var(--foreground)" }} />
               </div>
               <button type="submit" className="w-full rounded-xl px-5 py-3 text-sm font-semibold text-primary-foreground border-0 cursor-pointer" style={{ backgroundColor: "var(--primary)" }}>Enviar propuesta</button>
             </form>

@@ -37,8 +37,8 @@ export function NavBar({ lang, role, screen, onNav, onLang, onLogout, darkMode, 
   const ROLE_LABELS: Record<Role, string> = { candidate: t("role.candidate"), company: t("role.company"), mentor: t("role.mentor"), admin: t("role.admin") };
 
   const darkLabel = darkMode
-    ? (lang === "es" ? "Modo claro" : lang === "pt" ? "Modo claro" : lang === "fr" ? "Mode clair" : "Light mode")
-    : (lang === "es" ? "Modo oscuro" : lang === "pt" ? "Modo escuro" : lang === "fr" ? "Mode sombre" : "Dark mode");
+    ? (t("auto.modo_claro._104"))
+    : (t("auto.modo_oscuro._105"));
 
   return (
     <header className="sticky top-0 z-40 border-b border-border" style={{ backgroundColor: "var(--background)" }}>
@@ -107,12 +107,12 @@ export function NavBar({ lang, role, screen, onNav, onLang, onLogout, darkMode, 
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56 mt-1" style={{ backgroundColor: "var(--card)", borderColor: "var(--border)", color: "var(--foreground)" }}>
-              <DropdownMenuLabel>{lang === "es" ? "Mi Cuenta" : "My Account"}</DropdownMenuLabel>
+              <DropdownMenuLabel>{t("auto.mi_cuenta._106")}</DropdownMenuLabel>
               <DropdownMenuSeparator style={{ backgroundColor: "var(--border)" }} />
               
               <DropdownMenuItem className="cursor-pointer" onClick={() => onNav("settings")}>
                 <Settings className="mr-2 h-4 w-4" />
-                <span>{lang === "es" ? "Configuración" : "Settings"}</span>
+                <span>{t("auto.configuraci_n._107")}</span>
               </DropdownMenuItem>
               
               <DropdownMenuSeparator style={{ backgroundColor: "var(--border)" }} />

@@ -10,12 +10,10 @@ export function NotFoundPage({ lang, onGoHome }: { lang: Lang; onGoHome: () => v
       </div>
       <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">404</h1>
       <h2 className="text-xl md:text-2xl font-semibold text-muted-foreground mb-8">
-        {lang === "es" ? "Página no encontrada" : "Page not found"}
+        {t("auto.p_gina_no_encon._66")}
       </h2>
       <p className="text-muted-foreground mb-8 max-w-md">
-        {lang === "es" 
-          ? "Lo sentimos, la página que estás buscando no existe o ha sido movida." 
-          : "Sorry, the page you are looking for does not exist or has been moved."}
+        {t("auto.lo_sentimos__la._67")}
       </p>
       <button 
         onClick={onGoHome}
@@ -23,7 +21,7 @@ export function NotFoundPage({ lang, onGoHome }: { lang: Lang; onGoHome: () => v
         style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}
       >
         <Home size={18} />
-        {lang === "es" ? "Volver al inicio" : "Go to home"}
+        {t("auto.volver_al_inici._68")}
       </button>
     </div>
   );

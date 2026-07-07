@@ -61,7 +61,7 @@ export function CompanyCandidateDetail({ lang, candidateId, onBack, onStart }: {
             <div className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-1">{t("comp.detail.title")}</div>
             <h1 className="text-2xl font-bold text-foreground" style={{ fontFamily: "DM Mono, monospace" }}>{candidate.id}</h1>
             <div className="flex items-center gap-2 mt-2 text-sm text-muted-foreground">
-              <Shield size={13} aria-hidden="true" style={{ color: "var(--accent)" }} />{lang === "es" ? "Perfil anónimo — sin nombre, fotografía ni diagnóstico médico" : "Anonymous profile — no name, photo, or medical diagnosis"}
+              <Shield size={13} aria-hidden="true" style={{ color: "var(--accent)" }} />{t("auto.perfil_an_nimo_._50")}
             </div>
           </div>
           <MatchBadge value={Math.floor(Math.random() * 20) + 80} size="lg" />
@@ -69,12 +69,12 @@ export function CompanyCandidateDetail({ lang, candidateId, onBack, onStart }: {
       </div>
       <div className="max-w-5xl mx-auto w-full px-4 lg:px-20 py-10 flex gap-5 md:gap-10">
         <div className="flex-1">
-          <h2 className="font-bold text-foreground mb-2">{lang === "es" ? "Perfil de compatibilidad" : "Compatibility profile"}</h2>
+          <h2 className="font-bold text-foreground mb-2">{t("auto.perfil_de_compa._51")}</h2>
           <RadarViz data={radar} height={300} outerRadius={100} fontSize={12} />
         </div>
         <div className="w-full md:w-72 shrink-0 flex flex-col gap-5">
           <div className="rounded-2xl border border-border p-6" style={{ backgroundColor: "var(--card)" }}>
-            <h3 className="font-bold text-foreground mb-4 text-sm">{lang === "es" ? "Entorno requerido" : "Required environment"}</h3>
+            <h3 className="font-bold text-foreground mb-4 text-sm">{t("auto.entorno_requeri._52")}</h3>
             <div className="flex flex-col gap-2.5">
               {env.map((e) => (
                 <div key={e.req} className="flex items-start gap-3">
@@ -87,7 +87,7 @@ export function CompanyCandidateDetail({ lang, candidateId, onBack, onStart }: {
             </div>
           </div>
           <button onClick={onStart} className="w-full flex items-center justify-center gap-2 py-4 rounded-xl font-bold cursor-pointer text-sm" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}>
-            <Users size={16} aria-hidden="true" />{lang === "es" ? "Iniciar proceso de match" : "Start match process"}
+            <Users size={16} aria-hidden="true" />{t("auto.iniciar_proceso._53")}
           </button>
         </div>
       </div>

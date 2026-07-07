@@ -3,6 +3,7 @@ import { Lang, ModalStep, QuizAnswers, PublicView } from "@/types";
 import { getInitialLang, getInitialModalStep } from "@/i18n/useT";
 import { QUIZ_AXES } from "@/i18n/content";
 import { saveCandidateProfile, getCurrentUser } from "@/services/supabase";
+import { useTranslation } from "react-i18next";
 
 import { useTheme } from "@/hooks/useTheme";
 import { useAuth } from "@/hooks/useAuth";
@@ -40,8 +41,13 @@ const MentorCompanies = lazy(() => import("@/pages/mentor/MentorCompanies").then
 const AdminDashboard = lazy(() => import("@/pages/admin/AdminDashboard"));
 
 export default function App() {
+  const { i18n } = useTranslation();
   const [modalStep, setModalStep] = useState<ModalStep>(() => getInitialModalStep());
-  const [lang, setLang] = useState<Lang>(() => getInitialLang());
+  const [lang, setLang] = useState<Lang>(() => {
+    const init = getInitialLang();
+    i18n.changeLanguage(init);
+    return init;
+  });
   const [screen, setScreen] = useState("home");
   const [publicView, setPublicView] = useState<PublicView>("landing");
 
@@ -68,6 +74,7 @@ export default function App() {
 
   const handleLangSelect = (l: Lang) => {
     setLang(l);
+    i18n.changeLanguage(l);
     window.localStorage.setItem("astris_lang", l);
     setModalStep("none");
   };

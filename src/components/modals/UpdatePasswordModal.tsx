@@ -4,6 +4,7 @@ import { Lang } from "@/types";
 import { useT } from "@/i18n/useT";
 import { Overlay } from "../common/Overlay";
 import { updatePassword } from "@/services/supabase";
+import { PasswordInput } from "../ui/PasswordInput";
 
 export function UpdatePasswordModal({ lang, onComplete }: {
   lang: Lang;
@@ -22,7 +23,7 @@ export function UpdatePasswordModal({ lang, onComplete }: {
 
   const handleSubmit = async () => {
     if (!password || password.length < 6) {
-      setError(lang === "es" ? "La contraseña debe tener al menos 6 caracteres." : "Password must be at least 6 characters.");
+      setError(t("auto.la_contrase_a_d._100"));
       return;
     }
     setLoading(true);
@@ -40,8 +41,8 @@ export function UpdatePasswordModal({ lang, onComplete }: {
     <Overlay>
       <div className="w-[95%] sm:w-full max-w-md rounded-2xl overflow-hidden mx-auto" style={{ backgroundColor: "var(--card)" }}>
         <div className="px-4 md:px-8 py-7 border-b border-border">
-          <div className="text-xl font-bold text-foreground">{lang === "es" ? "Nueva Contraseña" : "New Password"}</div>
-          <p className="text-sm text-muted-foreground mt-2">{lang === "es" ? "Ingresa tu nueva contraseña para acceder a tu cuenta." : "Enter your new password to access your account."}</p>
+          <div className="text-xl font-bold text-foreground">{t("auto.nueva_contrase_._101")}</div>
+          <p className="text-sm text-muted-foreground mt-2">{t("auto.ingresa_tu_nuev._102")}</p>
         </div>
         <div className="p-4 md:p-8 flex flex-col gap-5">
           {error && (
@@ -50,11 +51,11 @@ export function UpdatePasswordModal({ lang, onComplete }: {
             </div>
           )}
           <div>
-            <label className="block text-sm font-semibold text-foreground mb-2">{t("login.pass")}</label>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={handleKeyDown} className="w-full px-4 py-3 rounded-xl border-2 border-border text-foreground text-base" style={{ backgroundColor: "var(--input-background)" }} placeholder="••••••••" />
+            <label htmlFor="update-password" className="block text-sm font-semibold text-foreground mb-2">{t("login.pass")}</label>
+            <PasswordInput id="update-password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={handleKeyDown} className="w-full px-4 py-3 rounded-xl border-2 border-border text-foreground text-base" style={{ backgroundColor: "var(--input-background)" }} placeholder="••••••••" />
           </div>
           <button onClick={handleSubmit} disabled={loading} className="w-full py-4 rounded-xl font-bold text-base cursor-pointer" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)", opacity: loading ? 0.6 : 1 }}>
-            {loading ? "..." : (lang === "es" ? "Guardar y continuar" : "Save and continue")}
+            {loading ? "..." : (t("auto.guardar_y_conti._103"))}
           </button>
         </div>
       </div>

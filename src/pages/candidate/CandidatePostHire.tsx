@@ -35,7 +35,7 @@ export function CandidatePostHire({ lang }: { lang: Lang }) {
     <div className="min-h-screen w-full overflow-x-hidden flex flex-col">
       <div className="px-4 lg:px-20 py-10 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
         <h1 className="text-2xl md:text-3xl font-bold text-foreground">{t("posthire.title")}</h1>
-        <p className="text-muted-foreground mt-1">Veritas Analytics · {lang === "es" ? "Analista de Datos Junior" : "Junior Data Analyst"} · {lang === "es" ? "Día 14 de 60" : "Day 14 of 60"}</p>
+        <p className="text-muted-foreground mt-1">Veritas Analytics · {t("auto.analista_de_dat._23")} · {t("auto.d_a_14_de_60._24")}</p>
       </div>
       <div className="max-w-5xl mx-auto w-full px-4 lg:px-20 py-10 flex flex-col gap-4 md:gap-8">
         {/* Status */}
@@ -57,7 +57,7 @@ export function CandidatePostHire({ lang }: { lang: Lang }) {
         </div>
         {/* Report */}
         <div className="rounded-2xl border border-border p-4 md:p-8" style={{ backgroundColor: "var(--card)" }}>
-          <h2 className="font-bold text-foreground mb-4">{lang === "es" ? "Reporte de esta semana" : lang === "pt" ? "Relatório desta semana" : lang === "fr" ? "Rapport de cette semaine" : "This week's report"}</h2>
+          <h2 className="font-bold text-foreground mb-4">{t("auto.reporte_de_esta._22")}</h2>
           <div className="flex flex-col gap-4">
             <div>
               <label className="block text-sm font-semibold text-foreground mb-2">{C(lang, "postHireQ1") as string}</label>

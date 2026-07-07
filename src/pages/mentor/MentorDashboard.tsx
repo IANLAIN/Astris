@@ -16,7 +16,7 @@ export function MentorDashboard({ lang }: { lang: Lang }) {
       </div>
       <div className="border-b border-border" style={{ backgroundColor: "var(--background)" }}>
         <div className="px-4 lg:px-20 py-5 max-w-7xl mx-auto flex gap-5 md:gap-10">
-          {([["3", C(lang, "mentorProcesses"), "var(--primary)"], ["2", lang === "es" ? "Sesiones pendientes" : lang === "pt" ? "Sessões pendentes" : lang === "fr" ? "Sessions en attente" : "Pending sessions", "var(--accent)"], ["12", lang === "es" ? "Completados este año" : lang === "pt" ? "Concluídos este ano" : lang === "fr" ? "Complétés cette année" : "Completed this year", "var(--muted-foreground)"], ["91%", lang === "es" ? "Retención promedio" : lang === "pt" ? "Retenção média" : lang === "fr" ? "Rétention moyenne" : "Average retention", "var(--accent)"]] as const).map(([val, label, color]) => (
+          {([["3", C(lang, "mentorProcesses"), "var(--primary)"], ["2", t("auto.sesiones_pendie._40"), "var(--accent)"], ["12", t("auto.completados_est._41"), "var(--muted-foreground)"], ["91%", t("auto.retenci_n_prome._42"), "var(--accent)"]] as const).map(([val, label, color]) => (
             <div key={label as string} className="flex flex-col gap-1">
               <div className="text-2xl font-bold" style={{ color: color as string, fontFamily: "DM Mono, monospace" }}>{val}</div>
               <div className="text-xs text-muted-foreground">{label as string}</div>
@@ -40,7 +40,7 @@ export function MentorDashboard({ lang }: { lang: Lang }) {
                     <div className="text-muted-foreground text-sm">{proc.company}</div>
                   </div>
                   <div className="text-right shrink-0">
-                    <div className="text-xs text-muted-foreground">{lang === "es" ? "Activo hace" : "Active for"}</div>
+                    <div className="text-xs text-muted-foreground">{t("auto.activo_hace._46")}</div>
                     <div className="text-2xl font-bold text-foreground" style={{ fontFamily: "DM Mono, monospace" }}>{proc.days}d</div>
                   </div>
                 </div>
@@ -73,7 +73,7 @@ export function MentorDashboard({ lang }: { lang: Lang }) {
           </div>
           <div className="rounded-2xl border border-border p-6" style={{ backgroundColor: "var(--card)" }}>
             <div className="flex items-center gap-2 mb-4"><Activity size={15} aria-hidden="true" style={{ color: "var(--accent)" }} /><h3 className="font-bold text-foreground text-sm">{C(lang, "mentorImpact") as string}</h3></div>
-            {([[lang === "es" ? "Entrevistas acompañadas" : lang === "pt" ? "Entrevistas acompanhadas" : lang === "fr" ? "Entretiens accompagnés" : "Interviews supported", "5"], [lang === "es" ? "Onboardings completados" : lang === "pt" ? "Onboardings concluídos" : lang === "fr" ? "Onboardings complétés" : "Onboardings completed", "2"], [lang === "es" ? "Ajustes negociados" : lang === "pt" ? "Ajustes negociados" : lang === "fr" ? "Aménagements négociés" : "Adjustments negotiated", "8"]] as const).map(([label, val]) => (
+            {([[t("auto.entrevistas_aco._43"), "5"], [t("auto.onboardings_com._44"), "2"], [t("auto.ajustes_negocia._45"), "8"]] as const).map(([label, val]) => (
               <div key={label as string} className="flex items-center justify-between py-2 border-b border-border last:border-0">
                 <span className="text-sm text-foreground">{label as string}</span>
                 <span className="font-bold text-foreground" style={{ fontFamily: "DM Mono, monospace" }}>{val as string}</span>
