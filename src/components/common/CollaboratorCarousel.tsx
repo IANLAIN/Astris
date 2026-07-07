@@ -1,4 +1,5 @@
-import { useEffect, useState, useCallback, type ReactNode } from "react";
+import { type ReactNode } from "react";
+import { motion } from "framer-motion";
 import { Lang } from "@/types";
 import { useT } from "@/i18n/useT";
 import genuineImg from "@/assets/genuine.png";
@@ -46,133 +47,81 @@ const COLLABORATORS: Collaborator[] = [
 
 export function CollaboratorCarousel({ lang }: { lang: Lang }) {
   const t = useT(lang);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [paused, setPaused] = useState(false);
-  const [reducedMotion, setReducedMotion] = useState(false);
 
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReducedMotion(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
-
-  const next = useCallback(() => {
-    setActiveIndex((prev) => (prev + 1) % COLLABORATORS.length);
-  }, []);
-
-  useEffect(() => {
-    if (paused || reducedMotion) return;
-    const interval = setInterval(next, 1000);
-    return () => clearInterval(interval);
-  }, [paused, reducedMotion, next]);
-
-  const total = COLLABORATORS.length;
-
-  const getItem = (offset: number) => {
-    const idx = ((activeIndex + offset) % total + total) % total;
-    return COLLABORATORS[idx];
-  };
+  // Triple the array to ensure smooth infinite scrolling without gaps
+  const duplicatedCollaborators = [...COLLABORATORS, ...COLLABORATORS, ...COLLABORATORS, ...COLLABORATORS, ...COLLABORATORS];
 
   return (
     <div
-      className="w-full select-none"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-      onFocus={() => setPaused(true)}
-      onBlur={() => setPaused(false)}
+      className="w-full select-none overflow-hidden"
       role="region"
       aria-label={t("landing.supported")}
+      style={{ perspective: "1000px" }}
     >
-      <div className="flex items-center justify-center gap-6 md:gap-10 min-h-[140px]">
-        {/* Left (shadowed) */}
-        <a
-          href={getItem(-1).url}
-          target="_blank"
-          rel="noreferrer"
-          title={getItem(-1).name}
-          className="hidden sm:flex items-center justify-center rounded-2xl border-2 border-border transition-all duration-500 shrink-0"
-          style={{
-            width: 90,
-            height: 90,
-            opacity: 0.45,
-            filter: "grayscale(0.6) blur(0.5px)",
-            transform: "scale(0.85)",
-            backgroundColor: "var(--card)",
-          }}
-          tabIndex={-1}
-          aria-hidden="true"
-        >
-          {getItem(-1).isSvg ? (
-            getItem(-1).svgContent
-          ) : (
-            <img
-              src={getItem(-1).imgSrc}
-              alt=""
-              className="object-contain"
-              style={{ width: 56, height: 56 }}
-            />
-          )}
-        </a>
-
-        {/* Center (active / main) */}
-        <a
-          href={getItem(0).url}
-          target="_blank"
-          rel="noreferrer"
-          title={getItem(0).name}
-          className="flex items-center justify-center rounded-3xl border-2 border-border shadow-lg transition-all duration-500 shrink-0 hover:scale-105 hover:shadow-xl"
-          style={{
-            width: 130,
-            height: 130,
-            backgroundColor: "var(--card)",
-            zIndex: 10,
-          }}
-        >
-          {getItem(0).isSvg ? (
-            <div className="transition-transform duration-500">{getItem(0).svgContent}</div>
-          ) : (
-            <img
-              src={getItem(0).imgSrc}
-              alt={getItem(0).name}
-              className="object-contain transition-transform duration-500"
-              style={{ width: 80, height: 80 }}
-            />
-          )}
-        </a>
-
-        {/* Right (shadowed) */}
-        <a
-          href={getItem(1).url}
-          target="_blank"
-          rel="noreferrer"
-          title={getItem(1).name}
-          className="hidden sm:flex items-center justify-center rounded-2xl border-2 border-border transition-all duration-500 shrink-0"
-          style={{
-            width: 90,
-            height: 90,
-            opacity: 0.45,
-            filter: "grayscale(0.6) blur(0.5px)",
-            transform: "scale(0.85)",
-            backgroundColor: "var(--card)",
-          }}
-          tabIndex={-1}
-          aria-hidden="true"
-        >
-          {getItem(1).isSvg ? (
-            getItem(1).svgContent
-          ) : (
-            <img
-              src={getItem(1).imgSrc}
-              alt=""
-              className="object-contain"
-              style={{ width: 56, height: 56 }}
-            />
-          )}
-        </a>
+      <style>
+        {`
+          @keyframes infinite-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-100% / 5)); }
+          }
+          .animate-infinite-scroll {
+            display: flex;
+            width: fit-content;
+            animation: infinite-scroll 40s linear infinite;
+          }
+          .animate-infinite-scroll:hover {
+            animation-play-state: paused;
+          }
+        `}
+      </style>
+      <div className="relative min-h-[160px] flex items-center overflow-hidden">
+        <div className="animate-infinite-scroll gap-8 md:gap-12 py-4 px-4">
+          {duplicatedCollaborators.map((item, idx) => (
+            <motion.a
+              key={`${item.name}-${idx}`}
+              href={item.url}
+              target="_blank"
+              rel="noreferrer"
+              title={item.name}
+              className="flex items-center justify-center rounded-3xl border-2 border-border shadow-md bg-card p-6 shrink-0"
+              style={{
+                width: 180,
+                height: 120,
+              }}
+              whileHover={{ 
+                scale: 1.1, 
+                rotateY: 15, 
+                rotateX: 5, 
+                boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)" 
+              }}
+              initial={{ 
+                rotateY: idx % 2 === 0 ? 10 : -10, 
+                y: idx % 2 === 0 ? -4 : 4 
+              }}
+              animate={{
+                rotateY: [idx % 2 === 0 ? 10 : -10, idx % 2 === 0 ? -10 : 10, idx % 2 === 0 ? 10 : -10],
+                y: [idx % 2 === 0 ? -4 : 4, idx % 2 === 0 ? 4 : -4, idx % 2 === 0 ? -4 : 4]
+              }}
+              transition={{ 
+                duration: 6, 
+                repeat: Infinity, 
+                ease: "easeInOut",
+                delay: idx * 0.2
+              }}
+            >
+              {item.isSvg ? (
+                <div className="w-16 h-16 flex items-center justify-center">{item.svgContent}</div>
+              ) : (
+                <img
+                  src={item.imgSrc}
+                  alt={item.name}
+                  className="object-contain w-full h-full max-h-16"
+                />
+              )}
+            </motion.a>
+          ))}
+        </div>
       </div>
-
     </div>
   );
 }

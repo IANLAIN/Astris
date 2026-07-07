@@ -3,7 +3,10 @@ import { User, Building2, Star, ArrowRight, Globe, X, Sun, Moon } from "lucide-r
 import { Lang, Role, PublicView } from "@/types";
 import { useT, C } from "@/i18n/useT";
 import astrisImg from "@/assets/astris.png";
-import { CollaboratorCarousel } from "@/components/common/CollaboratorCarousel";
+import { lazy, Suspense } from "react";
+import { motion } from "framer-motion";
+
+const CollaboratorCarousel = lazy(() => import("@/components/common/CollaboratorCarousel").then(m => ({ default: m.CollaboratorCarousel })));
 
 export function LandingPage({ lang, onOpenAuth, onLang, onNavigate, darkMode, onDarkToggle }: { lang: Lang; onOpenAuth: (preRole?: Role, step?: "auth" | "login" | "register") => void; onLang: () => void; onNavigate: (view: PublicView) => void; darkMode: boolean; onDarkToggle: () => void; }) {
   const t = useT(lang);
@@ -107,8 +110,20 @@ export function LandingPage({ lang, onOpenAuth, onLang, onNavigate, darkMode, on
             {/* Logo side */}
             <div className="hidden lg:flex shrink-0 flex-col items-center justify-center">
               <div className="relative">
-                <div className="absolute inset-0 rounded-full blur-3xl opacity-30" style={{ background: "radial-gradient(circle, var(--primary), transparent 70%)", transform: "scale(1.2)" }} aria-hidden="true" />
-                <img src={astrisImg} alt="Astris Logo" className="relative h-auto w-[340px] object-contain drop-shadow-2xl" />
+                <motion.div 
+                  className="absolute inset-0 rounded-full blur-3xl opacity-30" 
+                  style={{ background: "radial-gradient(circle, var(--primary), transparent 70%)" }}
+                  animate={{ scale: [1.2, 1.4, 1.2], rotate: [0, 180, 360] }}
+                  transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                  aria-hidden="true" 
+                />
+                <motion.img 
+                  src={astrisImg} 
+                  alt="Astris Logo" 
+                  className="relative h-auto w-[340px] object-contain drop-shadow-2xl" 
+                  animate={{ y: [-8, 8, -8], scale: [1.02, 0.98, 1.02] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                />
               </div>
             </div>
           </div>
@@ -120,7 +135,9 @@ export function LandingPage({ lang, onOpenAuth, onLang, onNavigate, darkMode, on
             <p className="text-center text-[10px] font-bold uppercase tracking-[0.22em] text-muted-foreground mb-6 md:mb-8">
               {t("landing.supported")}
             </p>
-            <CollaboratorCarousel lang={lang} />
+            <Suspense fallback={<div className="h-24 w-full animate-pulse bg-primary/10 rounded-xl"></div>}>
+              <CollaboratorCarousel lang={lang} />
+            </Suspense>
           </div>
         </section>
 
