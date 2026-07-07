@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 
 export function PhilosophySlogan({ quote }: { quote: string }) {
-  // We can do a simple fade-in for each character or just fade-in the block.
-  // Since it's a slogan, a smooth fade-in up looks very elegant.
+  if (!quote) return null;
+
   return (
     <section className="mb-20 md:mb-32 flex justify-center mt-12 md:mt-24">
       <motion.div 
