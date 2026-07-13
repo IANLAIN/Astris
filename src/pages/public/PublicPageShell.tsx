@@ -60,12 +60,12 @@ export function PublicPageShell({ lang, currentView, onNavigate, onOpenAuth, onL
             <button
               onClick={onDarkToggle}
               className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium border border-border cursor-pointer hover:bg-secondary bg-transparent"
-              aria-label={darkMode ? "Modo claro" : "Modo oscuro"}
-              title={darkMode ? "Modo claro" : "Modo oscuro"}
+              aria-label={t("settings.dark", "Modo oscuro")}
+              title={darkMode ? t("settings.light", "Modo claro") : t("settings.dark", "Modo oscuro")}
             >
               {darkMode ? <Sun size={16} /> : <Moon size={16} />}
             </button>
-            <button onClick={onLang} className="flex items-center gap-2 rounded-lg border border-border px-3 py-1.5 text-sm font-medium hover:bg-secondary cursor-pointer bg-transparent" aria-label="Cambiar idioma">
+            <button onClick={onLang} className="flex items-center gap-2 rounded-lg border border-border px-3 py-1.5 text-sm font-medium hover:bg-secondary cursor-pointer bg-transparent" aria-label={t("lang.title", "Cambiar idioma")}>
               <Globe size={16} />{lang.toUpperCase()}
             </button>
             <button onClick={() => onOpenAuth(undefined, "login")} className="rounded-xl border-2 border-border px-5 py-2.5 text-sm font-semibold cursor-pointer" style={{ backgroundColor: "var(--background)", color: "var(--foreground)" }}>{t("landing.nav.login")}</button>

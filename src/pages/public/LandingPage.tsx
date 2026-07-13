@@ -47,12 +47,12 @@ export function LandingPage({ lang, onOpenAuth, onLang, onNavigate, darkMode, on
             <button
               onClick={onDarkToggle}
               className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium border border-border cursor-pointer hover:bg-secondary bg-transparent"
-              aria-label={darkMode ? "Modo claro" : "Modo oscuro"}
-              title={darkMode ? "Modo claro" : "Modo oscuro"}
+              aria-label={t("settings.dark", "Modo oscuro")}
+              title={darkMode ? t("settings.light", "Modo claro") : t("settings.dark", "Modo oscuro")}
             >
               {darkMode ? <Sun size={16} /> : <Moon size={16} />}
             </button>
-            <button onClick={onLang} className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium border border-border cursor-pointer hover:bg-secondary bg-transparent" aria-label="Cambiar idioma">
+            <button onClick={onLang} className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium border border-border cursor-pointer hover:bg-secondary bg-transparent" aria-label={t("lang.title", "Cambiar idioma")}>
               <Globe size={16} />{lang.toUpperCase()}
             </button>
             <button onClick={() => onOpenAuth(undefined, "login")} className="px-5 py-2.5 rounded-xl text-sm font-semibold border-2 border-border cursor-pointer" style={{ backgroundColor: "var(--background)", color: "var(--foreground)" }}>{t("landing.nav.login")}</button>
@@ -126,7 +126,7 @@ export function LandingPage({ lang, onOpenAuth, onLang, onNavigate, darkMode, on
               <p className="text-lg text-muted-foreground leading-relaxed mb-10 whitespace-pre-line italic max-w-xl">{t("landing.hero.sub")}</p>
               <div className="flex flex-col sm:flex-row flex-wrap gap-3 w-full sm:w-auto mt-8">
                 <button onClick={() => onOpenAuth(undefined, "register")} className="flex items-center justify-center sm:justify-start gap-3 w-full sm:w-auto px-8 py-4 rounded-xl text-lg font-bold cursor-pointer transition-transform hover:scale-[1.02] border-0" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}>
-                  {lang === "en" ? "Join Astris" : "Únete a Astris"}<ArrowRight size={20} aria-hidden="true" />
+                  {t("landing.cta.join", "Únete a Astris")}<ArrowRight size={20} aria-hidden="true" />
                 </button>
               </div>
             </div>
@@ -173,12 +173,12 @@ export function LandingPage({ lang, onOpenAuth, onLang, onNavigate, darkMode, on
                 <img src={astrisImg} alt="Astris" className="w-9 h-9 object-contain" /> Astris
               </div>
               <div className="text-sm text-muted-foreground max-w-xs mb-3">{t("landing.footer.program")}</div>
-              <div className="text-xs text-muted-foreground">&copy; {new Date().getFullYear()} Astris. Todos los derechos reservados.</div>
+              <div className="text-xs text-muted-foreground">&copy; {new Date().getFullYear()} Astris. {t("landing.footer.rights", "Todos los derechos reservados.")}</div>
             </div>
 
             <div className="flex gap-16">
               <div className="flex flex-col gap-4">
-                <span className="font-bold text-foreground text-sm uppercase tracking-wider">Enlaces</span>
+                <span className="font-bold text-foreground text-sm uppercase tracking-wider">{t("landing.footer.links", "Enlaces")}</span>
                 <div className="flex flex-col gap-3 text-sm text-muted-foreground">
                   {(C(lang, "footerLinks") as string[]).map((link) => (
                     <span key={link} className="cursor-pointer hover:text-primary transition-colors">{link}</span>
@@ -187,7 +187,7 @@ export function LandingPage({ lang, onOpenAuth, onLang, onNavigate, darkMode, on
               </div>
 
               <div className="flex flex-col gap-4">
-                <span className="font-bold text-foreground text-sm uppercase tracking-wider">Soporte y Contacto</span>
+                <span className="font-bold text-foreground text-sm uppercase tracking-wider">{t("landing.footer.support", "Soporte y Contacto")}</span>
                 <div className="flex flex-col gap-3 text-sm text-muted-foreground">
                   <a href="https://www.vibralatinatx.com/contact-1" target="_blank" rel="noreferrer" className="hover:text-primary transition-colors flex items-center gap-2"><ArrowRight size={14} />Vibra Latina</a>
                   <a href="https://support.microsoft.com/es-us/contactus/" target="_blank" rel="noreferrer" className="hover:text-primary transition-colors flex items-center gap-2"><ArrowRight size={14} />Microsoft Support</a>

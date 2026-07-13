@@ -506,8 +506,12 @@
   "footerLinks": [
     "Accessibility",
     "Privacy",
-    "Terms of use"
+    "Terms of Use"
   ],
+  "landing.cta.join": "Join Astris",
+  "landing.footer.rights": "All rights reserved.",
+  "landing.footer.links": "Links",
+  "landing.footer.support": "Support & Contact",
   "checkinPageTitle": "Check-ins",
   "checkinPageSub": "Scheduled sessions with your candidates",
   "companiesPageTitle": "Collaborating companies",
