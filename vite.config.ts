@@ -25,16 +25,22 @@ export default defineConfig({
       output: {
         manualChunks(id: string) {
           if (id.includes('node_modules')) {
-            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
-              return 'vendor-react';
-            }
-            if (id.includes('@mui') || id.includes('@emotion') || id.includes('@radix-ui') || id.includes('framer-motion') || id.includes('recharts') || id.includes('lucide-react')) {
-              return 'vendor-ui';
-            }
             if (id.includes('@supabase')) {
               return 'vendor-supabase';
             }
-            return 'vendor-other';
+            if (id.includes('framer-motion')) {
+              return 'vendor-framer';
+            }
+            if (id.includes('recharts')) {
+              return 'vendor-recharts';
+            }
+            if (id.includes('lucide-react')) {
+              return 'vendor-lucide';
+            }
+            if (id.includes('@radix-ui')) {
+              return 'vendor-radix';
+            }
+            return 'vendor-core';
           }
           return undefined;
         }
