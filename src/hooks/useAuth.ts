@@ -38,10 +38,12 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
           setUserVocation((user as any).vocation || "");
           setLoggedIn(true);
           setModalStep("none");
+          // Demo users: route to their primary dashboard screens
+          const isDemoUser = user.id === "demo-cand" || user.id === "demo-comp" || user.id === "demo-ment";
           const first =
             user.role === "candidate"
-              ? user.completedOnboarding ? "vacancies" : "onboarding"
-              : user.role === "company" ? "org-profile" : "dashboard";
+              ? isDemoUser ? "profile" : (user.completedOnboarding ? "vacancies" : "onboarding")
+              : user.role === "company" ? (isDemoUser ? "candidates" : "org-profile") : "dashboard";
           setScreen(first);
         }
       } catch {
@@ -123,7 +125,7 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
         setUserVocation("Analista de Datos");
         setLoggedIn(true);
         setModalStep("none");
-        setScreen("vacancies");
+        setScreen("profile");
         return;
       }
       if (email === "empresa@astris.org") {

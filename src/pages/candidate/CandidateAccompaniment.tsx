@@ -24,8 +24,8 @@ export function CandidateAccompaniment({ lang }: { lang: Lang }) {
                 <div className="flex-1 pt-1.5 pb-4">
                   <div className="font-semibold text-foreground flex items-center gap-3">
                     {s.label}
-                    {s.current && <span className="text-xs font-bold px-2.5 py-1 rounded-full" style={{ backgroundColor: "var(--accent)" + "22", color: "var(--accent)" }}>{t("auto.en_curso._4")}</span>}
-                    {s.done && <span className="text-xs text-muted-foreground">{t("auto.completado._5")}</span>}
+                    {s.current && <span className="text-xs font-bold px-2.5 py-1 rounded-full" style={{ backgroundColor: "var(--accent)" + "22", color: "var(--accent)" }}>{t("common.in_progress")}</span>}
+                    {s.done && <span className="text-xs text-muted-foreground">{t("common.completed")}</span>}
                   </div>
                 </div>
               </div>

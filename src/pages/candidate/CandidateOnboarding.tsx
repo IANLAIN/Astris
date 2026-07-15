@@ -33,7 +33,7 @@ export function CandidateOnboarding({ lang, palette, darkMode, font, onPalette, 
             <button onClick={() => onDark(!darkMode)} className="w-full flex items-center justify-between p-4 rounded-2xl border-2 cursor-pointer transition-all hover:scale-[1.02] hover:shadow-sm" style={{ borderColor: "var(--border)", backgroundColor: "var(--card)" }}>
               <div className="flex items-center gap-3">
                 {darkMode ? <Moon size={18} aria-hidden="true" /> : <Sun size={18} aria-hidden="true" />}
-                <span className="font-semibold text-foreground">{darkMode ? (t("auto.modo_oscuro._15")) : (t("auto.modo_claro._16"))}</span>
+                <span className="font-semibold text-foreground">{darkMode ? (t("common.dark_mode")) : (t("common.light_mode"))}</span>
               </div>
               <div className="w-12 h-6 rounded-full relative shrink-0" style={{ backgroundColor: darkMode ? "var(--primary)" : "var(--muted)" }} aria-hidden="true">
                 <div className="absolute top-0.5 w-5 h-5 rounded-full bg-white" style={{ left: darkMode ? "calc(100% - 22px)" : "2px", transition: "left 200ms ease" }} />
@@ -42,7 +42,7 @@ export function CandidateOnboarding({ lang, palette, darkMode, font, onPalette, 
           </div>
           {/* Palettes */}
           <div>
-            <h3 className="text-sm font-bold text-foreground mb-3 uppercase tracking-wide flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-accent" aria-hidden="true" /> {t("auto.paleta_de_color._17")}</h3>
+            <h3 className="text-sm font-bold text-foreground mb-3 uppercase tracking-wide flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-accent" aria-hidden="true" /> {t("common.color_palette")}</h3>
             <div className="flex flex-col gap-2.5">
               {(Object.keys(PALETTES) as PaletteKey[]).map((key) => {
                 const p = PALETTES[key];
@@ -85,7 +85,7 @@ export function CandidateOnboarding({ lang, palette, darkMode, font, onPalette, 
         <div className="w-full lg:flex-1 px-4 lg:px-14 py-10 bg-muted/20">
           <div className="flex items-center gap-2 mb-5">
             <div className="w-2 h-2 rounded-full bg-accent" aria-hidden="true" />
-            <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">{t("auto.vista_previa_en._18")}</span>
+            <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">{t("common.preview_in")}</span>
           </div>
           <div
             className="rounded-3xl border overflow-hidden"

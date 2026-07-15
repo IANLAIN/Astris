@@ -91,7 +91,7 @@ export async function signInWithGoogle(role?: string, intent?: 'login' | 'regist
 export async function getCurrentUser() {
   const demoEmail = typeof window !== "undefined" ? window.localStorage.getItem("astris_demo_user") : null;
   if (demoEmail === "candidato@astris.org") {
-    return { id: "demo-cand", email: demoEmail, name: "Alex (Demo)", role: "candidate", avatarUrl: "", vocation: "Analista de Datos", completedOnboarding: true, needsRegistration: false };
+    return { id: "demo-cand", email: demoEmail, name: "Alex (Demo)", role: "candidate", avatarUrl: "", vocation: "Analista de Datos", completedOnboarding: false, needsRegistration: false };
   }
   if (demoEmail === "empresa@astris.org") {
     return { id: "demo-comp", email: demoEmail, name: "Veritas Analytics (Demo)", role: "company", avatarUrl: "", vocation: "", completedOnboarding: true, needsRegistration: false };

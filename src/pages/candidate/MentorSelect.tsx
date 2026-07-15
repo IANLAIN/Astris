@@ -49,7 +49,7 @@ export function MentorSelect({ lang, onSelect }: { lang: Lang; onSelect: () => v
       </div>
       <div className="max-w-7xl mx-auto w-full px-4 lg:px-20 py-10">
         {loadingMent ? (
-          <div className="flex items-center justify-center py-20 text-muted-foreground">{t("auto.cargando_mentor._1")}</div>
+          <div className="flex items-center justify-center py-20 text-muted-foreground">{t("common.loading_mentor")}</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
             {mentors.map((m) => (
@@ -64,13 +64,13 @@ export function MentorSelect({ lang, onSelect }: { lang: Lang; onSelect: () => v
                   </div>
                 </div>
                 <div className="px-6 pb-5 flex flex-col gap-2 border-t border-border pt-4">
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground"><Star size={12} aria-hidden="true" style={{ color: "var(--accent)" }} />{m.years} {t("auto.a_os_de_experie._2")}</div>
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground"><Star size={12} aria-hidden="true" style={{ color: "var(--accent)" }} />{m.years} {t("mentor.years_experience")}</div>
                   <div className="flex items-center gap-2 text-xs text-muted-foreground"><MapPin size={12} aria-hidden="true" />{m.modality}</div>
                   {m.bio && <p className="text-xs text-muted-foreground leading-relaxed mt-1">{m.bio}</p>}
                 </div>
                 <div className="px-6 pb-6 mt-auto">
                   <button onClick={() => { setChosen(m.id); setTimeout(onSelect, 300); }} className="w-full py-4 rounded-2xl font-bold cursor-pointer text-sm border-0 transition-all hover:scale-[1.02]" style={{ backgroundColor: chosen === m.id ? "var(--primary)" : "var(--secondary)", color: chosen === m.id ? "var(--primary-foreground)" : "var(--foreground)" }}>
-                    {chosen === m.id ? <span className="flex items-center justify-center gap-1.5"><Check size={16} aria-hidden="true" /> {t("auto.seleccionado._3")}</span> : t("mentor.choose")}
+                    {chosen === m.id ? <span className="flex items-center justify-center gap-1.5"><Check size={16} aria-hidden="true" /> {t("common.selected")}</span> : t("mentor.choose")}
                   </button>
                 </div>
               </article>

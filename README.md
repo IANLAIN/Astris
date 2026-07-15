@@ -1,62 +1,127 @@
-# Astris - Plataforma de Inclusión Laboral Adaptativa
+# 🌟 Astris
 
-Astris es una plataforma tecnológica diseñada para facilitar la inserción al mercado laboral de personas con diferentes estilos cognitivos, sensoriales y de aprendizaje, a través de un perfilamiento por habilidades y necesidades reales (procesamiento de información, tolerancia ambiental, ejecución de tareas y ajustes razonables).
+**Conectando talento con entornos laborales adaptativos.**
 
-## Arquitectura y Estructura del Proyecto
+Astris es una plataforma web que empareja talento neurodivergente con empresas comprometidas con la inclusión laboral real, mediante un sistema de matching basado en estilos de trabajo, necesidades ambientales y ajustes razonables—no en diagnósticos.
 
-Tras una auditoría y refactorización masiva, el proyecto se ha organizado siguiendo principios de modularidad, DRY (Don't Repeat Yourself), y Clean Architecture para facilitar la mantenibilidad y escalabilidad.
+---
+
+## ✨ Características
+
+- **Perfilado en 4 ejes**: Procesamiento, Tolerancia Ambiental, Ejecución y Ajustes Razonables
+- **Matching inteligente**: Compatibilidades calculadas objetivamente entre candidatos y empresas
+- **Acompañamiento con mentor**: Guía personalizada desde la preparación hasta el día 60 post-contratación
+- **4 idiomas**: Español, Inglés, Portugués y Francés
+- **Interfaz accesible**: Paletas de colores personalizables, modo oscuro, fuente para dislexia
+- **Modo demo**: Explora la plataforma sin necesidad de backend
+
+---
+
+## 🚀 Stack Tecnológico
+
+| Capa | Tecnología |
+|------|-----------|
+| **Framework** | React 18 + TypeScript 6 |
+| **Build** | Vite 6 |
+| **Estilos** | Tailwind CSS v4 |
+| **UI** | Radix UI + Lucide Icons |
+| **Enrutamiento** | React Router DOM v7 |
+| **i18n** | i18next + react-i18next |
+| **Backend** | Supabase (Auth + PostgreSQL) |
+| **Gráficos** | Recharts |
+
+---
+
+## 📦 Instalación
+
+```bash
+# Clonar el repositorio
+git clone https://github.com/IANLAIN/Astris.git
+cd Astris
+
+# Instalar dependencias
+npm install
+
+# Iniciar servidor de desarrollo
+npm run dev
+```
+
+La aplicación estará disponible en `http://localhost:5173`.
+
+---
+
+## 🔧 Comandos Disponibles
+
+| Comando | Descripción |
+|---------|------------|
+| `npm run dev` | Inicia servidor de desarrollo Vite |
+| `npm run build` | Compila para producción |
+| `npm run deploy` | Despliega a GitHub Pages |
+| `npm run update-logo` | Actualiza el logo desde scripts |
+
+---
+
+## 🧪 Modo Demo
+
+Usa estas credenciales predefinidas para explorar la plataforma sin backend:
+
+| Rol | Email | Contraseña |
+|-----|-------|-----------|
+| **Candidato** | `candidato@astris.org` | `Demo2026` |
+| **Empresa** | `empresa@astris.org` | `Demo2026` |
+| **Mentor** | `mentor@astris.org` | `Demo2026` |
+| **Admin** | `johansttivelinaresb@gmail.com` | `Astris2026` |
+
+---
+
+## 📁 Estructura del Proyecto
 
 ```
-/src
-├── assets/          # Imágenes, fuentes, íconos y assets estáticos generales.
-├── components/      # Componentes UI reutilizables (divididos en common/, modals/ y ui/ para Shadcn).
-├── context/         # Contextos globales de React (Theme, Auth, etc.).
-├── hooks/           # Hooks personalizados (e.g. useAuth, useTheme).
-├── i18n/            # Internacionalización y contenido de la app.
-├── mock/            # Datos mockeados y de prueba (hasta la conexión total con el backend).
-├── pages/           # Vistas principales de la aplicación, separadas por rol (admin, candidate, company, mentor, public, shared).
-├── services/        # Lógica de negocio pura y conexión externa (Supabase, API).
-├── styles/          # Estilos globales (globals.css, tailwind.css, theme.css).
-├── types/           # Interfaces y tipos globales de TypeScript.
-├── App.tsx          # Componente raíz que maneja el layout global y las rutas a alto nivel.
-└── main.tsx         # Punto de entrada de la aplicación (React 18).
+src/
+├── App.tsx                # Componente raíz + enrutamiento
+├── main.tsx               # Entry point
+├── assets/                # Imágenes
+├── components/
+│   ├── common/            # Componentes compartidos
+│   ├── modals/            # Modales (login, registro, idioma)
+│   └── ui/                # Componentes UI (Radix wrappers)
+├── hooks/                 # Hooks personalizados
+├── i18n/                  # Traducciones y configuración i18n
+├── mock/                  # Datos de demostración
+├── pages/                 # Páginas por rol
+├── services/              # Servicios (Supabase)
+├── styles/                # CSS global
+└── types/                 # Tipos TypeScript
 ```
 
-### Tecnologías Clave
+---
 
-- **Vite + React 18**: Herramientas de empaquetado y librería de UI principal.
-- **TypeScript**: Tipado estático estricto.
-- **Tailwind CSS + Shadcn**: Sistema de diseño rápido y modular. Accesibilidad priorizada.
-- **Supabase**: Backend como servicio (BaaS) para autenticación y base de datos (lógica encapsulada en `src/services`).
+## 📖 Documentación
 
-## Configuración y Entorno de Desarrollo
+- [**ARQUITECTURA.md**](./ARCHITECTURE.md) — Decisiones técnicas y estructura del código
+- [**CONTRIBUTING.md**](./CONTRIBUTING.md) — Guía para contribuir al proyecto
 
-Para comenzar a desarrollar en local:
+---
 
-1. **Instalar dependencias**:
-   ```bash
-   npm install
-   ```
+## 🌐 Despliegue
 
-2. **Levantar el servidor de desarrollo**:
-   ```bash
-   npm run dev
-   ```
+El proyecto está configurado para desplegarse en GitHub Pages:
 
-3. **Construir para producción**:
-   ```bash
-   npm run build
-   ```
+```bash
+npm run build
+npm run deploy
+```
 
-## Normas de Desarrollo
+El sitio se publica en `https://astris.port0.org`.
 
-Todo agente o desarrollador que colabore en Astris debe leer y acatar estrictamente los documentos de gobierno del proyecto antes de modificar código:
+---
 
-1. **[CONTRIBUTING.md](./CONTRIBUTING.md)**: Guía detallada sobre la estructura de archivos, convenciones de nomenclatura (PascalCase para componentes, camelCase para hooks), prohibición estricta de archivos temporales/basura, política de imágenes optimizadas (< 200 KB) y requerimientos para commits.
-2. **[ARCHITECTURE.md](./ARCHITECTURE.md)**: Explicación de las decisiones de diseño clave, como el uso del ecosistema Vite + React, ruteo mediante estado (con Code Splitting obligatorio usando `React.lazy`), la centralización de traducciones (4 idiomas), y la filosofía de diseño ético del perfil de 4 ejes.
-3. **[.cursorrules](./.cursorrules)**: Reglas core automatizadas para agentes de Inteligencia Artificial que resumen las normativas de DRy, i18n y limpieza de código.
+## 🤝 Contribuir
 
-**Puntos Clave:**
-- **DRY (Don't Repeat Yourself)**: La lógica redundante debe ser extraída a custom hooks (`src/hooks/`) o utilidades compartidas.
-- **Limpieza Absoluta**: Nunca dejes código comentado sin justificación, archivos `.bak`, `.old`, o copias sin procesar de Figma.
-- **Validación Continua**: Es obligatorio ejecutar `npm run build` y asegurar la compilación completa antes de realizar cualquier commit en el repositorio.
+Revisa [CONTRIBUTING.md](./CONTRIBUTING.md) para conocer los estándares de código, flujo de trabajo y cómo añadir traducciones o nuevas páginas.
+
+---
+
+## 📄 Licencia
+
+ISC © 2025–2026 Astris

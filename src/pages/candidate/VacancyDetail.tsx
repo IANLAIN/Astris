@@ -27,9 +27,9 @@ export function VacancyDetail({ lang, vacancyId, onStart, onBack }: { lang: Lang
       
       if (vacancyId.startsWith("demo-vac-")) {
         const demoVacancies = [
-          { id: "demo-vac-1", title: "Desarrollador Web Frontend", company: "Tech Solutions", sector: "Tecnología", modality: t("auto.remoto._6"), type: t("auto.tiempo_completo._9"), match: 94, socialLevel: "Bajo", adjustments: ["Horarios flexibles", "Comunicación asíncrona"], desc: "Buscamos desarrollador React...", companyDesc: "Talento sin barreras" },
-          { id: "demo-vac-2", title: "Analista de Datos Junior", company: "Veritas Analytics", sector: "Análisis de Datos", modality: t("auto.h_brido._7"), type: t("auto.tiempo_completo._9"), match: 88, socialLevel: "Medio", adjustments: ["Entorno silencioso", "Luz tenue"], desc: "Análisis con Python y SQL...", companyDesc: "Innovación inclusiva" },
-          { id: "demo-vac-3", title: "Especialista QA", company: "QualityCorp", sector: "Tecnología", modality: t("auto.remoto._6"), type: "Medio tiempo", match: 75, socialLevel: "Bajo", adjustments: ["Trabajo por objetivos"], desc: "Pruebas de software...", companyDesc: "Calidad de software" }
+          { id: "demo-vac-1", title: "Desarrollador Web Frontend", company: "Tech Solutions", sector: "Tecnología", modality: t("modality.remote"), type: t("vacancy.full_time"), match: 94, socialLevel: "Bajo", adjustments: ["Horarios flexibles", "Comunicación asíncrona"], desc: "Buscamos desarrollador React...", companyDesc: "Talento sin barreras" },
+          { id: "demo-vac-2", title: "Analista de Datos Junior", company: "Veritas Analytics", sector: "Análisis de Datos", modality: t("modality.hybrid"), type: t("vacancy.full_time"), match: 88, socialLevel: "Medio", adjustments: ["Entorno silencioso", "Luz tenue"], desc: "Análisis con Python y SQL...", companyDesc: "Innovación inclusiva" },
+          { id: "demo-vac-3", title: "Especialista QA", company: "QualityCorp", sector: "Tecnología", modality: t("modality.remote"), type: "Medio tiempo", match: 75, socialLevel: "Bajo", adjustments: ["Trabajo por objetivos"], desc: "Pruebas de software...", companyDesc: "Calidad de software" }
         ];
         setV(demoVacancies.find((x) => x.id === vacancyId) as VacancyItem);
         return;
@@ -57,8 +57,8 @@ export function VacancyDetail({ lang, vacancyId, onStart, onBack }: { lang: Lang
           title: j.title,
           company: companyName,
           sector: "-",
-          modality: j.work_modality === "remote" ? (t("auto.remoto._6")) : j.work_modality === "hybrid" ? (t("auto.h_brido._7")) : (t("auto.presencial._8")),
-          type: j.contract_type ?? (t("auto.tiempo_completo._9")),
+          modality: j.work_modality === "remote" ? (t("modality.remote")) : j.work_modality === "hybrid" ? (t("modality.hybrid")) : (t("modality.in_person")),
+          type: j.contract_type ?? (t("vacancy.full_time")),
           match: currentMatch,
           socialLevel: "Bajo",
           adjustments: j.offered_accommodations ?? [],
@@ -74,7 +74,7 @@ export function VacancyDetail({ lang, vacancyId, onStart, onBack }: { lang: Lang
 
   const COMPAT = [{ label: "Modalidad de trabajo", match: true }, { label: "Comunicación asíncrona", match: true }, { label: "Instrucciones escritas", match: true }, { label: "Espacio individual silencioso", match: false }, { label: "Horario flexible", match: true }];
 
-  if (!v) return <div className="min-h-screen w-full overflow-x-hidden flex items-center justify-center text-muted-foreground">{t("auto.cargando___._10")}</div>;
+  if (!v) return <div className="min-h-screen w-full overflow-x-hidden flex items-center justify-center text-muted-foreground">{t("common.loading")}</div>;
 
   return (
     <div className="min-h-screen w-full overflow-x-hidden flex flex-col">
@@ -91,11 +91,11 @@ export function VacancyDetail({ lang, vacancyId, onStart, onBack }: { lang: Lang
       <div className="max-w-7xl mx-auto w-full px-4 lg:px-20 py-10 flex flex-col lg:flex-row gap-5 md:gap-10">
         <div className="flex-1">
           <div className="rounded-2xl border border-border p-4 md:p-8 mb-6" style={{ backgroundColor: "var(--card)" }}>
-            <h2 className="font-bold text-foreground mb-3">{t("auto.sobre_la_empres._11")}</h2>
+            <h2 className="font-bold text-foreground mb-3">{t("vacancy.about_company")}</h2>
             <p className="text-muted-foreground leading-relaxed">{v.companyDesc}</p>
           </div>
           <div className="rounded-2xl border border-border p-4 md:p-8 mb-6" style={{ backgroundColor: "var(--card)" }}>
-            <h2 className="font-bold text-foreground mb-3">{t("auto.el_cargo._12")}</h2>
+            <h2 className="font-bold text-foreground mb-3">{t("vacancy.the_role")}</h2>
             <p className="text-muted-foreground leading-relaxed">{v.desc}</p>
             <div className="flex gap-4 mt-4">
               <span className="flex items-center gap-1.5 text-sm text-muted-foreground"><Clock size={13} aria-hidden="true" />{v.type}</span>
@@ -118,7 +118,7 @@ export function VacancyDetail({ lang, vacancyId, onStart, onBack }: { lang: Lang
         </div>
         <div className="w-full md:w-72 shrink-0 flex flex-col gap-5">
           <div className="rounded-2xl border border-border p-6" style={{ backgroundColor: "var(--card)" }}>
-            <h3 className="font-bold text-foreground mb-4 text-sm">{t("auto.ajustes_ofrecid._13")}</h3>
+            <h3 className="font-bold text-foreground mb-4 text-sm">{t("vacancy.offered_adjustments")}</h3>
             <div className="flex flex-col gap-2">
               {v.adjustments.map((a) => (
                 <div key={a} className="flex items-center gap-2.5">

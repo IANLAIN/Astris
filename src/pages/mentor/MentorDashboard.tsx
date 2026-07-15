@@ -73,7 +73,7 @@ export function MentorDashboard({ lang }: { lang: Lang }) {
           </div>
           <div className="rounded-2xl border border-border p-6" style={{ backgroundColor: "var(--card)" }}>
             <div className="flex items-center gap-2 mb-4"><Activity size={15} aria-hidden="true" style={{ color: "var(--accent)" }} /><h3 className="font-bold text-foreground text-sm">{C(lang, "mentorImpact") as string}</h3></div>
-            {([[t("auto.entrevistas_aco._43"), "5"], [t("auto.onboardings_com._44"), "2"], [t("auto.ajustes_negocia._45"), "8"]] as const).map(([label, val]) => (
+            {([[t("mentor.accompanied_interviews"), "5"], [t("mentor.completed_onboardings"), "2"], [t("mentor.negotiated_adjustments"), "8"]] as const).map(([label, val]) => (
               <div key={label as string} className="flex items-center justify-between py-2 border-b border-border last:border-0">
                 <span className="text-sm text-foreground">{label as string}</span>
                 <span className="font-bold text-foreground" style={{ fontFamily: "DM Mono, monospace" }}>{val as string}</span>

@@ -1,59 +1,104 @@
-# Guía de Contribución para Astris
+# Guía de Contribución
 
-¡Gracias por tu interés en contribuir al proyecto Astris! Para mantener la calidad, legibilidad y el enfoque ético de nuestra plataforma, todos los desarrolladores (humanos y agentes de IA) deben seguir estrictamente estas directrices.
+## Stack Tecnológico
 
-## 1. Estructura de Directorios
+- **Frontend**: React 18 + TypeScript 6 + Vite 6
+- **Estilos**: Tailwind CSS v4 con `@tailwindcss/vite`
+- **UI Components**: Radix UI primitives + Lucide icons
+- **Enrutamiento**: React Router DOM v7, search params
+- **Estado**: Hooks locales (ningún store global)
+- **i18n**: i18next + react-i18next
+- **Backend**: Supabase (Auth + PostgreSQL)
+- **Gráficos**: Recharts
 
-El código fuente se encuentra en la carpeta `src/`. Mantenemos una arquitectura modular:
+## Estándares de Código
 
-- `assets/`: Imágenes y recursos estáticos. **Regla**: Las imágenes deben estar optimizadas (menos de 200 KB) y preferiblemente en formatos modernos (WebP, SVG o JPEG optimizado).
-- `components/`: Componentes reutilizables de React.
-  - `common/`: Componentes genéricos (botones, tarjetas, NavBar).
-  - `modals/`: Modales de la aplicación (Login, Register).
-  - `ui/`: Componentes primitivos base (generalmente basados en Radix UI).
-- `hooks/`: Custom hooks de React (`useAuth.ts`, `useTheme.ts`). Mantienen la lógica de estado separada de la vista.
-- `i18n/`: Configuración de internacionalización y traducciones. `content.ts` centraliza todos los textos en 4 idiomas.
-- `pages/`: Componentes de página, organizados por rol de usuario (`admin/`, `candidate/`, `company/`, `mentor/`, `public/`, `shared/`).
-- `services/`: Lógica de integración con APIs externas y base de datos (ej. `supabase.ts`).
-- `types/`: Definiciones de interfaces y tipos de TypeScript globales.
+### TypeScript
 
-## 2. Convenciones de Código
+- **Strict mode**: `strict: true` en tsconfig.json
+- **No `any`**: tipar explícitamente todas las funciones, props y estados
+- **Imports**: usar alias `@/` para `src/`
 
-- **Nomenclatura**:
-  - Archivos de componentes React: `PascalCase.tsx` (ej. `CandidateProfile.tsx`).
-  - Hooks y utilidades: `camelCase.ts` (ej. `useAuth.ts`, `supabase.ts`).
-- **Tipado Estricto (TypeScript)**: Evitar el uso de `any`. Definir interfaces claras en `src/types/` para modelos de datos y props.
-- **Importaciones**: Usar el alias `@/` configurado en Vite para referenciar la carpeta `src/`. Mantener los imports organizados: primero librerías externas, luego alias internos, finalmente imports relativos.
+### Estructura de Archivos
 
-## 3. Principio DRY (Don't Repeat Yourself)
+- **Un componente por archivo** (export named function)
+- **Páginas** en `src/pages/{role}/{PageName}.tsx`
+- **Componentes compartidos** en `src/components/common/`
+- **Hooks** en `src/hooks/`
+- **Servicios** en `src/services/`
+- **Traducciones** en `src/i18n/{lang}.json`
 
-- Cualquier lógica que se repita en más de dos componentes debe ser extraída a un **custom hook** (en `src/hooks/`) o a un **servicio/utilidad** (en `src/services/` o `src/utils/`).
-- Los componentes visuales repetitivos deben centralizarse en `src/components/common/`.
+### Nombres
 
-## 4. Code Splitting Obligatorio
+| Elemento | Convención | Ejemplo |
+|----------|-----------|---------|
+| Componentes | PascalCase | `CandidateVacancies` |
+| Hooks | camelCase, prefijo `use` | `useAuth`, `useTheme` |
+| Funciones | camelCase, verbo | `getCurrentUser`, `handleLogin` |
+| Tipos | PascalCase | `Lang`, `Role`, `VacancyItem` |
+| Props | PascalCase con sufijo `Props` | `AboutPageProps` |
+| Claves i18n | namespace + dot notation | `modality.remote`, `common.loading` |
 
-- **Todas las rutas y pantallas principales** (`pages/`) deben cargarse de manera diferida utilizando `React.lazy()` y ser envueltas en un bloque `<Suspense>` genérico (gestionado en `App.tsx`).
-- No importar de forma síncrona componentes de página pesados, para mantener el bundle inicial (chunk size) lo más pequeño posible.
+### Traducciones
 
-## 5. Política de Archivos (Limpieza)
+Toda cadena visible al usuario DEBE:
 
-- **Prohibido el código basura**: No se permite subir al repositorio archivos temporales, backups o exportaciones sin procesar.
-- **Archivos bloqueados**: `.bak`, `.old`, carpetas `temp/`, `backup/`, `figma-exports/`.
-- Eliminar cualquier archivo que no esté siendo importado por el proyecto ("archivos huérfanos").
+1. Definirse en `src/i18n/es.json` (español como lengua base)
+2. Traducirse a los otros 3 idiomas: `en.json`, `pt.json`, `fr.json`
+3. Usar claves semánticas con naming namespace: `<ámbito>.<nombre>`
 
-## 6. Internacionalización (i18n)
+```tsx
+// ✅ Correcto
+<button>{t("vacancies.filters")}</button>
 
-- **4 Idiomas Obligatorios**: Español (`es`), Inglés (`en`), Portugués (`pt`), Francés (`fr`).
-- **Centralización**: Todo texto visible para el usuario debe extraerse y configurarse en el objeto `T` dentro de `src/i18n/content.ts`.
-- **Uso**: Utilizar el hook `useT(lang)` en los componentes para acceder a las traducciones. No hardcodear strings en los componentes visuales.
+// ❌ Incorrecto (clave no semántica)
+<button>{t("auto.filtros._32")}</button>
+```
 
-## 7. Estilo y Herramientas
+### Code Splitting
 
-- El proyecto utiliza **Tailwind CSS v4** para los estilos. Mantener el uso de clases utilitarias estandarizadas.
-- Los iconos deben provenir de `lucide-react`.
-- La paleta de colores corporativos se gestiona mediante variables CSS (`var(--primary)`, `var(--card)`) inyectadas por el hook de tema (`useTheme`). Soporta modos claro y oscuro de manera nativa.
+Todas las páginas deben cargarse con `React.lazy()` en `App.tsx`:
 
-## 8. Flujo de Trabajo y Commits
+```tsx
+const MyPage = lazy(() => import("@/pages/role/MyPage").then(m => ({ default: m.MyPage })));
+```
 
-- **Verificación local**: Es **obligatorio** ejecutar `npm run build` y asegurar que la compilación (TypeScript + Vite) finaliza sin errores antes de realizar un commit.
-- **Mensajes de Commit**: Utilizar Conventional Commits (ej. `feat: add candidate dashboard`, `fix: translation issue in navbar`, `refactor: extract logic to useAuth`).
+### Principios DRY
+
+- Lógica repetitiva → extraer a hook o utilidad
+- JSX repetido → extraer a componente
+- Misma API call → centralizar en servicio
+
+## Flujo de Trabajo con Git
+
+1. Crear rama desde `main`: `git checkout -b feature/mi-cambio`
+2. Hacer cambios incrementales con commits descriptivos
+3. Ejecutar `npm run build` antes de abrir PR (debe pasar sin errores)
+4. Hacer PR a `main` con descripción del cambio
+
+## Testing
+
+- No hay suite de tests formal (pendiente para futura iteración)
+- Verificar manualmente con `npm run dev` y `npm run build`
+
+## Añadir Nuevas Traducciones
+
+1. Agregar clave:valor en `src/i18n/es.json`
+2. Traducir en `en.json`, `pt.json`, `fr.json`
+3. Usar `t("clave")` en el componente
+4. Para arrays/objetos anidados, usar `C(lang, "clave")`
+
+## Añadir Nueva Página
+
+1. Crear archivo `src/pages/{role}/{PageName}.tsx`
+2. Exportar función con nombre
+3. En `App.tsx`: importar con `React.lazy()`
+4. Añadir condición de renderizado según `screen` y `role`
+5. Si es navegable desde navbar, añadir al array de navegación en `NavBar.tsx`
+
+## Estilos
+
+- Usar **Tailwind CSS** con clases utilitarias
+- Variables CSS para tema: `var(--primary)`, `var(--card)`, etc.
+- Radix UI para componentes interactivos avanzados
+- No crear nuevos archivos CSS a menos que sea estrictamente necesario

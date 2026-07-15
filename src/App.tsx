@@ -1,12 +1,10 @@
-import { useState, lazy, Suspense } from "react";
+import { useState, useEffect, useCallback, lazy, Suspense } from "react";
 import { Lang, ModalStep, QuizAnswers, PublicView } from "@/types";
 import { getInitialLang, getInitialModalStep } from "@/i18n/useT";
 import { QUIZ_AXES } from "@/i18n/content";
 import { saveCandidateProfile, getCurrentUser } from "@/services/supabase";
 import { useTranslation } from "react-i18next";
-import { useSearchParams, useNavigate } from "react-router-dom";
-import { useCanGoBack } from "@/hooks/useCanGoBack";
-
+import { useNavigate, useLocation } from "react-router-dom";
 
 import { useTheme } from "@/hooks/useTheme";
 import { useAuth } from "@/hooks/useAuth";
@@ -43,6 +41,13 @@ const MentorCheckins = lazy(() => import("@/pages/mentor/MentorCheckins").then(m
 const MentorCompanies = lazy(() => import("@/pages/mentor/MentorCompanies").then(m => ({ default: m.MentorCompanies })));
 const AdminDashboard = lazy(() => import("@/pages/admin/AdminDashboard"));
 
+function parseParams(): { screen: string; publicView: PublicView } {
+  const params = new URLSearchParams(window.location.search);
+  const screen = params.get("screen") || "home";
+  const pv = (params.get("view") || "landing") as PublicView;
+  return { screen, publicView: pv };
+}
+
 export default function App() {
   const { i18n } = useTranslation();
   const [modalStep, setModalStep] = useState<ModalStep>(() => getInitialModalStep());
@@ -52,25 +57,30 @@ export default function App() {
     return init;
   });
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
   const navigate = useNavigate();
-  const canGoBack = useCanGoBack();
 
-  const screen = searchParams.get("screen") || "home";
-  const publicView = (searchParams.get("view") || "landing") as PublicView;
-
-  const setScreen = (s: string) => {
-    setSearchParams(prev => { prev.set("screen", s); return prev; });
-  };
-  const setPublicView = (v: PublicView) => {
-    setSearchParams(prev => { prev.set("view", v); return prev; });
-  };
-
+  // Derive screen & publicView from current URL on each render
+  const { screen, publicView } = parseParams();
 
   const [quizAnswers, setQuizAnswers] = useState<QuizAnswers>({});
   const [quizAxis, setQuizAxis] = useState(0);
   const [selectedVacancy, setSelectedVacancy] = useState("V-1042");
   const [selectedCandidate, setSelectedCandidate] = useState("CAND-A7X2");
+
+  // ── Navigation helpers (create REAL browser history entries) ──
+  // useCallback for stable references — avoid infinite loops in useAuth's effect
+  const setScreen = useCallback((s: string) => {
+    const params = new URLSearchParams(window.location.search);
+    params.set("screen", s);
+    navigate(`?${params.toString()}`, { replace: false });
+  }, [navigate]);
+
+  const setPublicView = useCallback((v: PublicView) => {
+    const params = new URLSearchParams(window.location.search);
+    params.set("view", v);
+    navigate(`?${params.toString()}`, { replace: false });
+  }, [navigate]);
 
   const {
     palette, darkMode, font, fontFamily, darkRootStyle, palStyle,
@@ -110,13 +120,12 @@ export default function App() {
   };
 
   const handleBackTo = (fallbackScreen: string) => {
-    if (canGoBack) {
+    if (window.history.state?.idx > 0) {
       navigate(-1);
     } else {
       setScreen(fallbackScreen);
     }
   };
-
 
   const reopenLang = () => setModalStep("language");
   const showModal = modalStep !== "none";
@@ -140,6 +149,7 @@ export default function App() {
     );
   }
 
+  // popstate is handled automatically by React Router via useLocation()
   return (
     <div className="min-h-screen w-full overflow-x-hidden bg-background text-foreground" style={{ fontFamily, ...(darkRootStyle as React.CSSProperties) }}>
       {showModal && modalStep === "language" && <LanguageModal onSelect={handleLangSelect} />}
