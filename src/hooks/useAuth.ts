@@ -15,6 +15,15 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
   const [userName, setUserName] = useState<string>("");
   const [userAvatar, setUserAvatar] = useState<string>("");
   const [userVocation, setUserVocation] = useState<string>("");
+  const [quizCompleted, setQuizCompleted] = useState<boolean>(false);
+
+  // Load quiz completion status from localStorage
+  useEffect(() => {
+    const stored = window.localStorage.getItem("astris_quiz_completed");
+    if (stored === "true") {
+      setQuizCompleted(true);
+    }
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -38,13 +47,25 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
           setUserVocation((user as any).vocation || "");
           setLoggedIn(true);
           setModalStep("none");
-          // Demo users: route to their primary dashboard screens
+          
+          // If candidate hasn't completed quiz, force onboarding/quiz
           const isDemoUser = user.id === "demo-cand" || user.id === "demo-comp" || user.id === "demo-ment";
-          const first =
-            user.role === "candidate"
-              ? isDemoUser ? "profile" : (user.completedOnboarding ? "vacancies" : "onboarding")
-              : user.role === "company" ? (isDemoUser ? "candidates" : "org-profile") : "dashboard";
-          setScreen(first);
+          if (user.role === "candidate") {
+            if (isDemoUser) {
+              // Demo candidate skips quiz — mark as completed
+              setQuizCompleted(true);
+              window.localStorage.setItem("astris_quiz_completed", "true");
+              setScreen("profile");
+            } else if (!user.completedOnboarding || !quizCompleted) {
+              setScreen("onboarding");
+            } else {
+              setScreen("vacancies");
+            }
+          } else if (user.role === "company") {
+            setScreen(isDemoUser ? "candidates" : "org-profile");
+          } else {
+            setScreen("dashboard");
+          }
         }
       } catch {
         // No active session
@@ -52,16 +73,7 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
         setAppReady(true);
       }
     })();
-
-    const { data: authListener } = supabase.auth.onAuthStateChange((event) => {
-      if (event === "PASSWORD_RECOVERY") {
-        setRequirePasswordUpdate(true);
-      }
-    });
-
-    return () => {
-      authListener.subscription.unsubscribe();
-    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setScreen, setModalStep]);
 
   const handleCompleteGoogleRegistration = () => {
@@ -72,10 +84,14 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
       setUserVocation(googleAuthUser.vocation || "");
       setLoggedIn(true);
       setModalStep("none");
-      const first = googleAuthUser.role === "candidate" 
-        ? (googleAuthUser.completedOnboarding ? "vacancies" : "onboarding") 
-        : googleAuthUser.role === "company" ? "org-profile" : "dashboard";
-      setScreen(first);
+      if (googleAuthUser.role === "candidate" && !quizCompleted) {
+        setScreen("onboarding");
+      } else {
+        const first = googleAuthUser.role === "candidate" 
+          ? "vacancies"
+          : googleAuthUser.role === "company" ? "org-profile" : "dashboard";
+        setScreen(first);
+      }
       setGoogleAuthUser(null);
     }
   };
@@ -99,7 +115,11 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
       setUserVocation(vocation);
       setLoggedIn(true);
       setModalStep("none");
-      setScreen(selectedRole === "candidate" ? "onboarding" : selectedRole === "company" ? "org-profile" : "dashboard");
+      if (selectedRole === "candidate" && !quizCompleted) {
+        setScreen("onboarding");
+      } else {
+        setScreen(selectedRole === "candidate" ? "vacancies" : selectedRole === "company" ? "org-profile" : "dashboard");
+      }
     } catch (err: any) {
       setAuthError(err.message ?? "Registration failed. Please try again.");
     } finally {
@@ -123,6 +143,8 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
         setRole("candidate");
         setUserName("Alex (Demo)");
         setUserVocation("Analista de Datos");
+        setQuizCompleted(true);
+        window.localStorage.setItem("astris_quiz_completed", "true");
         setLoggedIn(true);
         setModalStep("none");
         setScreen("profile");
@@ -166,7 +188,11 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
       setUserVocation((user as any)?.vocation ?? "");
       setLoggedIn(true);
       setModalStep("none");
-      setScreen(resolvedRole === "candidate" ? "vacancies" : resolvedRole === "company" ? "candidates" : "dashboard");
+      if (resolvedRole === "candidate" && !quizCompleted) {
+        setScreen("onboarding");
+      } else {
+        setScreen(resolvedRole === "candidate" ? "vacancies" : resolvedRole === "company" ? "candidates" : "dashboard");
+      }
     } catch (err: any) {
       setAuthError(err.message ?? "Login failed. Please check your credentials.");
     } finally {
@@ -196,6 +222,8 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
     userName,
     userAvatar,
     userVocation,
+    quizCompleted,
+    setQuizCompleted,
     setPendingRole,
     setRequirePasswordUpdate,
     handleCompleteGoogleRegistration,

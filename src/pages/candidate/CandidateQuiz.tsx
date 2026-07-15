@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Check } from "lucide-react";
 import { Lang, QuizAnswers } from "@/types";
 import { useT, computeRadar } from "@/i18n/useT";
@@ -17,60 +17,79 @@ export function CandidateQuiz({ lang, axisIndex, answers, onAnswer, onPrev, onNe
   const radarData = computeRadar(answers);
   const AXIS_KEYS = ["quiz.axis1", "quiz.axis2", "quiz.axis3", "quiz.axis4"];
 
+  // Check if all axes have at least one answer
+  const allAxesStarted = QUIZ_AXES.every((_, ai) => {
+    const a = answers[ai];
+    return a && Object.keys(a).length > 0;
+  });
+
+  // On mobile: hide the radar panel behind a toggle
+  const [showRadar, setShowRadar] = useState(false);
+  useEffect(() => {
+    setShowRadar(false); // hide radar when axis changes
+  }, [axisIndex]);
+
   return (
     <div className="min-h-screen w-full overflow-x-hidden flex flex-col">
-      {/* Progress */}
-      <div className="px-4 lg:px-20 py-4 md:py-8 border-b border-border">
-        <div className="flex items-center gap-4 mb-3">
-          <span className="text-sm font-semibold text-muted-foreground" style={{ fontFamily: "DM Mono, monospace" }}>{t("quiz.step")} {axisIndex + 1} {t("quiz.of")} {QUIZ_AXES.length}</span>
-          <div className="flex gap-2" role="progressbar" aria-valuenow={axisIndex + 1} aria-valuemax={QUIZ_AXES.length}>
+      {/* Progress header */}
+      <div className="px-4 md:px-6 lg:px-20 py-4 md:py-6 border-b border-border">
+        <div className="flex items-center gap-3 mb-3">
+          <span className="text-xs md:text-sm font-semibold text-muted-foreground" style={{ fontFamily: "DM Mono, monospace" }}>{t("quiz.step")} {axisIndex + 1} {t("quiz.of")} {QUIZ_AXES.length}</span>
+          <div className="flex gap-1.5 md:gap-2 flex-1 max-w-xs" role="progressbar" aria-valuenow={axisIndex + 1} aria-valuemax={QUIZ_AXES.length}>
             {QUIZ_AXES.map((_, i) => (
               <div
                 key={i}
-                className="h-2 rounded-full"
+                className="h-2 rounded-full transition-all duration-300"
                 style={{
-                  width: i === axisIndex ? 44 : i < axisIndex ? 36 : 22,
+                  width: i === axisIndex ? "44px" : "22px",
                   backgroundColor: i <= axisIndex ? "var(--primary)" : "var(--muted)",
-                  transition: "width 250ms ease, background-color 250ms ease",
                 }}
               />
             ))}
           </div>
+          {/* Mobile radar toggle */}
+          <button
+            onClick={() => setShowRadar(v => !v)}
+            className="lg:hidden ml-auto text-xs font-bold px-3 py-1.5 rounded-lg border border-border"
+            style={{ backgroundColor: showRadar ? "var(--secondary)" : "var(--background)", color: "var(--foreground)" }}
+          >
+            {showRadar ? "Ocultar radar" : "Ver radar"}
+          </button>
         </div>
-        <h1 className="text-2xl font-bold text-foreground">{t(AXIS_KEYS[axisIndex])}</h1>
+        <h1 className="text-xl md:text-2xl font-bold text-foreground">{t(AXIS_KEYS[axisIndex])}</h1>
       </div>
 
-      <div className="flex flex-1">
-        {/* Questions — key forces remount + fade on every axis change */}
-        <div key={axisIndex} className="flex-1 px-4 lg:px-20 py-10 overflow-y-auto anim-slide-up">
-          <div className="max-w-xl">
+      <div className="flex flex-1 flex-col lg:flex-row">
+        {/* Questions */}
+        <div key={axisIndex} className="flex-1 px-4 md:px-6 lg:px-20 py-6 md:py-10 overflow-y-auto">
+          <div className="max-w-xl mx-auto lg:mx-0">
             {(() => {
               const q = axis.questions[questionIndex];
               const qi = questionIndex;
               const ans = axisAnswers[qi];
               const opts = q.opts[lang] ?? q.opts.es;
               return (
-                <div key={qi} className="mb-8 anim-slide-up">
-                  <div className="flex items-center gap-3 mb-6">
+                <div key={qi} className="mb-6">
+                  <div className="flex items-center gap-3 mb-5">
                      <span className="text-xs font-bold px-3 py-1 rounded-full bg-primary/10 text-primary">Pregunta {questionIndex + 1} de {axis.questions.length}</span>
                   </div>
-                  <p className="text-xl md:text-2xl font-semibold text-foreground mb-8 leading-relaxed">{q.stems[lang] ?? q.stems.es}</p>
+                  <p className="text-lg md:text-xl lg:text-2xl font-semibold text-foreground mb-6 md:mb-8 leading-relaxed">{q.stems[lang] ?? q.stems.es}</p>
                   {q.type === "single" ? (
-                    <div className="flex flex-col gap-3" role="radiogroup">
+                    <div className="flex flex-col gap-2 md:gap-3" role="radiogroup">
                       {opts.map((opt, oi) => {
                         const sel = ans === oi;
                         return (
-                          <button key={oi} onClick={() => onAnswer(axisIndex, qi, oi)} className="flex items-center gap-4 p-5 rounded-2xl border-2 text-left cursor-pointer transition-all hover:scale-[1.01]" style={{ borderColor: sel ? "var(--primary)" : "var(--border)", backgroundColor: sel ? "var(--card)" : "var(--background)", boxShadow: sel ? "0 4px 14px rgba(0,0,0,0.05)" : "none" }} role="radio" aria-checked={sel}>
-                            <div className="w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0" style={{ borderColor: sel ? "var(--primary)" : "var(--muted-foreground)", backgroundColor: sel ? "var(--primary)" : "transparent" }} aria-hidden="true">
-                              {sel && <div className="w-2.5 h-2.5 rounded-full bg-white" />}
+                          <button key={oi} onClick={() => onAnswer(axisIndex, qi, oi)} className="flex items-center gap-3 md:gap-4 p-4 md:p-5 rounded-2xl border-2 text-left cursor-pointer transition-all hover:scale-[1.01] active:scale-[0.99]" style={{ borderColor: sel ? "var(--primary)" : "var(--border)", backgroundColor: sel ? "var(--card)" : "var(--background)" }} role="radio" aria-checked={sel}>
+                            <div className="w-5 h-5 md:w-6 md:h-6 rounded-full border-2 flex items-center justify-center shrink-0" style={{ borderColor: sel ? "var(--primary)" : "var(--muted-foreground)", backgroundColor: sel ? "var(--primary)" : "transparent" }} aria-hidden="true">
+                              {sel && <div className="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-white" />}
                             </div>
-                            <span className="text-foreground text-base md:text-lg leading-snug font-medium">{opt}</span>
+                            <span className="text-foreground text-sm md:text-base lg:text-lg leading-snug font-medium">{opt}</span>
                           </button>
                         );
                       })}
                     </div>
                   ) : (
-                    <div className="flex flex-col gap-3">
+                    <div className="flex flex-col gap-2 md:gap-3">
                       {opts.map((opt, oi) => {
                         const selected = Array.isArray(ans) ? (ans as number[]).includes(oi) : false;
                         const isNone = oi === opts.length - 1;
@@ -85,11 +104,11 @@ export function CandidateQuiz({ lang, axisIndex, answers, onAnswer, onPrev, onNe
                           onAnswer(axisIndex, qi, next);
                         };
                         return (
-                          <button key={oi} onClick={toggleMulti} className="flex items-center gap-4 p-5 rounded-2xl border-2 text-left cursor-pointer transition-all hover:scale-[1.01]" style={{ borderColor: selected ? "var(--primary)" : "var(--border)", backgroundColor: selected ? "var(--card)" : "var(--background)", boxShadow: selected ? "0 4px 14px rgba(0,0,0,0.05)" : "none" }}>
-                            <div className="w-6 h-6 rounded flex items-center justify-center shrink-0 border-2" style={{ borderColor: selected ? "var(--primary)" : "var(--muted-foreground)", backgroundColor: selected ? "var(--primary)" : "transparent" }} aria-hidden="true">
-                              {selected && <Check size={14} style={{ color: "var(--primary-foreground)" }} />}
+                          <button key={oi} onClick={toggleMulti} className="flex items-center gap-3 md:gap-4 p-4 md:p-5 rounded-2xl border-2 text-left cursor-pointer transition-all hover:scale-[1.01]" style={{ borderColor: selected ? "var(--primary)" : "var(--border)", backgroundColor: selected ? "var(--card)" : "var(--background)" }}>
+                            <div className="w-5 h-5 md:w-6 md:h-6 rounded flex items-center justify-center shrink-0 border-2" style={{ borderColor: selected ? "var(--primary)" : "var(--muted-foreground)", backgroundColor: selected ? "var(--primary)" : "transparent" }} aria-hidden="true">
+                              {selected && <Check size={12} style={{ color: "var(--primary-foreground)" }} />}
                             </div>
-                            <span className="text-foreground text-base md:text-lg leading-snug font-medium">{opt}</span>
+                            <span className="text-foreground text-sm md:text-base lg:text-lg leading-snug font-medium">{opt}</span>
                           </button>
                         );
                       })}
@@ -100,7 +119,7 @@ export function CandidateQuiz({ lang, axisIndex, answers, onAnswer, onPrev, onNe
             })()}
 
             {/* Nav buttons */}
-            <div className="flex gap-4 mt-8 pt-6 border-t border-border">
+            <div className="flex gap-3 md:gap-4 mt-6 md:mt-8 pt-5 md:pt-6 border-t border-border">
               <button 
                 onClick={() => {
                   if (questionIndex > 0) {
@@ -111,10 +130,10 @@ export function CandidateQuiz({ lang, axisIndex, answers, onAnswer, onPrev, onNe
                   }
                 }} 
                 disabled={axisIndex === 0 && questionIndex === 0}
-                className="flex items-center gap-2 px-6 py-4 rounded-xl border-2 font-bold cursor-pointer transition-all" 
+                className="flex items-center gap-2 px-4 md:px-6 py-3 md:py-4 rounded-xl border-2 font-bold cursor-pointer transition-all text-sm md:text-base" 
                 style={{ borderColor: "var(--border)", backgroundColor: "var(--card)", color: "var(--foreground)", opacity: (axisIndex === 0 && questionIndex === 0) ? 0.4 : 1 }}
               >
-                <ChevronLeft size={20} aria-hidden="true" />{t("back")}
+                <ChevronLeft size={18} aria-hidden="true" />{t("back")}
               </button>
               
               <button 
@@ -127,39 +146,50 @@ export function CandidateQuiz({ lang, axisIndex, answers, onAnswer, onPrev, onNe
                   }
                 }} 
                 disabled={axisAnswers[questionIndex] === undefined || (Array.isArray(axisAnswers[questionIndex]) && (axisAnswers[questionIndex] as number[]).length === 0)} 
-                className="flex-1 flex items-center justify-center gap-2 px-7 py-4 rounded-xl border-2 font-bold transition-all hover:opacity-90" 
+                className="flex-1 flex items-center justify-center gap-2 px-4 md:px-7 py-3 md:py-4 rounded-xl border-2 font-bold transition-all hover:opacity-90 text-sm md:text-base" 
                 style={{ borderColor: "var(--primary)", backgroundColor: "var(--primary)", color: "var(--primary-foreground)", cursor: (axisAnswers[questionIndex] === undefined || (Array.isArray(axisAnswers[questionIndex]) && (axisAnswers[questionIndex] as number[]).length === 0)) ? "not-allowed" : "pointer", opacity: (axisAnswers[questionIndex] === undefined || (Array.isArray(axisAnswers[questionIndex]) && (axisAnswers[questionIndex] as number[]).length === 0)) ? 0.5 : 1 }}
               >
                 {questionIndex === axis.questions.length - 1 && axisIndex === 3 ? (t("quiz.complete_profile")) : t("next")}
-                <ChevronRight size={20} aria-hidden="true" />
+                <ChevronRight size={18} aria-hidden="true" />
               </button>
             </div>
           </div>
         </div>
 
-        {/* Radar */}
-        <div className="w-full lg:w-[360px] shrink-0 lg:border-l border-t lg:border-t-0 border-border px-5 md:px-10 py-10" style={{ backgroundColor: "var(--card)" }}>
-          <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1">{t("quiz.radar.title")}</div>
-          <p className="text-xs text-muted-foreground mb-4">{t("quiz.radar.sub")}</p>
-          <RadarViz data={radarData} height={260} outerRadius={85} fontSize={10} />
-          <div className="mt-4 flex flex-col gap-3">
-            {radarData.map((d, i) => (
-              <div key={d.axis} className="flex items-center gap-3">
-                <span className="text-xs text-foreground w-28 shrink-0">{d.axis}</span>
-                <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ backgroundColor: "var(--muted)" }}>
-                  <div
-                    className="h-full rounded-full"
-                    style={{
-                      width: `${d.value}%`,
-                      backgroundColor: answers[i] && Object.keys(answers[i]).length > 0 ? "var(--primary)" : "var(--muted-foreground)",
-                      opacity: answers[i] && Object.keys(answers[i]).length > 0 ? 1 : 0.3,
-                      transition: "width 450ms ease, background-color 300ms ease, opacity 300ms ease",
-                    }}
-                  />
-                </div>
-                <span className="text-xs text-muted-foreground w-6 text-right" style={{ fontFamily: "DM Mono, monospace" }}>{answers[i] && Object.keys(answers[i]).length > 0 ? d.value : "—"}</span>
+        {/* Radar: desktop sidebar — mobile toggled panel */}
+        <div className={`${showRadar ? "block" : "hidden"} lg:block w-full lg:w-[360px] shrink-0 lg:border-l border-t lg:border-t-0 border-border px-4 md:px-6 lg:px-8 py-6 lg:py-10`} style={{ backgroundColor: "var(--card)" }}>
+          {/* Rounded rectangle card for the radar info */}
+          <div className="rounded-2xl border border-border p-4 md:p-6" style={{ backgroundColor: "var(--background)" }}>
+            <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1">{t("quiz.radar.title")}</div>
+            <p className="text-xs text-muted-foreground mb-4">{t("quiz.radar.sub")}</p>
+            
+            <div className="w-full flex justify-center mb-4">
+              <div className="w-full max-w-[260px]">
+                <RadarViz data={radarData} height={220} outerRadius={70} fontSize={9} />
               </div>
-            ))}
+            </div>
+            
+            <div className="flex flex-col gap-2.5">
+              {radarData.map((d, i) => {
+                const answered = answers[i] && Object.keys(answers[i]).length > 0;
+                return (
+                  <div key={d.axis} className="flex items-center gap-2">
+                    <span className="text-xs text-foreground w-24 md:w-28 shrink-0 font-medium">{d.axis}</span>
+                    <div className="flex-1 h-2.5 rounded-full overflow-hidden" style={{ backgroundColor: "var(--muted)" }}>
+                      <div
+                        className="h-full rounded-full transition-all duration-500"
+                        style={{
+                          width: answered ? `${d.value}%` : "0%",
+                          backgroundColor: answered ? "var(--primary)" : "var(--muted-foreground)",
+                          opacity: answered ? 1 : 0.3,
+                        }}
+                      />
+                    </div>
+                    <span className="text-xs text-muted-foreground w-6 text-right font-mono">{answered ? d.value : "—"}</span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>

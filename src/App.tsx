@@ -5,18 +5,17 @@ import { QUIZ_AXES } from "@/i18n/content";
 import { saveCandidateProfile, getCurrentUser } from "@/services/supabase";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useLocation } from "react-router-dom";
+import { AlertTriangle } from "lucide-react";
 
 import { useTheme } from "@/hooks/useTheme";
 import { useAuth } from "@/hooks/useAuth";
 
-// Components
 import { NavBar } from "@/components/common/NavBar";
 import { LanguageModal } from "@/components/modals/LanguageModal";
 import { LoginModal } from "@/components/modals/LoginModal";
 import { RegisterModal } from "@/components/modals/RegisterModal";
 import { UpdatePasswordModal } from "@/components/modals/UpdatePasswordModal";
 
-// Lazy Loaded Pages
 const LandingPage = lazy(() => import("@/pages/public/LandingPage").then(m => ({ default: m.LandingPage })));
 const AboutPage = lazy(() => import("@/pages/public/AboutPage").then(m => ({ default: m.AboutPage })));
 const SupportPage = lazy(() => import("@/pages/public/SupportPage").then(m => ({ default: m.SupportPage })));
@@ -48,6 +47,8 @@ function parseParams(): { screen: string; publicView: PublicView } {
   return { screen, publicView: pv };
 }
 
+const CANDIDATE_SCREENS = ["onboarding", "quiz", "profile", "vacancies", "vacancy-detail", "mentor-select", "accompaniment", "post-hire", "tracking"];
+
 export default function App() {
   const { i18n } = useTranslation();
   const [modalStep, setModalStep] = useState<ModalStep>(() => getInitialModalStep());
@@ -60,7 +61,6 @@ export default function App() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Derive screen & publicView from current URL on each render
   const { screen, publicView } = parseParams();
 
   const [quizAnswers, setQuizAnswers] = useState<QuizAnswers>({});
@@ -68,8 +68,6 @@ export default function App() {
   const [selectedVacancy, setSelectedVacancy] = useState("V-1042");
   const [selectedCandidate, setSelectedCandidate] = useState("CAND-A7X2");
 
-  // ── Navigation helpers (create REAL browser history entries) ──
-  // useCallback for stable references — avoid infinite loops in useAuth's effect
   const setScreen = useCallback((s: string) => {
     const params = new URLSearchParams(window.location.search);
     params.set("screen", s);
@@ -90,8 +88,8 @@ export default function App() {
   const {
     role, pendingRole, loggedIn, authLoading, authError, appReady, authMessage,
     googleAuthUser, requirePasswordUpdate, userName, userAvatar, userVocation,
-    setPendingRole, setRequirePasswordUpdate, handleCompleteGoogleRegistration,
-    handleRegister, handleLogin, handleLogout
+    quizCompleted, setQuizCompleted, setPendingRole, setRequirePasswordUpdate,
+    handleCompleteGoogleRegistration, handleRegister, handleLogin, handleLogout
   } = useAuth(setScreen, setModalStep);
 
   const handleAnswer = (ai: number, qi: number, val: number | number[]) => {
@@ -149,7 +147,6 @@ export default function App() {
     );
   }
 
-  // popstate is handled automatically by React Router via useLocation()
   return (
     <div className="min-h-screen w-full overflow-x-hidden bg-background text-foreground" style={{ fontFamily, ...(darkRootStyle as React.CSSProperties) }}>
       {showModal && modalStep === "language" && <LanguageModal onSelect={handleLangSelect} />}
@@ -202,10 +199,36 @@ export default function App() {
                         if (user?.id) {
                           await saveCandidateProfile(user.id, quizAnswers, palette, font);
                         }
+                        window.localStorage.setItem("astris_quiz_completed", "true");
+                        setQuizCompleted(true);
                         setScreen("profile");
                       }
                     }} />
                 )}
+
+                {/* If quiz not completed and NOT on onboarding/quiz → show blocker */}
+                {role === "candidate" && !quizCompleted && !["onboarding", "quiz"].includes(screen) && (
+                  <div className="flex flex-col items-center justify-center min-h-[70vh] px-4 text-center gap-4">
+                    <div className="w-16 h-16 rounded-2xl flex items-center justify-center" style={{ backgroundColor: "rgba(245,158,11,0.15)" }}>
+                      <AlertTriangle size={32} className="text-amber-500" />
+                    </div>
+                    <h2 className="text-2xl font-bold text-foreground">Perfil incompleto</h2>
+                    <p className="text-muted-foreground max-w-md">
+                      Para acceder al dashboard completa primero tu perfil de compatibilidad.
+                    </p>
+                    <button
+                      onClick={() => setScreen("onboarding")}
+                      className="px-8 py-3 rounded-xl font-bold cursor-pointer transition-transform hover:scale-105"
+                      style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}
+                    >
+                      Ir a caracterización
+                    </button>
+                  </div>
+                )}
+
+                {/* Render normal screens only if quiz is completed (or not candidate) */}
+                {(!quizCompleted && role === "candidate") ? null : (
+                  <>
                 {role === "candidate" && screen === "profile" && <CandidateProfile lang={lang} answers={quizAnswers} vocation={userVocation} userName={userName} userAvatar={userAvatar} />}
                 {role === "candidate" && screen === "vacancies" && <CandidateVacancies lang={lang} onSelect={(id) => { setSelectedVacancy(id); setScreen("vacancy-detail"); }} />}
                 {role === "candidate" && screen === "vacancy-detail" && <VacancyDetail lang={lang} vacancyId={selectedVacancy} onBack={() => handleBackTo("vacancies")} onStart={() => setScreen("mentor-select")} />}
@@ -229,11 +252,13 @@ export default function App() {
                 {screen === "settings" && <SettingsPage lang={lang} palette={palette} darkMode={darkMode} font={font} onPalette={setPalette} onDark={setDarkMode} onFont={setFont} onLogout={() => handleLogout(setPublicView)} />}
                 
                 {screen !== "settings" && 
-                 !(role === "candidate" && ["onboarding", "quiz", "profile", "vacancies", "vacancy-detail", "mentor-select", "accompaniment", "post-hire", "tracking"].includes(screen)) &&
+                 !(role === "candidate" && CANDIDATE_SCREENS.includes(screen)) &&
                  !(role === "company" && ["org-profile", "post-vacancy", "candidates", "candidate-detail", "comp-post-hire", "post-hire"].includes(screen)) &&
                  !(role === "mentor" && ["dashboard", "checkins", "companies"].includes(screen)) &&
                  !(role === "admin" && ["dashboard", "companies", "candidates", "mentors", "mentorships", "activity"].includes(screen)) && (
                   <NotFoundPage lang={lang} onGoHome={() => handleNav("home")} />
+                )}
+                  </>
                 )}
               </main>
             </div>
