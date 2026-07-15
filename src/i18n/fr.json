@@ -225,16 +225,40 @@
       "match": 96,
       "strengths": "Forte concentration sur les tâches détaillées. Préfère les environnements calmes. Nécessite des instructions écrites.",
       "radar": [
-        { "axis": "Traitement", "value": 88 },
-        { "axis": "T. Environ.", "value": 22 },
-        { "axis": "Exécution", "value": 92 },
-        { "axis": "Aménagements", "value": 70 }
+        {
+          "axis": "Traitement",
+          "value": 88
+        },
+        {
+          "axis": "T. Environ.",
+          "value": 22
+        },
+        {
+          "axis": "Exécution",
+          "value": 92
+        },
+        {
+          "axis": "Aménagements",
+          "value": 70
+        }
       ],
       "env": [
-        { "req": "Travail à distance disponible", "met": true },
-        { "req": "Communication asynchrone", "met": true },
-        { "req": "Espace individuel calme", "met": false },
-        { "req": "Horaires flexibles", "met": true }
+        {
+          "req": "Travail à distance disponible",
+          "met": true
+        },
+        {
+          "req": "Communication asynchrone",
+          "met": true
+        },
+        {
+          "req": "Espace individuel calme",
+          "met": false
+        },
+        {
+          "req": "Horaires flexibles",
+          "met": true
+        }
       ]
     },
     {
@@ -242,16 +266,40 @@
       "match": 89,
       "strengths": "Excellente tolérance aux environnements variables. Grande capacité multitâche. Communication verbale fluide.",
       "radar": [
-        { "axis": "Traitement", "value": 65 },
-        { "axis": "T. Environ.", "value": 82 },
-        { "axis": "Exécution", "value": 68 },
-        { "axis": "Aménagements", "value": 85 }
+        {
+          "axis": "Traitement",
+          "value": 65
+        },
+        {
+          "axis": "T. Environ.",
+          "value": 82
+        },
+        {
+          "axis": "Exécution",
+          "value": 68
+        },
+        {
+          "axis": "Aménagements",
+          "value": 85
+        }
       ],
       "env": [
-        { "req": "Travail à distance disponible", "met": true },
-        { "req": "Communication asynchrone", "met": false },
-        { "req": "Instructions écrites", "met": true },
-        { "req": "Évaluation par livrables", "met": true }
+        {
+          "req": "Travail à distance disponible",
+          "met": true
+        },
+        {
+          "req": "Communication asynchrone",
+          "met": false
+        },
+        {
+          "req": "Instructions écrites",
+          "met": true
+        },
+        {
+          "req": "Évaluation par livrables",
+          "met": true
+        }
       ]
     }
   ],
@@ -438,14 +486,46 @@
   "privacyTitle": "Votre vie privée est le fondement, pas un ajout.",
   "privacyBody": "Aucun diagnostic médical n'est stocké ni partagé. Les entreprises ne voient jamais de vrais noms ni de photographies — seulement des profils de compatibilité anonymes. Le candidat contrôle quelles informations sont visibles à chaque étape.",
   "accompStages": [
-    { "label": "Analyse du profil", "done": true, "current": false },
-    { "label": "Premier contact avec le mentor", "done": true, "current": false },
-    { "label": "Plan d'accompagnement", "done": true, "current": false },
-    { "label": "Réunion d'explication avec l'entreprise", "done": false, "current": true },
-    { "label": "Consentement et accord", "done": false, "current": false },
-    { "label": "Début de la formation adaptée", "done": false, "current": false },
-    { "label": "Intégration professionnelle", "done": false, "current": false },
-    { "label": "Suivi post-embauche", "done": false, "current": false }
+    {
+      "label": "Analyse du profil",
+      "done": true,
+      "current": false
+    },
+    {
+      "label": "Premier contact avec le mentor",
+      "done": true,
+      "current": false
+    },
+    {
+      "label": "Plan d'accompagnement",
+      "done": true,
+      "current": false
+    },
+    {
+      "label": "Réunion d'explication avec l'entreprise",
+      "done": false,
+      "current": true
+    },
+    {
+      "label": "Consentement et accord",
+      "done": false,
+      "current": false
+    },
+    {
+      "label": "Début de la formation adaptée",
+      "done": false,
+      "current": false
+    },
+    {
+      "label": "Intégration professionnelle",
+      "done": false,
+      "current": false
+    },
+    {
+      "label": "Suivi post-embauche",
+      "done": false,
+      "current": false
+    }
   ],
   "statusLabels": [
     "En adaptation",
@@ -458,8 +538,14 @@
   "postHireSend": "Envoyer le rapport",
   "postHireCheckins": "Historique des check-ins",
   "postHireHistory": [
-    { "date": "10 Juin, 2025", "note": "Première semaine positive. Outils asynchrones correctement configurés." },
-    { "date": "03 Juin, 2025", "note": "Onboarding terminé. Plan d'accompagnement convenu avec le mentor." }
+    {
+      "date": "10 Juin, 2025",
+      "note": "Première semaine positive. Outils asynchrones correctement configurés."
+    },
+    {
+      "date": "03 Juin, 2025",
+      "note": "Onboarding terminé. Plan d'accompagnement convenu avec le mentor."
+    }
   ],
   "previewNav": [
     "Mon profil",
@@ -543,5 +629,51 @@
   "mentor.completed_onboardings": "Intégrations terminées",
   "mentor.negotiated_adjustments": "Aménagements négociés",
   "quiz.complete_profile": "Terminer le profil",
-  "posthire.this_week_report": "Rapport de cette semaine"
+  "posthire.this_week_report": "Rapport de cette semaine",
+  "about.heroStat.85value": "85%",
+  "about.heroStat.85text": "Personnes neurodivergentes au chômage par manque de compatibilité",
+  "about.heroStat.85source": "Source : Fundación Eurofirms",
+  "about.radarTitle": "Tu perfil en construcción",
+  "about.radarSub": "Se actualiza con cada respuesta",
+  "about.radarHint": "Los valores aparecen a medida que respondes el cuestionario",
+  "about.missionBody1": "L'emploi comme droit, pas un privilège. Nous facilitons l'insertion inclusive.",
+  "about.missionBody2": "Pont entre les talents neurodivergents et les entreprises engagées.",
+  "about.missionBody3": "Être la plateforme de référence en inclusion professionnelle d'ici 2036.",
+  "about.pillarPreparar": "PRÉPARER",
+  "about.pillarAdaptar": "ADAPTER",
+  "about.pillarAcompanar": "ACCOMPAGNER",
+  "about.pillarConectar": "CONNECTER",
+  "about.pillarPrepararTag": "Découvrir les capacités, ne pas forcer les moules",
+  "about.pillarAdaptarTag": "La technologie s'adapte aux personnes",
+  "about.pillarAcompanarTag": "Mentor humain, accompagnement réel",
+  "about.pillarConectarTag": "Matching basé sur les données, pas les diagnostics",
+  "about.pillarPrepararBody": "Formation personnalisée et simulations de travail pour valoriser le talent unique.",
+  "about.pillarAdaptarBody": "Interface personnalisable avec palettes, modes clair/sombre et ajustements sensoriels.",
+  "about.pillarAcompanarBody": "Des mentors spécialisés guident de la préparation jusqu'au jour 60 post-embauche.",
+  "about.pillarConectarBody": "Nous croisons les profils par compétences et besoins environnementaux pour des matches réels.",
+  "about.pillarVal1a": "Formation personnalisée",
+  "about.pillarVal1b": "Simulations de travail",
+  "about.pillarVal1c": "Connaissance de soi",
+  "about.pillarVal2a": "Interface personnalisable",
+  "about.pillarVal2b": "Ajustements sensoriels",
+  "about.pillarVal2c": "Entreprises préparées",
+  "about.pillarVal3a": "Mentors spécialisés",
+  "about.pillarVal3b": "Accompagnement intégral",
+  "about.pillarVal3c": "Suivi post-embauche",
+  "about.pillarVal4a": "Matching objectif",
+  "about.pillarVal4b": "Profils anonymes",
+  "about.pillarVal4c": "Confidentialité totale",
+  "about.stat90": "90%",
+  "about.stat140": "140%",
+  "about.stat15": "15%",
+  "about.stat90text": "Rétention dans l'embauche inclusive",
+  "about.stat140text": "Équipes diversifiées plus productives",
+  "about.stat15text": "Plus d'innovation dans les entreprises inclusives",
+  "about.stat90source": "HLB",
+  "about.stat140source": "HLB / JPMorgan",
+  "about.stat15source": "HLB",
+  "about.procesamiento": "Procesamiento",
+  "about.tAmbiental": "T. Ambiental",
+  "about.ejecucion": "Ejecución",
+  "about.ajustes": "Ajustes"
 }

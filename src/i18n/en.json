@@ -225,16 +225,40 @@
       "match": 96,
       "strengths": "High focus on detailed tasks. Prefers quiet environments. Requires written instructions.",
       "radar": [
-        { "axis": "Processing", "value": 88 },
-        { "axis": "E. Tolerance", "value": 22 },
-        { "axis": "Execution", "value": 92 },
-        { "axis": "Adjustments", "value": 70 }
+        {
+          "axis": "Processing",
+          "value": 88
+        },
+        {
+          "axis": "E. Tolerance",
+          "value": 22
+        },
+        {
+          "axis": "Execution",
+          "value": 92
+        },
+        {
+          "axis": "Adjustments",
+          "value": 70
+        }
       ],
       "env": [
-        { "req": "Remote work available", "met": true },
-        { "req": "Asynchronous communication", "met": true },
-        { "req": "Quiet individual space", "met": false },
-        { "req": "Flexible schedule", "met": true }
+        {
+          "req": "Remote work available",
+          "met": true
+        },
+        {
+          "req": "Asynchronous communication",
+          "met": true
+        },
+        {
+          "req": "Quiet individual space",
+          "met": false
+        },
+        {
+          "req": "Flexible schedule",
+          "met": true
+        }
       ]
     },
     {
@@ -242,16 +266,40 @@
       "match": 89,
       "strengths": "Excellent tolerance to variable environments. High multitasking ability. Fluent verbal communication.",
       "radar": [
-        { "axis": "Processing", "value": 65 },
-        { "axis": "E. Tolerance", "value": 82 },
-        { "axis": "Execution", "value": 68 },
-        { "axis": "Adjustments", "value": 85 }
+        {
+          "axis": "Processing",
+          "value": 65
+        },
+        {
+          "axis": "E. Tolerance",
+          "value": 82
+        },
+        {
+          "axis": "Execution",
+          "value": 68
+        },
+        {
+          "axis": "Adjustments",
+          "value": 85
+        }
       ],
       "env": [
-        { "req": "Remote work available", "met": true },
-        { "req": "Asynchronous communication", "met": false },
-        { "req": "Written instructions", "met": true },
-        { "req": "Deliverable-based evaluation", "met": true }
+        {
+          "req": "Remote work available",
+          "met": true
+        },
+        {
+          "req": "Asynchronous communication",
+          "met": false
+        },
+        {
+          "req": "Written instructions",
+          "met": true
+        },
+        {
+          "req": "Deliverable-based evaluation",
+          "met": true
+        }
       ]
     }
   ],
@@ -438,14 +486,46 @@
   "privacyTitle": "Your privacy is the foundation, not an add-on.",
   "privacyBody": "No medical diagnosis is stored or shared. Companies never see real names or photographs — only anonymous compatibility profiles. The candidate controls what information is visible at each stage.",
   "accompStages": [
-    { "label": "Profile analysis", "done": true, "current": false },
-    { "label": "First contact with the mentor", "done": true, "current": false },
-    { "label": "Accompaniment plan", "done": true, "current": false },
-    { "label": "Explanation meeting with the company", "done": false, "current": true },
-    { "label": "Consent and agreement", "done": false, "current": false },
-    { "label": "Start of adapted training", "done": false, "current": false },
-    { "label": "Labor integration", "done": false, "current": false },
-    { "label": "Post-hire tracking", "done": false, "current": false }
+    {
+      "label": "Profile analysis",
+      "done": true,
+      "current": false
+    },
+    {
+      "label": "First contact with the mentor",
+      "done": true,
+      "current": false
+    },
+    {
+      "label": "Accompaniment plan",
+      "done": true,
+      "current": false
+    },
+    {
+      "label": "Explanation meeting with the company",
+      "done": false,
+      "current": true
+    },
+    {
+      "label": "Consent and agreement",
+      "done": false,
+      "current": false
+    },
+    {
+      "label": "Start of adapted training",
+      "done": false,
+      "current": false
+    },
+    {
+      "label": "Labor integration",
+      "done": false,
+      "current": false
+    },
+    {
+      "label": "Post-hire tracking",
+      "done": false,
+      "current": false
+    }
   ],
   "statusLabels": [
     "Adapting",
@@ -458,8 +538,14 @@
   "postHireSend": "Send report",
   "postHireCheckins": "Check-in history",
   "postHireHistory": [
-    { "date": "Jun 10, 2025", "note": "Positive first week. Asynchronous tools correctly configured." },
-    { "date": "Jun 3, 2025", "note": "Onboarding completed. Accompaniment plan agreed upon with mentor." }
+    {
+      "date": "Jun 10, 2025",
+      "note": "Positive first week. Asynchronous tools correctly configured."
+    },
+    {
+      "date": "Jun 3, 2025",
+      "note": "Onboarding completed. Accompaniment plan agreed upon with mentor."
+    }
   ],
   "previewNav": [
     "My profile",
@@ -543,5 +629,51 @@
   "mentor.completed_onboardings": "Completed onboardings",
   "mentor.negotiated_adjustments": "Negotiated adjustments",
   "quiz.complete_profile": "Complete profile",
-  "posthire.this_week_report": "This week's report"
+  "posthire.this_week_report": "This week's report",
+  "about.heroStat.85value": "85%",
+  "about.heroStat.85text": "Neurodivergent people unemployed due to lack of compatibility",
+  "about.heroStat.85source": "Source: Fundación Eurofirms",
+  "about.radarTitle": "Tu perfil en construcción",
+  "about.radarSub": "Se actualiza con cada respuesta",
+  "about.radarHint": "Los valores aparecen a medida que respondes el cuestionario",
+  "about.missionBody1": "Employment as a right, not a privilege. We facilitate inclusive insertion.",
+  "about.missionBody2": "Bridge between neurodivergent talent and committed companies.",
+  "about.missionBody3": "Be the leading platform in labor inclusion by 2036.",
+  "about.pillarPreparar": "PREPARE",
+  "about.pillarAdaptar": "ADAPT",
+  "about.pillarAcompanar": "ACCOMPANY",
+  "about.pillarConectar": "CONNECT",
+  "about.pillarPrepararTag": "Discover abilities, don't force molds",
+  "about.pillarAdaptarTag": "Technology adapts to people",
+  "about.pillarAcompanarTag": "Human mentor, real accompaniment",
+  "about.pillarConectarTag": "Data-based matching, not diagnoses",
+  "about.pillarPrepararBody": "Personalized training and work simulations to enhance unique talent.",
+  "about.pillarAdaptarBody": "Customizable interface with palettes, light/dark modes, and sensory adjustments.",
+  "about.pillarAcompanarBody": "Specialized mentors guide from preparation through day 60 post-hire.",
+  "about.pillarConectarBody": "We cross-reference profiles by skills and environmental needs for real matches.",
+  "about.pillarVal1a": "Personalized training",
+  "about.pillarVal1b": "Work simulations",
+  "about.pillarVal1c": "Self-knowledge",
+  "about.pillarVal2a": "Customizable interface",
+  "about.pillarVal2b": "Sensory adjustments",
+  "about.pillarVal2c": "Prepared companies",
+  "about.pillarVal3a": "Specialized mentors",
+  "about.pillarVal3b": "Comprehensive accompaniment",
+  "about.pillarVal3c": "Post-hire tracking",
+  "about.pillarVal4a": "Objective matching",
+  "about.pillarVal4b": "Anonymous profiles",
+  "about.pillarVal4c": "Total privacy",
+  "about.stat90": "90%",
+  "about.stat140": "140%",
+  "about.stat15": "15%",
+  "about.stat90text": "Retention in inclusive hiring",
+  "about.stat140text": "More productive diverse teams",
+  "about.stat15text": "More innovation in inclusive companies",
+  "about.stat90source": "HLB",
+  "about.stat140source": "HLB / JPMorgan",
+  "about.stat15source": "HLB",
+  "about.procesamiento": "Procesamiento",
+  "about.tAmbiental": "T. Ambiental",
+  "about.ejecucion": "Ejecución",
+  "about.ajustes": "Ajustes"
 }

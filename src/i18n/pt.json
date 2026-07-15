@@ -225,16 +225,40 @@
       "match": 96,
       "strengths": "Alto foco em tarefas detalhadas. Prefere ambiente silencioso. Requer instruções escritas.",
       "radar": [
-        { "axis": "Processamento", "value": 88 },
-        { "axis": "T. Ambiental", "value": 22 },
-        { "axis": "Execução", "value": 92 },
-        { "axis": "Ajustes", "value": 70 }
+        {
+          "axis": "Processamento",
+          "value": 88
+        },
+        {
+          "axis": "T. Ambiental",
+          "value": 22
+        },
+        {
+          "axis": "Execução",
+          "value": 92
+        },
+        {
+          "axis": "Ajustes",
+          "value": 70
+        }
       ],
       "env": [
-        { "req": "Trabalho remoto disponível", "met": true },
-        { "req": "Comunicação assíncrona", "met": true },
-        { "req": "Espaço individual silencioso", "met": false },
-        { "req": "Horário flexível", "met": true }
+        {
+          "req": "Trabalho remoto disponível",
+          "met": true
+        },
+        {
+          "req": "Comunicação assíncrona",
+          "met": true
+        },
+        {
+          "req": "Espaço individual silencioso",
+          "met": false
+        },
+        {
+          "req": "Horário flexível",
+          "met": true
+        }
       ]
     },
     {
@@ -242,16 +266,40 @@
       "match": 89,
       "strengths": "Excelente tolerância a ambientes variáveis. Alta capacidade multitarefa. Comunicação verbal fluente.",
       "radar": [
-        { "axis": "Processamento", "value": 65 },
-        { "axis": "T. Ambiental", "value": 82 },
-        { "axis": "Execução", "value": 68 },
-        { "axis": "Ajustes", "value": 85 }
+        {
+          "axis": "Processamento",
+          "value": 65
+        },
+        {
+          "axis": "T. Ambiental",
+          "value": 82
+        },
+        {
+          "axis": "Execução",
+          "value": 68
+        },
+        {
+          "axis": "Ajustes",
+          "value": 85
+        }
       ],
       "env": [
-        { "req": "Trabalho remoto disponível", "met": true },
-        { "req": "Comunicação assíncrona", "met": false },
-        { "req": "Instruções escritas", "met": true },
-        { "req": "Avaliação por entregáveis", "met": true }
+        {
+          "req": "Trabalho remoto disponível",
+          "met": true
+        },
+        {
+          "req": "Comunicação assíncrona",
+          "met": false
+        },
+        {
+          "req": "Instruções escritas",
+          "met": true
+        },
+        {
+          "req": "Avaliação por entregáveis",
+          "met": true
+        }
       ]
     }
   ],
@@ -438,14 +486,46 @@
   "privacyTitle": "Sua privacidade é a base, não um complemento.",
   "privacyBody": "Nenhum diagnóstico médico é armazenado ou compartilhado. As empresas nunca veem nomes reais nem fotografias — apenas perfis de compatibilidade anônimos. O candidato controla quais informações são visíveis em cada etapa.",
   "accompStages": [
-    { "label": "Análise de perfil", "done": true, "current": false },
-    { "label": "Primeiro contato com o mentor", "done": true, "current": false },
-    { "label": "Plano de acompanhamento", "done": true, "current": false },
-    { "label": "Reunião de explicação com a empresa", "done": false, "current": true },
-    { "label": "Consentimento e acordo", "done": false, "current": false },
-    { "label": "Início da capacitação adaptada", "done": false, "current": false },
-    { "label": "Vinculação laboral", "done": false, "current": false },
-    { "label": "Acompanhamento pós-contratação", "done": false, "current": false }
+    {
+      "label": "Análise de perfil",
+      "done": true,
+      "current": false
+    },
+    {
+      "label": "Primeiro contato com o mentor",
+      "done": true,
+      "current": false
+    },
+    {
+      "label": "Plano de acompanhamento",
+      "done": true,
+      "current": false
+    },
+    {
+      "label": "Reunião de explicação com a empresa",
+      "done": false,
+      "current": true
+    },
+    {
+      "label": "Consentimento e acordo",
+      "done": false,
+      "current": false
+    },
+    {
+      "label": "Início da capacitação adaptada",
+      "done": false,
+      "current": false
+    },
+    {
+      "label": "Vinculação laboral",
+      "done": false,
+      "current": false
+    },
+    {
+      "label": "Acompanhamento pós-contratação",
+      "done": false,
+      "current": false
+    }
   ],
   "statusLabels": [
     "Em adaptação",
@@ -458,8 +538,14 @@
   "postHireSend": "Enviar relatório",
   "postHireCheckins": "Histórico de check-ins",
   "postHireHistory": [
-    { "date": "10 Jun, 2025", "note": "Primeira semana positiva. Ferramentas assíncronas configuradas corretamente." },
-    { "date": "03 Jun, 2025", "note": "Onboarding concluído. Plano de acompanhamento acordado com mentor." }
+    {
+      "date": "10 Jun, 2025",
+      "note": "Primeira semana positiva. Ferramentas assíncronas configuradas corretamente."
+    },
+    {
+      "date": "03 Jun, 2025",
+      "note": "Onboarding concluído. Plano de acompanhamento acordado com mentor."
+    }
   ],
   "previewNav": [
     "Meu perfil",
@@ -543,5 +629,51 @@
   "mentor.completed_onboardings": "Onboardings concluídos",
   "mentor.negotiated_adjustments": "Ajustes negociados",
   "quiz.complete_profile": "Completar perfil",
-  "posthire.this_week_report": "Relatório desta semana"
+  "posthire.this_week_report": "Relatório desta semana",
+  "about.heroStat.85value": "85%",
+  "about.heroStat.85text": "Pessoas neurodivergentes desempregadas por falta de compatibilidade",
+  "about.heroStat.85source": "Fonte: Fundación Eurofirms",
+  "about.radarTitle": "Tu perfil en construcción",
+  "about.radarSub": "Se actualiza con cada respuesta",
+  "about.radarHint": "Los valores aparecen a medida que respondes el cuestionario",
+  "about.missionBody1": "Emprego como direito, não privilégio. Facilitamos inserção inclusiva.",
+  "about.missionBody2": "Ponte entre talento neurodivergente e empresas comprometidas.",
+  "about.missionBody3": "Ser plataforma referência em inclusão laboral para 2036.",
+  "about.pillarPreparar": "PREPARAR",
+  "about.pillarAdaptar": "ADAPTAR",
+  "about.pillarAcompanar": "ACOMPANHAR",
+  "about.pillarConectar": "CONECTAR",
+  "about.pillarPrepararTag": "Descobrir capacidades, não forçar moldes",
+  "about.pillarAdaptarTag": "A tecnologia se adapta às pessoas",
+  "about.pillarAcompanarTag": "Mentor humano, acompanhamento real",
+  "about.pillarConectarTag": "Matching baseado em dados, não em diagnósticos",
+  "about.pillarPrepararBody": "Treinamento personalizado e simulações de trabalho para potencializar talento único.",
+  "about.pillarAdaptarBody": "Interface personalizável com paletas, modos claro/escuro e ajustes sensoriais.",
+  "about.pillarAcompanarBody": "Mentores especializados guiam da preparação até o dia 60 pós-contratação.",
+  "about.pillarConectarBody": "Cruzamos perfis por habilidades e necessidades do ambiente para matches reais.",
+  "about.pillarVal1a": "Treinamento personalizado",
+  "about.pillarVal1b": "Simulações de trabalho",
+  "about.pillarVal1c": "Autoconhecimento",
+  "about.pillarVal2a": "Interface personalizável",
+  "about.pillarVal2b": "Ajustes sensoriais",
+  "about.pillarVal2c": "Empresas preparadas",
+  "about.pillarVal3a": "Mentores especializados",
+  "about.pillarVal3b": "Acompanhamento integral",
+  "about.pillarVal3c": "Acompanhamento pós-contratação",
+  "about.pillarVal4a": "Matching objetivo",
+  "about.pillarVal4b": "Perfis anônimos",
+  "about.pillarVal4c": "Privacidade total",
+  "about.stat90": "90%",
+  "about.stat140": "140%",
+  "about.stat15": "15%",
+  "about.stat90text": "Retenção em contratação inclusiva",
+  "about.stat140text": "Equipes diversas mais produtivas",
+  "about.stat15text": "Mais inovação em empresas inclusivas",
+  "about.stat90source": "HLB",
+  "about.stat140source": "HLB / JPMorgan",
+  "about.stat15source": "HLB",
+  "about.procesamiento": "Procesamiento",
+  "about.tAmbiental": "T. Ambiental",
+  "about.ejecucion": "Ejecución",
+  "about.ajustes": "Ajustes"
 }
