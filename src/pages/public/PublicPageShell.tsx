@@ -48,12 +48,12 @@ export function PublicPageShell({ lang, currentView, onNavigate, onOpenAuth, onL
               onClick={onFontToggle}
               className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium border border-border cursor-pointer transition-colors"
               style={{
-                borderColor: font === "lexend" ? "var(--primary)" : "var(--border)",
-                backgroundColor: font === "lexend" ? "color-mix(in srgb, var(--primary) 12%, transparent)" : "transparent",
-                color: font === "lexend" ? "var(--primary)" : "var(--foreground)",
+                borderColor: font !== "inter" ? "var(--primary)" : "var(--border)",
+                backgroundColor: font !== "inter" ? "color-mix(in srgb, var(--primary) 12%, transparent)" : "transparent",
+                color: font !== "inter" ? "var(--primary)" : "var(--foreground)",
               }}
-              aria-label={t("onboarding.dyslexia_font_title", "Modo Dislexia")}
-              title={t("onboarding.dyslexia_font_title", "Modo Dislexia")}
+              aria-label={font === "opendyslexic" ? "OpenDyslexic activado" : font === "lexend" ? "Lexend activado" : "Tipografía normal"}
+              title={font === "opendyslexic" ? "OpenDyslexic activado" : font === "lexend" ? "Lexend activado" : "Tipografía normal"}
             >
               <Type size={16} />
             </button>
@@ -78,9 +78,9 @@ export function PublicPageShell({ lang, currentView, onNavigate, onOpenAuth, onL
               onClick={onFontToggle}
               className="flex items-center justify-center p-2 rounded-lg border border-border cursor-pointer transition-colors"
               style={{
-                borderColor: font === "lexend" ? "var(--primary)" : "var(--border)",
-                backgroundColor: font === "lexend" ? "color-mix(in srgb, var(--primary) 12%, transparent)" : "transparent",
-                color: font === "lexend" ? "var(--primary)" : "var(--foreground)",
+                borderColor: font !== "inter" ? "var(--primary)" : "var(--border)",
+                backgroundColor: font !== "inter" ? "color-mix(in srgb, var(--primary) 12%, transparent)" : "transparent",
+                color: font !== "inter" ? "var(--primary)" : "var(--foreground)",
               }}
             >
                <Type size={18} />

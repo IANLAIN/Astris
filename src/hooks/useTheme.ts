@@ -31,7 +31,10 @@ export function useTheme() {
     window.localStorage.setItem("astris_font", f); 
   };
 
-  const fontFamily = font === "lexend" ? "'Lexend', Inter, sans-serif" : "'Inter', sans-serif";
+  const fontFamily =
+    font === "lexend" ? "'Lexend', Inter, sans-serif" :
+    font === "opendyslexic" ? "'OpenDyslexic', 'Lexend', Inter, sans-serif" :
+    "'Inter', sans-serif";
 
   const darkRootStyle: Record<string, string> = darkMode ? {
     "--background": "#0D1824",

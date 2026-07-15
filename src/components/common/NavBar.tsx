@@ -77,14 +77,17 @@ export function NavBar({ lang, role, screen, onNav, onLang, onLogout, darkMode, 
             onClick={onFontToggle}
             className="flex items-center justify-center p-2 lg:px-3 lg:py-2 rounded-xl text-sm font-semibold cursor-pointer border-2 transition-colors"
             style={{
-              borderColor: font === "lexend" ? "var(--primary)" : "var(--border)",
-              backgroundColor: font === "lexend" ? "color-mix(in srgb, var(--primary) 12%, transparent)" : "var(--card)",
-              color: font === "lexend" ? "var(--primary)" : "var(--muted-foreground)",
+              borderColor: font !== "inter" ? "var(--primary)" : "var(--border)",
+              backgroundColor: font !== "inter" ? "color-mix(in srgb, var(--primary) 12%, transparent)" : "var(--card)",
+              color: font !== "inter" ? "var(--primary)" : "var(--muted-foreground)",
             }}
-            aria-label={t("onboarding.dyslexia_font_title", "Modo Dislexia")}
-            title={t("onboarding.dyslexia_font_title", "Modo Dislexia")}
+            aria-label={font === "opendyslexic" ? "OpenDyslexic activado" : font === "lexend" ? "Lexend activado" : "Tipografía normal"}
+            title={font === "opendyslexic" ? "OpenDyslexic activado" : font === "lexend" ? "Lexend activado" : "Tipografía normal"}
           >
             <Type size={16} aria-hidden="true" />
+            <span className="hidden md:inline ml-1.5 text-xs">
+              {font === "opendyslexic" ? "Dislexia" : font === "lexend" ? "Lectura" : "Aa"}
+            </span>
           </button>
           {/* Dark / Light mode toggle */}
           <button

@@ -152,15 +152,19 @@ export function SettingsPage({ lang, palette, darkMode, font, onPalette, onDark,
             {/* Typography */}
             <div>
               <h3 className="text-sm font-bold text-foreground mb-3 uppercase tracking-wide flex items-center gap-2"><Type size={14} aria-hidden="true" /> {t("palette.font")}</h3>
-              {([["inter", "Inter (Default)"], ["lexend", "Lexend (Dislexia)"]] as const).map(([fk, fname]) => {
-                const sel = font === fk;
-                return (
-                  <button key={fk} onClick={() => onFont(fk)} className="w-full flex items-center gap-3 p-3 rounded-2xl border-2 cursor-pointer text-left mb-2 transition-all hover:scale-[1.02]" style={{ borderColor: sel ? "var(--primary)" : "var(--border)", backgroundColor: sel ? "var(--background)" : "transparent" }}>
-                    <div className="flex-1 font-semibold text-sm" style={{ fontFamily: fk === "lexend" ? "'Lexend', sans-serif" : "'Inter', sans-serif" }}>{fname}</div>
-                    {sel && <div className="w-4 h-4 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: "var(--primary)" }}><Check size={10} style={{ color: "var(--primary-foreground)" }} /></div>}
-                  </button>
-                );
-              })}
+      {([["inter", "Inter (Default)"], ["lexend", "Lexend (Lectura fácil)"], ["opendyslexic", "OpenDyslexic (Dislexia)"]] as const).map(([fk, fname]) => {
+        const sel = font === fk;
+        const ff =
+          fk === "lexend" ? "'Lexend', sans-serif" :
+          fk === "opendyslexic" ? "'OpenDyslexic', 'Lexend', sans-serif" :
+          "'Inter', sans-serif";
+        return (
+          <button key={fk} onClick={() => onFont(fk)} className="w-full flex items-center gap-3 p-3 rounded-2xl border-2 cursor-pointer text-left mb-2 transition-all hover:scale-[1.02]" style={{ borderColor: sel ? "var(--primary)" : "var(--border)", backgroundColor: sel ? "var(--background)" : "transparent" }}>
+            <div className="flex-1 font-semibold text-sm" style={{ fontFamily: ff }}>{fname}</div>
+            {sel && <div className="w-4 h-4 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: "var(--primary)" }}><Check size={10} style={{ color: "var(--primary-foreground)" }} /></div>}
+          </button>
+        );
+      })}
             </div>
 
             {/* Palettes */}

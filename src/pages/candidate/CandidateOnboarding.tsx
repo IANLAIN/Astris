@@ -16,7 +16,10 @@ export function CandidateOnboarding({ lang, palette, darkMode, font, onPalette, 
   const accent = pal.accent;
   const border = darkMode ? "rgba(255,255,255,0.1)" : pal.border;
   const accentText = palette === "contraste" ? "#1A1A04" : "#fff";
-  const fontFamily = font === "lexend" ? "'Lexend', Inter, sans-serif" : "'Atkinson Hyperlegible', Inter, sans-serif";
+  const fontFamily =
+    font === "lexend" ? "'Lexend', Inter, sans-serif" :
+    font === "opendyslexic" ? "'OpenDyslexic', 'Lexend', Inter, sans-serif" :
+    "'Inter', sans-serif";
 
   return (
     <div className="min-h-screen w-full overflow-x-hidden flex flex-col">
@@ -60,18 +63,18 @@ export function CandidateOnboarding({ lang, palette, darkMode, font, onPalette, 
               })}
             </div>
           </div>
-          {/* Font Checkbox */}
+          {/* Font Checkbox — direct toggle OpenDyslexic on/off */}
           <div className="mt-4 p-4 rounded-2xl border-2 border-border bg-card">
             <label className="flex items-start gap-3 cursor-pointer">
               <input
                 type="checkbox"
-                checked={font === "lexend"}
-                onChange={(e) => onFont(e.target.checked ? "lexend" : "inter")}
+                checked={font === "opendyslexic"}
+                onChange={(e) => onFont(e.target.checked ? "opendyslexic" : "inter")}
                 className="mt-1 w-5 h-5 rounded border-2 border-primary text-primary focus:ring-primary"
               />
               <div className="flex-1">
                 <div className="font-bold text-foreground text-sm">{t("onboarding.dyslexia_font_title", "¿Necesitas una fuente especial para facilitar la lectura?")}</div>
-                <div className="text-xs text-muted-foreground mt-0.5">{t("onboarding.dyslexia_font_desc", "(Recomendada para dislexia)")}</div>
+                <div className="text-xs text-muted-foreground mt-0.5">{t("onboarding.dyslexia_font_desc", "(OpenDyslexic — recomendada para dislexia)")}</div>
               </div>
             </label>
           </div>

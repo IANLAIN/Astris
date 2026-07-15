@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, lazy, Suspense } from "react";
-import { Lang, ModalStep, QuizAnswers, PublicView } from "@/types";
+import { Lang, ModalStep, QuizAnswers, PublicView, FontKey } from "@/types";
 import { getInitialLang, getInitialModalStep } from "@/i18n/useT";
 import { QUIZ_AXES } from "@/i18n/content";
 import { saveCandidateProfile, getCurrentUser } from "@/services/supabase";
@@ -128,6 +128,13 @@ export default function App() {
   const reopenLang = () => setModalStep("language");
   const showModal = modalStep !== "none";
 
+  /* Cycle: inter → lexend → opendyslexic → inter */
+  const cycleFont = (current: FontKey): FontKey =>
+    current === "inter" ? "lexend" :
+    current === "lexend" ? "opendyslexic" :
+    "inter";
+
+
   if (!appReady) {
     return (
       <div className="min-h-screen w-full overflow-x-hidden bg-background flex items-center justify-center" style={{ fontFamily }}>
@@ -167,23 +174,23 @@ export default function App() {
           </div>
         }>
           {!loggedIn && publicView === "about" && (
-            <AboutPage lang={lang} onOpenAuth={(preRole, step) => { setPendingRole(preRole ?? null); setModalStep(step === "register" ? "register" : "login"); }} onLang={reopenLang} onNavigate={setPublicView} darkMode={darkMode} onDarkToggle={() => setDarkMode((d) => !d)} font={font} onFontToggle={() => setFont(font === "lexend" ? "inter" : "lexend")} />
+            <AboutPage lang={lang} onOpenAuth={(preRole, step) => { setPendingRole(preRole ?? null); setModalStep(step === "register" ? "register" : "login"); }} onLang={reopenLang} onNavigate={setPublicView} darkMode={darkMode} onDarkToggle={() => setDarkMode((d) => !d)} font={font} onFontToggle={() => setFont(cycleFont(font))} />
           )}
           {!loggedIn && publicView === "support" && (
-            <SupportPage lang={lang} onOpenAuth={(preRole, step) => { setPendingRole(preRole ?? null); setModalStep(step === "register" ? "register" : "login"); }} onLang={reopenLang} onNavigate={setPublicView} darkMode={darkMode} onDarkToggle={() => setDarkMode((d) => !d)} font={font} onFontToggle={() => setFont(font === "lexend" ? "inter" : "lexend")} />
+            <SupportPage lang={lang} onOpenAuth={(preRole, step) => { setPendingRole(preRole ?? null); setModalStep(step === "register" ? "register" : "login"); }} onLang={reopenLang} onNavigate={setPublicView} darkMode={darkMode} onDarkToggle={() => setDarkMode((d) => !d)} font={font} onFontToggle={() => setFont(cycleFont(font))} />
           )}
           {!loggedIn && publicView === "partners" && (
-            <PartnersPage lang={lang} onOpenAuth={(preRole, step) => { setPendingRole(preRole ?? null); setModalStep(step === "register" ? "register" : "login"); }} onLang={reopenLang} onNavigate={setPublicView} darkMode={darkMode} onDarkToggle={() => setDarkMode((d) => !d)} font={font} onFontToggle={() => setFont(font === "lexend" ? "inter" : "lexend")} />
+            <PartnersPage lang={lang} onOpenAuth={(preRole, step) => { setPendingRole(preRole ?? null); setModalStep(step === "register" ? "register" : "login"); }} onLang={reopenLang} onNavigate={setPublicView} darkMode={darkMode} onDarkToggle={() => setDarkMode((d) => !d)} font={font} onFontToggle={() => setFont(cycleFont(font))} />
           )}
           {!loggedIn && publicView === "landing" && (
-            <LandingPage lang={lang} onOpenAuth={(preRole, step) => { setPendingRole(preRole ?? null); setModalStep(step === "register" ? "register" : "login"); }} onLang={reopenLang} onNavigate={setPublicView} darkMode={darkMode} onDarkToggle={() => setDarkMode((d) => !d)} font={font} onFontToggle={() => setFont(font === "lexend" ? "inter" : "lexend")} />
+            <LandingPage lang={lang} onOpenAuth={(preRole, step) => { setPendingRole(preRole ?? null); setModalStep(step === "register" ? "register" : "login"); }} onLang={reopenLang} onNavigate={setPublicView} darkMode={darkMode} onDarkToggle={() => setDarkMode((d) => !d)} font={font} onFontToggle={() => setFont(cycleFont(font))} />
           )}
           {!loggedIn && !["about", "support", "partners", "landing"].includes(publicView) && (
             <NotFoundPage lang={lang} onGoHome={() => setPublicView("landing")} />
           )}
           {loggedIn && role && (
             <div>
-              <NavBar lang={lang} role={role} screen={screen} onNav={handleNav} onLang={reopenLang} onLogout={() => handleLogout(setPublicView)} darkMode={darkMode} onDarkToggle={() => setDarkMode((d) => !d)} font={font} onFontToggle={() => setFont(font === "lexend" ? "inter" : "lexend")} userName={userName} userAvatar={userAvatar} />
+              <NavBar lang={lang} role={role} screen={screen} onNav={handleNav} onLang={reopenLang} onLogout={() => handleLogout(setPublicView)} darkMode={darkMode} onDarkToggle={() => setDarkMode((d) => !d)} font={font} onFontToggle={() => setFont(cycleFont(font))} userName={userName} userAvatar={userAvatar} />
               <main style={palStyle as React.CSSProperties}>
                 {role === "candidate" && screen === "onboarding" && (
                   <CandidateOnboarding lang={lang} palette={palette} darkMode={darkMode} font={font} onPalette={setPalette} onDark={setDarkMode} onFont={setFont} onContinue={() => { setQuizAxis(0); setScreen("quiz"); }} />
