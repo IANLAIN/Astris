@@ -24,36 +24,36 @@ export function PartnersPage({ lang, onNavigate, onOpenAuth, onLang, darkMode, o
   };
 
   return (
-    <PublicPageShell lang={lang} currentView="partners" onNavigate={onNavigate} onOpenAuth={onOpenAuth} onLang={onLang} darkMode={darkMode} onDarkToggle={onDarkToggle} font={font} onFontToggle={onFontToggle} title={t("landing.nav.partners")} subtitle="Si tu empresa quiere participar de Astris, completa este formulario y nos pondremos en contacto para conversar sobre colaboración.">
+    <PublicPageShell lang={lang} currentView="partners" onNavigate={onNavigate} onOpenAuth={onOpenAuth} onLang={onLang} darkMode={darkMode} onDarkToggle={onDarkToggle} font={font} onFontToggle={onFontToggle} title={t("landing.nav.partners")} subtitle={t("partners.subtitle")}>
       <div className="max-w-2xl mx-auto w-full">
         <p className="mb-8 text-center text-lg text-muted-foreground leading-relaxed">
-          Si tu empresa quiere participar de Astris, completa este formulario y nos pondremos en contacto para conversar sobre colaboración.
+          {t("partners.subtitle")}
         </p>
         <div className="rounded-3xl border border-border bg-background p-4 md:p-8 shadow-sm">
           {submitted ? (
             <div className="rounded-2xl border border-primary/20 bg-primary/5 p-6 text-center">
-              <h3 className="mb-2 text-xl font-bold text-foreground">Gracias por tu interés</h3>
-              <p className="text-sm leading-relaxed text-muted-foreground">Hemos recibido tu propuesta. Nos pondremos en contacto pronto para explorar una colaboración con Astris.</p>
+              <h3 className="mb-2 text-xl font-bold text-foreground">{t("partners.thanksTitle")}</h3>
+              <p className="text-sm leading-relaxed text-muted-foreground">{t("partners.thanksBody")}</p>
             </div>
           ) : (
             <form className="space-y-4" onSubmit={handleSubmit}>
               <div>
-                <label htmlFor="partner-company" className="mb-1 block text-sm font-semibold text-foreground">Nombre de la empresa</label>
+                <label htmlFor="partner-company" className="mb-1 block text-sm font-semibold text-foreground">{t("partners.companyLabel")}</label>
                 <input id="partner-company" name="company" value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} required className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm outline-none focus:border-primary" style={{ color: "var(--foreground)" }} />
               </div>
               <div>
-                <label htmlFor="partner-name" className="mb-1 block text-sm font-semibold text-foreground">Tu nombre</label>
+                <label htmlFor="partner-name" className="mb-1 block text-sm font-semibold text-foreground">{t("partners.nameLabel")}</label>
                 <input id="partner-name" name="name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm outline-none focus:border-primary" style={{ color: "var(--foreground)" }} />
               </div>
               <div>
-                <label htmlFor="partner-email" className="mb-1 block text-sm font-semibold text-foreground">Correo electrónico</label>
+                <label htmlFor="partner-email" className="mb-1 block text-sm font-semibold text-foreground">{t("partners.emailLabel")}</label>
                 <input id="partner-email" name="email" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm outline-none focus:border-primary" style={{ color: "var(--foreground)" }} />
               </div>
               <div>
-                <label htmlFor="partner-why" className="mb-1 block text-sm font-semibold text-foreground">¿Por qué quieren ser parte de Astris?</label>
+                <label htmlFor="partner-why" className="mb-1 block text-sm font-semibold text-foreground">{t("partners.whyLabel")}</label>
                 <textarea id="partner-why" name="why" value={form.why} onChange={(e) => setForm({ ...form, why: e.target.value })} required rows={5} className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm outline-none focus:border-primary resize-y" style={{ color: "var(--foreground)" }} />
               </div>
-              <button type="submit" className="w-full rounded-xl px-5 py-3 text-sm font-semibold text-primary-foreground border-0 cursor-pointer" style={{ backgroundColor: "var(--primary)" }}>Enviar propuesta</button>
+              <button type="submit" className="w-full rounded-xl px-5 py-3 text-sm font-semibold text-primary-foreground border-0 cursor-pointer" style={{ backgroundColor: "var(--primary)" }}>{t("partners.submit")}</button>
             </form>
           )}
         </div>

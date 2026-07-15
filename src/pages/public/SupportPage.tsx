@@ -32,7 +32,7 @@ export function SupportPage({ lang, onNavigate, onOpenAuth, onLang, darkMode, on
             </div>
             <h3 className="mb-6 text-2xl font-extrabold text-foreground">{org.name}</h3>
             <a href={org.href} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary/10 text-base font-bold text-primary hover:bg-primary/20 transition-colors">
-              Ver enlace <ArrowRight size={18} />
+              {t("support.seeLink")} <ArrowRight size={18} />
             </a>
           </div>
         ))}

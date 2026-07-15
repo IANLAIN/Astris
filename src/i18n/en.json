@@ -675,5 +675,14 @@
   "about.procesamiento": "Procesamiento",
   "about.tAmbiental": "T. Ambiental",
   "about.ejecucion": "Ejecución",
-  "about.ajustes": "Ajustes"
+  "about.ajustes": "Ajustes",
+  "support.seeLink": "View link",
+  "partners.subtitle": "If your company wants to partner with Astris, fill out this form and we'll get in touch to discuss collaboration.",
+  "partners.companyLabel": "Company name",
+  "partners.nameLabel": "Your name",
+  "partners.emailLabel": "Email",
+  "partners.whyLabel": "Why does your company want to be part of Astris?",
+  "partners.submit": "Send proposal",
+  "partners.thanksTitle": "Thank you for your interest",
+  "partners.thanksBody": "We have received your proposal. We will contact you soon to explore a collaboration with Astris."
 }

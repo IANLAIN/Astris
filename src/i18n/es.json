@@ -671,5 +671,14 @@
   "about.stat15text": "Más innovación en empresas inclusivas",
   "about.stat90source": "HLB",
   "about.stat140source": "HLB / JPMorgan",
-  "about.stat15source": "HLB"
+  "about.stat15source": "HLB",
+  "support.seeLink": "Ver enlace",
+  "partners.subtitle": "Si tu empresa quiere participar de Astris, completa este formulario y nos pondremos en contacto para conversar sobre colaboración.",
+  "partners.companyLabel": "Nombre de la empresa",
+  "partners.nameLabel": "Tu nombre",
+  "partners.emailLabel": "Correo electrónico",
+  "partners.whyLabel": "¿Por qué quieren ser parte de Astris?",
+  "partners.submit": "Enviar propuesta",
+  "partners.thanksTitle": "Gracias por tu interés",
+  "partners.thanksBody": "Hemos recibido tu propuesta. Nos pondremos en contacto pronto para explorar una colaboración con Astris."
 }
