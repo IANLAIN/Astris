@@ -11,6 +11,7 @@ interface Collaborator {
   isSvg?: boolean;
   svgContent?: ReactNode;
   imgSrc?: string;
+  whiteBg?: boolean;
 }
 
 const COLLABORATORS: Collaborator[] = [
@@ -24,7 +25,7 @@ const COLLABORATORS: Collaborator[] = [
     url: "https://support.microsoft.com/",
     isSvg: true,
     svgContent: (
-      <svg width="60" height="60" viewBox="0 0 21 21" aria-hidden="true">
+      <svg width="80" height="80" viewBox="0 0 21 21" aria-hidden="true">
         <rect x="1" y="1" width="9" height="9" fill="#F25022" />
         <rect x="11" y="1" width="9" height="9" fill="#7FBA00" />
         <rect x="1" y="11" width="9" height="9" fill="#00A4EF" />
@@ -36,6 +37,7 @@ const COLLABORATORS: Collaborator[] = [
     name: "Closer To The Stars",
     url: "https://closertothestars.org/",
     imgSrc: closerImg,
+    whiteBg: true,
   },
   {
     name: "Vibra Latina",
@@ -62,7 +64,7 @@ export function CollaboratorCarousel({ lang }: { lang: Lang }) {
     if (paused || reducedMotion) return;
     const interval = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % COLLABORATORS.length);
-    }, 1000);
+    }, 1200);
     return () => clearInterval(interval);
   }, [paused, reducedMotion]);
 
@@ -75,11 +77,10 @@ export function CollaboratorCarousel({ lang }: { lang: Lang }) {
       onBlur={() => setPaused(false)}
       role="region"
       aria-label={t("landing.supported")}
-      style={{ perspective: "1000px" }}
+      style={{ perspective: "1200px" }}
     >
-      <div className="relative flex items-center justify-center min-h-[160px]">
+      <div className="relative flex items-center justify-center min-h-[240px] md:min-h-[280px]">
         {COLLABORATORS.map((item, idx) => {
-          // Calculate offset relative to activeIndex (0 to 3)
           const offset = (idx - activeIndex + COLLABORATORS.length) % COLLABORATORS.length;
           
           let translateX = 0;
@@ -90,31 +91,27 @@ export function CollaboratorCarousel({ lang }: { lang: Lang }) {
           let rotateY = 0;
 
           if (offset === 0) {
-            // Active / Center
             translateX = 0;
-            scale = 1.1;
+            scale = 1.15;
             opacity = 1;
             zIndex = 30;
             rotateY = 0;
             filter = "none";
           } else if (offset === 1) {
-            // Right Shadowed
-            translateX = 140;
-            scale = 0.85;
-            opacity = 0.5;
+            translateX = 200;
+            scale = 0.8;
+            opacity = 0.4;
             zIndex = 20;
             rotateY = -15;
-            filter = "grayscale(0.6) blur(1px)";
+            filter = "grayscale(0.5) blur(1px)";
           } else if (offset === 3) {
-            // Left Shadowed
-            translateX = -140;
-            scale = 0.85;
-            opacity = 0.5;
+            translateX = -200;
+            scale = 0.8;
+            opacity = 0.4;
             zIndex = 20;
             rotateY = 15;
-            filter = "grayscale(0.6) blur(1px)";
+            filter = "grayscale(0.5) blur(1px)";
           } else {
-            // Hidden (Behind)
             translateX = 0;
             scale = 0.5;
             opacity = 0;
@@ -129,28 +126,30 @@ export function CollaboratorCarousel({ lang }: { lang: Lang }) {
               target="_blank"
               rel="noreferrer"
               title={item.name}
-              className="absolute flex items-center justify-center rounded-3xl border-2 border-border bg-card p-4 transition-all duration-700 ease-in-out hover:!opacity-100 hover:!filter-none"
+              className="absolute flex items-center justify-center rounded-3xl border-2 border-border transition-all duration-700 ease-in-out hover:!opacity-100 hover:!filter-none"
               style={{
-                width: 168,
-                height: 120,
+                width: 240,
+                height: 160,
                 transform: `translateX(${translateX}px) scale(${scale}) rotateY(${rotateY}deg)`,
                 opacity,
                 zIndex,
                 filter,
-                boxShadow: offset === 0 ? "0 20px 40px -10px rgba(0,0,0,0.2)" : "none",
+                boxShadow: offset === 0 ? "0 24px 48px -12px rgba(0,0,0,0.25)" : "none",
+                backgroundColor: item.whiteBg ? "#ffffff" : "var(--card)",
               }}
               tabIndex={offset === 0 ? 0 : -1}
               aria-hidden={offset !== 0}
             >
               {item.isSvg ? (
-                <div className="flex items-center justify-center transition-transform duration-500 w-16 h-16">
+                <div className="flex items-center justify-center transition-transform duration-500 w-20 h-20">
                   {item.svgContent}
                 </div>
               ) : (
                 <img
                   src={item.imgSrc}
                   alt={item.name}
-                  className="object-contain transition-transform duration-500 w-full h-full max-h-16"
+                  className="object-contain transition-transform duration-500 p-3"
+                  style={{ maxWidth: "80%", maxHeight: "80%" }}
                 />
               )}
             </a>

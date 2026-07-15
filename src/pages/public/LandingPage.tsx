@@ -153,13 +153,13 @@ export function LandingPage({ lang, onOpenAuth, onLang, onNavigate, darkMode, on
           </div>
         </section>
 
-        {/* Collaborators carousel */}
-        <section className="border-y border-border px-5 md:px-10" style={{ backgroundColor: "var(--card)", paddingTop: "clamp(2rem, 5vh, 4rem)", paddingBottom: "clamp(2rem, 5vh, 4rem)" }}>
-          <div className="max-w-7xl mx-auto">
-            <p className="text-center text-[10px] font-bold uppercase tracking-[0.22em] text-muted-foreground mb-6 md:mb-8">
+        {/* Collaborators carousel — MUCHO MÁS GRANDE */}
+        <section className="border-y border-border" style={{ backgroundColor: "var(--card)", paddingTop: "clamp(4rem, 8vh, 6rem)", paddingBottom: "clamp(4rem, 8vh, 6rem)" }}>
+          <div className="max-w-7xl mx-auto px-5 md:px-10">
+            <p className="text-center text-sm md:text-base font-bold uppercase tracking-[0.22em] text-muted-foreground mb-10 md:mb-14">
               {t("landing.supported")}
             </p>
-            <Suspense fallback={<div className="h-24 w-full animate-pulse bg-primary/10 rounded-xl"></div>}>
+            <Suspense fallback={<div className="h-40 w-full animate-pulse bg-primary/10 rounded-2xl"></div>}>
               <CollaboratorCarousel lang={lang} />
             </Suspense>
           </div>
