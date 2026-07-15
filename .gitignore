@@ -1,15 +1,80 @@
+# ── Dependencias ───────────────────────────────────────
 node_modules/
+.pnpm-store/
+
+# ── Build output ────────────────────────────────────────
 dist/
 build/
+out/
+
+# ── Environment variables (NUNCA committear) ────────────
 .env
 .env.local
+.env.*.local
+.env.production
+.env.development
+
+# ── Logs ─────────────────────────────────────────────────
 *.log
 logs/
-.DS_Store
-coverage/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ── IDE / Editor ─────────────────────────────────────────
 .vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-*
+
+# ── OS files ─────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+Thumbs.db
+desktop.ini
+
+# ── Archivos temporales y basura ────────────────────────
 temp/
 tmp/
+/tmp/
 backup/
 *.bak
+*.old
+*.temp
+*.tmp
 refactor_notes.md
+changelog.temp
+
+# ── Scripts temporales de desarrollo ─────────────────────
+scripts/*.py
+scripts/extract_*.mjs
+scripts/temp_*.mjs
+scripts/fix_*.js
+/tmp/*.py
+/tmp/*.mjs
+/tmp/*.js
+
+# ── Coverage / Testing ───────────────────────────────────
+coverage/
+.nyc_output/
+jest-stare/
+
+# ── TypeScript ───────────────────────────────────────────
+*.tsbuildinfo
+
+# ── Sentry / Error reporting ────────────────────────────
+.sentryclirc
+
+# ── Certificados SSL locales ─────────────────────────────
+*.pem
+*.key
+*.cert
+
+# ── WordPress / Generators ───────────────────────────────
+wp-cli.local.yml
+
+# ── Paquetes (si se genera algo local) ───────────────────
+*.tgz
