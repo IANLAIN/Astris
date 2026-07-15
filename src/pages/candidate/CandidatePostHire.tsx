@@ -1,7 +1,14 @@
 import { useState } from "react";
+import { Activity, TrendingUp, CheckCircle, Sparkles } from "lucide-react";
 import { Lang } from "@/types";
 import { useT, C } from "@/i18n/useT";
 import { supabase } from "@/services/supabase";
+
+const STATUS_CONFIG = [
+  { Icon: Activity, labelKey: "statusLabels.0", descKey: "statusDesc.0", color: "#F59E0B" },
+  { Icon: TrendingUp, labelKey: "statusLabels.1", descKey: "statusDesc.1", color: "#10B981" },
+  { Icon: CheckCircle, labelKey: "statusLabels.2", descKey: "statusDesc.2", color: "#3B82F6" },
+];
 
 export function CandidatePostHire({ lang }: { lang: Lang }) {
   const t = useT(lang);
@@ -38,21 +45,43 @@ export function CandidatePostHire({ lang }: { lang: Lang }) {
         <p className="text-muted-foreground mt-1">Veritas Analytics · {t("vacancy.data_analyst")} · {t("vacancy.day_14_of_60")}</p>
       </div>
       <div className="max-w-5xl mx-auto w-full px-4 lg:px-20 py-10 flex flex-col gap-4 md:gap-8">
-        {/* Status */}
+        {/* Status — Professional icon cards */}
         <div className="rounded-2xl border border-border p-4 md:p-8" style={{ backgroundColor: "var(--card)" }}>
           <h2 className="font-bold text-foreground mb-6">{t("posthire.status")}</h2>
           <div className="flex gap-4 flex-col sm:flex-row">
-            {STATUS_LABELS.map((label, i) => (
-              <button 
-                key={i} 
-                onClick={() => setStatus(i)}
-                className="flex-1 py-5 rounded-xl border-2 text-center cursor-pointer font-semibold text-sm transition-all hover:scale-[1.02]" 
-                style={{ borderColor: status === i ? "var(--primary)" : "var(--border)", backgroundColor: status === i ? "var(--secondary)" : "var(--background)", color: "var(--foreground)" }}
-              >
-                {status === i && <div className="w-2 h-2 rounded-full bg-primary mx-auto mb-2" aria-hidden="true" />}
-                {label}
-              </button>
-            ))}
+            {STATUS_LABELS.map((label, i) => {
+              const { Icon, color } = STATUS_CONFIG[i] || { Icon: Activity, color: "#6366F1" };
+              const active = status === i;
+              return (
+                <button
+                  key={i}
+                  onClick={() => setStatus(i)}
+                  className="flex-1 flex flex-col items-center gap-3 py-5 px-4 rounded-xl border-2 text-center cursor-pointer transition-all hover:scale-[1.02]"
+                  style={{
+                    borderColor: active ? color : "var(--border)",
+                    backgroundColor: active ? `${color}10` : "var(--background)",
+                    color: active ? color : "var(--muted-foreground)",
+                    boxShadow: active ? `0 4px 20px ${color}25` : "none",
+                  }}
+                >
+                  <div
+                    className="w-10 h-10 rounded-xl flex items-center justify-center transition-all"
+                    style={{
+                      backgroundColor: active ? `${color}18` : "var(--muted)",
+                      color: active ? color : "var(--muted-foreground)",
+                    }}
+                  >
+                    <Icon size={20} strokeWidth={1.5} />
+                  </div>
+                  <div>
+                    <div className="font-bold text-sm">{label}</div>
+                    <div className="text-[10px] opacity-70 mt-0.5 uppercase tracking-wider">
+                      {i === 0 ? "En proceso" : i === 1 ? "Estable" : "Completado"}
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
           </div>
         </div>
         {/* Report */}

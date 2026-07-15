@@ -21,7 +21,7 @@ export function NavBar({ lang, role, screen, onNav, onLang, onLogout, darkMode, 
     { id: "profile", label: t("nav.profile"), Icon: BarChart2 },
     { id: "vacancies", label: t("nav.vacancies"), Icon: Briefcase },
     { id: "mentor-select", label: t("nav.mentor"), Icon: Users },
-    { id: "tracking", label: t("nav.tracking"), Icon: Activity },
+    { id: "post-hire", label: t("nav.tracking"), Icon: Activity },
   ];
   const COMPANY_NAV = [
     { id: "org-profile", label: t("nav.org"), Icon: Building2 },
