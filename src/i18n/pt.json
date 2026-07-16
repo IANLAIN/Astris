@@ -56,7 +56,6 @@
   "landing.impact.title": "Impacto esperado",
   "landing.impact.cand": "Para o talento",
   "landing.impact.comp": "Para as empresas",
-  "landing.footer.program": "Closer to the Stars Educational Program",
   "onboarding.dyslexia_font_title": "Você precisa de uma fonte especial para facilitar a leitura?",
   "onboarding.dyslexia_font_desc": "(Recomendada para dislexia)",
   "back": "Voltar",
@@ -317,7 +316,7 @@
   ],
   "skills": [
     "Digitação",
-    "Microsoft Office",
+    "Suíte Office avançada",
     "Leitura intensiva",
     "Redação técnica",
     "Análise de dados",

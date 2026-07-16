@@ -2,8 +2,8 @@ import { ArrowRight } from "lucide-react";
 import { Lang, Role, PublicView } from "@/types";
 import { useT } from "@/i18n/useT";
 import { PublicPageShell } from "./PublicPageShell";
-import genuineImg from "@/assets/genuine.png";
 import vibralatinaImg from "@/assets/vibralatina.png";
+import closerImg from "@/assets/closertothestarscircle.jpeg";
 
 export function SupportPage({ lang, onNavigate, onOpenAuth, onLang, darkMode, onDarkToggle, font, onFontToggle }: {
   lang: Lang;
@@ -18,13 +18,12 @@ export function SupportPage({ lang, onNavigate, onOpenAuth, onLang, darkMode, on
   const t = useT(lang);
   const orgs = [
     { name: "Vibra Latina", href: "https://www.vibralatinatx.com/", icon: <img src={vibralatinaImg} alt="Vibra Latina" className="h-16 w-16 object-contain" /> },
-    { name: "Microsoft", href: "https://support.microsoft.com/es-us/contactus/", icon: <svg width="48" height="48" viewBox="0 0 21 21" aria-hidden="true" className="shrink-0"><rect x="1" y="1" width="9" height="9" fill="#F25022" /><rect x="11" y="1" width="9" height="9" fill="#7FBA00" /><rect x="1" y="11" width="9" height="9" fill="#00A4EF" /><rect x="11" y="11" width="9" height="9" fill="#FFB900" /></svg> },
-    { name: "The Genuine Foundation", href: "https://genuinecup.org/", icon: <img src={genuineImg} alt="The Genuine Foundation" className="h-16 w-16 object-contain" /> },
+    { name: "Closer To The Stars", href: "https://closertothestars.org/", icon: <img src={closerImg} alt="Closer To The Stars" className="h-16 w-16 object-contain" /> },
   ];
 
   return (
     <PublicPageShell lang={lang} currentView="support" onNavigate={onNavigate} onOpenAuth={onOpenAuth} onLang={onLang} darkMode={darkMode} onDarkToggle={onDarkToggle} font={font} onFontToggle={onFontToggle} title={t("landing.nav.support")}>
-      <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-3 max-w-5xl mx-auto py-8">
+      <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2 max-w-4xl mx-auto py-8">
         {orgs.map((org) => (
           <div key={org.name} className="flex flex-col items-center justify-center text-center rounded-[2.5rem] border-2 border-border bg-card p-10 shadow-lg hover:shadow-xl transition-all hover:-translate-y-1">
             <div className="mb-6 flex h-28 w-28 items-center justify-center rounded-full bg-primary/10">

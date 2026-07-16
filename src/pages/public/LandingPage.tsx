@@ -160,7 +160,7 @@ export function LandingPage({ lang, onOpenAuth, onLang, onNavigate, darkMode, on
               {t("landing.supported")}
             </p>
             <Suspense fallback={<div className="h-40 w-full animate-pulse bg-primary/10 rounded-2xl"></div>}>
-              <CollaboratorCarousel lang={lang} />
+              <CollaboratorCarousel lang={lang} darkMode={darkMode} />
             </Suspense>
           </div>
         </section>
@@ -172,7 +172,6 @@ export function LandingPage({ lang, onOpenAuth, onLang, onNavigate, darkMode, on
               <div className="text-xl font-bold flex items-center gap-3 text-foreground mb-2">
                 <img src={astrisImg} alt="Astris" className="w-9 h-9 object-contain" /> Astris
               </div>
-              <div className="text-sm text-muted-foreground max-w-xs mb-3">{t("landing.footer.program")}</div>
               <div className="text-xs text-muted-foreground">&copy; {new Date().getFullYear()} Astris. {t("landing.footer.rights", "Todos los derechos reservados.")}</div>
             </div>
 
@@ -190,8 +189,7 @@ export function LandingPage({ lang, onOpenAuth, onLang, onNavigate, darkMode, on
                 <span className="font-bold text-foreground text-sm uppercase tracking-wider">{t("landing.footer.support", "Soporte y Contacto")}</span>
                 <div className="flex flex-col gap-3 text-sm text-muted-foreground">
                   <a href="https://www.vibralatinatx.com/contact-1" target="_blank" rel="noreferrer" className="hover:text-primary transition-colors flex items-center gap-2"><ArrowRight size={14} />Vibra Latina</a>
-                  <a href="https://support.microsoft.com/es-us/contactus/" target="_blank" rel="noreferrer" className="hover:text-primary transition-colors flex items-center gap-2"><ArrowRight size={14} />Microsoft Support</a>
-                  <a href="https://genuinecup.org/" target="_blank" rel="noreferrer" className="hover:text-primary transition-colors flex items-center gap-2"><ArrowRight size={14} />The Genuine Foundation</a>
+                  <a href="https://closertothestars.org/" target="_blank" rel="noreferrer" className="hover:text-primary transition-colors flex items-center gap-2"><ArrowRight size={14} />Closer To The Stars</a>
                 </div>
               </div>
             </div>

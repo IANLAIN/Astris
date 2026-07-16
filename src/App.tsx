@@ -81,7 +81,7 @@ export default function App() {
   }, [navigate]);
 
   const {
-    palette, darkMode, font, fontFamily, darkRootStyle, palStyle,
+    palette, darkMode, font, fontFamily, rootStyle,
     setPalette, setDarkMode, setFont
   } = useTheme();
 
@@ -145,7 +145,7 @@ export default function App() {
 
   if (authMessage) {
     return (
-      <div className="min-h-screen w-full overflow-x-hidden bg-background flex items-center justify-center" style={{ fontFamily, ...(darkRootStyle as React.CSSProperties) }}>
+      <div className="min-h-screen w-full overflow-x-hidden bg-background flex items-center justify-center" style={{ fontFamily, ...(rootStyle as React.CSSProperties) }}>
         <div className="p-6 rounded-2xl border border-border flex items-center gap-4 shadow-lg" style={{ backgroundColor: "var(--card)" }}>
           <div className="w-6 h-6 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: "var(--primary)", borderTopColor: "transparent" }}></div>
           <p className="text-foreground font-medium">{authMessage}</p>
@@ -155,7 +155,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden bg-background text-foreground" style={{ fontFamily, ...(darkRootStyle as React.CSSProperties) }}>
+    <div className="min-h-screen w-full overflow-x-hidden bg-background text-foreground" style={{ fontFamily, ...(rootStyle as React.CSSProperties) }}>
       {showModal && modalStep === "language" && <LanguageModal onSelect={handleLangSelect} />}
       {showModal && modalStep === "register" && (
         <RegisterModal lang={lang} role={pendingRole} onRegister={handleRegister} onBack={() => setModalStep("none")} error={authError} loading={authLoading} googleAuthUser={googleAuthUser} onCompleteGoogle={handleCompleteGoogleRegistration} />
@@ -169,7 +169,7 @@ export default function App() {
 
       {!showModal && (
         <Suspense fallback={
-          <div className="flex h-screen w-full items-center justify-center bg-background text-foreground" style={palStyle as React.CSSProperties}>
+          <div className="flex h-screen w-full items-center justify-center bg-background text-foreground" style={rootStyle as React.CSSProperties}>
             <div className="w-8 h-8 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: "var(--primary)", borderTopColor: "transparent" }}></div>
           </div>
         }>
@@ -191,7 +191,7 @@ export default function App() {
           {loggedIn && role && (
             <div>
               <NavBar lang={lang} role={role} screen={screen} onNav={handleNav} onLang={reopenLang} onLogout={() => handleLogout(setPublicView)} darkMode={darkMode} onDarkToggle={() => setDarkMode((d) => !d)} font={font} onFontToggle={() => setFont(cycleFont(font))} userName={userName} userAvatar={userAvatar} />
-              <main style={palStyle as React.CSSProperties}>
+              <main style={rootStyle as React.CSSProperties}>
                 {role === "candidate" && screen === "onboarding" && (
                   <CandidateOnboarding lang={lang} palette={palette} darkMode={darkMode} font={font} onPalette={setPalette} onDark={setDarkMode} onFont={setFont} onContinue={() => { setQuizAxis(0); setScreen("quiz"); }} />
                 )}

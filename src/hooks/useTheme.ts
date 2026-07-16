@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PaletteKey, FontKey } from "@/types";
 import { PALETTES } from "@/i18n/content";
+
+type CSSVars = Record<string, string>;
 
 export function useTheme() {
   const [palette, setPaletteState] = useState<PaletteKey>(
@@ -13,11 +15,11 @@ export function useTheme() {
     () => (typeof window !== "undefined" && window.localStorage.getItem("astris_font") as FontKey) || "inter"
   );
 
-  const setPalette = (p: PaletteKey) => { 
-    setPaletteState(p); 
-    window.localStorage.setItem("astris_palette", p); 
+  const setPalette = (p: PaletteKey) => {
+    setPaletteState(p);
+    window.localStorage.setItem("astris_palette", p);
   };
-  
+
   const setDarkMode = (d: boolean | ((prev: boolean) => boolean)) => {
     setDarkModeState((prev) => {
       const next = typeof d === "function" ? d(prev) : d;
@@ -25,52 +27,105 @@ export function useTheme() {
       return next;
     });
   };
-  
-  const setFont = (f: FontKey) => { 
-    setFontState(f); 
-    window.localStorage.setItem("astris_font", f); 
+
+  const setFont = (f: FontKey) => {
+    setFontState(f);
+    window.localStorage.setItem("astris_font", f);
   };
 
   const fontFamily =
-    font === "lexend" ? "'Lexend', Inter, sans-serif" :
-    font === "opendyslexic" ? "'OpenDyslexic', 'Lexend', Inter, sans-serif" :
+    font === "lexend" ? "'Lexend', 'Inter', sans-serif" :
+    font === "opendyslexic" ? "'OpenDyslexic', 'Lexend', 'Inter', sans-serif" :
     "'Inter', sans-serif";
 
-  const darkRootStyle: Record<string, string> = darkMode ? {
-    "--background": "#0D1824",
-    "--foreground": "#E8EDF5",
-    "--card": "#152030",
-    "--popover": "#152030",
-    "--primary": "#4B8EC8",
-    "--primary-foreground": "#0D1824",
-    "--secondary": "#1A2D42",
-    "--secondary-foreground": "#E8EDF5",
-    "--muted": "#152030",
-    "--muted-foreground": "#7A9CC0",
-    "--accent": "#3D9BC5",
-    "--accent-foreground": "#0D1824",
-    "--border": "rgba(255,255,255,0.1)",
-    "--input-background": "#152030",
-    "--card-foreground": "#E8EDF5",
-  } : {};
+  // Apply font to <html> so it cascades everywhere
+  useEffect(() => {
+    document.documentElement.style.fontFamily = fontFamily;
+  }, [fontFamily]);
 
+  // Sync .dark class on <html> for Tailwind dark: variants and shadcn/ui
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", darkMode);
+  }, [darkMode]);
+
+  // Combined CSS variables: palette base + dark mode overrides
   const pal = PALETTES[palette];
-  const palStyle: Record<string, string> = {
-    "--background": darkMode ? "#1A1A2E" : pal.bg,
-    "--foreground": darkMode ? "#F0EFEA" : pal.fg,
-    "--card": darkMode ? "#252535" : pal.card,
-    "--card-foreground": darkMode ? "#F0EFEA" : pal.fg,
-    "--primary": pal.accent,
-    "--primary-foreground": palette === "contraste" ? "#1A1A04" : "#fff",
-    "--secondary": darkMode ? "#303045" : pal.border,
-    "--secondary-foreground": darkMode ? "#F0EFEA" : pal.fg,
-    "--border": darkMode ? "rgba(255,255,255,0.1)" : pal.border,
-    "--muted": darkMode ? "#2A2A3E" : pal.bg,
-    "--muted-foreground": darkMode ? "#A8A8C8" : "#6A6A66",
-    "--accent": pal.accent,
-    "--accent-foreground": palette === "contraste" ? "#1A1A04" : "#fff",
-    "--input-background": darkMode ? "#1A1A2E" : pal.card,
-  };
+
+  const rootStyle: CSSVars = darkMode
+    ? {
+        // Dark mode — sober matte pastel palette
+        "--background": "#1A1A1A",
+        "--foreground": "#E8E4DF",
+        "--card": "#242424",
+        "--card-foreground": "#E8E4DF",
+        "--popover": "#242424",
+        "--popover-foreground": "#E8E4DF",
+        "--primary": pal.accent,
+        "--primary-foreground": palette === "contraste" ? "#1A1A04" : "#FFFFFF",
+        "--secondary": "#2A2A2A",
+        "--secondary-foreground": "#E8E4DF",
+        "--border": "rgba(255,255,255,0.08)",
+        "--muted": "#2A2A2A",
+        "--muted-foreground": "#ABA7A2",
+        "--accent": pal.accent,
+        "--accent-foreground": "#FFFFFF",
+        "--input-background": "#2A2A2A",
+        "--ring": pal.accent,
+        "--input": "#2A2A2A",
+        "--switch-background": "#3A3A3A",
+        "--destructive": "#b71c1c",
+        "--destructive-foreground": "#FFFFFF",
+        "--sidebar": "#1E1E1E",
+        "--sidebar-foreground": "#E8E4DF",
+        "--sidebar-primary": pal.accent,
+        "--sidebar-primary-foreground": "#FFFFFF",
+        "--sidebar-accent": "#2A2A2A",
+        "--sidebar-accent-foreground": "#E8E4DF",
+        "--sidebar-border": "rgba(255,255,255,0.08)",
+        "--sidebar-ring": pal.accent,
+        "--chart-1": pal.accent,
+        "--chart-2": "#8BA7C4",
+        "--chart-3": "#C4A88B",
+        "--chart-4": "#A0C4A8",
+        "--chart-5": "#C4A0B8",
+      }
+    : {
+        // Light mode — from palette
+        "--background": pal.bg,
+        "--foreground": pal.fg,
+        "--card": pal.card,
+        "--card-foreground": pal.fg,
+        "--popover": pal.card,
+        "--popover-foreground": pal.fg,
+        "--primary": pal.accent,
+        "--primary-foreground": palette === "contraste" ? "#1A1A04" : "#FFFFFF",
+        "--secondary": pal.border,
+        "--secondary-foreground": pal.fg,
+        "--border": pal.border,
+        "--muted": pal.bg,
+        "--muted-foreground": "#6A6A66",
+        "--accent": pal.accent,
+        "--accent-foreground": "#FFFFFF",
+        "--input-background": pal.card,
+        "--ring": pal.accent,
+        "--input": "transparent",
+        "--switch-background": "#86B39A",
+        "--destructive": "#b71c1c",
+        "--destructive-foreground": "#FFFFFF",
+        "--sidebar": "#EEF3FA",
+        "--sidebar-foreground": "#1A1A2E",
+        "--sidebar-primary": "#1B4B7A",
+        "--sidebar-primary-foreground": "#F7FAFC",
+        "--sidebar-accent": "#DDE9F4",
+        "--sidebar-accent-foreground": "#1A1A2E",
+        "--sidebar-border": "rgba(27, 75, 122, 0.13)",
+        "--sidebar-ring": "#2E86AB",
+        "--chart-1": "#1B4B7A",
+        "--chart-2": "#2E86AB",
+        "--chart-3": "#C9830A",
+        "--chart-4": "#4A7A61",
+        "--chart-5": "#6B7E9A",
+      };
 
   return {
     palette,
@@ -80,7 +135,6 @@ export function useTheme() {
     setDarkMode,
     setFont,
     fontFamily,
-    darkRootStyle,
-    palStyle
+    rootStyle,
   };
 }

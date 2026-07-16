@@ -4,7 +4,7 @@ import { useT } from "@/i18n/useT";
 
 export function CompanyPostVacancy({ lang }: { lang: Lang }) {
   const t = useT(lang);
-  const SKILLS = ["Mecanografía", "Microsoft Office", "Lectura intensiva", "Redacción técnica", "Análisis de datos", "Diseño visual", "Comunicación verbal"];
+  const SKILLS = ["Mecanografía", "Ofimática avanzada", "Lectura intensiva", "Redacción técnica", "Análisis de datos", "Diseño visual", "Comunicación verbal"];
   return (
     <div className="min-h-screen w-full overflow-x-hidden flex flex-col">
       <div className="px-4 lg:px-20 py-10 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
