@@ -4,7 +4,7 @@ import {
 } from "lucide-react";
 import { Lang, Role, FontKey } from "@/types";
 import { useT } from "@/i18n/useT";
-import astrisImg from "@/assets/astris.png";
+import astrisImg from "@/assets/astris.svg";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 
 export function NavBar({ lang, role, screen, onNav, onLang, onLogout, darkMode, onDarkToggle, font, onFontToggle, userName, userAvatar }: {

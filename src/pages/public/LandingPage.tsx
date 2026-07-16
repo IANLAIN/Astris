@@ -2,7 +2,7 @@ import { useState } from "react";
 import { User, Building2, Star, ArrowRight, Globe, X, Sun, Moon, Type } from "lucide-react";
 import { Lang, PublicView, FontKey, Role } from "@/types";
 import { useT, C } from "@/i18n/useT";
-import astrisImg from "@/assets/astris.png";
+import astrisImg from "@/assets/astris.svg";
 import { lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 

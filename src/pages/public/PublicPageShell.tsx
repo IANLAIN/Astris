@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Globe, X, Sun, Moon, Type } from "lucide-react";
 import { Lang, Role, PublicView, FontKey } from "@/types";
 import { useT } from "@/i18n/useT";
-import astrisImg from "@/assets/astris.png";
+import astrisImg from "@/assets/astris.svg";
 
 export function PublicPageShell({ lang, currentView, onNavigate, onOpenAuth, onLang, title, subtitle, children, darkMode, onDarkToggle, font, onFontToggle }: {
   lang: Lang;
