@@ -17,8 +17,8 @@ export function SupportPage({ lang, onNavigate, onOpenAuth, onLang, darkMode, on
 }) {
   const t = useT(lang);
   const orgs = [
-    { name: "Vibra Latina", href: "https://www.vibralatinatx.com/", icon: <img src={vibralatinaImg} alt="Vibra Latina" className="h-16 w-16 object-contain" /> },
-    { name: "Closer To The Stars", href: "https://closertothestars.org/", icon: <img src={closerImg} alt="Closer To The Stars" className="h-16 w-16 object-contain" /> },
+    { name: "Vibra Latina", href: "https://www.vibralatinatx.com/", icon: <img src={vibralatinaImg} alt="Vibra Latina" className="h-[77px] w-[77px] object-contain" /> },
+    { name: "Closer To The Stars", href: "https://closertothestars.org/", icon: <img src={closerImg} alt="Closer To The Stars" className="h-[200px] w-[200px] object-contain" /> },
   ];
 
   return (
