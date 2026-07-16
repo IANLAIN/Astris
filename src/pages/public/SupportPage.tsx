@@ -3,7 +3,7 @@ import { Lang, Role, PublicView } from "@/types";
 import { useT } from "@/i18n/useT";
 import { PublicPageShell } from "./PublicPageShell";
 import vibralatinaImg from "@/assets/vibralatina.png";
-import closerImg from "@/assets/closertothestarscircle.jpeg";
+import closerImg from "@/assets/closertothestarscircle.png";
 
 export function SupportPage({ lang, onNavigate, onOpenAuth, onLang, darkMode, onDarkToggle, font, onFontToggle }: {
   lang: Lang;
