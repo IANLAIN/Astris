@@ -3,7 +3,7 @@
   "lang.sub": "Choisissez la langue dans laquelle vous souhaitez utiliser Astris",
   "auth.title": "Bienvenue sur Astris",
   "auth.q": "Est-ce votre première fois ici ?",
-  "auth.new": "C'est ma première fois",
+  "auth.new": "S'inscrire",
   "auth.new.sub": "Créez votre profil et trouvez votre lieu de travail idéal",
   "auth.existing": "J'ai déjà un compte",
   "auth.existing.sub": "Accédez à votre tableau de bord et reprenez là où vous vous étiez arrêté",

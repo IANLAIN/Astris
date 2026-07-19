@@ -143,7 +143,6 @@ export function LoginModal({ lang, onLogin, onBack, onRegister, error, loading }
               {/* ── Register CTA ── */}
               {onRegister && (
                 <div className="text-center mt-2 pt-4 border-t border-border">
-                  <p className="text-sm text-muted-foreground mb-3">{t("auth.q")}</p>
                   <button
                     onClick={onRegister}
                     className="w-full py-4 rounded-xl font-bold text-base flex items-center justify-center gap-3 cursor-pointer transition-all hover:opacity-90"
