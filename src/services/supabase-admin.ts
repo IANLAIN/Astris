@@ -1,33 +1,49 @@
-// ── Admin Demo Service ──
-// All admin functions now use demo data.
+// ── Admin Service ──
+// Wraps the main supabase.ts admin functions.
+// When USE_REAL_BACKEND is false, falls back to demo data.
 
-import { ADMIN_STATS, ADMIN_USERS, ADMIN_COMPANIES, ADMIN_CANDIDATES } from "./demoData";
+import {
+  getDashboardStats as realGetStats,
+  getAdminUsers as realGetUsers,
+  getAdminCompanies as realGetCompanies,
+  getAdminCandidates as realGetCandidates,
+  softDeleteUser as realSoftDelete,
+  updateUserRole as realUpdateRole,
+  logAdminAction as realLog,
+  USE_REAL_BACKEND,
+} from "./supabase";
+
+import {
+  ADMIN_STATS,
+  ADMIN_USERS,
+  ADMIN_COMPANIES,
+  ADMIN_CANDIDATES,
+} from "./demoData";
 
 export async function logAdminAction(adminId: string, action: string, targetTable: string, targetId?: string, details?: any) {
-  // Demo: no-op
-  console.log("[ADMIN LOG]", { adminId, action, targetTable, targetId, details });
+  return realLog(adminId, action, targetTable, targetId, details);
 }
 
 export async function getDashboardStats() {
-  return ADMIN_STATS;
+  return realGetStats();
 }
 
 export async function getAdminUsers() {
-  return ADMIN_USERS;
-}
-
-export async function softDeleteUser(adminId: string, userId: string, isDeleted: boolean) {
-  console.log("[ADMIN] softDeleteUser:", userId, isDeleted);
-}
-
-export async function updateUserRole(adminId: string, userId: string, newRole: string) {
-  console.log("[ADMIN] updateUserRole:", userId, newRole);
+  return realGetUsers();
 }
 
 export async function getAdminCompanies() {
-  return ADMIN_COMPANIES;
+  return realGetCompanies();
 }
 
 export async function getAdminCandidates() {
-  return ADMIN_CANDIDATES;
+  return realGetCandidates();
+}
+
+export async function softDeleteUser(adminId: string, userId: string, isDeleted: boolean) {
+  return realSoftDelete(adminId, userId, isDeleted);
+}
+
+export async function updateUserRole(adminId: string, userId: string, newRole: string) {
+  return realUpdateRole(adminId, userId, newRole);
 }
