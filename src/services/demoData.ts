@@ -48,7 +48,7 @@ export const DEMO_USERS: Record<string, {
       company_size: "10-50 empleados",
       country: "Estados Unidos",
       city: "Houston, TX",
-      philosophy: "Somos una corporación comprometida con la producción audiovisual y la distribución de contenido. En Vibra Latina tenemos un propósito claro: promover el cambio social y la inclusión a través del poder de las historias. Con sede en Houston, Texas, y una sólida presencia en Latinoamérica, nos especializamos en desarrollar obras que abordan temas fundamentales enfocados en la responsabilidad social corporativa, la educación, innovaciones y STEM. Nuestra misión es mostrar historias inspiradoras de comunidades, líderes y personalidades, especialmente dentro de la comunidad hispana bilingüe.",
+      philosophy: "Somos una corporación comprometida con la producción audiovisual y la distribución de contenido. En Vibra Latina tenemos un propósito claro: promover el cambio social y la inserción laboral a través del poder de las historias. Con sede en Houston, Texas, y una sólida presencia en Latinoamérica, nos especializamos en desarrollar obras que abordan temas fundamentales enfocados en la responsabilidad social corporativa, la educación, innovaciones y STEM. Nuestra misión es mostrar historias inspiradoras de comunidades, líderes y personalidades, especialmente dentro de la comunidad hispana bilingüe.",
       noise: "Moderado (ambiente creativo controlado)",
       light: "Luz LED ajustable + luz natural",
       layout: "Espacios abiertos con zonas de enfoque individual",
@@ -86,10 +86,10 @@ export const DEMO_USERS: Record<string, {
     completedOnboarding: true,
     profile: {
       full_name: "Elena Vargas",
-      specialty: "Inclusión laboral, TDAH y funciones ejecutivas",
+      specialty: "Entornos laborales diversos y funciones ejecutivas",
       years_experience: 9,
       modality: "Virtual y Presencial",
-      bio: "Psicóloga organizacional con amplia experiencia en acompañamiento de talento neurodivergente en entornos corporativos y creativos."
+      bio: "Psicóloga organizacional con amplia experiencia en acompañamiento de personas con estilos diversos en entornos corporativos y creativos."
     }
   }
 };
@@ -119,7 +119,7 @@ export const VACANCIES_FALLBACK: VacancyItem[] = [
       "Instrucciones escritas detalladas",
       "Audífonos con cancelación de ruido"
     ],
-    desc: "Buscamos un desarrollador Full Stack para construir y mantener la plataforma web de Vibra Latina. Trabajarás con React, Node.js, y servicios en la nube para crear experiencias digitales que conecten a la comunidad latina con contenido audiovisual inclusivo.",
+    desc: "Buscamos un desarrollador Full Stack para construir y mantener la plataforma web de Vibra Latina. Trabajarás con React, Node.js, y servicios en la nube para crear experiencias digitales que conecten a la comunidad latina con contenido audiovisual adaptativo.",
     companyDesc: "Vibra Latina es una corporación comprometida con la producción audiovisual y la distribución de contenido, con sede en Houston, Texas. Nos especializamos en desarrollar obras que abordan temas de responsabilidad social corporativa, educación, innovación y STEM, mostrando historias inspiradoras de la comunidad hispana bilingüe.",
   },
   {
@@ -157,7 +157,7 @@ export const VACANCIES_FALLBACK: VacancyItem[] = [
       "Reuniones con agenda previa"
     ],
     desc: "Lidera la administración de sistemas de la fundación. Gestionarás infraestructura TI, seguridad informática, y coordinarás equipos técnicos en proyectos de impacto social relacionados con la exploración espacial y la divulgación científica.",
-    companyDesc: "Closer To The Stars Foundation es una organización sin fines de lucro dedicada a acercar la ciencia y la exploración espacial a comunidades subrepresentadas, promoviendo la inclusión en STEM.",
+    companyDesc: "Closer To The Stars Foundation es una organización sin fines de lucro dedicada a acercar la ciencia y la exploración espacial a comunidades subrepresentadas, promoviendo la inserción laboral en STEM.",
   },
 ];
 
@@ -166,10 +166,10 @@ export const MENTORS_FALLBACK: MentorItem[] = [
   {
     id: "M-01",
     name: "Elena Vargas",
-    specialty: "Inclusión laboral, TDAH y funciones ejecutivas",
+    specialty: "Entornos laborales diversos y funciones ejecutivas",
     years: 9,
     modality: "Virtual y Presencial",
-    bio: "Psicóloga organizacional especializada en estrategias de inserción laboral para perfiles con estilos cognitivos diversos. Experiencia en acompañamiento de talento neurodivergente en sectores tecnológico y creativo."
+    bio: "Psicóloga organizacional especializada en estrategias de inserción laboral para perfiles con estilos cognitivos diversos. Experiencia en acompañamiento de personas con estilos diversos en sectores tecnológico y creativo."
   },
   {
     id: "M-02",
@@ -177,7 +177,7 @@ export const MENTORS_FALLBACK: MentorItem[] = [
     specialty: "Aprendizaje adaptativo en entornos corporativos",
     years: 5,
     modality: "Virtual",
-    bio: "Consultor de inclusión con experiencia en mediación empresa-candidato. Especialista en diseño de planes de ajuste razonable y comunicación asertiva en equipos diversos."
+    bio: "Consultor de accesibilidad laboral con experiencia en mediación empresa-candidato. Especialista en diseño de planes de ajuste razonable y comunicación asertiva en equipos diversos."
   },
   {
     id: "M-03",

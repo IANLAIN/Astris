@@ -12,8 +12,8 @@ export function MentorSelect({ lang, onSelect }: { lang: Lang; onSelect: () => v
     // Use demo mentors directly
     const loaded = MENTORS_FALLBACK;
     return loaded.length > 0 ? loaded : [
-      { id: "M-01", name: "Elena Vargas", specialty: "Inclusión laboral, TDAH y funciones ejecutivas", years: 9, modality: "Virtual y Presencial", bio: "Psicóloga organizacional especializada en estrategias de inserción laboral para perfiles con estilos cognitivos diversos." },
-      { id: "M-02", name: "David Morales", specialty: "Aprendizaje adaptativo en entornos corporativos", years: 5, modality: "Virtual", bio: "Consultor de inclusión con experiencia en mediación empresa-candidato." },
+      { id: "M-01", name: "Elena Vargas", specialty: "Entornos laborales diversos y funciones ejecutivas", years: 9, modality: "Virtual y Presencial", bio: "Psicóloga organizacional especializada en estrategias de inserción laboral para perfiles con estilos cognitivos diversos." },
+      { id: "M-02", name: "David Morales", specialty: "Aprendizaje adaptativo en entornos corporativos", years: 5, modality: "Virtual", bio: "Consultor de accesibilidad laboral con experiencia en mediación empresa-candidato." },
     ];
   });
 
