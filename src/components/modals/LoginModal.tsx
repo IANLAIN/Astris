@@ -26,11 +26,21 @@ export function LoginModal({ lang, onLogin, onBack, error, loading }: {
   const isBusy = localLoading || loading;
 
   const handleLoginSubmit = () => {
-    if (!email || !password) {
+    setLocalError(null);
+    
+    if (!email && !password) {
+      setLocalError(t("login.emailError") + " " + t("login.passwordError"));
+      return;
+    }
+    if (!email) {
       setLocalError(t("login.emailError"));
       return;
     }
-    setLocalError(null);
+    if (!password) {
+      setLocalError(t("login.passwordError"));
+      return;
+    }
+    
     onLogin(email, password);
   };
 
@@ -42,12 +52,12 @@ export function LoginModal({ lang, onLogin, onBack, error, loading }: {
   };
 
   const handleReset = async () => {
+    setLocalError(null);
     if (!email) {
       setLocalError(t("login.emailError"));
       return;
     }
     setLocalLoading(true);
-    setLocalError(null);
     try {
       await resetPasswordForEmail(email);
       setResetSent(true);

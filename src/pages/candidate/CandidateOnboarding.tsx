@@ -17,8 +17,7 @@ export function CandidateOnboarding({ lang, palette, darkMode, font, onPalette, 
   const border = darkMode ? "rgba(255,255,255,0.1)" : pal.border;
   const accentText = palette === "contraste" ? "#1A1A04" : "#fff";
   const fontFamily =
-    font === "lexend" ? "'Lexend', Inter, sans-serif" :
-    font === "opendyslexic" ? "'OpenDyslexic', 'Lexend', Inter, sans-serif" :
+    font === "opendyslexic" ? "'OpenDyslexic', 'Inter', sans-serif" :
     "'Inter', sans-serif";
 
   return (

@@ -1,135 +1,136 @@
-# Arquitectura de Astris
+# Astris Architecture
 
-## Resumen
+## Overview
 
-Astris es una SPA React + Vite + TypeScript para conectar talento diverso con empresas inclusivas mediante matching basado en estilos de trabajo, necesidades ambientales y ajustes razonables — no en diagnósticos.
+Astris is a React + Vite + TypeScript SPA that connects diverse talent with inclusive companies through matching based on work styles, environmental needs, and reasonable accommodations — not on diagnoses.
 
-Usa React Router DOM v7 con **search params** para navegación, `React.lazy()` + `<Suspense>` para **code splitting obligatorio**, i18next para 4 idiomas, y Supabase como backend opcional con modo demo offline.
+It uses React Router DOM v7 with search params for navigation, React.lazy() + Suspense for mandatory code splitting, i18next for 4 languages, and a fully offline demo data system with no backend dependency.
 
 ---
 
-## Stack Tecnológico Actual
+## Current Technology Stack
 
-| Capa | Tecnología | Versión |
-|------|-----------|---------|
+| Layer | Technology | Version |
+|-------|-----------|---------|
 | Framework | React | 18 |
-| Lenguaje | TypeScript | 6 (strict: true) |
+| Language | TypeScript | 6 (strict: true) |
 | Build | Vite | 6 |
-| Enrutamiento | React Router DOM | 7 (search params) |
-| Estilos | Tailwind CSS | 4 |
+| Routing | React Router DOM | 7 (search params) |
+| Styles | Tailwind CSS | 4 |
 | UI primitives | Radix UI | latest |
-| Iconos | Lucide React | 0.487 |
+| Icons | Lucide React | 0.487 |
 | i18n | i18next + react-i18next + LanguageDetector | latest |
-| Backend | Supabase (Auth + PostgreSQL) | opcional |
-| Gráficos | Recharts | 3 |
-| Animaciones | Framer Motion (via motion package) | 12 |
-| Bundle Analysis | Vite rollupOptions.manualChunks | incorporado |
+| Backend | Demo offline (no backend) | — |
+| Demo data | src/services/demoData.ts | complete |
+| Charts | Recharts | 3 |
+| Animations | Framer Motion (via motion package) | 12 |
+| Bundle Analysis | Vite rollupOptions.manualChunks | built-in |
 
 ---
 
-## Estructura de Carpetas
+## Folder Structure
 
 ```
 src/
-├── App.tsx                    # Raíz: enrutamiento condicional por screen + role, modales, tema, Suspense
-├── main.tsx                   # Entry point: BrowserRouter + render + import de estilos/i18n
-├── vite-env.d.ts              # Tipos Vite
-│
-├── assets/                    # Imágenes (.png, .webp) — sin texto incrustado, < 200 KB
-│
-├── components/
-│   ├── common/                # Componentes compartidos: NavBar, MatchBadge, RadarViz,
-│   │                          #   CollaboratorCarousel, AnimatedBar, Overlay
-│   ├── modals/                # LanguageModal, LoginModal, RegisterModal, UpdatePasswordModal
-│   └── ui/                    # Radix UI wrappers shadcn-style: button, dialog, card, form, etc.
-│
-├── hooks/
-│   ├── useAuth.ts             # Autenticación: sesión, rol, quizCompleted, demo users, CRUD auth
-│   ├── useCanGoBack.ts        # Detectar historial navegable (window.history.state.idx)
-│   └── useTheme.ts            # Paleta, dark mode, fuente — persistidos en localStorage
-│
-├── i18n/
-│   ├── i18n.ts                # Configuración i18next (LanguageDetector, resources)
-│   ├── useT.ts                # Hook useT(), helpers: C(), computeRadar(), getPaletteName(), getInitialLang()
-│   ├── content.ts             # Datos estáticos: QUIZ_AXES (4 ejes × 4 preguntas), PALETTES (4 paletas)
-│   ├── es.json                # Traducciones español (base)
-│   ├── en.json                # Traducciones inglés
-│   ├── pt.json                # Traducciones portugués
-│   └── fr.json                # Traducciones francés
-│
-├── mock/                      # Datos mock offline
-│   └── index.ts               # VACANCIES_FALLBACK, MENTORS_FALLBACK, CANDIDATE_RADAR_FINAL,
-│                               #   COMPANY_CANDIDATES_DATA, MENTOR_PROCESSES
-│
-├── pages/
-│   ├── public/                # LandingPage, AboutPage, SupportPage, PartnersPage
-│   │   └── PublicPageShell    # Layout compartido para páginas públicas (no usado actualmente)
-│   ├── candidate/             # CandidateOnboarding, CandidateQuiz, CandidateProfile,
-│   │                          #   CandidateVacancies, VacancyDetail, MentorSelect,
-│   │                          #   CandidateAccompaniment, CandidatePostHire
-│   ├── company/               # CompanyOrgProfile, CompanyPostVacancy, CompanyCandidates,
-│   │                          #   CompanyCandidateDetail, CompanyPostHire
-│   ├── mentor/                # MentorDashboard, MentorCheckins, MentorCompanies
-│   ├── admin/                 # AdminDashboard + subvistas
-│   │   └── views/             # OverviewView, UsersView, CompaniesView, CandidatesView, JobsView
-│   └── shared/                # NotFoundPage, SettingsPage
-│
-├── services/
-│   ├── supabase.ts            # Cliente Supabase, auth CRUD, matching, demo fallback
-│   └── supabase-admin.ts      # Funciones admin: stats, usuarios, empresas, logs
-│
-├── styles/
-│   ├── index.css              # Entry point: importa todos los CSS
-│   ├── globals.css            # Resets y estilos base
-│   ├── tailwind.css           # Directivas Tailwind v4 (@import "tailwindcss")
-│   ├── theme.css              # Variables CSS tema (--primary, --background, etc.)
-│   └── fonts.css              # @font-face para Atkinson Hyperlegible, Lexend, Inter
-│
-├── types/
-│   └── index.ts              # Lang, Role, PaletteKey, FontKey, QuizAnswers, VacancyItem, MentorItem, etc.
+  App.tsx                    # Root: conditional routing by screen + role, modals, theme, Suspense
+  main.tsx                   # Entry point: BrowserRouter + render + style/i18n imports
+  vite-env.d.ts              # Vite types
+
+  assets/                    # Images (.png, .webp) — no embedded text, < 200 KB
+
+  components/
+    common/                  # Shared components: NavBar, MatchBadge, RadarViz,
+                             #   CollaboratorCarousel, AnimatedBar, Overlay
+    modals/                  # LanguageModal, LoginModal, RegisterModal, UpdatePasswordModal
+    ui/                      # Radix UI wrappers shadcn-style: button, dialog, card, form, etc.
+
+  hooks/
+    useAuth.ts               # Authentication: session, role, quizCompleted, demo users, CRUD auth
+    useCanGoBack.ts          # Detect navigable history (window.history.state.idx)
+    useTheme.ts              # Palette, dark mode, font — persisted in localStorage
+
+  i18n/
+    i18n.ts                  # i18next configuration (LanguageDetector, resources)
+    useT.ts                  # useT() hook, helpers: C(), computeRadar(), getPaletteName(), getInitialLang()
+    content.ts               # Static data NOT translated via i18n: QUIZ_AXES (4 axes × 4 questions), PALETTES (4 palettes)
+    es.json                  # Spanish translations (base)
+    en.json                  # English translations
+    pt.json                  # Portuguese translations
+    fr.json                  # French translations
+
+  mock/                      # Demo data re-export
+    index.ts                 # Re-exports everything from @/services/demoData
+
+  services/
+    demoData.ts              # ALL demo data: users, vacancies, mentors, companies, admin
+    supabase.ts              # Demo API: auth, matching, profiles, checkins, admin functions
+    supabase-admin.ts        # Admin demo functions: stats, users, companies, logs
+
+  pages/
+    public/                  # LandingPage, AboutPage, SupportPage, PartnersPage
+      PublicPageShell        # Shared layout for public pages
+    candidate/               # CandidateOnboarding, CandidateQuiz, CandidateProfile,
+                             #   CandidateVacancies, VacancyDetail, MentorSelect,
+                             #   CandidateAccompaniment, CandidatePostHire
+    company/                 # CompanyOrgProfile, CompanyPostVacancy, CompanyCandidates,
+                             #   CompanyCandidateDetail, CompanyPostHire
+    mentor/                  # MentorDashboard, MentorCheckins, MentorCompanies
+    admin/                   # AdminDashboard + subviews
+      views/                 # OverviewView, UsersView, CompaniesView, CandidatesView, JobsView
+    shared/                  # NotFoundPage, SettingsPage
+
+  styles/
+    index.css                # Entry point: imports all CSS
+    globals.css              # Resets and base styles
+    tailwind.css             # Tailwind v4 directives (@import "tailwindcss")
+    theme.css                # Theme CSS variables (--primary, --background, etc.)
+    fonts.css                # @font-face for Atkinson Hyperlegible, Lexend, Inter
+
+  types/
+    index.ts                 # Lang, Role, PaletteKey, FontKey, QuizAnswers, VacancyItem, MentorItem, etc.
 ```
 
 ---
 
-## Sistema de Enrutamiento
+## Routing System
 
-- **BrowserRouter** en `main.tsx`
-- **Navegación por search params**: `?screen=...&view=...`
+- **BrowserRouter** in `main.tsx`
+- **Search param navigation**: `?screen=...&view=...`
 
-### Funciones clave
+### Key Functions
 
-| Función | Ubicación | Comportamiento |
-|---------|-----------|----------------|
-| `parseParams()` | `src/App.tsx` | Lee `window.location.search` en cada render, retorna `{ screen, publicView }` |
-| `setScreen(s)` | `App.tsx` (useCallback) | `navigate("?screen=" + s, { replace: false })` — crea entrada real en el historial |
-| `setPublicView(v)` | `App.tsx` (useCallback) | `navigate("?view=" + v)` — para páginas públicas |
-| `handleBackTo(fallback)` | `App.tsx` | Si hay historial previo → `navigate(-1)`; si no → `setScreen(fallback)` |
-| `useCanGoBack()` | `src/hooks/useCanGoBack.ts` | Retorna `window.history.state?.idx > 0` |
+| Function | Location | Behavior |
+|----------|----------|----------|
+| parseParams() | src/App.tsx | Reads window.location.search on each render, returns { screen, publicView } |
+| setScreen(s) | App.tsx (useCallback) | navigate("?screen=" + s, { replace: false }) — creates a real history entry |
+| setPublicView(v) | App.tsx (useCallback) | navigate("?view=" + v) — for public pages |
+| handleBackTo(fallback) | App.tsx | If history exists -> navigate(-1); otherwise -> setScreen(fallback) |
+| useCanGoBack() | src/hooks/useCanGoBack.ts | Returns window.history.state?.idx > 0 |
 
-### Mapa de screens por rol
+### Screen Map by Role
 
-| Rol | Screens |
-|-----|---------|
-| **candidate** | `onboarding`, `quiz`, `profile`, `vacancies`, `vacancy-detail`, `mentor-select`, `accompaniment`, `post-hire`, `tracking` |
-| **company** | `org-profile`, `post-vacancy`, `candidates`, `candidate-detail`, `comp-post-hire`, `post-hire` |
-| **mentor** | `dashboard`, `checkins`, `companies` |
-| **admin** | `dashboard` (subvistas con estado interno + sidebar) |
+| Role | Screens |
+|------|---------|
+| candidate | onboarding, quiz, profile, vacancies, vacancy-detail, mentor-select, accompaniment, post-hire, tracking |
+| company | org-profile, post-vacancy, candidates, candidate-detail, comp-post-hire, post-hire |
+| mentor | dashboard, checkins, companies |
+| admin | dashboard (subviews with internal state + sidebar) |
 
-### Bloqueo de quiz obligatorio
+### Mandatory Quiz Block
 
-- `quizCompleted` se persiste en `localStorage` como `astris_quiz_completed` (booleano)
-- **Carga inicial**: `useEffect` en `useAuth()` lo lee del almacén
-- Mientras `quizCompleted === false`, el candidato **solo** puede ver `onboarding` y `quiz`
-- Cualquier otra screen muestra un **bloqueador** "Perfil incompleto" con botón para ir a caracterización
-- El bloqueador se renderiza **directamente en App.tsx**
+- `quizCompleted` is persisted in localStorage as `astris_quiz_completed` (boolean)
+- Initial load: useEffect in useAuth() reads it from storage
+- While quizCompleted === false, the candidate can ONLY see onboarding and quiz
+- Any other screen shows a blocker: "Perfil incompleto" with a button to go to characterization
+- The blocker renders directly in App.tsx
 
 ---
 
-## Sistema de Code Splitting — OBLIGATORIO
+## Code Splitting — Mandatory
 
-Toda página **debe** cargarse con `React.lazy()` + `<Suspense>`. No existen imports estáticos de páginas.
+Every page MUST be loaded with React.lazy() + Suspense. No static page imports allowed.
 
-### Patrón correcto para named exports
+### Correct pattern for named exports
 
 ```tsx
 const CandidateProfile = lazy(() =>
@@ -137,7 +138,7 @@ const CandidateProfile = lazy(() =>
 );
 ```
 
-### Patrón para default exports
+### Correct pattern for default exports
 
 ```tsx
 const AdminDashboard = lazy(() => import("@/pages/admin/AdminDashboard"));
@@ -145,22 +146,23 @@ const AdminDashboard = lazy(() => import("@/pages/admin/AdminDashboard"));
 
 ### Fallback
 
-Todas las páginas lazy se renderizan dentro de:
+All lazy pages render within:
 
 ```tsx
 <Suspense fallback={
   <div className="flex h-screen w-full items-center justify-center bg-background text-foreground">
-    <div className="w-8 h-8 border-4 border-t-transparent rounded-full animate-spin" style={{ borderColor: "var(--primary)", borderTopColor: "transparent" }}></div>
+    <div className="w-8 h-8 border-4 border-t-transparent rounded-full animate-spin"
+      style={{ borderColor: "var(--primary)", borderTopColor: "transparent" }}>
+    </div>
   </div>
 }>
 ```
 
-### Chunk splitting en build (vite.config.ts)
+### Build chunk splitting (vite.config.ts)
 
 ```ts
 manualChunks(id: string) {
   if (id.includes('node_modules')) {
-    if (id.includes('@supabase')) return 'vendor-supabase';
     if (id.includes('motion'))     return 'vendor-framer';
     if (id.includes('recharts'))   return 'vendor-recharts';
     if (id.includes('lucide-react')) return 'vendor-lucide';
@@ -170,117 +172,134 @@ manualChunks(id: string) {
 }
 ```
 
-Cada chunk de página debe pesar **< 10 KB**. Los vendors se separan por librería para maximizar caching.
+Each page chunk should be < 10 KB. Vendor chunks are separated by library to maximize caching.
 
 ---
 
-## Sistema de Traducción (i18n)
+## Translation System (i18n)
 
-### Arquitectura
+### Architecture
 
-| Archivo | Propósito |
-|---------|-----------|
-| `src/i18n/i18n.ts` | Inicializa i18next con LanguageDetector y resources de 4 JSON |
-| `src/i18n/useT.ts` | Hook `useT()`, helpers: `C()` (acceso a objetos anidados), `computeRadar()`, `getPaletteName()`, `getInitialLang()`, `getInitialModalStep()` |
-| `src/i18n/content.ts` | Datos estáticos **no traducidos por i18n**: `QUIZ_AXES` (preguntas con stems/opts en 4 idiomas), `PALETTES` (colores) |
-| `src/i18n/{es,en,pt,fr}.json` | Traducciones planas con **claves semánticas** |
+| File | Purpose |
+|------|---------|
+| src/i18n/i18n.ts | Initializes i18next with LanguageDetector and resources from 4 JSON files |
+| src/i18n/useT.ts | useT() hook, helpers: C() (nested object access), computeRadar(), getPaletteName(), getInitialLang(), getInitialModalStep() |
+| src/i18n/content.ts | Static data NOT translated via i18n: QUIZ_AXES (questions with stems/opts in 4 languages), PALETTES (colors) |
+| src/i18n/{es,en,pt,fr}.json | Flat translations with semantic keys |
 
-### Reglas
+### Rules
 
-1. **Texto visible al usuario** → debe ir en los JSON, no hardcodeado
-2. **Claves semánticas**: `ámbito.clave` (ej: `modality.remote`, `vacancy.full_time`, `common.loading`)
-3. **Datos con estructura anidada por idioma** (preguntas, paletas) → van en `content.ts` con objetos `{ es, en, pt, fr }`
-4. **Acceso programático a arrays/objetos**: `C(lang, "accompStages")` retorna el objeto traducido
-5. **Idioma persistido** en `localStorage["astris_lang"]`
+1. **User-visible text** MUST be in the JSON files, not hardcoded
+2. **Semantic keys**: `scope.key` (e.g., modality.remote, vacancy.full_time, common.loading)
+3. **Data with nested language structure** (questions, palettes) go in content.ts with `{ es, en, pt, fr }` objects
+4. **Programmatic access to arrays/objects**: C(lang, "accompStages") returns the translated object
+5. **Language persisted** in localStorage["astris_lang"]
+6. All dashboards (candidate, company, mentor, admin) must use t() for every user-visible string
 
-### Flujo de carga
+### Adding new translations
 
-1. `i18n.ts` importa estáticamente los 4 JSON
-2. LanguageDetector detecta idioma del navegador
-3. `getInitialLang()` en useT.ts verifica `localStorage` → navegador → español por defecto
-4. `getInitialModalStep()`: si no hay idioma persistido, muestra LanguageModal al primer ingreso
-5. `useT(lang)` devuelve la función `t()` de react-i18next
-
----
-
-## Gestión de Estado — Sin Store Global
-
-| Estado | Ubicación | Persistencia |
-|--------|-----------|-------------|
-| Autenticación / rol | `useAuth()` hook | Sesión Supabase + localStorage para demo |
-| Tema (paleta, dark, font) | `useTheme()` hook | `localStorage["astris_palette"]`, `localStorage["astris_dark"]`, `localStorage["astris_font"]` |
-| Navegación (screen, view) | URL search params | URL (compartible, navegable con botón atrás) |
-| Quiz answers / axis | `useState` en `App.tsx` | No persiste (se envía a Supabase al completar) |
-| Quiz completado | `useAuth().quizCompleted` | `localStorage["astris_quiz_completed"]` |
-| Traducciones | Contexto i18next | Cookie / localStorage vía LanguageDetector |
-| Vacante seleccionada | `useState` en `App.tsx` | No persiste |
-| Candidato seleccionado | `useState` en `App.tsx` | No persiste |
-
-**No hay Context API ni store global** (Redux, Zustand, Jotai). Los hooks se usan directamente desde `App.tsx` y pasan valores como props a las páginas.
+1. Add "key": "value" in src/i18n/es.json
+2. Translate in en.json, pt.json, fr.json
+3. Use t("key") in TSX
 
 ---
 
-## Autenticación
+## State Management — No Global Store
 
-### Proveedores
+| State | Location | Persistence |
+|-------|----------|-------------|
+| Authentication / role | useAuth() hook | localStorage for demo |
+| Theme (palette, dark, font) | useTheme() hook | localStorage["astris_palette"], localStorage["astris_dark"], localStorage["astris_font"] |
+| Navigation (screen, view) | URL search params | URL (shareable, navigable with browser back button) |
+| Quiz answers / axis | useState in App.tsx | Not persisted |
+| Quiz completed | useAuth().quizCompleted | localStorage["astris_quiz_completed"] |
+| Translations | i18next context | Cookie / localStorage via LanguageDetector |
+| Selected vacancy | useState in App.tsx | Not persisted |
+| Selected candidate | useState in App.tsx | Not persisted |
 
-- **Supabase Auth**: email/password, Google OAuth, password recovery
-- **Modo demo offline** (sin backend):
-
-| Rol | Email | Contraseña | ID |
-|-----|-------|-----------|-----|
-| Candidato | `candidato@astris.org` | `Demo2026` | `demo-cand` |
-| Empresa | `empresa@astris.org` | `Demo2026` | `demo-comp` |
-| Mentor | `mentor@astris.org` | `Demo2026` | `demo-ment` |
-| Admin | `johansttivelinaresb@gmail.com` | `Astris2026` | backdoor |
-
-### Flujo
-
-1. `App.tsx` → `useAuth(setScreen, setModalStep)` se ejecuta en el montaje
-2. `getCurrentUser()`: verifica primero `localStorage["astris_demo_user"]` → si coincide con demo, retorna datos mock sin llamar a Supabase
-3. Si no hay demo, consulta sesión Supabase via `supabase.auth.getSession()`
-4. Si hay sesión: lee `users_profiles` → retorna `{ id, email, name, role, avatarUrl, vocation, completedOnboarding, needsRegistration }`
-5. Según el rol, redirige a la screen inicial
-6. Google OAuth: flujo con `pending_role` y `google_intent` en localStorage para completar registro
-7. Password recovery: detectado por `window.location.hash.includes("type=recovery")`
+No Context API or global store (Redux, Zustand, Jotai). Hooks are used directly from App.tsx and pass values as props to pages.
 
 ---
 
-## Principios de Arquitectura
+## Authentication
 
-| Principio | Implementación |
+### Demo mode (no backend)
+
+| Role | Email | Password | ID |
+|------|-------|----------|-----|
+| Candidate | candidato@astris.org | Demo2026 | demo-cand |
+| Company | empresa@astris.org | Demo2026 | demo-comp |
+| Mentor | mentor@astris.org | Demo2026 | demo-ment |
+| Admin | johansttivelinaresb@gmail.com | Astris2026 | backdoor |
+
+### Flow
+
+1. App.tsx -> useAuth(setScreen, setModalStep) executes on mount
+2. getCurrentUser(): checks localStorage["astris_demo_user"] -> if matches demo, returns mock data
+3. If no demo, returns null
+4. If demo session exists: returns { id, email, name, role, avatarUrl, vocation, completedOnboarding, profile }
+5. Based on role, redirects to the initial screen
+6. Admin: uses localStorage["astris_admin_session"] to persist session
+
+---
+
+## Demo Data System
+
+All demo content lives in `src/services/demoData.ts`:
+
+| Data | Description |
+|------|-------------|
+| DEMO_USERS | Demo user credentials and profiles |
+| ADMIN_CREDENTIALS | Administrator credentials |
+| VACANCIES_FALLBACK | Vacancies: Vibra Latina (Full Stack, Designer) and Closer To The Stars (Sys Admin) |
+| MENTORS_FALLBACK | 4 available mentors |
+| CANDIDATE_RADAR_FINAL | Bryan Gonzalez radar profile |
+| CANDIDATE_ADJUSTMENTS | Candidate adjustments for display |
+| COMPANY_CANDIDATES_DATA | Company candidates with matches |
+| MENTOR_PROCESSES | Active mentor processes |
+| MENTOR_COMPANIES | Companies linked to mentor |
+| ADMIN_STATS / ADMIN_USERS / ADMIN_COMPANIES / ADMIN_CANDIDATES | Admin panel data |
+
+No internet connection or environment variables needed. Everything works offline.
+
+---
+
+## Architecture Principles
+
+| Principle | Implementation |
 |-----------|---------------|
-| **Code Splitting** | `React.lazy()` en cada página de App.tsx. Chunks < 10 KB por página. Vendor chunks separados. |
-| **DRY** | Lógica repetida → hooks (`useAuth`, `useTheme`). API calls → servicios (`supabase.ts`). JSX repetido → componentes comunes. |
-| **Modularidad** | 1 archivo = 1 componente/hook/servicio. Carpetas por **rol** (public, candidate, company, mentor, admin) y por **tipo** (common, ui, modals, hooks, services). |
-| **Un archivo, una responsabilidad** | Prohibido archivos > 150 líneas. Funciones < 40 líneas. Componentes < 100 líneas de JSX. |
-| **Sin código espagueti** | Separación clara: lógica (hooks), datos (servicios), presentación (componentes), configuración (i18n), tipos (types/). |
-| **Sin imports estáticos de páginas** | Toda página se importa con `React.lazy()`. Prohibido `import { Pagina } from "./pages/..."`. |
-| **Sin archivos basura** | Antes de commit: eliminar `.bak`, `.old`, scripts temporales (`/tmp/*.py`), archivos huérfanos. |
-| **Sin datos personales** | Nunca committear tokens, claves API, emails personales en el código. Usar `.env` (incluido en `.gitignore`). |
-| **Sin console.log** | Eliminar logs de debugging antes de commit. |
-| **Sin código comentado** | No dejar bloques comentados. Si no se usa, se elimina. |
-| **Accesibilidad** | ARIA labels, roles, formularios con `<label>`, contraste suficiente en paletas, fuente para dislexia (Lexend). |
-| **Responsive** | Tailwind breakpoints `sm`, `md`, `lg`. Radar colapsable en móvil. Mobile menu con toggle. |
+| Code Splitting | React.lazy() on every page in App.tsx. Chunks < 10 KB per page. Separate vendor chunks. |
+| DRY | Repeated logic to hooks (useAuth, useTheme). API calls to services (supabase.ts). Repeated JSX to common components. |
+| Modularity | 1 file = 1 component/hook/service. Folders by role (public, candidate, company, mentor, admin) and type (common, ui, modals, hooks, services). |
+| One file, one responsibility | No files > 150 lines. Functions < 40 lines. Components < 100 lines of JSX. |
+| No spaghetti code | Clear separation: logic (hooks), data (services), presentation (components), config (i18n), types (types/). |
+| No static page imports | Every page imported with React.lazy(). Static imports of pages prohibited. |
+| No junk files | Before commit: remove .bak, .old, temp scripts, orphan files. |
+| No personal data | Never commit tokens, API keys, personal emails in code. Use .env (included in .gitignore). |
+| No console.log | Remove debugging logs before commit. |
+| No commented code | No commented blocks. If unused, remove. |
+| Accessibility | ARIA labels, roles, forms with label, sufficient contrast in palettes, dyslexia font (OpenDyslexic). |
+| Responsive | Tailwind breakpoints sm, md, lg. Collapsible radar on mobile. Mobile menu with toggle. |
 
 ---
 
-## Decisiones Técnicas Clave
+## Key Technical Decisions
 
-1. **Search params en vez de rutas anidadas**: evita jerarquías complejas de React Router, el estado de navegación es la URL misma, soporta navegación con botón atrás del navegador de forma natural.
-2. **i18n con JSON plano**: simple, sin namespaces, un solo archivo por idioma. Los datos estructurados (preguntas, paletas) van en `content.ts` con formato `{ es, en, pt, fr }`.
-3. **Modo demo sin backend**: desarrollo offline completo sin depender de Supabase. Las credenciales demo se verifican en `useAuth.handleLogin()` antes de cualquier llamada a Supabase.
-4. **Recharts (RadarChart)**: liviano comparado con alternativas, suficiente para el radar de perfil en 4 ejes.
-5. **localStorage para quizCompleted**: evita llamadas a Supabase en cada render para verificar estado del cuestionario.
-6. **Radix UI + Tailwind**: componentes headless accesibles con estilos utilitarios. Sin librerías de componentes pesadas.
-7. **Vite manualChunks**: separación estratégica de vendors para maximizar caching HTTP y minimizar recarga de librerías al cambiar de página.
+1. **Search params instead of nested routes**: avoids complex React Router hierarchies, navigation state is the URL itself, supports natural back button navigation.
+2. **i18n with flat JSON**: simple, no namespaces, one file per language. Structured data (questions, palettes) goes in content.ts with `{ es, en, pt, fr }` format.
+3. **Demo mode without backend**: full offline development without external dependency. All data lives in src/services/demoData.ts. Demo credentials verified in useAuth.handleLogin().
+4. **Recharts (RadarChart)**: lightweight, sufficient for 4-axis radar profile.
+5. **localStorage for quizCompleted**: avoids external calls on each render to verify quiz status.
+6. **Radix UI + Tailwind**: headless accessible components with utility styles. No heavy component libraries.
+7. **Vite manualChunks**: strategic vendor separation for maximum HTTP caching. vendor-supabase chunk removed (no longer needed).
 
 ---
 
-## Consideraciones de Rendimiento
+## Performance Considerations
 
-- Todas las páginas son lazy-loaded: el usuario solo descarga lo que visita
-- Los vendors se cachean independientemente: si solo cambia código de página, los vendors no se descargan de nuevo
-- `img` assets optimizados manualmente (< 200 KB, .webp cuando es posible)
-- Sin re-renders globales: cada página recibe solo las props que necesita
-- Sin Context API: evita re-renders innecesarios en el árbol de componentes
+- All pages are lazy-loaded: the user only downloads what they visit
+- Vendors are cached independently: if only page code changes, vendors are not re-downloaded
+- img assets manually optimized (< 200 KB, .webp when possible)
+- No global re-renders: each page receives only the props it needs
+- No Context API: avoids unnecessary re-renders in the component tree
+- No Supabase dependency: removes ~30KB from the bundle, reduces load times

@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ChevronDown, Check } from "lucide-react";
 import { Lang } from "@/types";
 import { useT, C } from "@/i18n/useT";
-import { supabase } from "@/services/supabase";
+import { DEMO_USERS } from "@/services/demoData";
 
 export function CompanyOrgProfile({ lang }: { lang: Lang }) {
   const t = useT(lang);
@@ -11,121 +11,46 @@ export function CompanyOrgProfile({ lang }: { lang: Lang }) {
   const sectionTitles = C(lang, "orgSections") as string[];
   const sectionIds = C(lang, "orgSectionIds") as string[];
   const SECTIONS = sectionTitles.map((title, i) => ({ id: sectionIds[i], title }));
-  const PRESTACIONES = ["Audífonos con cancelación de ruido", "Teclados especializados", "Pantallas anti-reflejo", "Rampas y ascensores", "Salas de descanso sensorial", "Modalidad remota e híbrida disponible"];
-  const POLITICAS = ["Pausas activas programadas", "Flexibilidad de horario"];
+  const PRESTACIONES: string[] = ["Audífonos con cancelación de ruido", "Teclados especializados", "Pantallas anti-reflejo", "Rampas y ascensores", "Salas de descanso sensorial", "Modalidad remota e híbrida disponible"];
+  const POLITICAS: string[] = ["Pausas activas programadas", "Flexibilidad de horario"];
 
-  const [loading, setLoading] = useState(true);
+  // Load Vibra Latina demo data
+  const demoProfile: any = DEMO_USERS["empresa@astris.org"]?.profile;
+  const [formData, setFormData] = useState<Record<string, any>>({
+    company_name: demoProfile?.company_name || "Vibra Latina",
+    industry: demoProfile?.industry || "Audiovisual / Producción",
+    company_size: demoProfile?.company_size || "10-50 empleados",
+    country: demoProfile?.country || "Estados Unidos",
+    city: demoProfile?.city || "Austin, TX",
+    philosophy: demoProfile?.philosophy || "",
+    noise: demoProfile?.noise || "Moderado (ambiente creativo controlado)",
+    light: demoProfile?.light || "Luz LED ajustable + luz natural",
+    layout: demoProfile?.layout || "Espacios abiertos con zonas de enfoque individual",
+    accommodations: demoProfile?.accommodations || PRESTACIONES.slice(0, 3),
+    policies: demoProfile?.policies || POLITICAS,
+  });
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
-  const [formData, setFormData] = useState({
-    company_name: "",
-    industry: "",
-    company_size: "",
-    country: "",
-    city: "",
-    philosophy: "",
-    noise: "",
-    light: "",
-    layout: "",
-    accommodations: [] as string[],
-    policies: [] as string[],
-  });
-
-  useEffect(() => {
-    async function loadData() {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) return;
-      const { data } = await supabase.from("companies").select("*").eq("user_id", session.user.id).single();
-      if (data) {
-        let env: any = {};
-        try { env = JSON.parse(data.work_environment || "{}"); } catch (e) { }
-        setFormData({
-          company_name: data.company_name || "",
-          industry: data.industry || "",
-          company_size: env.company_size || "",
-          country: env.country || "",
-          city: env.city || "",
-          philosophy: data.philosophy || "",
-          noise: env.noise || "",
-          light: env.light || "",
-          layout: env.layout || "",
-          accommodations: data.accommodations || [],
-          policies: env.policies || [],
-        });
-      } else {
-        if (session.user.id === "demo-comp" || session.user.email === "empresa@astris.org") {
-          setFormData({
-            company_name: "Veritas Analytics (Demo)",
-            industry: "Análisis de Datos",
-            company_size: "50-200 empleados",
-            country: "España",
-            city: "Madrid",
-            philosophy: "Creemos fervientemente en el talento sin barreras. Nos esforzamos por crear un entorno inclusivo donde la neurodiversidad sea vista como nuestra mayor fortaleza competitiva.",
-            noise: "Bajo (oficina silenciosa)",
-            light: "Luz natural abundante",
-            layout: "Cubículos individuales y zonas silenciosas",
-            accommodations: ["Modalidad remota e híbrida disponible", "Salas de descanso sensorial"],
-            policies: ["Flexibilidad de horario", "Pausas activas programadas"],
-          });
-        }
-      }
-      setLoading(false);
-    }
-    loadData();
-  }, []);
 
   const handleChange = (field: string, val: string) => setFormData(p => ({ ...p, [field]: val }));
 
   const toggleArray = (field: "accommodations" | "policies", item: string) => {
     setFormData(p => ({
       ...p,
-      [field]: p[field].includes(item) ? p[field].filter(x => x !== item) : [...p[field], item]
+      [field]: p[field].includes(item) ? p[field].filter((x: string) => x !== item) : [...p[field], item]
     }));
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !saving) {
-      e.preventDefault();
-      handleSave();
-    }
-  };
-
-  const handleSave = async () => {
+  const handleSave = () => {
     setSaving(true);
     setMessage("");
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) return;
-
-    const env = JSON.stringify({
-      noise: formData.noise,
-      light: formData.light,
-      layout: formData.layout,
-      policies: formData.policies,
-      company_size: formData.company_size,
-      country: formData.country,
-      city: formData.city
-    });
-
-    const { error } = await supabase.from("companies").upsert({
-      user_id: session.user.id,
-      company_name: formData.company_name || "Sin nombre",
-      industry: formData.industry,
-      philosophy: formData.philosophy,
-      work_environment: env,
-      accommodations: formData.accommodations
-    });
-
-    setSaving(false);
-    if (!error) {
+    // Demo: simulate save
+    setTimeout(() => {
+      setSaving(false);
       setMessage(t("comp.org.saveSuccess"));
       setTimeout(() => setMessage(""), 3000);
-    } else {
-      setMessage(t("comp.org.saveError"));
-      console.error(error);
-    }
+    }, 500);
   };
-
-  if (loading) return <div className="min-h-screen w-full overflow-x-hidden flex items-center justify-center text-muted-foreground">Cargando...</div>;
 
   return (
     <div className="min-h-screen w-full overflow-x-hidden flex flex-col pb-20">
@@ -159,7 +84,6 @@ export function CompanyOrgProfile({ lang }: { lang: Lang }) {
                           type="text"
                           value={(formData as any)[f.field]}
                           onChange={(e) => handleChange(f.field, e.target.value)}
-                          onKeyDown={handleKeyDown}
                           className="w-full px-4 py-3 rounded-xl border border-border text-sm outline-none focus:border-primary"
                           style={{ backgroundColor: "var(--input-background)", color: "var(--foreground)" }}
                           placeholder={f.label}
@@ -176,11 +100,6 @@ export function CompanyOrgProfile({ lang }: { lang: Lang }) {
                       name="philosophy"
                       value={formData.philosophy}
                       onChange={(e) => handleChange("philosophy", e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' && e.ctrlKey && !saving) {
-                          handleSave();
-                        }
-                      }}
                       className="w-full px-4 py-3 rounded-xl border border-border text-sm outline-none focus:border-primary min-h-[100px] resize-y"
                       style={{ backgroundColor: "var(--input-background)", color: "var(--foreground)" }}
                       placeholder="Describe la filosofía y cultura de tu empresa..."
@@ -202,7 +121,6 @@ export function CompanyOrgProfile({ lang }: { lang: Lang }) {
                           type="text"
                           value={(formData as any)[f.field]}
                           onChange={(e) => handleChange(f.field, e.target.value)}
-                          onKeyDown={handleKeyDown}
                           className="w-full px-4 py-3 rounded-xl border border-border text-sm outline-none focus:border-primary"
                           style={{ backgroundColor: "var(--input-background)", color: "var(--foreground)" }}
                           placeholder={f.placeholder}

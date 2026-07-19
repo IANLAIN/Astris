@@ -47,7 +47,7 @@ export default function AdminDashboard({ onLogout, onBack }: AdminDashboardProps
     async function init() {
       try {
         let user: any = await getCurrentUser();
-        // Allow backdoor login without real supabase session
+        // Allow backdoor login without real session
         if (!user) {
           user = { id: "00000000-0000-0000-0000-000000000000", role: "admin", name: "Administrador (Backdoor)" };
         }
@@ -58,13 +58,13 @@ export default function AdminDashboard({ onLogout, onBack }: AdminDashboardProps
         }
         setCurrentUser(user);
         
-        // Load initial data
+        // Load initial data from demo services
         const [dashStats, allUsers] = await Promise.all([
           getDashboardStats(),
           getAdminUsers()
         ]);
         setStats(dashStats);
-        setUsers(allUsers);
+        setUsers(allUsers as UserProfile[]);
         
       } catch (err: any) {
         setError(err.message);
@@ -99,7 +99,7 @@ export default function AdminDashboard({ onLogout, onBack }: AdminDashboardProps
     return (
       <div className="min-h-screen bg-background flex flex-col items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-primary mb-4" />
-        <p className="text-muted-foreground font-medium">Validando permisos administrativos...</p>
+        <p className="text-muted-foreground font-medium">Cargando panel administrativo...</p>
       </div>
     );
   }

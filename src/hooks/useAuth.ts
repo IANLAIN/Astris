@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Role } from "@/types";
-import { getCurrentUser, loginUser, logoutUser, registerUser, supabase } from "@/services/supabase";
+import { getCurrentUser, loginUser, logoutUser, registerUser } from "@/services/supabase";
+import { ADMIN_CREDENTIALS } from "@/services/demoData";
 
 export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) => void) {
   const [role, setRole] = useState<Role | null>(null);
@@ -49,7 +50,7 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
           setModalStep("none");
           
           // If candidate hasn't completed quiz, force onboarding/quiz
-          const isDemoUser = user.id === "demo-cand" || user.id === "demo-comp" || user.id === "demo-ment";
+          const isDemoUser = user.id === "demo-cand" || user.id === "demo-comp" || user.id === "demo-ment" || user.id === "admin-backdoor";
           if (user.role === "candidate") {
             if (isDemoUser) {
               // Demo candidate skips quiz — mark as completed
@@ -63,6 +64,9 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
             }
           } else if (user.role === "company") {
             setScreen(isDemoUser ? "candidates" : "org-profile");
+          } else if (user.role === "admin") {
+            window.localStorage.setItem("astris_admin_session", "true");
+            setScreen("dashboard");
           } else {
             setScreen("dashboard");
           }
@@ -97,9 +101,10 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
   };
 
   const handleRegister = async (email: string, password: string, name: string, selectedRole: Role, vocation: string) => {
-    if (email === "johansttivelinaresb@gmail.com") {
+    if (email === ADMIN_CREDENTIALS.email) {
       setRole("admin");
       setUserName("Admin Astris");
+      window.localStorage.setItem("astris_admin_session", "true");
       setLoggedIn(true);
       setModalStep("none");
       setScreen("dashboard");
@@ -128,21 +133,24 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
   };
 
   const handleLogin = async (email?: string, password?: string) => {
-    if (email === "johansttivelinaresb@gmail.com" && password === "Astris2026") {
+    // Admin backdoor
+    if (email === ADMIN_CREDENTIALS.email && password === ADMIN_CREDENTIALS.password) {
       setRole("admin");
       setUserName("Admin Astris");
+      window.localStorage.setItem("astris_admin_session", "true");
       setLoggedIn(true);
       setModalStep("none");
       setScreen("dashboard");
       return;
     }
 
+    // Demo users
     if (password === "Demo2026") {
       if (email === "candidato@astris.org") {
         window.localStorage.setItem("astris_demo_user", email);
         setRole("candidate");
-        setUserName("Alex (Demo)");
-        setUserVocation("Analista de Datos");
+        setUserName("Bryan Gonzalez");
+        setUserVocation("Ingeniero de Sistemas y Computación");
         setQuizCompleted(true);
         window.localStorage.setItem("astris_quiz_completed", "true");
         setLoggedIn(true);
@@ -153,7 +161,7 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
       if (email === "empresa@astris.org") {
         window.localStorage.setItem("astris_demo_user", email);
         setRole("company");
-        setUserName("Veritas Analytics (Demo)");
+        setUserName("Vibra Latina");
         setLoggedIn(true);
         setModalStep("none");
         setScreen("candidates");
@@ -162,8 +170,8 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
       if (email === "mentor@astris.org") {
         window.localStorage.setItem("astris_demo_user", email);
         setRole("mentor");
-        setUserName("Elena (Demo)");
-        setUserVocation("Especialista en Inclusión");
+        setUserName("Elena Vargas");
+        setUserVocation("Especialista en Inclusión Laboral y Coaching Neurodivergente");
         setLoggedIn(true);
         setModalStep("none");
         setScreen("dashboard");

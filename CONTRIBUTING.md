@@ -1,246 +1,292 @@
-# Guía de Contribución — Astris
+# Contributing to Astris
 
-## Stack Tecnológico
+## Technology Stack
 
-| Capa | Tecnología | Versión |
-|------|-----------|---------|
-| **Framework** | React | 18 |
-| **Lenguaje** | TypeScript | 6 (strict: true) |
-| **Build** | Vite | 6 |
-| **Plugin React** | @vitejs/plugin-react | 4 |
-| **Plugin Tailwind** | @tailwindcss/vite | 4 |
-| **Enrutamiento** | React Router DOM | 7 (search params) |
-| **Estilos** | Tailwind CSS | 4 |
-| **UI Components** | Radix UI primitives | latest |
-| **Iconos** | Lucide React | 0.487 |
-| **i18n** | i18next + react-i18next + LanguageDetector | latest |
-| **Backend** | Supabase (Auth + PostgreSQL) | opcional (~2.108) |
-| **Gráficos** | Recharts | 3 |
-| **Animaciones** | Framer Motion (via `motion`) | 12 |
-| **Drag & Drop** | react-dnd + react-dnd-html5-backend | 16 |
-| **Formularios** | react-hook-form | 7 |
-| **Notificaciones** | sonner | 2 |
-| **Date picker** | react-day-picker | 8 |
-| **Carousel** | embla-carousel-react | 8 |
+| Layer | Technology | Version |
+|-------|-----------|---------|
+| Framework | React | 18 |
+| Language | TypeScript | 6 (strict: true) |
+| Build | Vite | 6 |
+| React Plugin | @vitejs/plugin-react | 4 |
+| Tailwind Plugin | @tailwindcss/vite | 4 |
+| Routing | React Router DOM | 7 (search params) |
+| Styles | Tailwind CSS | 4 |
+| UI Components | Radix UI primitives | latest |
+| Icons | Lucide React | 0.487 |
+| i18n | i18next + react-i18next + LanguageDetector | latest |
+| Backend | Demo offline (no backend) | — |
+| Demo data | src/services/demoData.ts | complete |
+| Charts | Recharts | 3 |
+| Animations | Framer Motion (via motion) | 12 |
+| Drag & Drop | react-dnd + react-dnd-html5-backend | 16 |
+| Forms | react-hook-form | 7 |
+| Notifications | sonner | 2 |
+| Date picker | react-day-picker | 8 |
+| Carousel | embla-carousel-react | 8 |
 
 ---
 
-## Estándares de Código — Reglas Obligatorias
+## Code Standards — Mandatory Rules
 
 ### TypeScript
 
-- **`strict: true`** — no puede desactivarse
-- **Prohibido `any`** — toda función, prop, variable y estado debe tener tipo explícito
-- Usar el alias `@/` para imports desde `src/` (configurado en `tsconfig.json` y `vite.config.ts`)
-- Nombres semánticos: verbos para funciones, sustantivos para tipos
+- `strict: true` — cannot be disabled
+- `any` is prohibited — every function, prop, variable, and state must have an explicit type
+- Use the `@/` alias for imports from `src/` (configured in tsconfig.json and vite.config.ts)
+- Semantic naming: verbs for functions, nouns for types
 
-### Estructura de Archivos — Regla de Oro
+### File Structure — Golden Rule
 
-> **Un archivo = un componente / hook / servicio / página / tipo.**
-> **Prohibido archivos > 150 líneas.** Si un archivo excede este límite, debe dividirse.
+> One file = one component / hook / service / page / type.
+> No files exceeding 150 lines. If a file exceeds this limit, split it.
 
-| Tipo | Ubicación | Export |
-|------|-----------|--------|
-| Páginas | `src/pages/{role}/{Nombre}.tsx` | `export function Nombre` |
-| Componentes compartidos | `src/components/common/{Nombre}.tsx` | `export function Nombre` |
-| Modales | `src/components/modals/{Nombre}.tsx` | `export function Nombre` |
-| UI primitives | `src/components/ui/{componente}.tsx` | `export Componente` |
-| Hooks | `src/hooks/useNombre.ts` | `export function useNombre` |
-| Servicios | `src/services/{nombre}.ts` | `export async function nombre` |
-| Traducciones JSON | `src/i18n/{lang}.json` | — (import estático en i18n.ts) |
-| Datos estáticos | `src/i18n/content.ts` | `export const NOMBRE` |
-| Tipos | `src/types/index.ts` | `export type Nombre` |
-| Datos mock | `src/mock/index.ts` | `export const NOMBRE` |
+| Type | Location | Export |
+|------|----------|--------|
+| Pages | src/pages/{role}/{Name}.tsx | export function Name |
+| Shared components | src/components/common/{Name}.tsx | export function Name |
+| Modals | src/components/modals/{Name}.tsx | export function Name |
+| UI primitives | src/components/ui/{component}.tsx | export Component |
+| Hooks | src/hooks/useName.ts | export function useName |
+| Services | src/services/{name}.ts | export async function name |
+| JSON translations | src/i18n/{lang}.json | — (static import in i18n.ts) |
+| Static data | src/i18n/content.ts | export const NAME |
+| Types | src/types/index.ts | export type Name |
+| Demo data | src/services/demoData.ts | export const NAME |
 
-### Límites de Tamaño — DRY Strict
+### Size Limits — Strict DRY
 
-| Métrica | Límite | Acción |
-|---------|--------|--------|
-| Archivo | ≤ 150 líneas | Extraer a componentes/hijos |
-| Función | ≤ 40 líneas | Extraer subfunciones o hooks |
-| Componente JSX | ≤ 100 líneas | Dividir en subcomponentes |
-| Línea de código | ≤ 100 caracteres | Saltar a la siguiente línea |
+| Metric | Limit | Action |
+|--------|-------|--------|
+| File | <= 150 lines | Extract to subcomponents/children |
+| Function | <= 40 lines | Extract subfunctions or hooks |
+| Component JSX | <= 100 lines | Split into subcomponents |
+| Code line | <= 100 characters | Break to next line |
 
-### Convención de Nombres
+### Naming Convention
 
-| Elemento | Convención | Ejemplo |
-|----------|-----------|---------|
-| Componentes | PascalCase | `CandidateVacancies` |
-| Hooks | camelCase, prefijo `use` | `useAuth` |
-| Funciones | camelCase, verbo | `getCurrentUser`, `handleLogin` |
-| Tipos/Interfaces | PascalCase | `Lang`, `VacancyItem` |
-| Props | PascalCase + `Props` | `AboutPageProps` |
-| Claves i18n | `ámbito.clave` | `modality.remote` |
-| Archivos (componentes) | PascalCase | `CandidateQuiz.tsx` |
-| Archivos (hooks/servicios) | camelCase | `useAuth.ts`, `supabase.ts` |
-| Constantes | UPPER_SNAKE_CASE | `VACANCIES_FALLBACK` |
+| Element | Convention | Example |
+|---------|-----------|---------|
+| Components | PascalCase | CandidateVacancies |
+| Hooks | camelCase, use prefix | useAuth |
+| Functions | camelCase, verb | getCurrentUser, handleLogin |
+| Types/Interfaces | PascalCase | Lang, VacancyItem |
+| Props | PascalCase + Props | AboutPageProps |
+| i18n keys | scope.key | modality.remote |
+| Files (components) | PascalCase | CandidateQuiz.tsx |
+| Files (hooks/services) | camelCase | useAuth.ts, supabase.ts |
+| Constants | UPPER_SNAKE_CASE | VACANCIES_FALLBACK |
 
-### Reglas de Importación
+### Import Rules
 
 ```tsx
-// ✅ Correcto — lazy loading para páginas
+// CORRECT — lazy loading for pages
 const CandidateProfile = lazy(() =>
   import("@/pages/candidate/CandidateProfile").then(m => ({ default: m.CandidateProfile }))
 );
 
-// ❌ INCORRECTO — import estático de páginas (rompe code splitting)
+// INCORRECT — static page import (breaks code splitting)
 import { CandidateProfile } from "@/pages/candidate/CandidateProfile";
 
-// ✅ Correcto — import estático para componentes, hooks, servicios
+// CORRECT — static import for components, hooks, services
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 
-// ❌ INCORRECTO — imports relativos cuando existe alias @/
+// INCORRECT — relative imports when @/ alias exists
 import { useAuth } from "../../hooks/useAuth";
 
-// ✅ Correcto — siempre usar @/ para imports de src/
+// CORRECT — always use @/ for src/ imports
 import { Lang } from "@/types";
 ```
 
 ---
 
-## Code Splitting — OBLIGATORIO
+## Code Splitting — Mandatory
 
-Todo el enrutamiento de páginas **debe** usar `React.lazy()` + `<Suspense>`. Ninguna página puede importarse estáticamente.
+All page routing MUST use React.lazy() + Suspense. No page may be imported statically.
 
-### Patrón correcto
+### Correct pattern
 
-En `src/App.tsx`:
+In src/App.tsx:
 
 ```tsx
-// Para componentes con named export:
+// For components with named export:
 const CandidateProfile = lazy(() =>
   import("@/pages/candidate/CandidateProfile").then(m => ({ default: m.CandidateProfile }))
 );
 
-// Para componentes con default export:
+// For components with default export:
 const AdminDashboard = lazy(() => import("@/pages/admin/AdminDashboard"));
 ```
 
-### Renderizado
+### Rendering
 
-Todas las páginas lazy se renderizan dentro de un solo `<Suspense>`:
+All lazy pages render within a single Suspense:
 
 ```tsx
 <Suspense fallback={<Spinner />}>
-  {condicion && <MiPagina />}
+  {condition && <MyPage />}
 </Suspense>
 ```
 
 ### Vendor Chunks (vite.config.ts)
 
-El build separa automáticamente las librerías en chunks para maximizar caching:
+The build automatically separates libraries into chunks to maximize caching:
 
-| Chunk | Librerías |
+| Chunk | Libraries |
 |-------|-----------|
-| `vendor-supabase` | @supabase/supabase-js |
-| `vendor-framer` | motion (framer-motion) |
-| `vendor-recharts` | recharts |
-| `vendor-lucide` | lucide-react |
-| `vendor-radix` | @radix-ui/* |
-| `vendor-core` | React, React DOM, React Router, i18next, etc. |
+| vendor-framer | motion (framer-motion) |
+| vendor-recharts | recharts |
+| vendor-lucide | lucide-react |
+| vendor-radix | @radix-ui/* |
+| vendor-core | React, React DOM, React Router, i18next, etc. |
+
+Note: The vendor-supabase chunk was removed since the project no longer depends on Supabase.
 
 ---
 
-## Sistema de Traducciones — Reglas Estrictas
+## Demo Data System
 
-Toda cadena visible al usuario **DEBE**:
+All demo content (no backend) lives in `src/services/demoData.ts`.
 
-1. Definirse en `src/i18n/es.json` (español como idioma base)
-2. Traducirse a los otros 3 idiomas: `en.json`, `pt.json`, `fr.json`
-3. Usar clave semántica con formato `ámbito.clave`
+### Key files
 
-### Correcto
+| File | Purpose |
+|------|---------|
+| src/services/demoData.ts | All demo data: users, vacancies, mentors, companies |
+| src/services/supabase.ts | API that replaces Supabase: auth, matching, profiles, checkins, admin |
+| src/services/supabase-admin.ts | Admin functions that return demo data |
+
+### How to add demo data
+
+1. Open `src/services/demoData.ts`
+2. Add/edit the corresponding data array (e.g., `VACANCIES_FALLBACK`)
+3. If you need a new API function, add it in `src/services/supabase.ts`
+4. The function must return data from `demoData.ts` directly
+
+### How to add a new demo user
+
+```ts
+// In src/services/demoData.ts, inside DEMO_USERS
+"new@email.com": {
+  email: "new@email.com",
+  password: "Demo2026",
+  id: "demo-new-1",
+  role: "candidate",
+  name: "New User",
+  vocation: "Developer",
+  completedOnboarding: true,
+  profile: { /* profile data */ },
+}
+```
+
+---
+
+## Translation System — Strict Rules
+
+Every user-visible string MUST:
+
+1. Be defined in `src/i18n/es.json` (Spanish as base language)
+2. Be translated to the other 3 languages: `en.json`, `pt.json`, `fr.json`
+3. Use a semantic key in `scope.key` format
+
+### Correct
 
 ```tsx
 <button>{t("vacancies.filters")}</button>
 <p>{t("common.loading")}</p>
 ```
 
-### Incorrecto
+### Incorrect
 
 ```tsx
-<button>{t("auto.filtros._32")}</button>          {/* Clave no semántica */}
-<button>Filtros</button>                           {/* Texto hardcodeado */}
-<button>{t("Filtros")}</button>                   /* Clave no semántica (traducción directa) */
+<button>{t("auto.filtros._32")}</button>          {/* Non-semantic key */}
+<button>Filters</button>                           {/* Hardcoded text */}
+<button>{t("Filtros")}</button>                   {/* Non-semantic key (direct translation) */}
 ```
 
-### Datos estructurados multilingüe
+### Structured multi-language data
 
-Para arrays, objetos o texto largo que varía por idioma, usar `content.ts` con objeto `{ es, en, pt, fr }` y acceder con `C(lang, "key")`:
+For arrays, objects, or long text that varies by language, use content.ts with `{ es, en, pt, fr }` objects and access with `C(lang, "key")`:
 
 ```tsx
-const stages = C(lang, "accompStages") as Array<{label: string; done: boolean}>;
+const stages = C(lang, "accompStages") as Array<{label: string; done: boolean; current: boolean}>;
 ```
 
-### Añadir nuevas traducciones
+### i18n requirement for all dashboards
 
-1. Agregar `"clave": "valor"` en `src/i18n/es.json`
-2. Traducir en `en.json`, `pt.json`, `fr.json`
-3. Usar `t("clave")` en el TSX
+Every dashboard (candidate, company, mentor, admin) must use `t()` for every user-visible string. Hardcoded text is prohibited. The following keys must exist in all 4 language files:
+
+- profile.cognitive_profile
+- profile.flexible_hours
+- profile.async_comm
+- profile.quiet_environment
+- profile.recent_activity
+- profile.up_to_date
+- profile.explore_vacancies
+- mentor.dash.report
+- mentor.dash.accompaniment_hours
+- mentor.dash.completed_sessions
+- mentor.dash.active_candidates
+- mentor.dash.linked_companies
 
 ---
 
-## Principio DRY — Cómo Aplicarlo
+## DRY Principle — How to Apply
 
-| Situación | Solución | Ejemplo |
+| Situation | Solution | Example |
 |-----------|----------|---------|
-| Misma lógica en varios componentes | Extraer a **hook** | `useAuth`, `useTheme` |
-| Misma llamada API en varios lugares | Centralizar en **servicio** | `supabase.ts` - `getCurrentUser()`, `saveCandidateProfile()` |
-| Mismo JSX en varios componentes | Extraer a **componente compartido** | `MatchBadge`, `RadarViz`, `NavBar` |
-| Misma configuración repetida | **Constante o tipo compartido** | `types/index.ts`, `content.ts` |
-| Mismo estilo repetido | Clase Tailwind reutilizable o variable CSS | `var(--primary)`, `btn-primary` |
+| Same logic in multiple components | Extract to hook | useAuth, useTheme |
+| Same API call in multiple places | Centralize in service | supabase.ts — getCurrentUser(), saveCandidateProfile() |
+| Same JSX in multiple components | Extract to shared component | MatchBadge, RadarViz, NavBar |
+| Same repeated config | Shared constant or type | types/index.ts, content.ts |
+| Same repeated style | Reusable Tailwind class or CSS variable | var(--primary), btn-primary |
 
 ---
 
-## Organización Modular de Carpetas
-
-La estructura de carpetas refleja dos criterios: **rol del usuario** (qué ve) y **tipo de archivo** (qué hace).
+## Modular Folder Organization
 
 ```
 src/
-├── pages/                    # ⬅ 1 página por archivo, organizada por rol
-│   ├── public/               #   Landing, About, Support, Partners
-│   ├── candidate/            #   Onboarding, Quiz, Profile, Vacancies, etc.
-│   ├── company/              #   OrgProfile, PostVacancy, Candidates, etc.
-│   ├── mentor/               #   Dashboard, Checkins, Companies
-│   ├── admin/                #   Dashboard + views/
-│   └── shared/               #   NotFound, Settings
-│
-├── components/               # ⬅ Componentes reutilizables
-│   ├── common/               #   NavBar, MatchBadge, RadarViz, etc.
-│   ├── modals/               #   LanguageModal, LoginModal, etc.
-│   └── ui/                   #   Radix wrappers (button, dialog, card, etc.)
-│
-├── hooks/                    # ⬅ 1 hook por archivo
-├── services/                 # ⬅ 1 servicio por archivo (o archivo único si es pequeño)
-├── i18n/                     # ⬅ Traducciones + config + datos estáticos
-├── types/                    # ⬅ Tipos globales (1 archivo si es manejable)
-├── mock/                     # ⬅ Datos de demostración
-├── styles/                   # ⬅ CSS global
-└── assets/                   # ⬅ Imágenes estáticas
-```
+  pages/                    # 1 page per file, organized by role
+    public/                 # Landing, About, Support, Partners
+    candidate/              # Onboarding, Quiz, Profile, Vacancies, etc.
+    company/                # OrgProfile, PostVacancy, Candidates, etc.
+    mentor/                 # Dashboard, Checkins, Companies
+    admin/                  # Dashboard + views/
+    shared/                 # NotFound, Settings
 
-**Regla**: no crear carpetas innecesarias. Si una carpeta tiene un solo archivo, evaluar si realmente necesita su propia carpeta.
+  components/               # Reusable components
+    common/                 # NavBar, MatchBadge, RadarViz, etc.
+    modals/                 # LanguageModal, LoginModal, etc.
+    ui/                     # Radix wrappers (button, dialog, card, etc.)
+
+  hooks/                    # 1 hook per file
+  services/                 # demoData.ts + supabase.ts (demo API) + supabase-admin.ts
+  i18n/                     # Translations + config + static data
+  types/                    # Global types (1 file if manageable)
+  mock/                     # Demo data re-export
+  styles/                   # Global CSS
+  assets/                   # Static images
+```
 
 ---
 
-## Limpieza de Archivos — Antes de Cada Commit
+## File Cleanup — Before Each Commit
 
-### Checklist obligatorio
+### Mandatory checklist
 
-- [ ] `npm run build` → 0 errores, 0 warnings
-- [ ] Sin archivos `.bak`, `.old`, `.temp`, `.log` en el repo
-- [ ] Sin scripts temporales (`/tmp/*.py`, `extract.mjs`, `temp_content.mjs`, `fix_*.py`)
-- [ ] Sin tokens, claves API, contraseñas, o emails personales en el código
-- [ ] Sin `console.log` de debugging
-- [ ] Sin imports no utilizados
-- [ ] Sin código comentado
-- [ ] Sin archivos huérfanos (creados para una prueba y nunca eliminados)
-- [ ] `.gitignore` cubre `node_modules/`, `dist/`, `.env`, `*.log`, `*.bak`, `temp/`, `tmp/`
-- [ ] `git status` revisado antes del commit — solo archivos intencionales
+- [ ] npm run build -> 0 errors, 0 warnings
+- [ ] No .bak, .old, .temp, .log files in the repo
+- [ ] No temp scripts (/tmp/*.py, extract.mjs, temp_content.mjs, fix_*.py)
+- [ ] No tokens, API keys, passwords, or personal emails in code
+- [ ] No console.log for debugging
+- [ ] No unused imports
+- [ ] No commented code
+- [ ] No orphan files (created for testing and never deleted)
+- [ ] .gitignore covers node_modules/, dist/, .env, *.log, *.bak, temp/, tmp/
+- [ ] git status reviewed before commit — only intentional files
 
-### Archivos que NUNCA deben estar en el repo
+### Files that should NEVER be in the repo
 
 ```
 *.bak, *.old, *.temp, *.log
@@ -250,156 +296,154 @@ node_modules/, dist/, build/
 .DS_Store
 coverage/
 .vscode/
-scripts/ extract temporales
+temp scripts (extract, fix, convert)
 ```
 
 ---
 
-## Flujo de Trabajo con Git
+## Git Workflow
 
 ```bash
-# 1. Crear rama desde main
-git checkout -b feature/mi-cambio
+# 1. Create branch from main
+git checkout -b feature/my-change
 
-# 2. Hacer cambios siguiendo los estándares
-#    - Code splitting obligatorio
-#    - DRY aplicado
-#    - Traducciones en los 4 idiomas
-#    - Sin archivos basura
+# 2. Make changes following standards
+#    - Mandatory code splitting
+#    - DRY applied
+#    - Translations in all 4 languages
+#    - No junk files
 
-# 3. Verificar build
+# 3. Verify build
 npm run build
 
-# 4. Revisar qué se va a commitear
+# 4. Review what is being committed
 git status
 git diff --cached
 
-# 5. Commit con mensaje semántico
+# 5. Commit with semantic message
 git add -A
-git commit -m "tipo: descripción corta (< 72 caracteres)"
+git commit -m "type: short description (< 72 characters)"
 
-# 6. Push y crear PR
-git push origin feature/mi-cambio
-# Crear PR a main en GitHub
+# 6. Push and create PR
+git push origin feature/my-change
+# Create PR to main on GitHub
 ```
 
-### Tipos de commit
+### Commit types
 
-| Prefijo | Uso | Ejemplo |
-|---------|-----|---------|
-| `fix:` | Corrección de bug | `fix: resolver crash en CandidateQuiz al seleccionar multi-opción` |
-| `feat:` | Nueva funcionalidad | `feat: agregar vista de tracking post-contratación para empresas` |
-| `refactor:` | Refactorización sin cambio funcional | `refactor: extraer lógica de matching a servicio independiente` |
-| `docs:` | Documentación | `docs: actualizar ARCHITECTURE.md con flujo de autenticación` |
-| `i18n:` | Traducciones | `i18n: agregar claves de onboarding en portugués y francés` |
-| `style:` | Estilos/CSS sin cambio de lógica | `style: ajustar padding del navbar en móvil` |
-| `chore:` | Limpieza, build, config | `chore: eliminar archivos temporales y actualizar .gitignore` |
-
-### Reglas de commit
-
-- **Mensaje corto** (< 72 caracteres)
-- **Sin datos personales**: no incluir tokens, emails reales, contraseñas en el mensaje
-- **Sin archivos basura**: revisar `git status` antes de `git add`
-- **Un solo propósito por commit**: no mezclar limpieza con features
+| Prefix | Usage | Example |
+|--------|-------|---------|
+| fix: | Bug fix | fix: resolve crash in CandidateQuiz when selecting multi-option |
+| feat: | New feature | feat: add post-hire tracking view for companies |
+| refactor: | Refactoring without functional change | refactor: remove Supabase dependency, use demo data |
+| docs: | Documentation | docs: update ARCHITECTURE.md with new demo system |
+| i18n: | Translations | i18n: add onboarding keys in Portuguese and French |
+| style: | Styles/CSS without logic change | style: adjust navbar padding on mobile |
+| chore: | Cleanup, build, config | chore: remove temp files and update .gitignore |
 
 ---
 
-## Cómo Añadir una Nueva Página
+## How to Add a New Page
 
-1. Crear `src/pages/{role}/{Nombre}.tsx` con `export function Nombre`
-2. En `App.tsx`: importar con `React.lazy()` siguiendo el patrón de named export
-3. Añadir condición de render en el JSX de App según `screen` y `role`
-4. Si la página requiere datos del quiz o selecciones, añadir estado en `App.tsx`
-5. Si aparece en navbar, añadir al array de navegación en `NavBar.tsx`
-6. Agregar todas las traducciones en los 4 JSON de i18n
-7. Verificar con `npm run build`
-
----
-
-## Cómo Añadir un Nuevo Componente
-
-1. Identificar si es: **común** (compartido entre páginas), **modal**, o **UI primitiva**
-2. Crear archivo en la carpeta correspondiente: `components/common/Nombre.tsx`
-3. Exportar `export function Nombre(props: NombreProps)`
-4. Usar Tailwind CSS + variables CSS para estilos
-5. Si contiene texto visible, usar `useT()` o recibir `lang` como prop
+1. Create `src/pages/{role}/{Name}.tsx` with `export function Name`
+2. In `App.tsx`: import with `React.lazy()` following the named export pattern
+3. Add render condition in App's JSX based on `screen` and `role`
+4. If the page needs quiz data or selections, add state in `App.tsx`
+5. If it appears in the navbar, add it to the navigation array in `NavBar.tsx`
+6. Add all translations in the 4 i18n JSON files
+7. If the page needs data, import from `@/services/demoData` or `@/services/supabase`
+8. Verify with `npm run build`
 
 ---
 
-## Cómo Añadir un Nuevo Hook
+## How to Add a New Component
 
-1. Crear `src/hooks/useNombre.ts`
-2. Exportar `export function useNombre(...)`
-3. Tipar **parámetros** y **retorno** explícitamente (sin `any`)
-4. Si el hook necesita estado de navegación, recibir `setScreen` como parámetro
-5. No usar hooks dentro de hooks condicionalmente (seguir reglas de React)
-
----
-
-## Cómo Añadir un Nuevo Servicio
-
-1. Identificar si el servicio es de **Supabase** o de **otra API**
-2. Si es de Supabase, agregar función en `src/services/supabase.ts` (o `supabase-admin.ts` si es administrativo)
-3. Si merece un archivo propio, crear `src/services/{nombre}.ts`
-4. Importar `supabase` desde `./supabase`
-5. Exportar funciones `async` con tipo de retorno explícito
-6. Usar try-catch para errores y retornar valores por defecto en caso de fallo
+1. Identify if it is: **common** (shared between pages), **modal**, or **UI primitive**
+2. Create the file in the corresponding folder: `components/common/Name.tsx`
+3. Export `export function Name(props: NameProps)`
+4. Use Tailwind CSS + CSS variables for styles
+5. If it contains visible text, use `useT()` or receive `lang` as a prop
 
 ---
 
-## Estilos
+## How to Add a New Hook
 
-- Usar **Tailwind CSS v4** con clases utilitarias (`@import "tailwindcss"`)
-- Variables CSS para tema: `--primary`, `--background`, `--card`, `--border`, `--muted`, etc.
-- Radix UI para componentes interactivos (dropdowns, modales, tooltips, selects)
-- **No crear nuevos archivos CSS** a menos que sea estrictamente necesario
-- Preferir `style={{}}` con variables CSS sobre archivos CSS separados
-- Las imágenes deben ir en `src/assets/`, ser relevantes, sin texto incrustado, y pesar < 200 KB
-- Tamaños de fuente: usar `text-sm` (14px), `text-base` (16px), `text-lg` (18px), `text-xl` (20px), `text-2xl` (24px)
+1. Create `src/hooks/useName.ts`
+2. Export `export function useName(...)`
+3. Type **parameters** and **return** explicitly (no `any`)
+4. If the hook needs navigation state, receive `setScreen` as a parameter
+5. Do not use hooks conditionally inside hooks (follow React hooks rules)
+
+---
+
+## How to Add a New Service
+
+1. If the service needs demo data, add it in `src/services/demoData.ts`
+2. Create the function in `src/services/supabase.ts` that returns the data
+3. If administrative, use `src/services/supabase-admin.ts`
+4. Export `async` functions with explicit return types
+
+---
+
+## Styles
+
+- Use **Tailwind CSS v4** with utility classes (`@import "tailwindcss"`)
+- CSS variables for theme: `--primary`, `--background`, `--card`, `--border`, `--muted`, etc.
+- Radix UI for interactive components (dropdowns, modals, tooltips, selects)
+- **Do not create new CSS files** unless strictly necessary
+- Prefer `style={{}}` with CSS variables over separate CSS files
+- Images must go in `src/assets/`, be relevant, with no embedded text, and weigh < 200 KB
+- Font sizes: use `text-sm` (14px), `text-base` (16px), `text-lg` (18px), `text-xl` (20px), `text-2xl` (24px)
+- Font options: Inter (default) or OpenDyslexic (dyslexia-friendly toggle)
 
 ---
 
 ## Testing
 
-No hay suite automatizada actualmente (pendiente). Verificar manualmente:
+No automated test suite currently (pending). Manual verification:
 
 ```bash
-# 1. Iniciar servidor de desarrollo
+# 1. Start development server
 npm run dev
 
-# 2. Probar navegación completa:
-#    - Landing page pública
-#    - Registro / Login (demo)
-#    - Flujo de onboarding + quiz (candidato)
-#    - Dashboard de cada rol
+# 2. Test complete navigation:
+#    - Public landing page
+#    - Login as candidate (candidato@astris.org / Demo2026)
+#    - Candidate dashboard with Vibra Latina vacancies
+#    - Login as company (empresa@astris.org / Demo2026)
+#    - Company dashboard with candidates
+#    - Login as mentor (mentor@astris.org / Demo2026)
+#    - Mentor dashboard with active processes
 
-# 3. Verificar compilación
-npm run build    # DEBE pasar sin errores
+# 3. Verify compilation
+npm run build    # MUST pass with no errors
+
+# 4. Test i18n: switch to each language and verify all strings
 ```
 
 ---
 
-## Documentación
+## Documentation
 
-Toda nueva funcionalidad debe reflejarse en:
+Every new feature must be reflected in:
 
-- `ARCHITECTURE.md` — decisiones técnicas, estructura, flujos
-- `CONTRIBUTING.md` — guía de desarrollo, cómo añadir nuevas piezas
-- `README.md` — descripción general, stack, instalación, comandos
+- `ARCHITECTURE.md` — technical decisions, structure, flows
+- `CONTRIBUTING.md` — development guide, how to add new pieces
+- `README.md` — general description, stack, installation, commands
 
 ---
 
-## Resumen: Lo que NO está permitido
+## Prohibited Practices
 
-| Práctica | Estado |
+| Practice | Status |
 |----------|--------|
-| Import estático de páginas | ❌ Prohibido |
-| `any` en TypeScript | ❌ Prohibido |
-| Archivos > 150 líneas | ❌ Prohibido (refactorizar) |
-| Funciones > 40 líneas | ❌ Prohibido (extraer) |
-| Texto hardcodeado visible | ❌ Prohibido (usar i18n) |
-| console.log de debugging | ❌ Prohibido en commits |
-| Código comentado | ❌ Prohibido en commits |
-| Archivos .bak, .old, temporales | ❌ Prohibido en el repo |
-| Tokens, claves, emails en código | ❌ Prohibido (usar .env) |
-| Context API / store global | ❌ Prohibido (usar hooks + props) |
+| Static page imports | Prohibited |
+| `any` in TypeScript | Prohibited |
+| Files > 150 lines | Prohibited (refactor) |
+| Functions > 40 lines | Prohibited (extract) |
+| Hardcoded visible text | Prohibited (use i18n) |
+| console.log for debugging | Prohibited in commits |
+| Commented code | Prohibited in commits |
+| .bak, .old, temp files | Prohibited in repo |
+| Tokens, keys, emails in code | Prohibited (use .env) |
+| Context API / global store | Prohibited (use hooks + props) |

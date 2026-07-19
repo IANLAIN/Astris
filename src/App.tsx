@@ -128,11 +128,9 @@ export default function App() {
   const reopenLang = () => setModalStep("language");
   const showModal = modalStep !== "none";
 
-  /* Cycle: inter → lexend → opendyslexic → inter */
+  /* Cycle: inter → opendyslexic → inter */
   const cycleFont = (current: FontKey): FontKey =>
-    current === "inter" ? "lexend" :
-    current === "lexend" ? "opendyslexic" :
-    "inter";
+    current === "inter" ? "opendyslexic" : "inter";
 
 
   if (!appReady) {

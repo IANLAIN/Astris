@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { User, Building2, Star, ArrowRight, Globe, X, Sun, Moon, Type } from "lucide-react";
+import { ArrowRight, Globe, X, Sun, Moon, Type } from "lucide-react";
 import { Lang, PublicView, FontKey, Role } from "@/types";
 import { useT, C } from "@/i18n/useT";
 import astrisImg from "@/assets/astris.svg";
+import closerCircleImg from "@/assets/closertothestarscircle.png";
 import { lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 
@@ -39,8 +40,8 @@ export function LandingPage({ lang, onOpenAuth, onLang, onNavigate, darkMode, on
                 backgroundColor: font !== "inter" ? "color-mix(in srgb, var(--primary) 12%, transparent)" : "transparent",
                 color: font !== "inter" ? "var(--primary)" : "var(--foreground)",
               }}
-              aria-label={font === "opendyslexic" ? "OpenDyslexic activado" : font === "lexend" ? "Lexend activado" : "Tipografía normal"}
-              title={font === "opendyslexic" ? "OpenDyslexic activado" : font === "lexend" ? "Lexend activado" : "Tipografía normal"}
+              aria-label={font === "opendyslexic" ? "OpenDyslexic activado" : "Tipografía normal"}
+              title={font === "opendyslexic" ? "OpenDyslexic activado" : "Tipografía normal"}
             >
               <Type size={16} />
             </button>

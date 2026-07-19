@@ -1,12 +1,36 @@
-import { createClient } from "@supabase/supabase-js";
+// ── Demo Data Service ──
+// This replaces all Supabase functionality with mock data.
+// No real backend is needed — everything works offline.
 
-export const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL || "https://placeholder.supabase.co",
-  import.meta.env.VITE_SUPABASE_ANON_KEY || "placeholder"
-);
+import {
+  DEMO_USERS,
+  ADMIN_CREDENTIALS,
+  VACANCIES_FALLBACK,
+  MENTORS_FALLBACK,
+  CANDIDATE_RADAR_FINAL,
+  CANDIDATE_ADJUSTMENTS,
+  COMPANY_CANDIDATES_DATA,
+  MENTOR_PROCESSES,
+  ADMIN_STATS,
+  ADMIN_USERS,
+  ADMIN_COMPANIES,
+  ADMIN_CANDIDATES
+} from "./demoData";
 
-// ── Auth helpers (adapted from auth.js for the React/TS context) ──────────────
+// ── Types ──
+export interface DemoUser {
+  id: string;
+  email: string;
+  name: string;
+  role: "candidate" | "company" | "mentor" | "admin";
+  avatarUrl: string;
+  vocation: string;
+  completedOnboarding: boolean;
+  needsRegistration?: boolean;
+  profile?: any;
+}
 
+// ── Auth ──
 export async function registerUser(
   email: string,
   password: string,
@@ -14,320 +38,210 @@ export async function registerUser(
   role: "candidate" | "company" | "mentor" | "admin",
   vocation: string = ""
 ) {
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      data: {
-        role,
-        full_name: name || email.split("@")[0],
-      },
-    },
-  });
-  if (error) throw error;
-  // Ensure a profile row exists in `users_profiles` for this user
-  try {
-    if (data?.user?.id) {
-      const upsertBody: any = {
-        id: data.user.id,
-        email: email,
-        full_name: name || data.user.user_metadata?.full_name || email.split("@")[0],
-        role,
-        vocation,
-        completed_onboarding: false,
-      };
-      const { error: upsertErr } = await supabase.from("users_profiles").upsert(upsertBody);
-      if (upsertErr) console.error("Error upserting users_profiles after register:", upsertErr);
-    }
-  } catch (e) {
-    console.error("Unexpected error ensuring users_profiles on register:", e);
-  }
-
-  return data.user;
+  // In demo mode, registration just returns success
+  // Any registered user can login as demo
+  return { id: `user-${Date.now()}`, email };
 }
 
 export async function loginUser(email: string, password: string) {
-  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error) throw error;
-  // Ensure profile exists for signed-in user
-  try {
-    const userId = data?.user?.id;
-    if (userId) {
-      const { data: profile } = await supabase.from("users_profiles").select("id").eq("id", userId).single();
-      if (!profile) {
-        const { error: upsertErr } = await supabase.from("users_profiles").upsert({
-          id: userId,
-          email: email,
-          full_name: data.user.user_metadata?.full_name || data.user.user_metadata?.name || email.split("@")[0],
-          role: data.user.user_metadata?.role ?? null,
-          completed_onboarding: false,
-        });
-        if (upsertErr) console.error("Error upserting users_profiles after login:", upsertErr);
-      }
-    }
-  } catch (e) {
-    console.error("Unexpected error ensuring users_profiles on login:", e);
+  // Check admin backdoor
+  if (email === ADMIN_CREDENTIALS.email && password === ADMIN_CREDENTIALS.password) {
+    return { user: { id: ADMIN_CREDENTIALS.id, email: ADMIN_CREDENTIALS.email } };
   }
 
-  return data.user;
+  // Check demo users
+  const demoUser = DEMO_USERS[email];
+  if (demoUser && password === demoUser.password) {
+    window.localStorage.setItem("astris_demo_user", email);
+    return { user: { id: demoUser.id, email: demoUser.email } };
+  }
+
+  // Allow any email/password combo for registered users
+  if (email && password) {
+    return { user: { id: `user-${Date.now()}`, email } };
+  }
+
+  throw new Error("Credenciales inválidas. Usa las credenciales demo.");
 }
 
-export async function signInWithGoogle(role?: string, intent?: 'login' | 'register') {
-  if (role) {
-    localStorage.setItem("astris_pending_role", role);
-  }
-  if (intent) {
-    localStorage.setItem("astris_google_intent", intent);
-  }
-  const { error } = await supabase.auth.signInWithOAuth({
-    provider: "google",
-    options: {
-      redirectTo: window.location.origin,
-    },
-  });
-  if (error) throw error;
-}
-
-export async function getCurrentUser() {
+export async function getCurrentUser(): Promise<DemoUser | null> {
   const demoEmail = typeof window !== "undefined" ? window.localStorage.getItem("astris_demo_user") : null;
-  if (demoEmail === "candidato@astris.org") {
-    return { id: "demo-cand", email: demoEmail, name: "Alex (Demo)", role: "candidate", avatarUrl: "", vocation: "Analista de Datos", completedOnboarding: false, needsRegistration: false };
-  }
-  if (demoEmail === "empresa@astris.org") {
-    return { id: "demo-comp", email: demoEmail, name: "Veritas Analytics (Demo)", role: "company", avatarUrl: "", vocation: "", completedOnboarding: true, needsRegistration: false };
-  }
-  if (demoEmail === "mentor@astris.org") {
-    return { id: "demo-ment", email: demoEmail, name: "Elena (Demo)", role: "mentor", avatarUrl: "", vocation: "Especialista en Inclusión", completedOnboarding: true, needsRegistration: false };
-  }
 
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session) return null;
-
-  const userId = session.user.id;
-  let { data: profile, error } = await supabase
-    .from("users_profiles")
-    .select("*")
-    .eq("id", userId)
-    .single();
-
-  const pendingRole = localStorage.getItem("astris_pending_role");
-  const intent = localStorage.getItem("astris_google_intent");
-  
-  const isRecovery = window.location.hash.includes("type=recovery");
-  
-  let needsRegistration = false;
-
-  if ((pendingRole || intent) && !isRecovery) {
-    if (!profile || !profile.role) {
-      needsRegistration = true; // Siempre mostrar confirmación de registro para nuevos usuarios de Google
-      
-      const roleToSet = pendingRole || "candidate";
-      const { data: updatedProfile, error: updateError } = await supabase
-        .from("users_profiles")
-        .upsert({ 
-          id: userId, 
-          role: roleToSet,
-          email: session.user.email,
-          full_name: profile?.full_name || session.user.user_metadata?.full_name || session.user.user_metadata?.name || session.user.email?.split("@")[0]
-        })
-        .select()
-        .single();
-      
-      if (updateError) {
-        console.error("Error al crear perfil en users_profiles:", updateError);
-      }
-      
-      if (!updateError && updatedProfile) {
-        profile = updatedProfile;
-        error = null;
-      }
-    }
-    localStorage.removeItem("astris_pending_role");
-    localStorage.removeItem("astris_google_intent");
-  } else if (isRecovery) {
-    // Clear residual intents to prevent ghost registration flashes
-    localStorage.removeItem("astris_pending_role");
-    localStorage.removeItem("astris_google_intent");
-  }
-
-  // If no profile exists at all, try to create one from auth metadata
-  if (!profile) {
-    try {
-      const fallback = {
-        id: userId,
-        email: session.user.email,
-        full_name: session.user.user_metadata?.full_name || session.user.user_metadata?.name || session.user.email?.split("@")[0],
-        role: session.user.user_metadata?.role ?? null,
-        completed_onboarding: false,
-      };
-      const { data: created, error: createErr } = await supabase.from("users_profiles").upsert(fallback).select().single();
-      if (createErr) {
-        console.error("Error creating fallback users_profiles:", createErr);
-      } else {
-        profile = created;
-        error = null;
-      }
-    } catch (e) {
-      console.error("Unexpected error creating fallback users_profiles:", e);
-    }
-  }
-
-  if (error || !profile) return null;
-  return {
-    id: userId,
-    email: session.user.email ?? "",
-    name: profile.full_name ?? session.user.email ?? "",
-    role: profile.role as "candidate" | "company" | "mentor",
-    avatarUrl: profile.avatar_url ?? "",
-    vocation: profile.vocation ?? "",
-    completedOnboarding: profile.completed_onboarding ?? false,
-    needsRegistration,
-  };
-}
-
-export async function getCandidates() {
-  const { data, error } = await supabase
-    .from("users_profiles")
-    .select("*")
-    .eq("role", "candidate")
-    .not("email", "ilike", "%@astris.org");
-
-  if (error) {
-    console.error("Error fetching candidates:", error);
-    return [];
-  }
-
-  return (data ?? []).map((profile: any) => ({ id: profile.id, profile }));
-}
-
-export async function getCompanies() {
-  const { data, error } = await supabase
-    .from("companies")
-    .select("*, users_profiles!inner(email)")
-    .not("users_profiles.email", "ilike", "%@astris.org");
-  if (error) {
-    console.error("Error fetching companies:", error);
-    return [];
-  }
-  return data ?? [];
-}
-
-export async function getMatchesForCandidate(candidateId: string) {
-  // Fetch active jobs
-  const { data: jobs, error } = await supabase
-    .from("jobs")
-    .select(`id, title, description, company_id, status, work_modality, location_text, contract_type, offered_accommodations`)
-    .eq("status", "active");
-
-  if (error || !jobs) return [];
-
-  // Get companies for these jobs
-  const companyIds = Array.from(new Set(jobs.map((j: any) => j.company_id).filter(Boolean)));
-  let companiesMap: Record<string, any> = {};
-  if (companyIds.length > 0) {
-    const { data: companies } = await supabase
-      .from("companies")
-      .select("user_id, company_name, accommodations, philosophy, work_environment, users_profiles!inner(email)")
-      .in("user_id", companyIds)
-      .not("users_profiles.email", "ilike", "%@astris.org");
-    (companies || []).forEach((c: any) => { companiesMap[c.user_id] = c; });
-  }
-
-  // Get candidate info
-  const { data: candidate } = await supabase.from("candidates").select("*").eq("user_id", candidateId).single();
-  const workPref = (candidate?.work_preference || "").toLowerCase();
-
-  return jobs.map((j: any) => {
-    let score = 50; // Base score
-    const comp = companiesMap[j.company_id];
-    
-    // Modality matching
-    if (workPref.includes("remot") && (j.work_modality === "remote" || j.work_modality === "hybrid")) score += 30;
-    else if (workPref.includes("híbrid") && j.work_modality === "hybrid") score += 20;
-    else if (workPref.includes("presencial") && j.work_modality === "in-person") score += 20;
-
-    if (comp?.accommodations?.length > 0) {
-       score += Math.min(20, comp.accommodations.length * 5);
-    }
-    
+  if (demoEmail && DEMO_USERS[demoEmail]) {
+    const u = DEMO_USERS[demoEmail];
     return {
-      jobId: j.id,
-      matchPercentage: Math.min(99, score)
+      id: u.id,
+      email: u.email,
+      name: u.name,
+      role: u.role as any,
+      avatarUrl: u.avatarUrl || "",
+      vocation: u.vocation,
+      completedOnboarding: u.completedOnboarding,
+      profile: u.profile,
     };
-  }).sort((a, b) => b.matchPercentage - a.matchPercentage);
-}
+  }
 
-export async function getMatchesForCompany(companyId: string) {
-  const { data: cands } = await supabase
-    .from("candidates")
-    .select("user_id, work_preference, interests, users_profiles!inner(full_name, email)")
-    .not("users_profiles.email", "ilike", "%@astris.org");
-  if (!cands) return [];
-
-  // Simple placeholder logic based on company data if needed, or random fallback
-  // The company can fetch these candidates and rank them.
-  return cands.map((c: any) => {
-    let score = 50 + (c.work_preference ? 20 : 0) + (c.interests ? 10 : 0);
+  // Check if admin is logged in via localStorage
+  const adminSession = typeof window !== "undefined" ? window.localStorage.getItem("astris_admin_session") : null;
+  if (adminSession === "true") {
     return {
-      candidateId: c.user_id,
-      matchPercentage: Math.min(99, score + Math.floor(Math.random() * 15)) // add slight noise for realism if no exact metric exists
+      id: ADMIN_CREDENTIALS.id,
+      email: ADMIN_CREDENTIALS.email,
+      name: "Admin Astris",
+      role: "admin",
+      avatarUrl: "",
+      vocation: "",
+      completedOnboarding: true,
     };
-  }).sort((a, b) => b.matchPercentage - a.matchPercentage);
+  }
+
+  return null;
 }
 
 export async function logoutUser() {
   if (typeof window !== "undefined") {
     window.localStorage.removeItem("astris_demo_user");
+    window.localStorage.removeItem("astris_admin_session");
   }
-  await supabase.auth.signOut();
+}
+
+export async function signInWithGoogle(role?: string, intent?: 'login' | 'register') {
+  // Demo: just store the intent and simulate Google auth
+  if (role) {
+    window.localStorage.setItem("astris_pending_role", role);
+  }
+  if (intent) {
+    window.localStorage.setItem("astris_google_intent", intent);
+  }
+  // In demo mode, pretend the OAuth redirect happened
+  console.log("[DEMO] Google sign-in simulated. No real OAuth.");
 }
 
 export async function resetPasswordForEmail(email: string) {
-  const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: window.location.origin,
-  });
-  if (error) throw error;
+  // Demo: no-op, just success
+  return;
 }
 
 export async function updatePassword(newPassword: string) {
-  const { error } = await supabase.auth.updateUser({ password: newPassword });
-  if (error) throw error;
+  // Demo: no-op
+  return;
 }
 
 export async function updateProfile(userId: string, name: string, avatarUrl: string = "", vocation: string = "") {
-  const { error } = await supabase.from("users_profiles").update({ 
-    full_name: name,
-    avatar_url: avatarUrl,
-    vocation: vocation
-  }).eq("id", userId);
-  if (error) throw error;
+  // Demo: no-op
+  return;
 }
 
 export async function deleteAccount() {
-  const { error } = await supabase.rpc("delete_user");
-  if (error) throw error;
-  await supabase.auth.signOut();
+  await logoutUser();
 }
 
 export async function saveCandidateProfile(userId: string, quizAnswers: any, theme: string, font: string) {
+  // Demo: save to localStorage
   try {
-    // Upsert into candidates table
-    const { error: candErr } = await supabase.from("candidates").upsert({
-      user_id: userId,
-      quiz_answers: quizAnswers,
-      accessibility_theme: theme,
-      accessibility_font: font,
-      updated_at: new Date().toISOString()
-    });
-    if (candErr) console.error("Error saving candidate data:", candErr);
-    
-    // Mark onboarding as completed in users_profiles
-    const { error: profErr } = await supabase.from("users_profiles").update({
-      completed_onboarding: true
-    }).eq("id", userId);
-    if (profErr) console.error("Error marking onboarding completed:", profErr);
-    
-  } catch (err) {
-    console.error("Unexpected error saving profile:", err);
+    window.localStorage.setItem("astris_quiz_answers", JSON.stringify(quizAnswers));
+    window.localStorage.setItem("astris_theme", theme);
+    window.localStorage.setItem("astris_font", font);
+    window.localStorage.setItem("astris_quiz_completed", "true");
+  } catch (e) {
+    console.error("Error saving profile demo:", e);
   }
+}
+
+// ── Matching ──
+export async function getMatchesForCandidate(candidateId: string) {
+  return VACANCIES_FALLBACK.map((v, i) => ({
+    jobId: v.id,
+    matchPercentage: v.match - (i * 4),
+    title: v.title,
+    company: v.company,
+    sector: v.sector,
+    modality: v.modality,
+    type: v.type,
+    adjustments: v.adjustments,
+    desc: v.desc,
+    companyDesc: v.companyDesc,
+  })).sort((a, b) => b.matchPercentage - a.matchPercentage);
+}
+
+export async function getMatchesForCompany(companyId: string) {
+  return COMPANY_CANDIDATES_DATA.map((c) => ({
+    candidateId: c.id,
+    matchPercentage: c.match,
+    strengths: c.strengths,
+    radar: c.radar,
+    env: c.env,
+  })).sort((a, b) => b.matchPercentage - a.matchPercentage);
+}
+
+// ── Mentors ──
+export async function getMentors() {
+  return MENTORS_FALLBACK;
+}
+
+// ── Companies profile ──
+export async function getCompanyProfile(userId: string) {
+  if (userId === "demo-comp") {
+    return DEMO_USERS["empresa@astris.org"]?.profile || null;
+  }
+  return null;
+}
+
+export async function saveCompanyProfile(userId: string, data: any) {
+  // Demo: no-op
+  return { error: null };
+}
+
+// ── Checkins ──
+export async function saveCheckin(userId: string, role: string, note: string) {
+  // Demo: save to localStorage
+  try {
+    const key = `astris_checkins_${userId}`;
+    const existing = JSON.parse(window.localStorage.getItem(key) || "[]");
+    existing.unshift({ date: new Date().toISOString(), note, role });
+    window.localStorage.setItem(key, JSON.stringify(existing));
+  } catch (e) {
+    // ignore
+  }
+}
+
+export async function getCheckins(userId: string) {
+  try {
+    const key = `astris_checkins_${userId}`;
+    return JSON.parse(window.localStorage.getItem(key) || "[]");
+  } catch (e) {
+    return [];
+  }
+}
+
+// ── Admin ──
+export async function getDashboardStats() {
+  return ADMIN_STATS;
+}
+
+export async function getAdminUsers() {
+  return ADMIN_USERS;
+}
+
+export async function getAdminCompanies() {
+  return ADMIN_COMPANIES;
+}
+
+export async function getAdminCandidates() {
+  return ADMIN_CANDIDATES;
+}
+
+export async function softDeleteUser(adminId: string, userId: string, isDeleted: boolean) {
+  // Demo: no-op
+  return;
+}
+
+export async function updateUserRole(adminId: string, userId: string, newRole: string) {
+  // Demo: no-op
+  return;
+}
+
+export async function logAdminAction(adminId: string, action: string, targetTable: string, targetId?: string, details?: any) {
+  // Demo: no-op
+  return;
 }

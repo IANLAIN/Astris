@@ -34,8 +34,7 @@ export function useTheme() {
   };
 
   const fontFamily =
-    font === "lexend" ? "'Lexend', 'Inter', sans-serif" :
-    font === "opendyslexic" ? "'OpenDyslexic', 'Lexend', 'Inter', sans-serif" :
+    font === "opendyslexic" ? "'OpenDyslexic', 'Inter', sans-serif" :
     "'Inter', sans-serif";
 
   // Apply font to <html> so it cascades everywhere
@@ -53,7 +52,6 @@ export function useTheme() {
 
   const rootStyle: CSSVars = darkMode
     ? {
-        // Dark mode — sober matte pastel palette
         "--background": "#1A1A1A",
         "--foreground": "#E8E4DF",
         "--card": "#242424",
@@ -90,7 +88,6 @@ export function useTheme() {
         "--chart-5": "#C4A0B8",
       }
     : {
-        // Light mode — from palette
         "--background": pal.bg,
         "--foreground": pal.fg,
         "--card": pal.card,

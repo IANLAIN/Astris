@@ -1,71 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ChevronLeft, Shield, Users, Check, X } from "lucide-react";
 import { Lang } from "@/types";
 import { useT } from "@/i18n/useT";
-import { supabase, getMatchesForCompany } from "@/services/supabase";
+import { COMPANY_CANDIDATES_DATA, CANDIDATE_RADAR_FINAL } from "@/services/demoData";
 import { MatchBadge } from "@/components/common/MatchBadge";
 import { RadarViz } from "@/components/common/RadarViz";
 
 export function CompanyCandidateDetail({ lang, candidateId, onBack, onStart }: { lang: Lang; candidateId: string; onBack: () => void; onStart: () => void }) {
   const t = useT(lang);
-  const [candidate, setCandidate] = useState<any | null>(null);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function loadCandidate() {
-      let currentMatch = 80;
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        const matches = await getMatchesForCompany(session.user.id);
-        const m = matches.find((x: any) => x.candidateId === candidateId);
-        if (m) currentMatch = m.matchPercentage;
-      }
-
-      if (candidateId.startsWith("cand-demo-")) {
-        setCandidate({
-          id: candidateId,
-          match: currentMatch,
-          profile: {
-            work_preference: "Remoto / Asíncrono",
-            ideal_environment: "Entorno silencioso, poca carga sensorial",
-            interests: "Tecnología, Análisis de datos",
-            accessibility_theme: "high-contrast",
-            accessibility_font: "opendyslexic"
-          }
-        });
-        setLoading(false);
-        return;
-      }
-
-      const { data } = await supabase
-        .from("users_profiles")
-        .select("*, candidates(*)")
-        .eq("id", candidateId)
-        .single();
-
-      if (data) {
-        setCandidate({ ...data, profile: data.candidates?.[0] ?? {}, match: currentMatch });
-      }
-      setLoading(false);
-    }
-    loadCandidate();
-  }, [candidateId]);
-
-  if (loading) return <div className="min-h-screen w-full overflow-x-hidden flex items-center justify-center text-muted-foreground">Cargando...</div>;
-  if (!candidate) return <div className="min-h-screen w-full overflow-x-hidden flex items-center justify-center text-muted-foreground">Candidato no encontrado.</div>;
-
-  const profile = candidate.profile || {};
-  const radar = [
-    { axis: "Procesamiento", value: profile.work_preference ? 80 : 55 },
-    { axis: "T. Ambiental", value: profile.ideal_environment ? 70 : 50 },
-    { axis: "Ejecución", value: profile.interests ? 75 : 45 },
-    { axis: "Ajustes", value: profile.accessibility_theme || profile.accessibility_font ? 85 : 50 },
-  ];
-  const env = [
-    { req: profile.ideal_environment ? profile.ideal_environment : "Entorno ideal no definido", met: !!profile.ideal_environment },
-    { req: profile.interests ? `Intereses: ${profile.interests}` : "Intereses no definidos", met: !!profile.interests },
-    { req: profile.accessibility_theme ? `Tema accesible: ${profile.accessibility_theme}` : "Tema accesible no definido", met: !!profile.accessibility_theme },
-    { req: profile.accessibility_font ? `Fuente accesible: ${profile.accessibility_font}` : "Fuente accesible no definida", met: !!profile.accessibility_font },
+  const candidateData = COMPANY_CANDIDATES_DATA.find((c) => c.id === candidateId);
+  const match = candidateData?.match || 85;
+  const radar = candidateData?.radar || CANDIDATE_RADAR_FINAL;
+  const env = candidateData?.env || [
+    { req: "Entorno de trabajo adaptativo", met: true },
+    { req: "Comunicación flexible", met: true },
   ];
 
   return (
@@ -75,12 +24,12 @@ export function CompanyCandidateDetail({ lang, candidateId, onBack, onStart }: {
         <div className="flex items-center justify-between">
           <div>
             <div className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-1">{t("comp.detail.title")}</div>
-            <h1 className="text-2xl font-bold text-foreground" style={{ fontFamily: "DM Mono, monospace" }}>{candidate.id}</h1>
+            <h1 className="text-2xl font-bold text-foreground" style={{ fontFamily: "DM Mono, monospace" }}>{candidateId.substring(0, 8)}</h1>
             <div className="flex items-center gap-2 mt-2 text-sm text-muted-foreground">
               <Shield size={13} aria-hidden="true" style={{ color: "var(--accent)" }} />{"Perfil anónimo"}
             </div>
           </div>
-          <MatchBadge value={Math.floor(Math.random() * 20) + 80} size="lg" />
+          <MatchBadge value={match} size="lg" />
         </div>
       </div>
       <div className="max-w-5xl mx-auto w-full px-4 lg:px-20 py-10 flex gap-5 md:gap-10">
@@ -92,7 +41,7 @@ export function CompanyCandidateDetail({ lang, candidateId, onBack, onStart }: {
           <div className="rounded-2xl border border-border p-6" style={{ backgroundColor: "var(--card)" }}>
             <h3 className="font-bold text-foreground mb-4 text-sm">{"Entorno requerido"}</h3>
             <div className="flex flex-col gap-2.5">
-              {env.map((e) => (
+              {env.map((e: any) => (
                 <div key={e.req} className="flex items-start gap-3">
                   <div className="w-5 h-5 rounded flex items-center justify-center shrink-0 mt-0.5" style={{ backgroundColor: e.met ? "var(--accent)" : "var(--muted)" }} aria-hidden="true">
                     {e.met ? <Check size={11} style={{ color: "var(--accent-foreground)" }} /> : <X size={11} style={{ color: "var(--muted-foreground)" }} />}

@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { Clock, MapPin, Check, ArrowRight } from "lucide-react";
 import { Lang, VacancyItem } from "@/types";
 import { useT } from "@/i18n/useT";
-import { supabase, getMatchesForCandidate } from "@/services/supabase";
+import { getMatchesForCandidate } from "@/services/supabase";
+import { VACANCIES_FALLBACK } from "@/services/demoData";
 import { MatchBadge } from "@/components/common/MatchBadge";
 
 export function CandidateVacancies({ lang, onSelect }: { lang: Lang; onSelect: (id: string) => void }) {
@@ -13,66 +14,32 @@ export function CandidateVacancies({ lang, onSelect }: { lang: Lang; onSelect: (
 
   useEffect(() => {
     async function loadJobs() {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) return;
-      const matches = await getMatchesForCandidate(session.user.id);
+      // Use the demo candidate ID directly
+      const candidateId = "demo-cand";
+      const matches = await getMatchesForCandidate(candidateId);
       
       if (matches.length > 0) {
-        const { data } = await supabase
-          .from("jobs")
-          .select(`id, title, description, company_id, status, work_modality, location_text, contract_type, offered_accommodations, required_skills`)
-          .in("id", matches.map((m: any) => m.jobId));
-          
-        if (data && data.length > 0) {
-          const companyIds = Array.from(new Set(data.map((j: any) => j.company_id).filter(Boolean)));
-          let companiesMap: Record<string, any> = {};
-          if (companyIds.length > 0) {
-            const { data: companies } = await supabase
-              .from("companies")
-              .select("user_id, company_name, industry, philosophy")
-              .in("user_id", companyIds);
-            (companies || []).forEach((c: any) => {
-              if (c.user_id) companiesMap[c.user_id] = c;
-            });
-          }
-
-          const mapped: VacancyItem[] = data.map((j: any) => {
-            const matchScore = matches.find((m: any) => m.jobId === j.id)?.matchPercentage || 0;
-            return {
-              id: j.id,
-              title: j.title,
-              company: (companiesMap[j.company_id]?.company_name) || "Empresa",
-              sector: (companiesMap[j.company_id]?.industry) || "-",
-              modality: j.work_modality === "remote" ? (t("modality.remote")) : j.work_modality === "hybrid" ? (t("modality.hybrid")) : (t("modality.in_person")),
-              type: j.contract_type ?? (t("vacancy.full_time")),
-              match: matchScore,
-              socialLevel: "Bajo",
-              adjustments: j.offered_accommodations ?? [],
-              desc: j.description ?? "",
-              companyDesc: (companiesMap[j.company_id]?.philosophy) || "",
-            };
-          });
-          setVacancies(mapped.sort((a,b) => b.match - a.match));
-        } else {
-          // DEMO DATA FALLBACK
-          setVacancies([
-            { id: "demo-vac-1", title: "Desarrollador Web Frontend", company: "Tech Solutions", sector: "Tecnología", modality: t("modality.remote"), type: t("vacancy.full_time"), match: 94, socialLevel: "Bajo", adjustments: ["Horarios flexibles", "Comunicación asíncrona"], desc: "Buscamos desarrollador React...", companyDesc: "Talento sin barreras" },
-            { id: "demo-vac-2", title: "Analista de Datos Junior", company: "Veritas Analytics", sector: "Análisis de Datos", modality: t("modality.hybrid"), type: t("vacancy.full_time"), match: 88, socialLevel: "Medio", adjustments: ["Entorno silencioso", "Luz tenue"], desc: "Análisis con Python y SQL...", companyDesc: "Innovación inclusiva" },
-            { id: "demo-vac-3", title: "Especialista QA", company: "QualityCorp", sector: "Tecnología", modality: t("modality.remote"), type: "Medio tiempo", match: 75, socialLevel: "Bajo", adjustments: ["Trabajo por objetivos"], desc: "Pruebas de software...", companyDesc: "Calidad de software" }
-          ]);
-        }
+        const mapped: VacancyItem[] = matches.map((m: any) => ({
+          id: m.jobId,
+          title: m.title,
+          company: m.company,
+          sector: m.sector || "Tecnología",
+          modality: m.modality || t("modality.remote"),
+          type: m.type || t("vacancy.full_time"),
+          match: m.matchPercentage,
+          socialLevel: "Bajo",
+          adjustments: m.adjustments || [],
+          desc: m.desc || "",
+          companyDesc: m.companyDesc || "",
+        }));
+        setVacancies(mapped.sort((a: any, b: any) => b.match - a.match));
       } else {
-        // DEMO DATA FALLBACK
-        setVacancies([
-            { id: "demo-vac-1", title: "Desarrollador Web Frontend", company: "Tech Solutions", sector: "Tecnología", modality: t("modality.remote"), type: t("vacancy.full_time"), match: 94, socialLevel: "Bajo", adjustments: ["Horarios flexibles", "Comunicación asíncrona"], desc: "Buscamos desarrollador React...", companyDesc: "Talento sin barreras" },
-            { id: "demo-vac-2", title: "Analista de Datos Junior", company: "Veritas Analytics", sector: "Análisis de Datos", modality: t("modality.hybrid"), type: t("vacancy.full_time"), match: 88, socialLevel: "Medio", adjustments: ["Entorno silencioso", "Luz tenue"], desc: "Análisis con Python y SQL...", companyDesc: "Innovación inclusiva" },
-            { id: "demo-vac-3", title: "Especialista QA", company: "QualityCorp", sector: "Tecnología", modality: t("modality.remote"), type: "Medio tiempo", match: 75, socialLevel: "Bajo", adjustments: ["Trabajo por objetivos"], desc: "Pruebas de software...", companyDesc: "Calidad de software" }
-        ]);
+        setVacancies(VACANCIES_FALLBACK);
       }
       setLoadingVac(false);
     }
     loadJobs();
-  }, [lang]);
+  }, [lang, t]);
 
   const filtered = modalityFilter === "all" ? vacancies : vacancies.filter((v) => v.modality.toLowerCase().includes(modalityFilter));
 

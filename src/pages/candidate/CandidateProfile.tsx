@@ -72,7 +72,7 @@ export function CandidateProfile({ lang, answers, userName, userAvatar, vocation
         {/* Left Column: Radar (Smaller) */}
         <div className="w-full lg:w-[340px] xl:w-[380px] shrink-0 space-y-6">
           <div className="rounded-2xl border border-border p-6" style={{ backgroundColor: "var(--card)", boxShadow: "0 10px 40px rgba(0,0,0,0.03)" }}>
-            <h2 className="text-lg font-bold text-foreground mb-4 text-center">Perfil Cognitivo</h2>
+            <h2 className="text-lg font-bold text-foreground mb-4 text-center">{t("profile.cognitive_profile", "Perfil Cognitivo")}</h2>
             <div className="flex justify-center items-center w-full overflow-hidden">
               <RadarViz data={radarData} height={280} outerRadius={85} fontSize={10} />
             </div>
@@ -101,7 +101,7 @@ export function CandidateProfile({ lang, answers, userName, userAvatar, vocation
                   });
                 }
                 if (active.length === 0) {
-                  active.push("Horarios flexibles", "Comunicación asíncrona", "Entorno silencioso");
+                  active.push(t("profile.flexible_hours", "Horarios flexibles"), t("profile.async_comm", "Comunicación asíncrona"), t("profile.quiet_environment", "Entorno silencioso"));
                 }
                 
                 return active.length > 0 ? (
@@ -118,13 +118,13 @@ export function CandidateProfile({ lang, answers, userName, userAvatar, vocation
           </div>
 
           <div className="rounded-[2rem] border border-border p-6 md:p-8" style={{ backgroundColor: "var(--card)", boxShadow: "0 10px 40px rgba(0,0,0,0.05)" }}>
-            <h2 className="text-xl font-bold text-foreground mb-4">Actividad Reciente</h2>
+            <h2 className="text-xl font-bold text-foreground mb-4">{t("profile.recent_activity", "Actividad Reciente")}</h2>
             <div className="flex flex-col items-center justify-center py-10 text-center border-2 border-dashed border-border rounded-xl">
               <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mb-3">
                 <Shield className="text-muted-foreground" size={24} aria-hidden="true" />
               </div>
-              <p className="text-foreground font-semibold">Todo está al día</p>
-              <p className="text-sm text-muted-foreground mt-1 max-w-sm">Explora la sección de vacantes para encontrar oportunidades adaptadas a tu perfil.</p>
+              <p className="text-foreground font-semibold">{t("profile.up_to_date", "Todo está al día")}</p>
+              <p className="text-sm text-muted-foreground mt-1 max-w-sm">{t("profile.explore_vacancies", "Explora la sección de vacantes para encontrar oportunidades adaptadas a tu perfil.")}</p>
             </div>
           </div>
         </div>

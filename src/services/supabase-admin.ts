@@ -1,68 +1,33 @@
-import { supabase } from "./supabase";
+// ── Admin Demo Service ──
+// All admin functions now use demo data.
+
+import { ADMIN_STATS, ADMIN_USERS, ADMIN_COMPANIES, ADMIN_CANDIDATES } from "./demoData";
 
 export async function logAdminAction(adminId: string, action: string, targetTable: string, targetId?: string, details?: any) {
-  try {
-    await supabase.from("admin_logs").insert({
-      admin_id: adminId,
-      action,
-      target_table: targetTable,
-      target_id: targetId,
-      details,
-    });
-  } catch (err) {
-    console.error("Failed to log admin action:", err);
-  }
+  // Demo: no-op
+  console.log("[ADMIN LOG]", { adminId, action, targetTable, targetId, details });
 }
 
 export async function getDashboardStats() {
-  const [usersRes, candidatesRes, companiesRes, jobsRes] = await Promise.all([
-    supabase.from("users_profiles").select("id", { count: "exact" }),
-    supabase.from("candidates").select("user_id", { count: "exact" }),
-    supabase.from("companies").select("user_id", { count: "exact" }),
-    supabase.from("jobs").select("id", { count: "exact" }),
-  ]);
-
-  return {
-    totalUsers: usersRes.count || 0,
-    totalCandidates: candidatesRes.count || 0,
-    totalCompanies: companiesRes.count || 0,
-    totalJobs: jobsRes.count || 0,
-  };
+  return ADMIN_STATS;
 }
 
 export async function getAdminUsers() {
-  const { data, error } = await supabase
-    .from("users_profiles")
-    .select("*, candidates(neurotype, work_preference), companies(company_name)")
-    .order("created_at", { ascending: false });
-
-  if (error) throw error;
-  return data || [];
+  return ADMIN_USERS;
 }
 
 export async function softDeleteUser(adminId: string, userId: string, isDeleted: boolean) {
-  const deleted_at = isDeleted ? new Date().toISOString() : null;
-  const { error } = await supabase.from("users_profiles").update({ deleted_at }).eq("id", userId);
-  if (error) throw error;
-  
-  await logAdminAction(adminId, isDeleted ? "SOFT_DELETE_USER" : "RESTORE_USER", "users_profiles", userId);
+  console.log("[ADMIN] softDeleteUser:", userId, isDeleted);
 }
 
 export async function updateUserRole(adminId: string, userId: string, newRole: string) {
-  const { error } = await supabase.from("users_profiles").update({ role: newRole }).eq("id", userId);
-  if (error) throw error;
-
-  await logAdminAction(adminId, "CHANGE_USER_ROLE", "users_profiles", userId, { newRole });
+  console.log("[ADMIN] updateUserRole:", userId, newRole);
 }
 
 export async function getAdminCompanies() {
-  const { data, error } = await supabase.from('companies').select('*, users_profiles(email, deleted_at)');
-  if (error) throw error;
-  return data || [];
+  return ADMIN_COMPANIES;
 }
 
 export async function getAdminCandidates() {
-  const { data, error } = await supabase.from('candidates').select('*, users_profiles(full_name, email, deleted_at)');
-  if (error) throw error;
-  return data || [];
+  return ADMIN_CANDIDATES;
 }

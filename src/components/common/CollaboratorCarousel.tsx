@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState } from "react";
 import { Lang } from "@/types";
 import { useT } from "@/i18n/useT";
 import vibralatinaImg from "@/assets/vibralatina.png";
@@ -7,8 +7,7 @@ import closerImg from "/closertothestars.jpeg";
 interface Collaborator {
   name: string;
   url: string;
-  imgSrc?: string;
-  whiteBg?: boolean;
+  imgSrc: string;
 }
 
 const COLLABORATORS: Collaborator[] = [
@@ -16,7 +15,6 @@ const COLLABORATORS: Collaborator[] = [
     name: "Closer To The Stars",
     url: "https://closertothestars.org/",
     imgSrc: closerImg,
-    whiteBg: true,
   },
   {
     name: "Vibra Latina",
@@ -43,7 +41,7 @@ export function CollaboratorCarousel({ lang, darkMode }: { lang: Lang; darkMode:
     if (paused || reducedMotion) return;
     const interval = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % COLLABORATORS.length);
-    }, 1200);
+    }, 1800);
     return () => clearInterval(interval);
   }, [paused, reducedMotion]);
 
@@ -58,7 +56,7 @@ export function CollaboratorCarousel({ lang, darkMode }: { lang: Lang; darkMode:
       aria-label={t("landing.supported")}
       style={{ perspective: "1200px" }}
     >
-      <div className="relative flex items-center justify-center min-h-[240px] md:min-h-[280px]">
+      <div className="relative flex items-center justify-center min-h-[400px] md:min-h-[440px]">
         {COLLABORATORS.map((item, idx) => {
           const offset = (idx - activeIndex + COLLABORATORS.length) % COLLABORATORS.length;
           
@@ -71,21 +69,21 @@ export function CollaboratorCarousel({ lang, darkMode }: { lang: Lang; darkMode:
 
           if (offset === 0) {
             translateX = 0;
-            scale = 1.15;
+            scale = 1.3;
             opacity = 1;
             zIndex = 30;
             rotateY = 0;
             filter = "none";
           } else if (offset === 1) {
             translateX = 200;
-            scale = 0.8;
+            scale = 0.85;
             opacity = 0.4;
             zIndex = 20;
             rotateY = -15;
             filter = "grayscale(0.5) blur(1px)";
           } else if (offset === 3) {
             translateX = -200;
-            scale = 0.8;
+            scale = 0.85;
             opacity = 0.4;
             zIndex = 20;
             rotateY = 15;
@@ -107,8 +105,8 @@ export function CollaboratorCarousel({ lang, darkMode }: { lang: Lang; darkMode:
               title={item.name}
               className="absolute flex items-center justify-center rounded-3xl border-2 transition-all duration-700 ease-in-out hover:!opacity-100 hover:!filter-none"
               style={{
-                width: 200,
-                height: 120,
+                width: 224,
+                height: 140,
                 transform: `translateX(${translateX}px) scale(${scale}) rotateY(${rotateY}deg)`,
                 opacity,
                 zIndex,
@@ -116,7 +114,7 @@ export function CollaboratorCarousel({ lang, darkMode }: { lang: Lang; darkMode:
                 boxShadow: offset === 0
                   ? darkMode ? "0 20px 40px -10px rgba(0,0,0,0.5)" : "0 20px 40px -10px rgba(0,0,0,0.2)"
                   : "none",
-                backgroundColor: item.whiteBg ? "#ffffff" : "var(--card)",
+                backgroundColor: "transparent",
                 borderColor: offset === 0 ? "var(--primary)" : "var(--border)",
               }}
               tabIndex={offset === 0 ? 0 : -1}
@@ -125,8 +123,8 @@ export function CollaboratorCarousel({ lang, darkMode }: { lang: Lang; darkMode:
                 <img
                   src={item.imgSrc}
                   alt={item.name}
-                  className="object-contain transition-transform duration-500 p-2"
-                  style={{ maxWidth: "85%", maxHeight: "85%" }}
+                  className="object-contain transition-transform duration-500"
+                  style={{ maxWidth: "90%", maxHeight: "90%" }}
                 />
             </a>
           );

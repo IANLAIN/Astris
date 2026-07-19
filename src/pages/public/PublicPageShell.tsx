@@ -52,8 +52,8 @@ export function PublicPageShell({ lang, currentView, onNavigate, onOpenAuth, onL
                 backgroundColor: font !== "inter" ? "color-mix(in srgb, var(--primary) 12%, transparent)" : "transparent",
                 color: font !== "inter" ? "var(--primary)" : "var(--foreground)",
               }}
-              aria-label={font === "opendyslexic" ? "OpenDyslexic activado" : font === "lexend" ? "Lexend activado" : "Tipografía normal"}
-              title={font === "opendyslexic" ? "OpenDyslexic activado" : font === "lexend" ? "Lexend activado" : "Tipografía normal"}
+              aria-label={font === "opendyslexic" ? "OpenDyslexic activado" : "Tipografía normal"}
+              title={font === "opendyslexic" ? "OpenDyslexic activado" : "Tipografía normal"}
             >
               <Type size={16} />
             </button>

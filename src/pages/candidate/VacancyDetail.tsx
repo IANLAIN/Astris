@@ -1,78 +1,22 @@
-import { useState, useEffect } from "react";
 import { Clock, MapPin, Check, X, ArrowRight, ChevronLeft } from "lucide-react";
 import { Lang, VacancyItem } from "@/types";
 import { useT } from "@/i18n/useT";
-import { supabase, getMatchesForCandidate } from "@/services/supabase";
+import { VACANCIES_FALLBACK } from "@/services/demoData";
 import { MatchBadge } from "@/components/common/MatchBadge";
-import { VACANCIES_FALLBACK } from "@/mock";
 
 export function VacancyDetail({ lang, vacancyId, onStart, onBack }: { lang: Lang; vacancyId: string; onStart: () => void; onBack: () => void }) {
   const t = useT(lang);
-  const [v, setV] = useState<VacancyItem | null>(null);
+  
+  const v: VacancyItem | undefined = VACANCIES_FALLBACK.find((x) => x.id === vacancyId);
 
-  useEffect(() => {
-    async function loadData() {
-      let currentMatch = 90;
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        const matches = await getMatchesForCandidate(session.user.id);
-        const m = matches.find((x: any) => x.jobId === vacancyId);
-        if (m) currentMatch = m.matchPercentage;
-      }
-
-      if (vacancyId.startsWith("V-")) {
-        setV(VACANCIES_FALLBACK.find((x) => x.id === vacancyId) ?? { ...VACANCIES_FALLBACK[0], match: currentMatch });
-        return;
-      }
-      
-      if (vacancyId.startsWith("demo-vac-")) {
-        const demoVacancies = [
-          { id: "demo-vac-1", title: "Desarrollador Web Frontend", company: "Tech Solutions", sector: "Tecnología", modality: t("modality.remote"), type: t("vacancy.full_time"), match: 94, socialLevel: "Bajo", adjustments: ["Horarios flexibles", "Comunicación asíncrona"], desc: "Buscamos desarrollador React...", companyDesc: "Talento sin barreras" },
-          { id: "demo-vac-2", title: "Analista de Datos Junior", company: "Veritas Analytics", sector: "Análisis de Datos", modality: t("modality.hybrid"), type: t("vacancy.full_time"), match: 88, socialLevel: "Medio", adjustments: ["Entorno silencioso", "Luz tenue"], desc: "Análisis con Python y SQL...", companyDesc: "Innovación inclusiva" },
-          { id: "demo-vac-3", title: "Especialista QA", company: "QualityCorp", sector: "Tecnología", modality: t("modality.remote"), type: "Medio tiempo", match: 75, socialLevel: "Bajo", adjustments: ["Trabajo por objetivos"], desc: "Pruebas de software...", companyDesc: "Calidad de software" }
-        ];
-        setV(demoVacancies.find((x) => x.id === vacancyId) as VacancyItem);
-        return;
-      }
-
-      const { data } = await supabase
-        .from("jobs")
-        .select(`id, title, description, company_id, work_modality, location_text, contract_type, offered_accommodations`)
-        .eq("id", vacancyId)
-        .single();
-
-      if (data) {
-        const j: any = data;
-        let companyName = "Empresa";
-        let companyPhilosophy = "";
-        if (j.company_id) {
-          const { data: comp } = await supabase.from("companies").select("user_id, company_name, philosophy").eq("user_id", j.company_id).single();
-          if (comp) {
-            companyName = comp.company_name ?? companyName;
-            companyPhilosophy = comp.philosophy ?? "";
-          }
-        }
-        setV({
-          id: j.id,
-          title: j.title,
-          company: companyName,
-          sector: "-",
-          modality: j.work_modality === "remote" ? (t("modality.remote")) : j.work_modality === "hybrid" ? (t("modality.hybrid")) : (t("modality.in_person")),
-          type: j.contract_type ?? (t("vacancy.full_time")),
-          match: currentMatch,
-          socialLevel: "Bajo",
-          adjustments: j.offered_accommodations ?? [],
-          desc: j.description ?? "",
-          companyDesc: companyPhilosophy,
-        });
-      } else {
-        setV({ ...VACANCIES_FALLBACK[0], match: currentMatch });
-      }
-    }
-    loadData();
-  }, [vacancyId, lang]);
-
-  const COMPAT = [{ label: "Modalidad de trabajo", match: true }, { label: "Comunicación asíncrona", match: true }, { label: "Instrucciones escritas", match: true }, { label: "Espacio individual silencioso", match: false }, { label: "Horario flexible", match: true }];
+  const COMPAT = [
+    { label: "Modalidad de trabajo", match: true },
+    { label: "Comunicación asíncrona", match: true },
+    { label: "Instrucciones escritas", match: true },
+    { label: "Espacio individual silencioso", match: true },
+    { label: "Horario flexible", match: true },
+    { label: "Audífonos con cancelación de ruido", match: true }
+  ];
 
   if (!v) return <div className="min-h-screen w-full overflow-x-hidden flex items-center justify-center text-muted-foreground">{t("common.loading")}</div>;
 

@@ -1,4 +1,4 @@
-import { MessageSquare, Calendar, Activity } from "lucide-react";
+import { MessageSquare, Calendar, Activity, BarChart2, Users } from "lucide-react";
 import { Lang } from "@/types";
 import { useT, C } from "@/i18n/useT";
 import { MENTOR_PROCESSES } from "@/mock";
@@ -10,7 +10,7 @@ export function MentorDashboard({ lang }: { lang: Lang }) {
       <div className="border-b border-border" style={{ backgroundColor: "var(--card)" }}>
         <div className="px-4 lg:px-20 py-10 max-w-7xl mx-auto">
           <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1">{t("mentor.dash.title")}</div>
-          <h2 className="text-2xl font-bold text-foreground">Carmen Ruiz</h2>
+          <h2 className="text-2xl font-bold text-foreground">Elena Vargas</h2>
           <p className="text-muted-foreground mt-1">Inclusión laboral y funciones ejecutivas</p>
         </div>
       </div>
@@ -25,7 +25,8 @@ export function MentorDashboard({ lang }: { lang: Lang }) {
         </div>
       </div>
       <div className="flex flex-1 max-w-7xl mx-auto w-full px-4 lg:px-20 py-10 gap-4 md:gap-8">
-        <div className="flex-1 min-w-0">
+        <div className="flex-1 min-w-0 space-y-6">
+          {/* ── Processes Section ── */}
           <h3 className="text-xl font-bold text-foreground mb-6">{C(lang, "mentorProcesses") as string}</h3>
           <div className="flex flex-col gap-5">
             {MENTOR_PROCESSES.map((proc) => (
@@ -60,6 +61,7 @@ export function MentorDashboard({ lang }: { lang: Lang }) {
           </div>
         </div>
         <div className="w-full md:w-72 shrink-0 flex flex-col gap-5">
+          {/* ── Upcoming Check-ins ── */}
           <div className="rounded-2xl border border-border p-6" style={{ backgroundColor: "var(--card)" }}>
             <div className="flex items-center gap-2 mb-4"><Calendar size={15} aria-hidden="true" style={{ color: "var(--primary)" }} /><h3 className="font-bold text-foreground text-sm">{C(lang, "mentorCheckins") as string}</h3></div>
             <div className="flex flex-col gap-3">
@@ -71,6 +73,7 @@ export function MentorDashboard({ lang }: { lang: Lang }) {
               ))}
             </div>
           </div>
+          {/* ── Impact Report ── */}
           <div className="rounded-2xl border border-border p-6" style={{ backgroundColor: "var(--card)" }}>
             <div className="flex items-center gap-2 mb-4"><Activity size={15} aria-hidden="true" style={{ color: "var(--accent)" }} /><h3 className="font-bold text-foreground text-sm">{C(lang, "mentorImpact") as string}</h3></div>
             {([[t("mentor.accompanied_interviews"), "5"], [t("mentor.completed_onboardings"), "2"], [t("mentor.negotiated_adjustments"), "8"]] as const).map(([label, val]) => (
@@ -79,6 +82,28 @@ export function MentorDashboard({ lang }: { lang: Lang }) {
                 <span className="font-bold text-foreground" style={{ fontFamily: "DM Mono, monospace" }}>{val as string}</span>
               </div>
             ))}
+          </div>
+          {/* ── Activity Report ── */}
+          <div className="rounded-2xl border border-border p-6" style={{ backgroundColor: "var(--card)" }}>
+            <div className="flex items-center gap-2 mb-4"><BarChart2 size={15} aria-hidden="true" style={{ color: "var(--primary)" }} /><h3 className="font-bold text-foreground text-sm">{t("mentor.dash.report")}</h3></div>
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center justify-between py-2 border-b border-border">
+                <span className="text-sm text-foreground">{t("mentor.dash.accompaniment_hours")}</span>
+                <span className="font-bold text-foreground" style={{ fontFamily: "DM Mono, monospace" }}>24h</span>
+              </div>
+              <div className="flex items-center justify-between py-2 border-b border-border">
+                <span className="text-sm text-foreground">{t("mentor.dash.completed_sessions")}</span>
+                <span className="font-bold text-foreground" style={{ fontFamily: "DM Mono, monospace" }}>12</span>
+              </div>
+              <div className="flex items-center justify-between py-2 border-b border-border">
+                <span className="text-sm text-foreground">{t("mentor.dash.active_candidates")}</span>
+                <span className="font-bold text-foreground" style={{ fontFamily: "DM Mono, monospace" }}>3</span>
+              </div>
+              <div className="flex items-center justify-between py-2">
+                <span className="text-sm text-foreground">{t("mentor.dash.linked_companies")}</span>
+                <span className="font-bold text-foreground" style={{ fontFamily: "DM Mono, monospace" }}>2</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

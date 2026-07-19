@@ -106,6 +106,7 @@
   "login.forgotTitle": "Recuperar Senha",
   "login.backLogin": "Voltar para o login",
   "login.emailError": "Por favor insira seu e-mail.",
+  "login.passwordError": "Por favor, insira sua senha.",
   "login.recoverySent": "Link de recuperação enviado. Verifique sua caixa de entrada.",
   "login.sendLink": "Enviar link",
   "updatePass.title": "Nova Senha",
@@ -683,5 +684,23 @@
   "partners.whyLabel": "Por que sua empresa quer fazer parte da Astris?",
   "partners.submit": "Enviar proposta",
   "partners.thanksTitle": "Obrigado pelo seu interesse",
-  "partners.thanksBody": "Recebemos sua proposta. Entraremos em contato em breve para explorar uma colaboração com a Astris."
+  "partners.thanksBody": "Recebemos sua proposta. Entraremos em contato em breve para explorar uma colaboração com a Astris.",
+  "profile": {
+    "cognitive_profile": "Perfil Cognitivo",
+    "flexible_hours": "Horários flexíveis",
+    "async_comm": "Comunicação assíncrona",
+    "quiet_environment": "Ambiente silencioso",
+    "recent_activity": "Atividade Recente",
+    "up_to_date": "Tudo está em dia",
+    "explore_vacancies": "Explore a seção de vagas para encontrar oportunidades adaptadas ao seu perfil."
+  },
+  "mentor": {
+    "dash": {
+      "report": "Relatório de Atividade",
+      "accompaniment_hours": "Horas de acompanhamento",
+      "completed_sessions": "Sessões concluídas",
+      "active_candidates": "Candidatos ativos",
+      "linked_companies": "Empresas vinculadas"
+    }
+  }
 }
