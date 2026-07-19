@@ -56,7 +56,7 @@ export function CollaboratorCarousel({ lang, darkMode }: { lang: Lang; darkMode:
       aria-label={t("landing.supported")}
       style={{ perspective: "1200px" }}
     >
-      <div className="relative flex items-center justify-center min-h-[400px] md:min-h-[440px]">
+      <div className="relative flex items-center justify-center min-h-[180px] md:min-h-[200px]">
         {COLLABORATORS.map((item, idx) => {
           const offset = (idx - activeIndex + COLLABORATORS.length) % COLLABORATORS.length;
           

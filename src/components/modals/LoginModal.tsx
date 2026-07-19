@@ -1,15 +1,16 @@
 import { useState } from "react";
-import { ChevronLeft, AlertCircle } from "lucide-react";
+import { ChevronLeft, AlertCircle, UserPlus } from "lucide-react";
 import { Lang } from "@/types";
 import { useT } from "@/i18n/useT";
 import { Overlay } from "../common/Overlay";
 import { signInWithGoogle, resetPasswordForEmail } from "@/services/supabase";
 import { PasswordInput } from "../ui/PasswordInput";
 
-export function LoginModal({ lang, onLogin, onBack, error, loading }: {
+export function LoginModal({ lang, onLogin, onBack, onRegister, error, loading }: {
   lang: Lang;
   onLogin: (email?: string, password?: string) => void;
   onBack: () => void;
+  onRegister?: () => void;
   error?: string | null;
   loading?: boolean;
 }) {
@@ -138,6 +139,21 @@ export function LoginModal({ lang, onLogin, onBack, error, loading }: {
                 </svg>
                 Continuar con Google
               </button>
+
+              {/* ── Register CTA ── */}
+              {onRegister && (
+                <div className="text-center mt-2 pt-4 border-t border-border">
+                  <p className="text-sm text-muted-foreground mb-3">{t("auth.q")}</p>
+                  <button
+                    onClick={onRegister}
+                    className="w-full py-4 rounded-xl font-bold text-base flex items-center justify-center gap-3 cursor-pointer transition-all hover:opacity-90"
+                    style={{ backgroundColor: "var(--accent)", color: "var(--accent-foreground)" }}
+                  >
+                    <UserPlus size={18} />
+                    {t("auth.new")}
+                  </button>
+                </div>
+              )}
             </>
           ) : (
             <button onClick={handleReset} disabled={isBusy || resetSent} className="w-full py-4 rounded-xl font-bold text-base cursor-pointer" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)", opacity: (isBusy || resetSent) ? 0.6 : 1 }}>

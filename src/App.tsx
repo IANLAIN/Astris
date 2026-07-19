@@ -159,7 +159,7 @@ export default function App() {
         <RegisterModal lang={lang} role={pendingRole} onRegister={handleRegister} onBack={() => setModalStep("none")} error={authError} loading={authLoading} googleAuthUser={googleAuthUser} onCompleteGoogle={handleCompleteGoogleRegistration} />
       )}
       {showModal && modalStep === "login" && (
-        <LoginModal lang={lang} onLogin={handleLogin} onBack={() => setModalStep("none")} error={authError} loading={authLoading} />
+        <LoginModal lang={lang} onLogin={handleLogin} onBack={() => setModalStep("none")} onRegister={() => setModalStep("register")} error={authError} loading={authLoading} />
       )}
       {requirePasswordUpdate && (
         <UpdatePasswordModal lang={lang} onComplete={() => setRequirePasswordUpdate(false)} />
