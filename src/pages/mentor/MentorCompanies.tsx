@@ -10,11 +10,10 @@ export function MentorCompanies({ lang }: { lang: Lang }) {
         <h1 className="text-2xl md:text-3xl font-bold text-foreground">{C(lang, "companiesPageTitle") as string}</h1>
         <p className="text-muted-foreground mt-2">{C(lang, "companiesPageSub") as string}</p>
       </div>
-      <div className="w-[95%] md:w-full md:max-w-4xl mx-auto w-full px-4 lg:px-20 py-10 grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div className="w-[95%] md:w-full md:max-w-4xl mx-auto w-full px-4 lg:px-20 py-10 grid grid-cols-1 md:grid-cols-2 gap-5">
         {[
-          { name: "Veritas Analytics", contact: "RRHH · Ana García", status: C(lang, "mentor.co.active"), processes: 1, color: "#2D7D5F" },
-          { name: "Forma Studio", contact: "Hiring · Daniel Reyes", status: C(lang, "mentor.co.inProcess"), processes: 1, color: "#1B4B7A" },
-          { name: "Kestrel Systems", contact: "People · Laura Mena", status: C(lang, "mentor.co.probation"), processes: 1, color: "#8B5C3A" },
+          { name: "Vibra Latina", contact: "RRHH · María Torres", status: C(lang, "mentor.co.active"), processes: 2, color: "#2D7D5F" },
+          { name: "Closer To The Stars Foundation", contact: "People · Carlos Mendoza", status: C(lang, "mentor.co.probation"), processes: 1, color: "#1B4B7A" },
         ].map((co) => (
           <article key={co.name} className="rounded-2xl border border-border p-6 flex flex-col gap-4" style={{ backgroundColor: "var(--card)" }}>
             <div className="flex items-start justify-between">

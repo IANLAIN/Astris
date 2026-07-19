@@ -11,7 +11,7 @@ export function MentorDashboard({ lang }: { lang: Lang }) {
         <div className="px-4 lg:px-20 py-10 max-w-7xl mx-auto">
           <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1">{t("mentor.dash.title")}</div>
           <h2 className="text-2xl font-bold text-foreground">Elena Vargas</h2>
-          <p className="text-muted-foreground mt-1">Inclusión laboral y funciones ejecutivas</p>
+          <p className="text-muted-foreground mt-1">Entornos laborales diversos y funciones ejecutivas</p>
         </div>
       </div>
       <div className="border-b border-border" style={{ backgroundColor: "var(--background)" }}>
@@ -65,7 +65,7 @@ export function MentorDashboard({ lang }: { lang: Lang }) {
           <div className="rounded-2xl border border-border p-6" style={{ backgroundColor: "var(--card)" }}>
             <div className="flex items-center gap-2 mb-4"><Calendar size={15} aria-hidden="true" style={{ color: "var(--primary)" }} /><h3 className="font-bold text-foreground text-sm">{C(lang, "mentorCheckins") as string}</h3></div>
             <div className="flex flex-col gap-3">
-              {[["Jun 18", "CAND-A7X2 × Veritas", "Onboarding semana 2"], ["Jun 20", "CAND-B3M9 × Forma Studio", "Preparación entrevista"], ["Jun 24", "CAND-C1K4 × Kestrel", "Revisión de 30 días"]].map(([date, cand, type]) => (
+              {[["Jun 18", "Bryan Gonzalez × Vibra Latina", "Onboarding semana 2"], ["Jun 20", "Candidato Diseñador × Vibra Latina", "Preparación entrevista"], ["Jun 24", "Candidato SysAdmin × Closer To The Stars", "Revisión de 30 días"]].map(([date, cand, type]) => (
                 <div key={date as string} className="flex items-start gap-3 p-3 rounded-xl border border-border" style={{ backgroundColor: "var(--background)" }}>
                   <div className="text-xs font-bold shrink-0 pt-0.5" style={{ color: "var(--primary)", fontFamily: "DM Mono, monospace" }}>{date}</div>
                   <div><div className="text-xs font-semibold text-foreground leading-tight">{cand as string}</div><div className="text-xs text-muted-foreground mt-0.5">{type as string}</div></div>
