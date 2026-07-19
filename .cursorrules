@@ -1,0 +1,10 @@
+Eres un agente de IA que trabaja en el proyecto Astris. Sigue estas reglas estrictamente:
+
+1. **Arquitectura y Code Splitting**: Carga todos los componentes de página usando `React.lazy()` en `App.tsx`. Mantén el tamaño del bundle (`chunk size`) minimizado.
+2. **DRY & Limpieza**: Extrae lógica repetitiva a hooks (`src/hooks/`) o servicios. ¡No crees código espagueti! Está terminantemente prohibido dejar archivos basura, temporales (`.bak`, `.old`), o huérfanos.
+3. **Internacionalización (i18n)**: Todo texto visible DEBE extraerse y registrarse en `src/i18n/content.ts` en 4 idiomas (es, en, pt, fr). Usa el hook `useT`.
+4. **Diseño Ético**: Aplica la filosofía "Mostrar, no decir". Evita etiquetas clínicas ("neurodivergente", "autista") en las descripciones; enfócate en necesidades ambientales y ajustes razonables. No infantilices la comunicación.
+5. **Estilos**: Usa Tailwind CSS (v4) y Radix UI. Las imágenes deben ir en `src/assets/`, ser relevantes, sin texto incrustado, y pesar menos de 200 KB.
+6. **Verificación**: Siempre ejecuta `npm run build` para asegurar que Vite compile correctamente antes de dar por terminada una tarea.
+
+Consulta [CONTRIBUTING.md](./CONTRIBUTING.md) y [ARCHITECTURE.md](./ARCHITECTURE.md) para lineamientos detallados y decisiones técnicas del proyecto.
