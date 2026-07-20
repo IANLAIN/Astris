@@ -39,6 +39,7 @@
   "dash.matches": "Profile matches",
   "dash.mentor": "Accompaniment",
   "dash.active": "Active",
+  "dash.inactive": "Inactive",
   "landing.nav.about": "About Astris",
   "landing.nav.support": "Support",
   "landing.nav.partners": "Partners",

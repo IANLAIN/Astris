@@ -88,9 +88,17 @@ export default function App() {
   const {
     role, pendingRole, loggedIn, authLoading, authError, appReady, authMessage,
     googleAuthUser, requirePasswordUpdate, userName, userAvatar, userVocation,
-    quizCompleted, setQuizCompleted, setPendingRole, setRequirePasswordUpdate,
+    userId, quizCompleted, loadedQuizAnswers, setQuizCompleted, setPendingRole,
+    setRequirePasswordUpdate,
     handleCompleteGoogleRegistration, handleRegister, handleLogin, handleLogout
   } = useAuth(setScreen, setModalStep);
+
+  // When useAuth restores saved quiz answers from DB, sync them into local quizAnswers
+  useEffect(() => {
+    if (loadedQuizAnswers && Object.keys(loadedQuizAnswers).length > 0) {
+      setQuizAnswers(loadedQuizAnswers);
+    }
+  }, [loadedQuizAnswers]);
 
   const handleAnswer = (ai: number, qi: number, val: number | number[]) => {
     setQuizAnswers((prev) => ({ ...prev, [ai]: { ...(prev[ai] ?? {}), [qi]: val } }));
@@ -234,7 +242,7 @@ export default function App() {
                 {/* Render normal screens only if quiz is completed (or not candidate) */}
                 {(!quizCompleted && role === "candidate") ? null : (
                   <>
-                {role === "candidate" && screen === "profile" && <CandidateProfile lang={lang} answers={quizAnswers} vocation={userVocation} userName={userName} userAvatar={userAvatar} />}
+                {role === "candidate" && screen === "profile" && <CandidateProfile lang={lang} answers={quizAnswers} vocation={userVocation} userName={userName} userAvatar={userAvatar} userId={userId} />}
                 {role === "candidate" && screen === "vacancies" && <CandidateVacancies lang={lang} onSelect={(id) => { setSelectedVacancy(id); setScreen("vacancy-detail"); }} />}
                 {role === "candidate" && screen === "vacancy-detail" && <VacancyDetail lang={lang} vacancyId={selectedVacancy} onBack={() => handleBackTo("vacancies")} onStart={() => setScreen("mentor-select")} />}
                 {role === "candidate" && screen === "mentor-select" && <MentorSelect lang={lang} onSelect={() => setScreen("accompaniment")} />}

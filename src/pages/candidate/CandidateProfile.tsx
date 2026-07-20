@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { User, Briefcase, CheckCircle, HeartHandshake } from "lucide-react";
+import { User, Briefcase, CheckCircle, HeartHandshake, Loader2 } from "lucide-react";
 import { Lang, QuizAnswers } from "@/types";
 import { useT, computeRadar } from "@/i18n/useT";
-import { getCurrentUser } from "@/services/supabase";
+import { getCurrentUser, getCandidateDashboardStats, CandidateDashboardStats } from "@/services/supabase";
 import { CANDIDATE_RADAR_FINAL } from "@/services/demoData";
 import { RadarViz } from "@/components/common/RadarViz";
 import { QUIZ_AXES } from "@/i18n/content";
@@ -13,15 +13,19 @@ export function CandidateProfile({
   userName,
   userAvatar,
   vocation,
+  userId,
 }: {
   lang: Lang;
   answers: QuizAnswers;
   userName?: string;
   userAvatar?: string;
   vocation?: string;
+  userId?: string;
 }) {
   const t = useT(lang);
   const [isDemo, setIsDemo] = useState(false);
+  const [stats, setStats] = useState<CandidateDashboardStats>({ vacancies: 0, matches: 0, accompanimentActive: false });
+  const [statsLoading, setStatsLoading] = useState(true);
 
   useEffect(() => {
     getCurrentUser().then((u) => {
@@ -33,6 +37,17 @@ export function CandidateProfile({
       );
     });
   }, []);
+
+  // Fetch live dashboard stats
+  useEffect(() => {
+    if (!userId) return;
+    getCandidateDashboardStats(userId).then((s) => {
+      setStats(s);
+      setStatsLoading(false);
+    }).catch(() => {
+      setStatsLoading(false);
+    });
+  }, [userId]);
 
   const hasQuizAnswers = Object.keys(answers).length > 0;
   const radarData = hasQuizAnswers
@@ -109,7 +124,11 @@ export function CandidateProfile({
               <div className="text-sm font-semibold text-muted-foreground truncate">
                 {t("dash.suggested")}
               </div>
-              <div className="text-2xl font-bold text-foreground mt-1">3</div>
+              {statsLoading ? (
+                <Loader2 size={20} className="mt-2 text-muted-foreground animate-spin" />
+              ) : (
+                <div className="text-2xl font-bold text-foreground mt-1">{stats.vacancies}</div>
+              )}
             </div>
           </div>
 
@@ -124,7 +143,11 @@ export function CandidateProfile({
               <div className="text-sm font-semibold text-muted-foreground truncate">
                 {t("dash.matches")}
               </div>
-              <div className="text-2xl font-bold text-foreground mt-1">12</div>
+              {statsLoading ? (
+                <Loader2 size={20} className="mt-2 text-muted-foreground animate-spin" />
+              ) : (
+                <div className="text-2xl font-bold text-foreground mt-1">{stats.matches}</div>
+              )}
             </div>
           </div>
 
@@ -139,9 +162,13 @@ export function CandidateProfile({
               <div className="text-sm font-semibold text-muted-foreground truncate">
                 {t("dash.mentor")}
               </div>
-              <div className="text-lg font-bold mt-1 text-emerald-500 truncate">
-                {t("dash.active")}
-              </div>
+              {statsLoading ? (
+                <Loader2 size={20} className="mt-2 text-muted-foreground animate-spin" />
+              ) : (
+                <div className="text-lg font-bold mt-1 text-emerald-500 truncate">
+                  {stats.accompanimentActive ? t("dash.active") : t("dash.inactive")}
+                </div>
+              )}
             </div>
           </div>
         </div>

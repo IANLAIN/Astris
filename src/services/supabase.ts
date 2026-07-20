@@ -46,6 +46,12 @@ export interface DemoUser {
   profile?: any;
 }
 
+export interface CandidateDashboardStats {
+  vacancies: number;
+  matches: number;
+  accompanimentActive: boolean;
+}
+
 export const DEMO_USER_IDS = ["demo-cand", "demo-comp", "demo-ment", "admin-backdoor"];
 
 export function isDemoUser(userId: string): boolean {
@@ -290,6 +296,81 @@ export async function saveCandidateProfile(userId: string, quizAnswers: any, the
   } catch (e) {
     console.error("Error saving profile:", e);
   }
+}
+
+// ── Candidate Profile Data ──
+
+/**
+ * Load a candidate's saved quiz answers from the database.
+ * Used on session restore so returning users see their actual radar profile.
+ */
+export async function getCandidateQuizAnswers(userId: string): Promise<any | null> {
+  if (USE_REAL_BACKEND) {
+    const { data } = await getClient()
+      .from('candidates')
+      .select('quiz_answers')
+      .eq('user_id', userId)
+      .single();
+    return data?.quiz_answers ?? null;
+  }
+  // Demo: load from localStorage
+  try {
+    const stored = window.localStorage.getItem("astris_quiz_answers");
+    if (stored) return JSON.parse(stored);
+  } catch { /* ignore */ }
+  // Fallback for demo-cand
+  if (userId === "demo-cand") {
+    return {
+      0: { 0: 0, 1: 0, 2: 2, 3: 0 },
+      1: { 0: 0, 1: 0, 2: 2, 3: 0 },
+      2: { 0: 0, 1: 0, 2: 0, 3: 0 },
+      3: { 0: [0, 1, 2, 3], 1: [0], 2: 0, 3: 2 },
+    };
+  }
+  return null;
+}
+
+/**
+ * Load dashboard summary stats for a candidate:
+ * - Number of suggested vacancies (active jobs)
+ * - Profile match count (same as vacancies for now)
+ * - Whether accompaniment/mentorship is active
+ */
+export async function getCandidateDashboardStats(userId: string): Promise<CandidateDashboardStats> {
+  if (USE_REAL_BACKEND) {
+    // Count active vacancies
+    const { count: vacanciesCount } = await getClient()
+      .from('jobs')
+      .select('*', { count: 'exact', head: true })
+      .eq('status', 'active');
+
+    // Check for active mentorship
+    let accompanimentActive = false;
+    try {
+      const { data: mentorship } = await getClient()
+        .from('mentorships')
+        .select('id, status')
+        .eq('candidate_id', userId)
+        .eq('status', 'active')
+        .maybeSingle();
+      accompanimentActive = !!mentorship;
+    } catch {
+      // mentorships table may not exist yet — default to false
+      accompanimentActive = false;
+    }
+
+    const count = vacanciesCount || 0;
+    return {
+      vacancies: count,
+      matches: count,
+      accompanimentActive,
+    };
+  }
+  // Demo
+  if (userId === "demo-cand") {
+    return { vacancies: 3, matches: 12, accompanimentActive: true };
+  }
+  return { vacancies: 0, matches: 0, accompanimentActive: false };
 }
 
 // ── Matching ──

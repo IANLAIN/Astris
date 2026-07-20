@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { Role } from "@/types";
-import { getCurrentUser, loginUser, logoutUser, registerUser, USE_REAL_BACKEND, isDemoUser } from "@/services/supabase";
+import { Role, QuizAnswers } from "@/types";
+import { getCurrentUser, loginUser, logoutUser, registerUser, USE_REAL_BACKEND, isDemoUser, getCandidateQuizAnswers } from "@/services/supabase";
 import { ADMIN_CREDENTIALS } from "@/services/demoData";
 
 export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) => void) {
@@ -17,6 +17,8 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
   const [userAvatar, setUserAvatar] = useState<string>("");
   const [userVocation, setUserVocation] = useState<string>("");
   const [quizCompleted, setQuizCompleted] = useState<boolean>(false);
+  const [loadedQuizAnswers, setLoadedQuizAnswers] = useState<QuizAnswers>({});
+  const [userId, setUserId] = useState<string>("");
 
   // Load quiz completion status from localStorage (used in both modes)
   useEffect(() => {
@@ -49,9 +51,22 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
           setUserAvatar((user as any).avatarUrl || "");
           setUserVocation((user as any).vocation || "");
           setLoggedIn(true);
+          setUserId(user.id);
           setModalStep("none");
 
           const demo = isDemoUser(user.id);
+
+          // Load saved quiz answers for candidates (so radar/profile renders correctly)
+          if (user.role === "candidate") {
+            const savedAnswers = await getCandidateQuizAnswers(user.id);
+            if (savedAnswers && Object.keys(savedAnswers).length > 0) {
+              setLoadedQuizAnswers(savedAnswers);
+              // Also persist in localStorage for cross-session fallback
+              try {
+                window.localStorage.setItem("astris_quiz_answers", JSON.stringify(savedAnswers));
+              } catch { /* ignore */ }
+            }
+          }
 
           if (user.role === "candidate") {
             if (demo) {
@@ -229,8 +244,21 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
       setUserName(user?.name ?? "");
       setUserAvatar((user as any)?.avatarUrl ?? "");
       setUserVocation((user as any)?.vocation ?? "");
+      setUserId(user?.id ?? "");
       setLoggedIn(true);
       setModalStep("none");
+
+      // Load saved quiz answers for candidates
+      if (resolvedRole === "candidate" && user?.id) {
+        const savedAnswers = await getCandidateQuizAnswers(user.id);
+        if (savedAnswers && Object.keys(savedAnswers).length > 0) {
+          setLoadedQuizAnswers(savedAnswers);
+          try {
+            window.localStorage.setItem("astris_quiz_answers", JSON.stringify(savedAnswers));
+          } catch { /* ignore */ }
+        }
+      }
+
       if (resolvedRole === "candidate" && !quizCompleted) {
         setScreen("onboarding");
       } else {
@@ -266,7 +294,9 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
     userName,
     userAvatar,
     userVocation,
+    userId,
     quizCompleted,
+    loadedQuizAnswers,
     setQuizCompleted,
     setPendingRole,
     setRequirePasswordUpdate,
