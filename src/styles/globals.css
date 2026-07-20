@@ -36,13 +36,6 @@
   to   { stroke-dashoffset: var(--offset, 0); }
 }
 
-/* ── Shimmer for quiz radar header ────────────────────────────────────────── */
-
-@keyframes shimmer {
-  0%   { transform: translateX(-100%); }
-  100% { transform: translateX(200%); }
-}
-
 /* ── Animation utility classes ────────────────────────────────────────────── */
 
 .anim-overlay {
