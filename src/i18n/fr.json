@@ -77,7 +77,7 @@
   "quiz.radar.title": "Votre profil en construction",
   "quiz.radar.sub": "Mise à jour à chaque réponse",
   "profile.title": "Votre profil de compatibilité",
-  "profile.privacy": "Votre profil décrit comment vous travaillez le mieux. Ces informations ne sont jamais partagées en tant que diagnostic médical.",
+  "profile.privacy": "Votre profil décrit comment vous travaillez le mieux. Seules les informations pertinentes pour la compatibilité sont affichées.",
   "profile.adjustments": "Aménagements raisonnables déclarés",
   "vacancies.title": "Offres d'emploi suggérées pour vous",
   "vacancies.filters": "Filtres",
@@ -98,7 +98,7 @@
   "comp.org.sub": "Définissez l'environnement de votre organisation pour que le système calcule des compatibilités précises.",
   "comp.vacancy.title": "Publier une offre",
   "comp.candidates.title": "Profils suggérés",
-  "comp.candidates.sub": "Candidats compatibles avec l'offre active. Sans données médicales ni diagnostics.",
+  "comp.candidates.sub": "Candidats compatibles avec l'offre active.",
   "comp.detail.title": "Profil du candidat",
   "comp.posthire.title": "Suivi d'intégration",
   "mentor.dash.title": "Tableau de bord mentor",
@@ -380,7 +380,7 @@
     },
     "conectar": {
       "title": "CONNECTER",
-      "body": "Connecter les talents aux opportunités est notre objectif ultime. Notre système de matching croise les profils en fonction des compétences et des besoins environnementaux — et non des diagnostics — pour trouver de vraies compatibilités. De cette façon, nous nous assurons que la personne et l'environnement de travail sont compatibles, générant des relations durables et réussies. Les entreprises ont accès à des profils anonymes avec des données de compatibilité objectives, sans noms, photos, ou informations cliniques.",
+      "body": "Connecter les talents aux opportunités est notre objectif ultime. Notre système de matching croise les profils en fonction des compétences et des besoins environnementaux pour trouver de vraies compatibilités. De cette façon, nous nous assurons que la personne et l'environnement de travail sont compatibles, générant des relations durables et réussies. Les entreprises ont accès à des profils anonymes avec des données de compatibilité objectives, sans noms ni photos.",
       "values": [
         "Matching objectif",
         "Profils basés sur les compétences",
@@ -397,7 +397,7 @@
     {
       "num": "01",
       "title": "Préparer",
-      "body": "Nous caractérisons la façon de travailler de chaque personne et l'environnement dont elle a besoin. Sans diagnostics, sans étiquettes cliniques."
+      "body": "Nous caractérisons la façon de travailler de chaque personne et l'environnement dont elle a besoin."
     },
     {
       "num": "02",
@@ -447,7 +447,7 @@
     },
     {
       "aspect": "Informations du candidat",
-      "trad": "Diagnostic et antécédents cliniques",
+      "trad": "Informations personnelles non filtrées",
       "astris": "Comment il travaille le mieux et ce dont l'environnement a besoin"
     },
     {
@@ -468,14 +468,14 @@
     {
       "aspect": "Confidentialité du candidat",
       "trad": "Variable",
-      "astris": "Les données médicales ne sont jamais partagées"
+      "astris": "Confidentialité totale du profil"
     }
   ],
   "impactCand": [
     "Réduction de 60 % du temps de recherche d'un emploi compatible",
     "Accès à des rôles qui correspondent véritablement à son style de travail",
     "Accompagnement dès le premier jour du processus",
-    "Aucun besoin de révéler des diagnostics médicaux à aucun moment"
+    "Aucun besoin de partager des informations sensibles à aucun moment"
   ],
   "impactComp": [
     "Accès à des talents hautement spécialisés et motivés",
@@ -484,7 +484,7 @@
     "Conseil continu du mentor tout au long de la période d'intégration"
   ],
   "privacyTitle": "Votre vie privée est le fondement, pas un ajout.",
-  "privacyBody": "Aucun diagnostic médical n'est stocké ni partagé. Les entreprises ne voient jamais de vrais noms ni de photographies — seulement des profils de compatibilité anonymes. Le candidat contrôle quelles informations sont visibles à chaque étape.",
+  "privacyBody": "Les informations personnelles ne sont jamais exposées directement. Les entreprises ne voient jamais de vrais noms ni de photographies — seulement des profils de compatibilité anonymes. Le candidat contrôle quelles informations sont visibles à chaque étape.",
   "accompStages": [
     {
       "label": "Analyse du profil",
@@ -646,7 +646,7 @@
   "about.pillarPrepararTag": "Découvrir les capacités, ne pas forcer les moules",
   "about.pillarAdaptarTag": "La technologie s'adapte aux personnes",
   "about.pillarAcompanarTag": "Mentor humain, accompagnement réel",
-  "about.pillarConectarTag": "Matching basé sur les données, pas les diagnostics",
+  "about.pillarConectarTag": "Matching basé sur les compétences et l'environnement",
   "about.pillarPrepararBody": "Formation personnalisée et simulations de travail pour valoriser le talent unique.",
   "about.pillarAdaptarBody": "Interface personnalisable avec palettes, modes clair/sombre et ajustements sensoriels.",
   "about.pillarAcompanarBody": "Des mentors spécialisés guident de la préparation jusqu'au jour 60 post-embauche.",

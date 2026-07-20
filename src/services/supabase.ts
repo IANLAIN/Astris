@@ -46,6 +46,12 @@ export interface DemoUser {
   profile?: any;
 }
 
+export const DEMO_USER_IDS = ["demo-cand", "demo-comp", "demo-ment", "admin-backdoor"];
+
+export function isDemoUser(userId: string): boolean {
+  return DEMO_USER_IDS.includes(userId);
+}
+
 // ── Helper: map DB row to DemoUser ──
 function rowToUser(row: any): DemoUser {
   return {
@@ -82,7 +88,7 @@ export async function registerUser(
     if (error) throw error;
     return { id: data.user?.id || '', email };
   }
-  // Demo mode
+  // Demo mode — returns a synthetic ID; the caller must persist session
   return { id: `user-${Date.now()}`, email };
 }
 
@@ -101,6 +107,17 @@ export async function loginUser(email: string, password: string) {
   if (demoUser && password === demoUser.password) {
     window.localStorage.setItem("astris_demo_user", email);
     return { user: { id: demoUser.id, email: demoUser.email } };
+  }
+  // Check non-demo locally registered users
+  const localUserJson = window.localStorage.getItem("astris_local_user");
+  if (localUserJson) {
+    try {
+      const localUser = JSON.parse(localUserJson);
+      if (localUser.email === email && password === localUser.password) {
+        window.localStorage.setItem("astris_local_user", localUserJson);
+        return { user: { id: localUser.id, email: localUser.email } };
+      }
+    } catch {}
   }
   throw new Error("Credenciales invalidas.");
 }
@@ -128,7 +145,23 @@ export async function getCurrentUser(): Promise<DemoUser | null> {
       completedOnboarding: false,
     };
   }
-  // Demo mode
+  // Demo mode: first check for non-demo locally registered user
+  const localUserJson = typeof window !== "undefined" ? window.localStorage.getItem("astris_local_user") : null;
+  if (localUserJson) {
+    try {
+      const u = JSON.parse(localUserJson);
+      return {
+        id: u.id,
+        email: u.email,
+        name: u.name,
+        role: u.role,
+        avatarUrl: u.avatarUrl || '',
+        vocation: u.vocation || '',
+        completedOnboarding: !!u.completedOnboarding,
+      };
+    } catch {}
+  }
+  // Demo mode: check demo users
   const demoEmail = typeof window !== "undefined" ? window.localStorage.getItem("astris_demo_user") : null;
   if (demoEmail && DEMO_USERS[demoEmail]) {
     const u = DEMO_USERS[demoEmail];
@@ -156,6 +189,11 @@ export async function logoutUser() {
   if (typeof window !== "undefined") {
     window.localStorage.removeItem("astris_demo_user");
     window.localStorage.removeItem("astris_admin_session");
+    window.localStorage.removeItem("astris_local_user");
+    window.localStorage.removeItem("astris_quiz_completed");
+    window.localStorage.removeItem("astris_quiz_answers");
+    window.localStorage.removeItem("astris_theme");
+    window.localStorage.removeItem("astris_font");
   }
 }
 
@@ -200,6 +238,17 @@ export async function updateProfile(userId: string, name: string, avatarUrl: str
       .update({ full_name: name, avatar_url: avatarUrl, vocation })
       .eq('id', userId);
   }
+  // Demo: update local user data
+  const localUserJson = window.localStorage.getItem("astris_local_user");
+  if (localUserJson) {
+    try {
+      const u = JSON.parse(localUserJson);
+      u.name = name;
+      u.avatarUrl = avatarUrl;
+      u.vocation = vocation;
+      window.localStorage.setItem("astris_local_user", JSON.stringify(u));
+    } catch {}
+  }
 }
 
 export async function deleteAccount() {
@@ -231,6 +280,13 @@ export async function saveCandidateProfile(userId: string, quizAnswers: any, the
     window.localStorage.setItem("astris_theme", theme);
     window.localStorage.setItem("astris_font", font);
     window.localStorage.setItem("astris_quiz_completed", "true");
+    // Update local user's onboarding status
+    const localUserJson = window.localStorage.getItem("astris_local_user");
+    if (localUserJson) {
+      const u = JSON.parse(localUserJson);
+      u.completedOnboarding = true;
+      window.localStorage.setItem("astris_local_user", JSON.stringify(u));
+    }
   } catch (e) {
     console.error("Error saving profile:", e);
   }
@@ -257,13 +313,17 @@ export async function getMatchesForCandidate(candidateId: string) {
       companyDesc: j.companies?.philosophy || '',
     }));
   }
-  // Demo
-  return VACANCIES_FALLBACK.map((v, i) => ({
-    jobId: v.id, matchPercentage: v.match - (i * 4),
-    title: v.title, company: v.company, sector: v.sector,
-    modality: v.modality, type: v.type, adjustments: v.adjustments,
-    desc: v.desc, companyDesc: v.companyDesc,
-  })).sort((a, b) => b.matchPercentage - a.matchPercentage);
+  // Demo: only return demo vacancies for the demo candidate
+  if (candidateId === "demo-cand") {
+    return VACANCIES_FALLBACK.map((v, i) => ({
+      jobId: v.id, matchPercentage: v.match - (i * 4),
+      title: v.title, company: v.company, sector: v.sector,
+      modality: v.modality, type: v.type, adjustments: v.adjustments,
+      desc: v.desc, companyDesc: v.companyDesc,
+    })).sort((a, b) => b.matchPercentage - a.matchPercentage);
+  }
+  // Non-demo user: return empty — no data yet
+  return [];
 }
 
 export async function getMatchesForCompany(companyId: string) {
@@ -280,10 +340,14 @@ export async function getMatchesForCompany(companyId: string) {
       env: [{ req: 'Comunicación clara', met: true }, { req: 'Flexibilidad horaria', met: true }],
     }));
   }
-  return COMPANY_CANDIDATES_DATA.map((c) => ({
-    candidateId: c.id, matchPercentage: c.match,
-    strengths: c.strengths, radar: c.radar, env: c.env,
-  })).sort((a, b) => b.matchPercentage - a.matchPercentage);
+  // Demo: only return demo candidates for the demo company
+  if (companyId === "demo-comp") {
+    return COMPANY_CANDIDATES_DATA.map((c) => ({
+      candidateId: c.id, matchPercentage: c.match,
+      strengths: c.strengths, radar: c.radar, env: c.env,
+    })).sort((a, b) => b.matchPercentage - a.matchPercentage);
+  }
+  return [];
 }
 
 // ── Mentors ──

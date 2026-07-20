@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import { Clock, MapPin, Check, ArrowRight } from "lucide-react";
+import { Clock, MapPin, Check, ArrowRight, ShieldAlert } from "lucide-react";
 import { Lang, VacancyItem } from "@/types";
 import { useT } from "@/i18n/useT";
-import { getMatchesForCandidate } from "@/services/supabase";
-import { VACANCIES_FALLBACK } from "@/services/demoData";
+import { getMatchesForCandidate, getCurrentUser } from "@/services/supabase";
 import { MatchBadge } from "@/components/common/MatchBadge";
 
 export function CandidateVacancies({ lang, onSelect }: { lang: Lang; onSelect: (id: string) => void }) {
@@ -14,8 +13,8 @@ export function CandidateVacancies({ lang, onSelect }: { lang: Lang; onSelect: (
 
   useEffect(() => {
     async function loadJobs() {
-      // Use the demo candidate ID directly
-      const candidateId = "demo-cand";
+      const user = await getCurrentUser();
+      const candidateId = user?.id || "demo-cand";
       const matches = await getMatchesForCandidate(candidateId);
       
       if (matches.length > 0) {
@@ -34,7 +33,7 @@ export function CandidateVacancies({ lang, onSelect }: { lang: Lang; onSelect: (
         }));
         setVacancies(mapped.sort((a: any, b: any) => b.match - a.match));
       } else {
-        setVacancies(VACANCIES_FALLBACK);
+        setVacancies([]);
       }
       setLoadingVac(false);
     }
@@ -77,6 +76,16 @@ export function CandidateVacancies({ lang, onSelect }: { lang: Lang; onSelect: (
         <div className="flex-1 flex flex-col gap-5">
           {loadingVac ? (
             <div className="flex items-center justify-center py-20 text-muted-foreground">{t("common.loading")}</div>
+          ) : filtered.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-20 text-center gap-4">
+              <div className="w-16 h-16 rounded-2xl flex items-center justify-center" style={{ backgroundColor: "rgba(245,158,11,0.15)" }}>
+                <ShieldAlert size={32} className="text-amber-500" />
+              </div>
+              <h3 className="text-xl font-bold text-foreground">No hay vacantes disponibles</h3>
+              <p className="text-muted-foreground max-w-sm">
+                Aún no hay vacantes sugeridas para tu perfil. Completa tu caracterización para recibir recomendaciones.
+              </p>
+            </div>
           ) : filtered.map((v) => (
             <article key={v.id} className="rounded-2xl border border-border p-7 flex flex-col md:flex-row items-start md:items-center gap-7 transition-all duration-300 hover:shadow-xl hover:border-primary group" style={{ backgroundColor: "var(--card)" }}>
               <MatchBadge value={v.match} size="lg" />

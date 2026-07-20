@@ -1,21 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronLeft, Shield, Users, Check, X } from "lucide-react";
 import { Lang } from "@/types";
 import { useT } from "@/i18n/useT";
-import { COMPANY_CANDIDATES_DATA, CANDIDATE_RADAR_FINAL } from "@/services/demoData";
+import { getMatchesForCompany, getCurrentUser } from "@/services/supabase";
+import { CANDIDATE_RADAR_FINAL } from "@/services/demoData";
 import { MatchBadge } from "@/components/common/MatchBadge";
 import { RadarViz } from "@/components/common/RadarViz";
 
 export function CompanyCandidateDetail({ lang, candidateId, onBack, onStart }: { lang: Lang; candidateId: string; onBack: () => void; onStart: () => void }) {
   const t = useT(lang);
+  const [match, setMatch] = useState(85);
+  const [radar, setRadar] = useState(CANDIDATE_RADAR_FINAL);
+  const [env, setEnv] = useState<Array<{req: string; met: boolean}>>([]);
+  const [loading, setLoading] = useState(true);
 
-  const candidateData = COMPANY_CANDIDATES_DATA.find((c) => c.id === candidateId);
-  const match = candidateData?.match || 85;
-  const radar = candidateData?.radar || CANDIDATE_RADAR_FINAL;
-  const env = candidateData?.env || [
-    { req: "Entorno de trabajo adaptativo", met: true },
-    { req: "Comunicación flexible", met: true },
-  ];
+  useEffect(() => {
+    (async () => {
+      const user = await getCurrentUser();
+      const companyId = user?.id || "demo-comp";
+      const matches = await getMatchesForCompany(companyId);
+      const found = matches.find((m: any) => m.candidateId === candidateId);
+      if (found) {
+        setMatch(found.matchPercentage);
+        setRadar(found.radar || CANDIDATE_RADAR_FINAL);
+        setEnv(found.env || []);
+      }
+      setLoading(false);
+    })();
+  }, [candidateId]);
 
   return (
     <div className="min-h-screen w-full overflow-x-hidden flex flex-col">

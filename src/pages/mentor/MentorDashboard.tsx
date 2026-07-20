@@ -1,10 +1,28 @@
-import { MessageSquare, Calendar, Activity, BarChart2, Users } from "lucide-react";
+import { useState, useEffect } from "react";
+import { MessageSquare, Calendar, Activity, BarChart2, ShieldAlert } from "lucide-react";
 import { Lang } from "@/types";
 import { useT, C } from "@/i18n/useT";
-import { MENTOR_PROCESSES } from "@/mock";
+import { getCurrentUser, isDemoUser } from "@/services/supabase";
+import { MENTOR_PROCESSES } from "@/services/demoData";
 
 export function MentorDashboard({ lang }: { lang: Lang }) {
   const t = useT(lang);
+  const [processes, setProcesses] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      const user = await getCurrentUser();
+      const demo = user ? isDemoUser(user.id) : false;
+      if (demo) {
+        setProcesses(MENTOR_PROCESSES);
+      } else {
+        setProcesses([]);
+      }
+      setLoading(false);
+    })();
+  }, []);
+
   return (
     <div className="min-h-screen w-full overflow-x-hidden flex flex-col">
       <div className="border-b border-border" style={{ backgroundColor: "var(--card)" }}>
@@ -29,7 +47,17 @@ export function MentorDashboard({ lang }: { lang: Lang }) {
           {/* ── Processes Section ── */}
           <h3 className="text-xl font-bold text-foreground mb-6">{C(lang, "mentorProcesses") as string}</h3>
           <div className="flex flex-col gap-5">
-            {MENTOR_PROCESSES.map((proc) => (
+            {loading ? (
+              <div className="text-center py-12 text-muted-foreground">{t("common.loading")}</div>
+            ) : processes.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-16 text-center gap-4">
+                <div className="w-16 h-16 rounded-2xl flex items-center justify-center" style={{ backgroundColor: "rgba(245,158,11,0.15)" }}>
+                  <ShieldAlert size={32} className="text-amber-500" />
+                </div>
+                <h3 className="text-xl font-bold text-foreground">No hay procesos activos</h3>
+                <p className="text-muted-foreground max-w-sm">Aún no tienes procesos de acompañamiento asignados.</p>
+              </div>
+            ) : processes.map((proc) => (
               <article key={proc.cid} className="rounded-2xl border border-border p-7 transition-all duration-300 hover:shadow-xl hover:border-primary group" style={{ backgroundColor: "var(--card)" }}>
                 <div className="flex items-start justify-between mb-4">
                   <div>

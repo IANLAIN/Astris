@@ -1,13 +1,39 @@
-import { Clock, MapPin, Check, X, ArrowRight, ChevronLeft } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Clock, MapPin, Check, X, ArrowRight, ChevronLeft, ShieldAlert } from "lucide-react";
 import { Lang, VacancyItem } from "@/types";
 import { useT } from "@/i18n/useT";
-import { VACANCIES_FALLBACK } from "@/services/demoData";
+import { getMatchesForCandidate, getCurrentUser } from "@/services/supabase";
 import { MatchBadge } from "@/components/common/MatchBadge";
 
 export function VacancyDetail({ lang, vacancyId, onStart, onBack }: { lang: Lang; vacancyId: string; onStart: () => void; onBack: () => void }) {
   const t = useT(lang);
-  
-  const v: VacancyItem | undefined = VACANCIES_FALLBACK.find((x) => x.id === vacancyId);
+  const [v, setV] = useState<VacancyItem | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      const user = await getCurrentUser();
+      const candidateId = user?.id || "demo-cand";
+      const matches = await getMatchesForCandidate(candidateId);
+      const found = matches.find((m: any) => m.jobId === vacancyId);
+      if (found) {
+        setV({
+          id: found.jobId,
+          title: found.title,
+          company: found.company,
+          sector: found.sector || "Tecnología",
+          modality: found.modality,
+          type: found.type,
+          match: found.matchPercentage,
+          socialLevel: "Bajo",
+          adjustments: found.adjustments || [],
+          desc: found.desc || "",
+          companyDesc: found.companyDesc || "",
+        });
+      }
+      setLoading(false);
+    })();
+  }, [vacancyId]);
 
   const COMPAT = [
     { label: "Modalidad de trabajo", match: true },
@@ -18,7 +44,22 @@ export function VacancyDetail({ lang, vacancyId, onStart, onBack }: { lang: Lang
     { label: "Audífonos con cancelación de ruido", match: true }
   ];
 
-  if (!v) return <div className="min-h-screen w-full overflow-x-hidden flex items-center justify-center text-muted-foreground">{t("common.loading")}</div>;
+  if (loading) {
+    return <div className="min-h-screen w-full overflow-x-hidden flex items-center justify-center text-muted-foreground">{t("common.loading")}</div>;
+  }
+
+  if (!v) {
+    return (
+      <div className="min-h-screen w-full overflow-x-hidden flex flex-col items-center justify-center gap-4">
+        <div className="w-16 h-16 rounded-2xl flex items-center justify-center" style={{ backgroundColor: "rgba(245,158,11,0.15)" }}>
+          <ShieldAlert size={32} className="text-amber-500" />
+        </div>
+        <h2 className="text-xl font-bold text-foreground">Vacante no encontrada</h2>
+        <p className="text-muted-foreground max-w-sm text-center">La vacante que buscas no está disponible o fue eliminada.</p>
+        <button onClick={onBack} className="px-6 py-2.5 rounded-xl font-semibold text-sm" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}>{t("back")}</button>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen w-full overflow-x-hidden flex flex-col">

@@ -77,7 +77,7 @@
   "quiz.radar.title": "Your profile in construction",
   "quiz.radar.sub": "Updates with each answer",
   "profile.title": "Your compatibility profile",
-  "profile.privacy": "Your profile describes how you work best. This information is never shared as a medical diagnosis.",
+  "profile.privacy": "Your profile describes how you work best. Only information relevant to compatibility is shown.",
   "profile.adjustments": "Declared reasonable adjustments",
   "vacancies.title": "Suggested vacancies for you",
   "vacancies.filters": "Filters",
@@ -98,7 +98,7 @@
   "comp.org.sub": "Define your organization's environment so the system can calculate accurate compatibilities.",
   "comp.vacancy.title": "Post vacancy",
   "comp.candidates.title": "Suggested profiles",
-  "comp.candidates.sub": "Candidates compatible with the active vacancy. No medical or diagnostic data.",
+  "comp.candidates.sub": "Candidates compatible with the active vacancy.",
   "comp.detail.title": "Candidate profile",
   "comp.posthire.title": "Integration tracking",
   "mentor.dash.title": "Mentor dashboard",
@@ -380,7 +380,7 @@
     },
     "conectar": {
       "title": "CONNECT",
-      "body": "Connecting talent with opportunities is our ultimate goal. Our matching system cross-references profiles based on skills and environmental needs — not on diagnoses — to find real matches. This way we ensure the person and the work environment are compatible, generating lasting and successful relationships. Companies access anonymous profiles with objective compatibility data, without names, photos, or clinical information.",
+      "body": "Connecting talent with opportunities is our ultimate goal. Our matching system cross-references profiles based on skills and environmental needs to find real matches. This way we ensure the person and the work environment are compatible, generating lasting and successful relationships. Companies access anonymous profiles with objective compatibility data, without names or photos.",
       "values": [
         "Objective matching",
         "Skill-based profiles",
@@ -397,7 +397,7 @@
     {
       "num": "01",
       "title": "Prepare",
-      "body": "We characterize how each person works and what environment they need. No diagnoses, no clinical labels."
+      "body": "We characterize how each person works and what environment they need."
     },
     {
       "num": "02",
@@ -447,7 +447,7 @@
     },
     {
       "aspect": "Candidate information",
-      "trad": "Diagnosis and clinical history",
+      "trad": "Unfiltered personal information",
       "astris": "How they work best and what the environment needs"
     },
     {
@@ -468,14 +468,14 @@
     {
       "aspect": "Candidate privacy",
       "trad": "Variable",
-      "astris": "Medical data is never shared"
+      "astris": "Full profile privacy"
     }
   ],
   "impactCand": [
     "60% reduction in time searching for a compatible job",
     "Access to roles that genuinely fit their work style",
     "Accompaniment from the first day of the process",
-    "No need to reveal medical diagnoses at any time"
+    "No need to share sensitive information at any time"
   ],
   "impactComp": [
     "Access to highly specialized and motivated talent",
@@ -484,7 +484,7 @@
     "Continuous advisory from the mentor during the entire integration period"
   ],
   "privacyTitle": "Your privacy is the foundation, not an add-on.",
-  "privacyBody": "No medical diagnosis is stored or shared. Companies never see real names or photographs — only anonymous compatibility profiles. The candidate controls what information is visible at each stage.",
+  "privacyBody": "Personal information is never directly exposed. Companies never see real names or photographs — only anonymous compatibility profiles. The candidate controls what information is visible at each stage.",
   "accompStages": [
     {
       "label": "Profile analysis",
@@ -646,7 +646,7 @@
   "about.pillarPrepararTag": "Discover abilities, don't force molds",
   "about.pillarAdaptarTag": "Technology adapts to people",
   "about.pillarAcompanarTag": "Human mentor, real accompaniment",
-  "about.pillarConectarTag": "Data-based matching, not diagnoses",
+  "about.pillarConectarTag": "Skills and environment-based matching",
   "about.pillarPrepararBody": "Personalized training and work simulations to enhance unique talent.",
   "about.pillarAdaptarBody": "Customizable interface with palettes, light/dark modes, and sensory adjustments.",
   "about.pillarAcompanarBody": "Specialized mentors guide from preparation through day 60 post-hire.",

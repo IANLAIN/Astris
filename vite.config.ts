@@ -25,9 +25,6 @@ export default defineConfig({
       output: {
         manualChunks(id: string) {
           if (id.includes('node_modules')) {
-            if (id.includes('@supabase')) {
-              return 'vendor-supabase';
-            }
             if (id.includes('framer-motion')) {
               return 'vendor-framer';
             }

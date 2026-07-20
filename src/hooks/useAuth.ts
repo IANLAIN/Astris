@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Role } from "@/types";
-import { getCurrentUser, loginUser, logoutUser, registerUser, USE_REAL_BACKEND } from "@/services/supabase";
+import { getCurrentUser, loginUser, logoutUser, registerUser, USE_REAL_BACKEND, isDemoUser } from "@/services/supabase";
 import { ADMIN_CREDENTIALS } from "@/services/demoData";
 
 export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) => void) {
@@ -51,10 +51,10 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
           setLoggedIn(true);
           setModalStep("none");
 
-          const isDemoUser = user.id === "demo-cand" || user.id === "demo-comp" || user.id === "demo-ment" || user.id === "admin-backdoor";
+          const demo = isDemoUser(user.id);
 
           if (user.role === "candidate") {
-            if (isDemoUser) {
+            if (demo) {
               // Demo candidate skips quiz
               setQuizCompleted(true);
               window.localStorage.setItem("astris_quiz_completed", "true");
@@ -65,11 +65,11 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
               setScreen("vacancies");
             }
           } else if (user.role === "company") {
-            setScreen(isDemoUser ? "candidates" : "org-profile");
+            setScreen(demo ? "candidates" : "org-profile");
+          } else if (user.role === "mentor") {
+            setScreen(demo ? "dashboard" : "dashboard");
           } else if (user.role === "admin") {
             window.localStorage.setItem("astris_admin_session", "true");
-            setScreen("dashboard");
-          } else {
             setScreen("dashboard");
           }
         }
@@ -126,16 +126,34 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
           setModalStep("login");
         }, 4000);
       } else {
-        // Demo: instant login
+        // Demo: persist local user and auto-login
+        const userId = `user-${Date.now()}`;
+        const localUser = {
+          id: userId,
+          email,
+          name,
+          role: selectedRole,
+          password,
+          avatarUrl: "",
+          vocation,
+          completedOnboarding: false,
+        };
+        window.localStorage.setItem("astris_local_user", JSON.stringify(localUser));
+        window.localStorage.removeItem("astris_demo_user");
+        window.localStorage.removeItem("astris_admin_session");
+        window.localStorage.removeItem("astris_quiz_completed");
+
         setRole(selectedRole);
         setUserName(name);
         setUserVocation(vocation);
         setLoggedIn(true);
         setModalStep("none");
-        if (selectedRole === "candidate" && !quizCompleted) {
+        setQuizCompleted(false);
+
+        if (selectedRole === "candidate") {
           setScreen("onboarding");
         } else {
-          setScreen(selectedRole === "candidate" ? "vacancies" : selectedRole === "company" ? "org-profile" : "dashboard");
+          setScreen(selectedRole === "company" ? "org-profile" : "dashboard");
         }
       }
     } catch (err: any) {
@@ -161,6 +179,7 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
       if (password === "Demo2026") {
         if (email === "candidato@astris.org") {
           window.localStorage.setItem("astris_demo_user", email);
+          window.localStorage.removeItem("astris_local_user");
           setRole("candidate");
           setUserName("Bryan Gonzalez");
           setUserVocation("Ingeniero de Sistemas y Computación");
@@ -173,6 +192,7 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
         }
         if (email === "empresa@astris.org") {
           window.localStorage.setItem("astris_demo_user", email);
+          window.localStorage.removeItem("astris_local_user");
           setRole("company");
           setUserName("Vibra Latina");
           setLoggedIn(true);
@@ -182,6 +202,7 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
         }
         if (email === "mentor@astris.org") {
           window.localStorage.setItem("astris_demo_user", email);
+          window.localStorage.removeItem("astris_local_user");
           setRole("mentor");
           setUserName("Elena Vargas");
           setUserVocation("Especialista en Inclusión Laboral y Coaching Neurodivergente");
@@ -226,6 +247,7 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
     try { await logoutUser(); } catch { /* ignore */ }
     setLoggedIn(false);
     setRole(null);
+    setQuizCompleted(false);
     setScreen("home");
     setPublicView("landing");
     setModalStep("none");

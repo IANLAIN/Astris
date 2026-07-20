@@ -77,7 +77,7 @@
   "quiz.radar.title": "Seu perfil em construção",
   "quiz.radar.sub": "Atualiza-se com cada resposta",
   "profile.title": "Seu perfil de compatibilidade",
-  "profile.privacy": "Seu perfil descreve como você trabalha melhor. Esta informação nunca é compartilhada como diagnóstico médico.",
+  "profile.privacy": "Seu perfil descreve como você trabalha melhor. Apenas informações relevantes para compatibilidade são exibidas.",
   "profile.adjustments": "Ajustes razoáveis declarados",
   "vacancies.title": "Vagas sugeridas para você",
   "vacancies.filters": "Filtros",
@@ -98,7 +98,7 @@
   "comp.org.sub": "Defina o ambiente da sua organização para que o sistema calcule compatibilidades precisas.",
   "comp.vacancy.title": "Publicar vaga",
   "comp.candidates.title": "Perfis sugeridos",
-  "comp.candidates.sub": "Candidatos compatíveis com a vaga ativa. Sem dados médicos ou diagnósticos.",
+  "comp.candidates.sub": "Candidatos compatíveis com a vaga ativa.",
   "comp.detail.title": "Perfil do candidato",
   "comp.posthire.title": "Acompanhamento de integração",
   "mentor.dash.title": "Painel do mentor",
@@ -380,7 +380,7 @@
     },
     "conectar": {
       "title": "CONECTAR",
-      "body": "Conectar talento a oportunidades é nosso objetivo final. Nosso sistema de matching cruza perfis baseados em habilidades e necessidades do ambiente — não em diagnósticos — para encontrar compatibilidades reais. Dessa forma garantimos que a pessoa e o ambiente de trabalho sejam compatíveis, gerando relações duradouras e bem-sucedidas. As empresas acessam perfis anônimos com dados objetivos de compatibilidade, sem nomes, fotos ou informações clínicas.",
+      "body": "Conectar talento a oportunidades é nosso objetivo final. Nosso sistema de matching cruza perfis baseados em habilidades e necessidades do ambiente para encontrar compatibilidades reais. Dessa forma garantimos que a pessoa e o ambiente de trabalho sejam compatíveis, gerando relações duradouras e bem-sucedidas. As empresas acessam perfis anônimos com dados objetivos de compatibilidade, sem nomes ou fotos.",
       "values": [
         "Matching objetivo",
         "Perfis baseados em habilidades",
@@ -397,7 +397,7 @@
     {
       "num": "01",
       "title": "Preparar",
-      "body": "Caracterizamos como cada pessoa trabalha e de qual ambiente precisa. Sem diagnósticos, sem rótulos clínicos."
+      "body": "Caracterizamos como cada pessoa trabalha e de qual ambiente precisa."
     },
     {
       "num": "02",
@@ -447,7 +447,7 @@
     },
     {
       "aspect": "Informações do candidato",
-      "trad": "Diagnóstico e histórico clínico",
+      "trad": "Informações pessoais sem filtro",
       "astris": "Como trabalha melhor e o que o ambiente precisa"
     },
     {
@@ -468,14 +468,14 @@
     {
       "aspect": "Privacidade do candidato",
       "trad": "Variável",
-      "astris": "Dados médicos nunca são compartilhados"
+      "astris": "Privacidade total do perfil"
     }
   ],
   "impactCand": [
     "Redução de 60% no tempo de busca de emprego compatível",
     "Acesso a cargos que genuinamente se ajustam ao seu estilo de trabalho",
     "Acompanhamento desde o primeiro dia de processo",
-    "Sem necessidade de revelar diagnósticos médicos em nenhum momento"
+    "Sem necessidade de compartilhar informações sensíveis em nenhum momento"
   ],
   "impactComp": [
     "Acesso a talento altamente especializado e motivado",
@@ -484,7 +484,7 @@
     "Assessoria contínua do mentor durante todo o período de integração"
   ],
   "privacyTitle": "Sua privacidade é a base, não um complemento.",
-  "privacyBody": "Nenhum diagnóstico médico é armazenado ou compartilhado. As empresas nunca veem nomes reais nem fotografias — apenas perfis de compatibilidade anônimos. O candidato controla quais informações são visíveis em cada etapa.",
+  "privacyBody": "As informações pessoais nunca são expostas diretamente. As empresas nunca veem nomes reais nem fotografias — apenas perfis de compatibilidade anônimos. O candidato controla quais informações são visíveis em cada etapa.",
   "accompStages": [
     {
       "label": "Análise de perfil",
@@ -646,7 +646,7 @@
   "about.pillarPrepararTag": "Descobrir capacidades, não forçar moldes",
   "about.pillarAdaptarTag": "A tecnologia se adapta às pessoas",
   "about.pillarAcompanarTag": "Mentor humano, acompanhamento real",
-  "about.pillarConectarTag": "Matching baseado em dados, não em diagnósticos",
+  "about.pillarConectarTag": "Matching baseado em habilidades e ambiente",
   "about.pillarPrepararBody": "Treinamento personalizado e simulações de trabalho para potencializar talento único.",
   "about.pillarAdaptarBody": "Interface personalizável com paletas, modos claro/escuro e ajustes sensoriais.",
   "about.pillarAcompanarBody": "Mentores especializados guiam da preparação até o dia 60 pós-contratação.",

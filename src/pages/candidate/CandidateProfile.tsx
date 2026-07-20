@@ -1,13 +1,24 @@
+import { useState, useEffect } from "react";
 import { Shield, User, Briefcase, HeartHandshake, CheckCircle } from "lucide-react";
 import { Lang, QuizAnswers } from "@/types";
 import { useT, computeRadar } from "@/i18n/useT";
-import { CANDIDATE_RADAR_FINAL } from "@/mock";
+import { getCurrentUser } from "@/services/supabase";
+import { CANDIDATE_RADAR_FINAL } from "@/services/demoData";
 import { RadarViz } from "@/components/common/RadarViz";
 import { QUIZ_AXES } from "@/i18n/content";
 
 export function CandidateProfile({ lang, answers, userName, userAvatar, vocation }: { lang: Lang; answers: QuizAnswers, userName?: string, userAvatar?: string, vocation?: string }) {
   const t = useT(lang);
-  const radarData = Object.keys(answers).length > 0 ? computeRadar(answers) : CANDIDATE_RADAR_FINAL;
+  const [isDemo, setIsDemo] = useState(false);
+
+  useEffect(() => {
+    getCurrentUser().then(u => {
+      setIsDemo(u?.id === "demo-cand" || u?.id === "demo-comp" || u?.id === "demo-ment" || u?.id === "admin-backdoor");
+    });
+  }, []);
+
+  const hasQuizAnswers = Object.keys(answers).length > 0;
+  const radarData = hasQuizAnswers ? computeRadar(answers) : (isDemo ? CANDIDATE_RADAR_FINAL : computeRadar(answers));
   const firstName = userName ? userName.split(" ")[0] : t("role.candidate");
 
   return (

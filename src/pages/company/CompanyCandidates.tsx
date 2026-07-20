@@ -1,13 +1,28 @@
-import { useState } from "react";
-import { ChevronRight } from "lucide-react";
+import { useState, useEffect } from "react";
+import { ChevronRight, ShieldAlert } from "lucide-react";
 import { Lang } from "@/types";
 import { useT } from "@/i18n/useT";
-import { COMPANY_CANDIDATES_DATA } from "@/services/demoData";
+import { getMatchesForCompany, getCurrentUser } from "@/services/supabase";
 import { MatchBadge } from "@/components/common/MatchBadge";
 
 export function CompanyCandidates({ lang, onSelect }: { lang: Lang; onSelect: (id: string) => void }) {
   const t = useT(lang);
-  const [candidates] = useState<Array<any>>(COMPANY_CANDIDATES_DATA);
+  const [candidates, setCandidates] = useState<Array<any>>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      const user = await getCurrentUser();
+      const companyId = user?.id || "demo-comp";
+      const matches = await getMatchesForCompany(companyId);
+      setCandidates(matches.map((m: any) => ({
+        id: m.candidateId,
+        match: m.matchPercentage,
+        strengths: m.strengths,
+      })));
+      setLoading(false);
+    })();
+  }, []);
 
   return (
     <div className="min-h-screen w-full overflow-x-hidden flex flex-col">
@@ -20,8 +35,18 @@ export function CompanyCandidates({ lang, onSelect }: { lang: Lang; onSelect: (i
           <div className="grid border-b border-border text-xs font-bold text-muted-foreground uppercase tracking-wide px-7 py-4" style={{ gridTemplateColumns: "1fr 2fr 100px 160px", backgroundColor: "var(--muted)" }}>
             <span>Identificador</span><span>Resumen de fortalezas</span><span className="text-center">Compatibilidad</span><span />
           </div>
-          {candidates.length === 0 ? (
-            <div className="px-7 py-6 md:py-12 text-center text-muted-foreground">No se encontraron candidatos.</div>
+          {loading ? (
+            <div className="px-7 py-12 text-center text-muted-foreground">{t("common.loading")}</div>
+          ) : candidates.length === 0 ? (
+            <div className="flex flex-col items-center justify-center px-7 py-16 text-center gap-4">
+              <div className="w-16 h-16 rounded-2xl flex items-center justify-center" style={{ backgroundColor: "rgba(245,158,11,0.15)" }}>
+                <ShieldAlert size={32} className="text-amber-500" />
+              </div>
+              <h3 className="text-xl font-bold text-foreground">No hay candidatos</h3>
+              <p className="text-muted-foreground max-w-sm">
+                Aún no hay perfiles sugeridos para tu empresa. Publica una vacante para comenzar a recibir candidatos.
+              </p>
+            </div>
           ) : candidates.map((c, i) => (
             <div key={c.id} className="grid items-center px-7 py-5 border-b border-border last:border-0 hover:bg-secondary/40 transition-colors group" style={{ gridTemplateColumns: "1fr 2fr 100px 160px", backgroundColor: i % 2 === 0 ? "var(--background)" : "var(--card)" }}>
               <div className="font-mono text-sm font-bold group-hover:text-primary transition-colors" style={{ color: "var(--primary)", fontFamily: "DM Mono, monospace" }}>{c.id.substring(0, 8)}</div>
