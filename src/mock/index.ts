@@ -1,6 +1,4 @@
-// ── Mock Data Index ──
-// Re-exports all demo data from the central demoData service.
-
+/** Re-exports all demo data from the central demoData service */
 export {
   DEMO_USERS,
   ADMIN_CREDENTIALS,

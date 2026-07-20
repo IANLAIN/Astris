@@ -1,10 +1,4 @@
-/* ── Astris — Motion & Micro-interaction Layer ───────────────────────────────
-   Principles: max 300ms, ease-out curves, no loops, never obligatory.
-   Every animation here is triggered by user interaction or fires once on
-   mount. Nothing plays automatically on its own.
-   ─────────────────────────────────────────────────────────────────────────── */
-
-/* ── Keyframes ────────────────────────────────────────────────────────────── */
+/* Motion & micro-interaction layer — max 300ms, ease-out, no loops */
 
 @keyframes astris-overlay-in {
   from { opacity: 0; }
@@ -36,7 +30,7 @@
   to   { stroke-dashoffset: var(--offset, 0); }
 }
 
-/* ── Animation utility classes ────────────────────────────────────────────── */
+/* Animation utility classes */
 
 .anim-overlay {
   animation: astris-overlay-in 200ms ease both;
@@ -58,7 +52,7 @@
   animation: astris-glow 3.6s ease-in-out infinite;
 }
 
-/* ── Global button micro-interactions ─────────────────────────────────────── */
+/* Button micro-interactions */
 
 button {
   transition:
@@ -74,7 +68,7 @@ button:not([disabled]):active {
   transition-duration: 80ms;
 }
 
-/* ── Card hover lift ──────────────────────────────────────────────────────── */
+/* Card hover lift */
 
 article {
   transition: box-shadow 220ms ease, transform 220ms ease;
@@ -85,7 +79,7 @@ article:hover {
   transform: translateY(-2px);
 }
 
-/* ── Input focus glow ─────────────────────────────────────────────────────── */
+/* Input focus glow */
 
 input,
 textarea {
@@ -99,7 +93,7 @@ textarea:focus {
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 18%, transparent);
 }
 
-/* ── Nav item transitions ─────────────────────────────────────────────────── */
+/* Nav item transitions */
 
 nav button {
   transition:
@@ -107,8 +101,7 @@ nav button {
     color            150ms ease;
 }
 
-/* ── Recharts SVG: allow axis labels to render outside SVG viewBox ───────── */
-/* Performance-safe because radar animation is disabled (isAnimationActive=false) */
+/* Recharts SVG: allow axis labels outside viewBox */
 
 .recharts-wrapper {
   overflow: visible !important;

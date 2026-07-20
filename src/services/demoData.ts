@@ -1,9 +1,6 @@
-// ── Demo Data Service ──
-// All mock data lives here. No Supabase dependency.
-
 import { VacancyItem, MentorItem } from "@/types";
 
-// ── DEMO USER CREDENTIALS ──
+// DEMO USER CREDENTIALS
 export const DEMO_USERS: Record<string, {
   email: string;
   password: string;
@@ -94,14 +91,14 @@ export const DEMO_USERS: Record<string, {
   }
 };
 
-// ── ADMIN BACKDOOR ──
+// ADMIN BACKDOOR
 export const ADMIN_CREDENTIALS = {
   email: "johansttivelinaresb@gmail.com",
   password: "Astris2026",
   id: "admin-backdoor",
 };
 
-// ── DEMO VACANCIES ──
+// DEMO VACANCIES
 export const VACANCIES_FALLBACK: VacancyItem[] = [
   {
     id: "vac-vibra-fullstack",
@@ -161,7 +158,7 @@ export const VACANCIES_FALLBACK: VacancyItem[] = [
   },
 ];
 
-// ── DEMO MENTORS ──
+// DEMO MENTORS
 export const MENTORS_FALLBACK: MentorItem[] = [
   {
     id: "M-01",
@@ -197,7 +194,7 @@ export const MENTORS_FALLBACK: MentorItem[] = [
   },
 ];
 
-// ── CANDIDATE RADAR (Bryan Gonzalez) ──
+// CANDIDATE RADAR (Bryan Gonzalez)
 export const CANDIDATE_RADAR_FINAL = [
   { axis: "Procesamiento", value: 85 },
   { axis: "T. Ambiental", value: 35 },
@@ -205,7 +202,7 @@ export const CANDIDATE_RADAR_FINAL = [
   { axis: "Ajustes", value: 78 },
 ];
 
-// ── CANDIDATE ADJUSTMENTS ──
+// CANDIDATE ADJUSTMENTS
 export const CANDIDATE_ADJUSTMENTS = [
   "Trabajo remoto o híbrido",
   "Comunicación asíncrona",
@@ -216,7 +213,7 @@ export const CANDIDATE_ADJUSTMENTS = [
   "Tareas divididas en bloques",
 ];
 
-// ── COMPANY CANDIDATES DATA (for Vibra Latina) ──
+// COMPANY CANDIDATES DATA (for Vibra Latina)
 export const COMPANY_CANDIDATES_DATA = [
   {
     id: "demo-cand",
@@ -272,7 +269,7 @@ export const COMPANY_CANDIDATES_DATA = [
   },
 ];
 
-// ── MENTOR PROCESSES ──
+// MENTOR PROCESSES
 export const MENTOR_PROCESSES = [
   {
     cid: "demo-cand",
@@ -307,7 +304,7 @@ export const MENTOR_PROCESSES = [
   },
 ];
 
-// ── MENTOR COMPANIES ──
+// MENTOR COMPANIES
 export const MENTOR_COMPANIES = [
   {
     name: "Vibra Latina",
@@ -325,7 +322,7 @@ export const MENTOR_COMPANIES = [
   }
 ];
 
-// ── ADMIN STATS ──
+// ADMIN STATS
 export const ADMIN_STATS = {
   totalUsers: 4,
   totalCandidates: 1,
@@ -333,7 +330,7 @@ export const ADMIN_STATS = {
   totalJobs: 3,
 };
 
-// ── ADMIN USERS ──
+// ADMIN USERS
 export const ADMIN_USERS = [
   {
     id: "demo-cand",
@@ -376,7 +373,7 @@ export const ADMIN_USERS = [
   }
 ];
 
-// ── ADMIN COMPANIES ──
+// ADMIN COMPANIES
 export const ADMIN_COMPANIES = [
   {
     user_id: "demo-comp",
@@ -390,7 +387,7 @@ export const ADMIN_COMPANIES = [
   }
 ];
 
-// ── ADMIN CANDIDATES ──
+// ADMIN CANDIDATES
 export const ADMIN_CANDIDATES = [
   {
     user_id: "demo-cand",

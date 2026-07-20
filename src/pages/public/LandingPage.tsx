@@ -132,8 +132,8 @@ export function LandingPage({ lang, onOpenAuth, onLang, onNavigate, darkMode, on
               </div>
             </div>
 
-            {/* Logo side */}
-            <div className="hidden lg:flex shrink-0 flex-col items-center justify-center">
+            {/* Logo side — visible on all screens */}
+            <div className="flex shrink-0 flex-col items-center justify-center lg:max-w-none max-w-[200px] md:max-w-none">
               <div className="relative">
                 <motion.div 
                   className="absolute inset-0 rounded-full blur-3xl opacity-30" 
@@ -145,7 +145,7 @@ export function LandingPage({ lang, onOpenAuth, onLang, onNavigate, darkMode, on
                 <motion.img 
                   src={astrisImg} 
                   alt="Astris Logo" 
-                  className="relative h-auto w-[340px] object-contain drop-shadow-2xl" 
+                  className="relative h-auto w-[160px] md:w-[240px] lg:w-[340px] object-contain drop-shadow-2xl" 
                   animate={{ y: [-8, 8, -8], scale: [1.02, 0.98, 1.02] }}
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                 />
