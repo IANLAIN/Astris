@@ -170,9 +170,9 @@ export function RegisterModal({ lang, role, onRegister, onBack, error, loading, 
           </div>
           <div>
             <label htmlFor="register-vocation" className="block text-sm font-semibold text-foreground mb-2">
-              {"Perfil profesional"}
+              {t("registerVocation", "Perfil profesional")}
             </label>
-            <input id="register-vocation" name="vocation" type="text" value={vocation} onChange={(e) => setVocation(e.target.value)} onKeyDown={handleKeyDown} className="w-full px-4 py-3 rounded-xl border-2 border-border text-foreground text-base" style={{ backgroundColor: "var(--input-background)" }} placeholder={"Ej: Desarrollador Frontend"} />
+            <input id="register-vocation" name="vocation" type="text" value={vocation} onChange={(e) => setVocation(e.target.value)} onKeyDown={handleKeyDown} className="w-full px-4 py-3 rounded-xl border-2 border-border text-foreground text-base" style={{ backgroundColor: "var(--input-background)" }} placeholder={t("registerVocationPlaceholder", "Ej: Desarrollador Frontend")} />
           </div>
           <button
             onClick={() => onRegister(email, password, name, selectedRole!, vocation)}

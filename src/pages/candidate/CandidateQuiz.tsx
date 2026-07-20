@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { ChevronLeft, ChevronRight, Check, BarChart3, Sparkles } from "lucide-react";
 import { Lang, QuizAnswers } from "@/types";
 import { useT, computeRadar } from "@/i18n/useT";
@@ -14,11 +14,20 @@ export function CandidateQuiz({ lang, axisIndex, answers, onAnswer, onPrev, onNe
   const [questionIndex, setQuestionIndex] = useState(0);
   const axis = QUIZ_AXES[axisIndex];
   const axisAnswers = answers[axisIndex] ?? {};
-  const radarData = computeRadar(answers);
+  const radarData = useMemo(() => computeRadar(answers, lang), [answers, lang]);
   const AXIS_KEYS = ["quiz.axis1", "quiz.axis2", "quiz.axis3", "quiz.axis4"];
+  const BAR_COLORS = ["#3D7A56", "#4CAF70", "#2E86AB", "#C9830A"];
+
+  const totalAnswered = useMemo(() =>
+    Object.keys(answers).filter(
+      k => answers[Number(k)] && Object.keys(answers[Number(k)]).length > 0
+    ).length,
+    [answers]
+  );
+  const progressPct = Math.round((totalAnswered / QUIZ_AXES.length) * 100);
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden flex flex-col">
+    <div className="min-h-screen w-full overflow-x-hidden flex flex-col bg-background">
       {/* ── Progress header ── */}
       <div className="px-4 md:px-8 lg:px-12 py-5 border-b border-border" style={{ backgroundColor: "var(--card)" }}>
         <div className="max-w-7xl mx-auto">
@@ -47,10 +56,10 @@ export function CandidateQuiz({ lang, axisIndex, answers, onAnswer, onPrev, onNe
         </div>
       </div>
 
-      {/* ── Main content: question + radar side by side ── */}
+      {/* ── Main content: question + radar ── */}
       <div className="flex-1 flex flex-col lg:flex-row">
         {/* ── Questions column ── */}
-        <div key={axisIndex} className="flex-1 px-4 md:px-8 lg:px-12 py-8 lg:py-12 overflow-y-auto">
+        <div key={axisIndex} className="flex-1 min-w-0 px-4 md:px-6 lg:px-8 py-8 lg:py-12 overflow-y-auto">
           <div className="max-w-2xl mx-auto lg:mx-0">
             {(() => {
               const q = axis.questions[questionIndex];
@@ -195,59 +204,86 @@ export function CandidateQuiz({ lang, axisIndex, answers, onAnswer, onPrev, onNe
           </div>
         </div>
 
-        {/* ── Radar panel: desktop right column, mobile below ── */}
-        <div className="w-full lg:w-[400px] xl:w-[440px] shrink-0 lg:border-l border-t lg:border-t-0 border-border" style={{ backgroundColor: "var(--background)" }}>
-          <div className="p-5 lg:p-8 lg:py-12 lg:sticky lg:top-24">
-            {/* Card container */}
-            <div className="rounded-3xl border-2 border-border overflow-hidden" style={{ backgroundColor: "var(--card)" }}>
-              {/* Header */}
-              <div className="px-6 pt-6 pb-4 border-b border-border">
-                <div className="flex items-center gap-2 mb-1">
-                  <Sparkles size={16} style={{ color: "var(--accent)" }} />
-                  <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">{t("quiz.radar.title")}</span>
+        {/* ── Radar panel — wide card, radar has large SVG margins so labels aren't clipped ── */}
+        <div className="w-full lg:w-[900px] xl:w-[1100px] shrink-0 px-4 md:px-6 lg:px-0 lg:pr-6 xl:pr-8 py-8 lg:py-12">
+          <div className="w-full rounded-3xl border-2 border-border/60 shadow-2xl shadow-primary/5" style={{ backgroundColor: "var(--card)" }}>
+            <div className="relative h-3 w-full overflow-hidden rounded-t-3xl" style={{ background: "linear-gradient(90deg, var(--primary), var(--accent), #6366F1, #8B5CF6, var(--primary))", backgroundSize: "400% 100%" }}>
+              <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)", animation: "shimmer 3.5s infinite" }} />
+            </div>
+
+            <div className="p-5 md:p-6 lg:p-8">
+              {/* Title row */}
+              <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm" style={{ backgroundColor: "color-mix(in srgb, var(--primary) 12%, transparent)" }}>
+                    <Sparkles size={18} style={{ color: "var(--primary)" }} />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-foreground tracking-tight">{t("quiz.radar.title")}</h3>
+                    <p className="text-[11px] text-muted-foreground tracking-wide">{t("quiz.radar.sub")}</p>
+                  </div>
                 </div>
-                <p className="text-xs text-muted-foreground">{t("quiz.radar.sub")}</p>
+                <div className="flex gap-1.5">
+                  {BAR_COLORS.map((c, i) => (
+                    <span key={i} className="w-2 h-2 rounded-full" style={{ backgroundColor: c, opacity: 0.35 }} />
+                  ))}
+                </div>
               </div>
 
-              {/* Radar chart — bigger */}
-              <div className="px-4 pt-6 pb-2 flex justify-center">
-                <div className="w-full max-w-[300px]">
-                  <RadarViz data={radarData} height={260} outerRadius={90} fontSize={10} />
+              {/* Radar pushed left, bars on the right */}
+              <div className="flex flex-col md:flex-row items-center md:items-start">
+                {/* Radar chart — shifted left with margin-right auto */}
+                <div className="w-full max-w-[480px] shrink-0 mr-auto">
+                  <div className="relative">
+                    <div className="absolute inset-0 rounded-full blur-[60px] opacity-20" style={{ background: "radial-gradient(circle, var(--primary), transparent 70%)" }} aria-hidden="true" />
+                    <RadarViz data={radarData} height={360} outerRadius={125} fontSize={14} />
+                  </div>
+                </div>
+
+                {/* Progress bars */}
+                <div className="w-full max-w-[280px] shrink-0 space-y-4">
+                  {radarData.map((d, i) => {
+                    const answered = answers[i] && Object.keys(answers[i]).length > 0;
+                    const c = BAR_COLORS[i % BAR_COLORS.length];
+                    return (
+                      <div key={d.axis}>
+                        <div className="flex items-center justify-between mb-1.5">
+                          <span className="text-sm font-semibold text-foreground tracking-tight">{d.axis}</span>
+                          <span
+                            className="text-sm font-bold font-mono tabular-nums ml-2"
+                            style={{ color: answered ? c : "var(--muted-foreground)", minWidth: "2.5ch", textAlign: "right" }}
+                          >
+                            {answered ? `${d.value}%` : "—"}
+                          </span>
+                        </div>
+                        <div className="h-3.5 rounded-full overflow-hidden" style={{ backgroundColor: "var(--muted)" }}>
+                          <div
+                            className="h-full rounded-full transition-all duration-200 ease-out"
+                            style={{
+                              width: answered ? `${d.value}%` : "0%",
+                              background: answered ? `linear-gradient(90deg, ${c}, ${c}dd)` : "none",
+                              opacity: answered ? 1 : 0.15,
+                              boxShadow: answered ? `inset 0 1.5px 0 rgba(255,255,255,0.35)` : "none",
+                            }}
+                          >
+                            {answered && (
+                              <div className="absolute inset-0 rounded-full" style={{ background: "linear-gradient(90deg, rgba(255,255,255,0.3), transparent 50%)" }} aria-hidden="true" />
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 
-              {/* Bar stats — clean horizontal bars */}
-              <div className="px-6 pb-6 space-y-3">
-                {radarData.map((d, i) => {
-                  const answered = answers[i] && Object.keys(answers[i]).length > 0;
-                  const colors = ["#3D7A56", "#4CAF70", "#2E86AB", "#C9830A"];
-                  return (
-                    <div key={d.axis} className="group">
-                      <div className="flex items-center justify-between mb-1.5">
-                        <span className="text-xs font-semibold text-foreground">{d.axis}</span>
-                        <span
-                          className="text-xs font-bold font-mono tabular-nums transition-all duration-300"
-                          style={{
-                            color: answered ? colors[i % colors.length] : "var(--muted-foreground)",
-                            opacity: answered ? 1 : 0.4,
-                          }}
-                        >
-                          {answered ? `${d.value}%` : "—"}
-                        </span>
-                      </div>
-                      <div className="h-3 rounded-full overflow-hidden" style={{ backgroundColor: "var(--muted)" }}>
-                        <div
-                          className="h-full rounded-full transition-all duration-700 ease-out"
-                          style={{
-                            width: answered ? `${d.value}%` : "0%",
-                            backgroundColor: colors[i % colors.length],
-                            opacity: answered ? 1 : 0.15,
-                          }}
-                        />
-                      </div>
-                    </div>
-                  );
-                })}
+              {/* Footer */}
+              <div className="mt-6 pt-4 border-t border-border/50 flex items-center justify-center gap-2">
+                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: "var(--primary)", opacity: 0.4 }} />
+                <span className="text-xs text-muted-foreground/60 uppercase tracking-[0.15em] font-semibold">
+                  {t("quiz.of")} {QUIZ_AXES.length} ejes · perfil en {progressPct}%
+                </span>
+                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: "var(--accent)", opacity: 0.4 }} />
               </div>
             </div>
           </div>

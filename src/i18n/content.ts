@@ -3,7 +3,7 @@ import { Lang, PaletteKey } from "@/types";
 export const QUIZ_AXES = [
   {
     key: "axis1",
-    radarAxis: "Procesamiento",
+    radarAxis: { es: "Procesamiento", en: "Processing", pt: "Processamento", fr: "Traitement" },
     questions: [
       {
         stems: {
@@ -69,7 +69,7 @@ export const QUIZ_AXES = [
   },
   {
     key: "axis2",
-    radarAxis: "T. Ambiental",
+    radarAxis: { es: "Tolerancia Ambiental", en: "Environmental Tolerance", pt: "Tolerância Ambiental", fr: "Tolérance Environnementale" },
     questions: [
       {
         stems: {
@@ -135,7 +135,7 @@ export const QUIZ_AXES = [
   },
   {
     key: "axis3",
-    radarAxis: "Ejecución",
+    radarAxis: { es: "Ejecución", en: "Execution", pt: "Execução", fr: "Exécution" },
     questions: [
       {
         stems: {
@@ -201,7 +201,7 @@ export const QUIZ_AXES = [
   },
   {
     key: "axis4",
-    radarAxis: "Ajustes",
+    radarAxis: { es: "Ajustes", en: "Adjustments", pt: "Ajustes", fr: "Aménagements" },
     questions: [
       {
         stems: {

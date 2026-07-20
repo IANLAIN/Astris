@@ -44,7 +44,7 @@ export function getPaletteDesc(p: PaletteKey, lang: Lang) {
   return lang === "es" ? PALETTES[p].descEs : PALETTES[p].descEn;
 }
 
-export function computeRadar(answers: QuizAnswers) {
+export function computeRadar(answers: QuizAnswers, lang: Lang = "es") {
   return QUIZ_AXES.map((axis, ai) => {
     const axisAnswers = answers[ai] ?? {};
     const questions = axis.questions;
@@ -67,6 +67,7 @@ export function computeRadar(answers: QuizAnswers) {
       }
     });
     const avg = count > 0 ? Math.round(sum / count) : 0;
-    return { axis: axis.radarAxis, value: avg };
+    const axisName = axis.radarAxis[lang] ?? axis.radarAxis.es;
+    return { axis: axisName, value: avg };
   });
 }
