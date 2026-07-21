@@ -53,9 +53,9 @@ export function AboutPage({ lang, onNavigate, onOpenAuth, onLang, darkMode, onDa
         className="mb-10 md:mb-16 grid gap-4 md:grid-cols-3"
       >
         {[
-          { icon: BarChart3, title: about.purposeTitle, body: t("about.missionBody1") },
-          { icon: Activity, title: about.missionTitle, body: t("about.missionBody2") },
-          { icon: Shield, title: about.visionTitle, body: t("about.missionBody3") },
+          { icon: BarChart3, title: about.purposeLabel, body: t("about.missionBody1") },
+          { icon: Activity, title: about.missionLabel, body: t("about.missionBody2") },
+          { icon: Shield, title: about.visionLabel, body: about.visionBody },
         ].map((item, i) => (
           <motion.div
             key={item.title}
