@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import { ChevronRight, ShieldAlert } from "lucide-react";
 import { Lang } from "@/types";
 import { useT } from "@/i18n/useT";
-import { getMatchesForCompany, getCurrentUser } from "@/services/supabase";
+import { getMatchesForOrganization, getCurrentUser } from "@/services/supabase";
 import { MatchBadge } from "@/components/common/MatchBadge";
 
-export function CompanyCandidates({ lang, onSelect }: { lang: Lang; onSelect: (id: string) => void }) {
+export function OrganizationCandidates({ lang, onSelect }: { lang: Lang; onSelect: (id: string) => void }) {
   const t = useT(lang);
   const [candidates, setCandidates] = useState<Array<any>>([]);
   const [loading, setLoading] = useState(true);
@@ -14,7 +14,7 @@ export function CompanyCandidates({ lang, onSelect }: { lang: Lang; onSelect: (i
     (async () => {
       const user = await getCurrentUser();
       const companyId = user?.id || "demo-comp";
-      const matches = await getMatchesForCompany(companyId);
+      const matches = await getMatchesForOrganization(companyId);
       setCandidates(matches.map((m: any) => ({
         id: m.candidateId,
         match: m.matchPercentage,
@@ -44,7 +44,7 @@ export function CompanyCandidates({ lang, onSelect }: { lang: Lang; onSelect: (i
               </div>
               <h3 className="text-xl font-bold text-foreground">No hay candidatos</h3>
               <p className="text-muted-foreground max-w-sm">
-                Aún no hay perfiles sugeridos para tu empresa. Publica una vacante para comenzar a recibir candidatos.
+                Aún no hay perfiles sugeridos para tu organización. Publica una vacante para comenzar a recibir candidatos.
               </p>
             </div>
           ) : candidates.map((c, i) => (

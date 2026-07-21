@@ -2,20 +2,20 @@
 
 Conectando talento con entornos laborales adaptativos.
 
-Astris es una plataforma web SPA que empareja talento diverso con empresas comprometidas con la inclusion laboral real, mediante un sistema de matching basado en estilos de trabajo, necesidades ambientales y ajustes razonables — no en diagnosticos.
+Astris es una plataforma web SPA que empareja talento diverso con organizaciones comprometidas con la inclusion laboral real, mediante un sistema de matching basado en estilos de trabajo, necesidades ambientales y ajustes razonables — no en diagnosticos.
 
 ---
 
 ## Caracteristicas
 
 - Perfilado en 4 ejes: Procesamiento, Tolerancia Ambiental, Ejecucion y Ajustes Razonables — cuestionario interactivo en 4 pasos
-- Matching inteligente: Compatibilidades calculadas objetivamente entre candidatos y empresas segun modalidad, ajustes y entorno
+- Matching inteligente: Compatibilidades calculadas objetivamente entre candidatos y organizaciones segun modalidad, ajustes y entorno
 - Acompanamiento con mentor: Guia personalizada desde la preparacion hasta el dia 60 post-contratacion, con check-ins y seguimiento
 - 4 idiomas: Espanol (base), Ingles, Portugues y Frances — con deteccion automatica del navegador
 - Interfaz accesible: 4 paletas de colores personalizables (Calm Blue, Warm Earth, High Contrast, Natural Green), modo oscuro, fuente para dislexia (OpenDyslexic)
-- Modo demo completo: Explora la plataforma sin backend con credenciales predefinidas para candidato, empresa, mentor y admin
+- Modo demo completo: Explora la plataforma sin backend con credenciales predefinidas para candidato, organizacion, mentor y admin
 - Sin backend requerido: Todo funciona offline con datos de demostracion
-- Admin dashboard: Panel administrativo con gestion de usuarios, empresas, candidatos y vacantes
+- Admin dashboard: Panel administrativo con gestion de usuarios, organizaciones, candidatos y vacantes
 - Code Splitting: Cada pagina se carga bajo demanda con React.lazy() — chunks de menos de 10 KB por pagina
 
 ---
@@ -79,11 +79,11 @@ Astris funciona completamente offline con datos de demostracion. No necesitas co
 | Rol | Email | Contrasena | Que veras |
 |-----|-------|-----------|-----------|
 | Candidato | candidato@astris.org | Demo2026 | Perfil de Bryan Gonzalez (TDAH, Ing. Sistemas), radar de compatibilidad, vacantes de Vibra Latina y Closer To The Stars con % de match |
-| Empresa | empresa@astris.org | Demo2026 | Dashboard de Vibra Latina, candidatos con compatibilidad, vacantes activas (Full Stack + Disenador Grafico) |
-| Mentor | mentor@astris.org | Demo2026 | Dashboard de Elena Vargas, procesos activos, check-ins, empresas vinculadas |
-| Admin | johansttivelinaresb@gmail.com | Astris2026 | Panel administrativo con usuarios, empresas, candidatos y vacantes |
+| Organizacion | organizacion@astris.org | Demo2026 | Dashboard de Vibra Latina, candidatos con compatibilidad, vacantes activas (Full Stack + Disenador Grafico) |
+| Mentor | mentor@astris.org | Demo2026 | Dashboard de Elena Vargas, procesos activos, check-ins, organizaciones vinculadas |
+| Admin | johansttivelinaresb@gmail.com | Astris2026 | Panel administrativo con usuarios, organizaciones, candidatos y vacantes |
 
-### Empresas demo
+### Organizaciones demo
 
 - **Vibra Latina** — Corporacion audiovisual con sede en Houston, TX. Especializada en produccion de contenido sobre responsabilidad social, educacion y STEM para la comunidad hispana bilingue. Vacantes: Desarrollador Full Stack (94% match) y Disenador Grafico (87% match).
 - **Closer To The Stars Foundation** — Fundacion sin fines de lucro dedicada a la divulgacion cientifica y exploracion espacial. Vacante: Gerente de Administracion de Sistemas (82% match).
@@ -94,13 +94,13 @@ Astris funciona completamente offline con datos de demostracion. No necesitas co
 
 ### Candidato
 1. Onboarding: Configura paleta de colores, modo oscuro y fuente
-2. Quiz de caracterizacion: 4 ejes × 4 preguntas sobre estilo de trabajo y necesidades
+2. Quiz de caracterizacion: 4 ejes x 4 preguntas sobre estilo de trabajo y necesidades
 3. Perfil: Visualiza tu radar de compatibilidad con ajustes recomendados
 4. Vacantes: Explora ofertas con porcentaje de match (Vibra Latina, Closer To The Stars)
 5. Seleccion de mentor: Elige acompanamiento profesional
 6. Acompanamiento: Seguimiento pre y post-contratacion
 
-### Empresa
+### Organizacion
 1. Perfil organizacional: Define filosofia, ajustes y entorno laboral
 2. Publicar vacantes: Describe el rol, modalidad y ajustes ofrecidos
 3. Explorar candidatos: Visualiza perfiles con porcentajes de compatibilidad
@@ -109,7 +109,7 @@ Astris funciona completamente offline con datos de demostracion. No necesitas co
 ### Mentor
 1. Dashboard: Visualiza procesos activos y candidatos asignados con reportes de actividad
 2. Check-ins: Realiza seguimiento estructurado
-3. Empresas: Gestiona relaciones con organizaciones asociadas
+3. Organizaciones: Gestiona relaciones con organizaciones asociadas
 
 ---
 
@@ -133,8 +133,8 @@ src/
   pages/                    # Paginas organizadas por rol
     public/                 # LandingPage, AboutPage, SupportPage, PartnersPage
     candidate/              # Onboarding, Quiz, Profile, Vacancies, Mentor, Accompaniment
-    company/                # OrgProfile, PostVacancy, Candidates, PostHire
-    mentor/                 # Dashboard, Checkins, Companies
+    organization/           # OrgProfile, PostVacancy, Candidates, PostHire
+    mentor/                 # Dashboard, Checkins, Organizations
     admin/                  # AdminDashboard + subvistas
     shared/                 # NotFoundPage, SettingsPage
   styles/                   # CSS global (Tailwind v4, tema, fuentes)

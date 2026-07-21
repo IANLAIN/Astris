@@ -23,7 +23,7 @@ export function NavBar({ lang, role, screen, onNav, onLang, onLogout, darkMode, 
     { id: "mentor-select", label: t("nav.mentor"), Icon: Users },
     { id: "post-hire", label: t("nav.tracking"), Icon: Activity },
   ];
-  const COMPANY_NAV = [
+  const ORGANIZATION_NAV = [
     { id: "org-profile", label: t("nav.org"), Icon: Building2 },
     { id: "post-vacancy", label: t("nav.post"), Icon: FileText },
     { id: "candidates", label: t("nav.candidates"), Icon: Users },
@@ -32,12 +32,12 @@ export function NavBar({ lang, role, screen, onNav, onLang, onLogout, darkMode, 
   const MENTOR_NAV = [
     { id: "dashboard", label: t("nav.dashboard"), Icon: BarChart2 },
     { id: "checkins", label: t("nav.checkins"), Icon: Calendar },
-    { id: "companies", label: t("nav.companies"), Icon: Building2 },
+    { id: "organizations", label: t("nav.companies"), Icon: Building2 },
   ];
   const ADMIN_NAV = [
     { id: "dashboard", label: "Dashboard", Icon: BarChart2 }
   ];
-  const navItems = role === "candidate" ? CANDIDATE_NAV : role === "company" ? COMPANY_NAV : role === "mentor" ? MENTOR_NAV : ADMIN_NAV;
+  const navItems = role === "candidate" ? CANDIDATE_NAV : role === "organization" ? ORGANIZATION_NAV : role === "mentor" ? MENTOR_NAV : ADMIN_NAV;
   const ROLE_LABELS: Record<Role, string> = { candidate: t("role.candidate"), company: t("role.company"), mentor: t("role.mentor"), admin: t("role.admin") };
 
   const darkLabel = darkMode

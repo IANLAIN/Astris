@@ -28,7 +28,7 @@ export function VacancyDetail({ lang, vacancyId, onStart, onBack }: { lang: Lang
           socialLevel: "Bajo",
           adjustments: found.adjustments || [],
           desc: found.desc || "",
-          companyDesc: found.companyDesc || "",
+          organizationDesc: found.organizationDesc || "",
         });
       }
       setLoading(false);
@@ -76,8 +76,8 @@ export function VacancyDetail({ lang, vacancyId, onStart, onBack }: { lang: Lang
       <div className="max-w-7xl mx-auto w-full px-4 lg:px-20 py-10 flex flex-col lg:flex-row gap-5 md:gap-10">
         <div className="flex-1">
           <div className="rounded-2xl border border-border p-4 md:p-8 mb-6" style={{ backgroundColor: "var(--card)" }}>
-            <h2 className="font-bold text-foreground mb-3">{t("vacancy.about_company")}</h2>
-            <p className="text-muted-foreground leading-relaxed">{v.companyDesc}</p>
+            <h2 className="font-bold text-foreground mb-3">{t("vacancy.about_organization")}</h2>
+            <p className="text-muted-foreground leading-relaxed">{v.organizationDesc}</p>
           </div>
           <div className="rounded-2xl border border-border p-4 md:p-8 mb-6" style={{ backgroundColor: "var(--card)" }}>
             <h2 className="font-bold text-foreground mb-3">{t("vacancy.the_role")}</h2>

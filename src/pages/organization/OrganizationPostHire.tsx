@@ -4,7 +4,7 @@ import { Lang } from "@/types";
 import { useT, C } from "@/i18n/useT";
 import { saveCheckin } from "@/services/supabase";
 
-export function CompanyPostHire({ lang }: { lang: Lang }) {
+export function OrganizationPostHire({ lang }: { lang: Lang }) {
   const t = useT(lang);
   const [obs, setObs] = useState("");
   const [sending, setSending] = useState(false);
@@ -14,7 +14,7 @@ export function CompanyPostHire({ lang }: { lang: Lang }) {
     if (!obs.trim()) return;
     setSending(true);
     try {
-      await saveCheckin("demo-comp", "company", obs);
+      await saveCheckin("demo-comp", "organization", obs);
     } catch (e) {
       // ignore
     }

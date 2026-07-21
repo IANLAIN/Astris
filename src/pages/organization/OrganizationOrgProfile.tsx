@@ -4,7 +4,7 @@ import { Lang } from "@/types";
 import { useT, C } from "@/i18n/useT";
 import { DEMO_USERS } from "@/services/demoData";
 
-export function CompanyOrgProfile({ lang }: { lang: Lang }) {
+export function OrganizationOrgProfile({ lang }: { lang: Lang }) {
   const t = useT(lang);
   const [open, setOpen] = useState<Record<string, boolean>>({ general: true });
   const toggle = (k: string) => setOpen((p) => ({ ...p, [k]: !p[k] }));
@@ -17,9 +17,9 @@ export function CompanyOrgProfile({ lang }: { lang: Lang }) {
   // Load Vibra Latina demo data
   const demoProfile: any = DEMO_USERS["empresa@astris.org"]?.profile;
   const [formData, setFormData] = useState<Record<string, any>>({
-    company_name: demoProfile?.company_name || "Vibra Latina",
+    organization_name: demoProfile?.organization_name || "Vibra Latina",
     industry: demoProfile?.industry || "Audiovisual / Producción",
-    company_size: demoProfile?.company_size || "10-50 empleados",
+    organization_size: demoProfile?.organization_size || "10-50 empleados",
     country: demoProfile?.country || "Estados Unidos",
     city: demoProfile?.city || "Austin, TX",
     philosophy: demoProfile?.philosophy || "",
@@ -70,9 +70,9 @@ export function CompanyOrgProfile({ lang }: { lang: Lang }) {
                 {s.id === "general" && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-5">
                     {[
-                      { label: "Nombre de la organización", field: "company_name" },
+                      { label: "Nombre de la organización", field: "organization_name" },
                       { label: "Sector de actividad", field: "industry" },
-                      { label: "Tamaño de la organización", field: "company_size" },
+                      { label: "Tamaño de la organización", field: "organization_size" },
                       { label: "País", field: "country" },
                       { label: "Ciudad", field: "city" }
                     ].map((f) => (
@@ -94,7 +94,7 @@ export function CompanyOrgProfile({ lang }: { lang: Lang }) {
                 )}
                 {s.id === "cultura" && (
                   <div className="pt-5">
-                    <label htmlFor="org-philosophy" className="sr-only">Cultura de la empresa</label>
+                    <label htmlFor="org-philosophy" className="sr-only">Cultura de la organización</label>
                     <textarea
                       id="org-philosophy"
                       name="philosophy"
@@ -102,7 +102,7 @@ export function CompanyOrgProfile({ lang }: { lang: Lang }) {
                       onChange={(e) => handleChange("philosophy", e.target.value)}
                       className="w-full px-4 py-3 rounded-xl border border-border text-sm outline-none focus:border-primary min-h-[100px] resize-y"
                       style={{ backgroundColor: "var(--input-background)", color: "var(--foreground)" }}
-                      placeholder="Describe la filosofía y cultura de tu empresa..."
+                      placeholder="Describe la filosofía y cultura de tu organización..."
                     />
                   </div>
                 )}

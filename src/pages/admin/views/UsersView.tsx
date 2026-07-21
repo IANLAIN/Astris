@@ -87,7 +87,7 @@ export default function UsersView({ users, onRoleChange, onSoftDelete }: UsersPr
                       className="bg-background border border-border rounded-lg px-2 py-1 text-xs font-semibold cursor-pointer"
                     >
                       <option value="candidate">Candidato</option>
-                      <option value="company">Empresa</option>
+                      <option value="organization">Organización</option>
                       <option value="mentor">Mentor</option>
                       <option value="admin">Administrador</option>
                     </select>

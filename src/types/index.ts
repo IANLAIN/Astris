@@ -1,6 +1,6 @@
 export type Lang = "es" | "en" | "pt" | "fr";
 export type ModalStep = "language" | "register" | "login" | "none";
-export type Role = "candidate" | "company" | "mentor" | "admin";
+export type Role = "candidate" | "organization" | "mentor" | "admin";
 export type PaletteKey = "azul" | "tierra" | "contraste" | "verde";
 export type FontKey = "inter" | "opendyslexic";
 export type PublicView = "landing" | "about" | "support" | "partners";
@@ -9,7 +9,7 @@ export type QuizAnswers = Record<number, Record<number, number | number[]>>;
 export interface VacancyItem {
   id: string;
   title: string;
-  company: string;
+  organization: string;
   sector: string;
   modality: string;
   type: string;
@@ -17,7 +17,7 @@ export interface VacancyItem {
   socialLevel: string;
   adjustments: string[];
   desc: string;
-  companyDesc: string;
+  organizationDesc: string;
 }
 
 export interface MentorItem {

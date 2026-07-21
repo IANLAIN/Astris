@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import { ChevronLeft, Shield, Users, Check, X } from "lucide-react";
 import { Lang } from "@/types";
 import { useT } from "@/i18n/useT";
-import { getMatchesForCompany, getCurrentUser } from "@/services/supabase";
+import { getMatchesForOrganization, getCurrentUser } from "@/services/supabase";
 import { CANDIDATE_RADAR_FINAL } from "@/services/demoData";
 import { MatchBadge } from "@/components/common/MatchBadge";
 import { RadarViz } from "@/components/common/RadarViz";
 
-export function CompanyCandidateDetail({ lang, candidateId, onBack, onStart }: { lang: Lang; candidateId: string; onBack: () => void; onStart: () => void }) {
+export function OrganizationCandidateDetail({ lang, candidateId, onBack, onStart }: { lang: Lang; candidateId: string; onBack: () => void; onStart: () => void }) {
   const t = useT(lang);
   const [match, setMatch] = useState(85);
   const [radar, setRadar] = useState(CANDIDATE_RADAR_FINAL);
@@ -18,7 +18,7 @@ export function CompanyCandidateDetail({ lang, candidateId, onBack, onStart }: {
     (async () => {
       const user = await getCurrentUser();
       const companyId = user?.id || "demo-comp";
-      const matches = await getMatchesForCompany(companyId);
+      const matches = await getMatchesForOrganization(companyId);
       const found = matches.find((m: any) => m.candidateId === candidateId);
       if (found) {
         setMatch(found.matchPercentage);

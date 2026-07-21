@@ -5,10 +5,10 @@ import {
   VACANCIES_FALLBACK,
   MENTORS_FALLBACK,
   CANDIDATE_RADAR_FINAL,
-  COMPANY_CANDIDATES_DATA,
+  ORGANIZATION_CANDIDATES_DATA,
   ADMIN_STATS,
   ADMIN_USERS,
-  ADMIN_COMPANIES,
+  ADMIN_ORGANIZATIONS,
   ADMIN_CANDIDATES,
 } from "./demoData";
 
@@ -30,7 +30,7 @@ export interface DemoUser {
   id: string;
   email: string;
   name: string;
-  role: "candidate" | "company" | "mentor" | "admin";
+  role: "candidate" | "organization" | "mentor" | "admin";
   avatarUrl: string;
   vocation: string;
   completedOnboarding: boolean;
@@ -46,7 +46,7 @@ export interface CandidateDashboardStats {
 
 export const DEMO_USER_IDS = ["demo-cand", "demo-comp", "demo-ment", "admin-backdoor"];
 
-export function isDemoUser(userId: string): boolean {
+export function isDemoUserUser(userId: string): boolean {
   return DEMO_USER_IDS.includes(userId);
 }
 
@@ -66,7 +66,7 @@ export async function registerUser(
   email: string,
   password: string,
   name: string,
-  role: "candidate" | "company" | "mentor" | "admin",
+  role: "candidate" | "organization" | "mentor" | "admin",
   vocation = ""
 ) {
   if (USE_REAL_BACKEND) {
@@ -310,7 +310,7 @@ export async function getMatchesForCandidate(candidateId: string) {
     const { data: jobs } = await getClient()
       .from("jobs")
       .select(
-        "id, title, company_id, status, work_modality, contract_type, offered_accommodations, description, companies(company_name, industry, philosophy)"
+        "id, title, company_id, status, work_modality, contract_type, offered_accommodations, description, companies(organization_name, industry, philosophy)"
       )
       .eq("status", "active");
     if (!jobs) return [];
@@ -318,13 +318,13 @@ export async function getMatchesForCandidate(candidateId: string) {
       jobId: j.id,
       matchPercentage: 85 + Math.floor(Math.random() * 15),
       title: j.title,
-      company: j.companies?.company_name || "",
+      company: j.companies?.organization_name || "",
       sector: j.companies?.industry || "",
       modality: j.work_modality || "",
       type: j.contract_type || "",
       adjustments: j.offered_accommodations || [],
       desc: j.description || "",
-      companyDesc: j.companies?.philosophy || "",
+      organizationDesc: j.companies?.philosophy || "",
     }));
   }
   if (candidateId === "demo-cand") {
@@ -332,13 +332,13 @@ export async function getMatchesForCandidate(candidateId: string) {
       jobId: v.id, matchPercentage: v.match - i * 4,
       title: v.title, company: v.company, sector: v.sector,
       modality: v.modality, type: v.type, adjustments: v.adjustments,
-      desc: v.desc, companyDesc: v.companyDesc,
+      desc: v.desc, organizationDesc: v.organizationDesc,
     })).sort((a, b) => b.matchPercentage - a.matchPercentage);
   }
   return [];
 }
 
-export async function getMatchesForCompany(companyId: string) {
+export async function getMatchesForOrganization(companyId: string) {
   if (USE_REAL_BACKEND) {
     const { data: candidates } = await getClient()
       .from("candidates")
@@ -353,7 +353,7 @@ export async function getMatchesForCompany(companyId: string) {
     }));
   }
   if (companyId === "demo-comp") {
-    return COMPANY_CANDIDATES_DATA.map((c) => ({
+    return ORGANIZATION_CANDIDATES_DATA.map((c) => ({
       candidateId: c.id, matchPercentage: c.match,
       strengths: c.strengths, radar: c.radar, env: c.env,
     })).sort((a, b) => b.matchPercentage - a.matchPercentage);
@@ -375,10 +375,10 @@ export async function getMentors() {
   return MENTORS_FALLBACK;
 }
 
-export async function getCompanyProfile(userId: string) {
+export async function getOrganizationProfile(userId: string) {
   if (USE_REAL_BACKEND) {
     const { data } = await getClient()
-      .from("companies")
+      .from("organizations")
       .select("*")
       .eq("user_id", userId)
       .single();
@@ -390,13 +390,13 @@ export async function getCompanyProfile(userId: string) {
   return null;
 }
 
-export async function saveCompanyProfile(userId: string, data: any) {
+export async function saveOrganizationProfile(userId: string, data: any) {
   if (USE_REAL_BACKEND) {
     const { error } = await getClient()
-      .from("companies")
+      .from("organizations")
       .upsert({
         user_id: userId,
-        company_name: data.company_name,
+        organization_name: data.organization_name,
         industry: data.industry,
         philosophy: data.philosophy,
         work_environment: data.work_environment || {},
@@ -442,11 +442,11 @@ export async function getDashboardStats() {
       .from("users_profiles").select("*", { count: "exact", head: true });
     const { count: totalCandidates } = await getClient()
       .from("users_profiles").select("*", { count: "exact", head: true }).eq("role", "candidate");
-    const { count: totalCompanies } = await getClient()
-      .from("companies").select("*", { count: "exact", head: true });
+    const { count: totalOrganizations } = await getClient()
+      .from("organizations").select("*", { count: "exact", head: true });
     const { count: totalJobs } = await getClient()
       .from("jobs").select("*", { count: "exact", head: true }).eq("status", "active");
-    return { totalUsers: totalUsers || 0, totalCandidates: totalCandidates || 0, totalCompanies: totalCompanies || 0, totalJobs: totalJobs || 0 };
+    return { totalUsers: totalUsers || 0, totalCandidates: totalCandidates || 0, totalOrganizations: totalOrganizations || 0, totalJobs: totalJobs || 0 };
   }
   return ADMIN_STATS;
 }
@@ -463,18 +463,18 @@ export async function getAdminUsers() {
   return ADMIN_USERS;
 }
 
-export async function getAdminCompanies() {
+export async function getAdminOrganizations() {
   if (USE_REAL_BACKEND) {
     const { data } = await getClient()
-      .from("companies").select("*, users_profiles!inner(email, deleted_at)");
+      .from("organizations").select("*, users_profiles!inner(email, deleted_at)");
     return (data || []).map((c: any) => ({
-      user_id: c.user_id, company_name: c.company_name, industry: c.industry,
+      user_id: c.user_id, organization_name: c.organization_name, industry: c.industry,
       city: c.work_environment?.city || "", country: c.work_environment?.country || "",
       esg_retention_rate: c.esg_retention_rate, esg_wellness_index: c.esg_wellness_index,
       users_profiles: c.users_profiles ? { email: c.users_profiles.email, deleted_at: c.users_profiles.deleted_at } : undefined,
     }));
   }
-  return ADMIN_COMPANIES;
+  return ADMIN_ORGANIZATIONS;
 }
 
 export async function getAdminCandidates() {

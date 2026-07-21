@@ -2,7 +2,7 @@
 
 ## Overview
 
-Astris is a React + Vite + TypeScript SPA that connects diverse talent with inclusive companies through matching based on work styles, environmental needs, and reasonable accommodations — not on diagnoses.
+Astris is a React + Vite + TypeScript SPA that connects diverse talent with inclusive organizations through matching based on work styles, environmental needs, and reasonable accommodations — not on diagnoses.
 
 It uses React Router DOM v7 with search params for navigation, React.lazy() + Suspense for mandatory code splitting, i18next for 4 languages, and a fully offline demo data system with no backend dependency.
 
@@ -62,9 +62,9 @@ src/
     index.ts                 # Re-exports everything from @/services/demoData
 
   services/
-    demoData.ts              # ALL demo data: users, vacancies, mentors, companies, admin
+    demoData.ts              # ALL demo data: users, vacancies, mentors, organizations, admin
     supabase.ts              # Demo API: auth, matching, profiles, checkins, admin functions
-    supabase-admin.ts        # Admin demo functions: stats, users, companies, logs
+    supabase-admin.ts        # Admin demo functions: stats, users, organizations, logs
 
   pages/
     public/                  # LandingPage, AboutPage, SupportPage, PartnersPage
@@ -72,11 +72,11 @@ src/
     candidate/               # CandidateOnboarding, CandidateQuiz, CandidateProfile,
                              #   CandidateVacancies, VacancyDetail, MentorSelect,
                              #   CandidateAccompaniment, CandidatePostHire
-    company/                 # CompanyOrgProfile, CompanyPostVacancy, CompanyCandidates,
-                             #   CompanyCandidateDetail, CompanyPostHire
-    mentor/                  # MentorDashboard, MentorCheckins, MentorCompanies
+    organization/            # OrganizationOrgProfile, OrganizationPostVacancy, OrganizationCandidates,
+                             #   OrganizationCandidateDetail, OrganizationPostHire
+    mentor/                  # MentorDashboard, MentorCheckins, MentorOrganizations
     admin/                   # AdminDashboard + subviews
-      views/                 # OverviewView, UsersView, CompaniesView, CandidatesView, JobsView
+      views/                 # OverviewView, UsersView, OrganizationsView, CandidatesView, JobsView
     shared/                  # NotFoundPage, SettingsPage
 
   styles/
@@ -112,8 +112,8 @@ src/
 | Role | Screens |
 |------|---------|
 | candidate | onboarding, quiz, profile, vacancies, vacancy-detail, mentor-select, accompaniment, post-hire, tracking |
-| company | org-profile, post-vacancy, candidates, candidate-detail, comp-post-hire, post-hire |
-| mentor | dashboard, checkins, companies |
+| organization | org-profile, post-vacancy, candidates, candidate-detail, comp-post-hire, post-hire |
+| mentor | dashboard, checkins, organizations |
 | admin | dashboard (subviews with internal state + sidebar) |
 
 ### Mandatory Quiz Block
@@ -194,7 +194,7 @@ Each page chunk should be < 10 KB. Vendor chunks are separated by library to max
 3. **Data with nested language structure** (questions, palettes) go in content.ts with `{ es, en, pt, fr }` objects
 4. **Programmatic access to arrays/objects**: C(lang, "accompStages") returns the translated object
 5. **Language persisted** in localStorage["astris_lang"]
-6. All dashboards (candidate, company, mentor, admin) must use t() for every user-visible string
+6. All dashboards (candidate, organization, mentor, admin) must use t() for every user-visible string
 
 ### Adding new translations
 
@@ -228,7 +228,7 @@ No Context API or global store (Redux, Zustand, Jotai). Hooks are used directly 
 | Role | Email | Password | ID |
 |------|-------|----------|-----|
 | Candidate | candidato@astris.org | Demo2026 | demo-cand |
-| Company | empresa@astris.org | Demo2026 | demo-comp |
+| Organization | organizacion@astris.org | Demo2026 | demo-org |
 | Mentor | mentor@astris.org | Demo2026 | demo-ment |
 | Admin | johansttivelinaresb@gmail.com | Astris2026 | backdoor |
 
@@ -255,10 +255,10 @@ All demo content lives in `src/services/demoData.ts`:
 | MENTORS_FALLBACK | 4 available mentors |
 | CANDIDATE_RADAR_FINAL | Bryan Gonzalez radar profile |
 | CANDIDATE_ADJUSTMENTS | Candidate adjustments for display |
-| COMPANY_CANDIDATES_DATA | Company candidates with matches |
+| ORGANIZATION_CANDIDATES_DATA | Organization candidates with matches |
 | MENTOR_PROCESSES | Active mentor processes |
-| MENTOR_COMPANIES | Companies linked to mentor |
-| ADMIN_STATS / ADMIN_USERS / ADMIN_COMPANIES / ADMIN_CANDIDATES | Admin panel data |
+| MENTOR_ORGANIZATIONS | Organizations linked to mentor |
+| ADMIN_STATS / ADMIN_USERS / ADMIN_ORGANIZATIONS / ADMIN_CANDIDATES | Admin panel data |
 
 No internet connection or environment variables needed. Everything works offline.
 
@@ -270,7 +270,7 @@ No internet connection or environment variables needed. Everything works offline
 |-----------|---------------|
 | Code Splitting | React.lazy() on every page in App.tsx. Chunks < 10 KB per page. Separate vendor chunks. |
 | DRY | Repeated logic to hooks (useAuth, useTheme). API calls to services (supabase.ts). Repeated JSX to common components. |
-| Modularity | 1 file = 1 component/hook/service. Folders by role (public, candidate, company, mentor, admin) and type (common, ui, modals, hooks, services). |
+| Modularity | 1 file = 1 component/hook/service. Folders by role (public, candidate, organization, mentor, admin) and type (common, ui, modals, hooks, services). |
 | One file, one responsibility | No files > 150 lines. Functions < 40 lines. Components < 100 lines of JSX. |
 | No spaghetti code | Clear separation: logic (hooks), data (services), presentation (components), config (i18n), types (types/). |
 | No static page imports | Every page imported with React.lazy(). Static imports of pages prohibited. |

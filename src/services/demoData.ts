@@ -5,7 +5,7 @@ export const DEMO_USERS: Record<string, {
   email: string;
   password: string;
   id: string;
-  role: "candidate" | "company" | "mentor" | "admin";
+  role: "candidate" | "organization" | "mentor" | "admin";
   name: string;
   avatarUrl?: string;
   vocation: string;
@@ -34,15 +34,15 @@ export const DEMO_USERS: Record<string, {
     email: "empresa@astris.org",
     password: "Demo2026",
     id: "demo-comp",
-    role: "company",
+    role: "organization",
     name: "Vibra Latina",
     avatarUrl: "",
     vocation: "",
     completedOnboarding: true,
     profile: {
-      company_name: "Vibra Latina",
+      organization_name: "Vibra Latina",
       industry: "Audiovisual / Producción",
-      company_size: "10-50 empleados",
+      organization_size: "10-50 empleados",
       country: "Estados Unidos",
       city: "Houston, TX",
       philosophy: "Somos una corporación comprometida con la producción audiovisual y la distribución de contenido. En Vibra Latina tenemos un propósito claro: promover el cambio social y la inserción laboral a través del poder de las historias. Con sede en Houston, Texas, y una sólida presencia en Latinoamérica, nos especializamos en desarrollar obras que abordan temas fundamentales enfocados en la responsabilidad social corporativa, la educación, innovaciones y STEM. Nuestra misión es mostrar historias inspiradoras de comunidades, líderes y personalidades, especialmente dentro de la comunidad hispana bilingüe.",
@@ -66,7 +66,7 @@ export const DEMO_USERS: Record<string, {
         light: "Luz LED ajustable + luz natural",
         layout: "Espacios abiertos con zonas de enfoque individual",
         policies: ["Flexibilidad de horario", "Pausas activas programadas", "Reuniones con agenda previa"],
-        company_size: "10-50 empleados",
+        organization_size: "10-50 empleados",
         country: "Estados Unidos",
         city: "Houston, TX"
       }
@@ -103,7 +103,7 @@ export const VACANCIES_FALLBACK: VacancyItem[] = [
   {
     id: "vac-vibra-fullstack",
     title: "Desarrollador Full Stack",
-    company: "Vibra Latina",
+    organization: "Vibra Latina",
     sector: "Tecnología / Audiovisual",
     modality: "Remoto o Híbrido",
     type: "Tiempo completo",
@@ -117,12 +117,12 @@ export const VACANCIES_FALLBACK: VacancyItem[] = [
       "Audífonos con cancelación de ruido"
     ],
     desc: "Buscamos un desarrollador Full Stack para construir y mantener la plataforma web de Vibra Latina. Trabajarás con React, Node.js, y servicios en la nube para crear experiencias digitales que conecten a la comunidad latina con contenido audiovisual adaptativo.",
-    companyDesc: "Vibra Latina es una corporación comprometida con la producción audiovisual y la distribución de contenido, con sede en Houston, Texas. Nos especializamos en desarrollar obras que abordan temas de responsabilidad social corporativa, educación, innovación y STEM, mostrando historias inspiradoras de la comunidad hispana bilingüe.",
+    organizationDesc: "Vibra Latina es una corporación comprometida con la producción audiovisual y la distribución de contenido, con sede en Houston, Texas. Nos especializamos en desarrollar obras que abordan temas de responsabilidad social corporativa, educación, innovación y STEM, mostrando historias inspiradoras de la comunidad hispana bilingüe.",
   },
   {
     id: "vac-vibra-designer",
     title: "Diseñador Gráfico",
-    company: "Vibra Latina",
+    organization: "Vibra Latina",
     sector: "Diseño / Audiovisual",
     modality: "Remoto o Híbrido",
     type: "Tiempo completo",
@@ -135,12 +135,12 @@ export const VACANCIES_FALLBACK: VacancyItem[] = [
       "Comunicación asíncrona"
     ],
     desc: "Buscamos un diseñador gráfico talentoso para crear la identidad visual de nuestros proyectos audiovisuales. Trabajarás en branding, diseño web, y material promocional para campañas digitales.",
-    companyDesc: "Vibra Latina es una corporación comprometida con la producción audiovisual y la distribución de contenido, con sede en Houston, Texas. Nos especializamos en desarrollar obras que abordan temas de responsabilidad social corporativa, educación, innovación y STEM, mostrando historias inspiradoras de la comunidad hispana bilingüe.",
+    organizationDesc: "Vibra Latina es una corporación comprometida con la producción audiovisual y la distribución de contenido, con sede en Houston, Texas. Nos especializamos en desarrollar obras que abordan temas de responsabilidad social corporativa, educación, innovación y STEM, mostrando historias inspiradoras de la comunidad hispana bilingüe.",
   },
   {
     id: "vac-closer-sysadmin",
     title: "Gerente de Administración de Sistemas",
-    company: "Closer To The Stars Foundation",
+    organization: "Closer To The Stars Foundation",
     sector: "Tecnología / Gestión",
     modality: "Híbrido",
     type: "Tiempo completo",
@@ -154,7 +154,7 @@ export const VACANCIES_FALLBACK: VacancyItem[] = [
       "Reuniones con agenda previa"
     ],
     desc: "Lidera la administración de sistemas de la fundación. Gestionarás infraestructura TI, seguridad informática, y coordinarás equipos técnicos en proyectos de impacto social relacionados con la exploración espacial y la divulgación científica.",
-    companyDesc: "Closer To The Stars Foundation es una organización sin fines de lucro dedicada a acercar la ciencia y la exploración espacial a comunidades subrepresentadas, promoviendo la inserción laboral en STEM.",
+    organizationDesc: "Closer To The Stars Foundation es una organización sin fines de lucro dedicada a acercar la ciencia y la exploración espacial a comunidades subrepresentadas, promoviendo la inserción laboral en STEM.",
   },
 ];
 
@@ -174,7 +174,7 @@ export const MENTORS_FALLBACK: MentorItem[] = [
     specialty: "Aprendizaje adaptativo en entornos corporativos",
     years: 5,
     modality: "Virtual",
-    bio: "Consultor de accesibilidad laboral con experiencia en mediación empresa-candidato. Especialista en diseño de planes de ajuste razonable y comunicación asertiva en equipos diversos."
+    bio: "Consultor de accesibilidad laboral con experiencia en mediación organización-candidato. Especialista en diseño de planes de ajuste razonable y comunicación asertiva en equipos diversos."
   },
   {
     id: "M-03",
@@ -182,7 +182,7 @@ export const MENTORS_FALLBACK: MentorItem[] = [
     specialty: "Integración sensorial y entorno laboral",
     years: 6,
     modality: "Virtual",
-    bio: "Terapeuta ocupacional con posgrado en accesibilidad laboral. Ayuda a empresas a crear entornos sensorialmente seguros y productivos para todos los perfiles."
+    bio: "Terapeuta ocupacional con posgrado en accesibilidad laboral. Ayuda a organizaciones a crear entornos sensorialmente seguros y productivos para todos los perfiles."
   },
   {
     id: "M-04",
@@ -214,7 +214,7 @@ export const CANDIDATE_ADJUSTMENTS = [
 ];
 
 // COMPANY CANDIDATES DATA (for Vibra Latina)
-export const COMPANY_CANDIDATES_DATA = [
+export const ORGANIZATION_CANDIDATES_DATA = [
   {
     id: "demo-cand",
     match: 94,
@@ -274,7 +274,7 @@ export const MENTOR_PROCESSES = [
   {
     cid: "demo-cand",
     name: "Bryan Gonzalez",
-    company: "Vibra Latina",
+    organization: "Vibra Latina",
     role: "Desarrollador Full Stack",
     stage: "Preparación — Entrevista",
     stageColor: "#1B4B7A",
@@ -284,7 +284,7 @@ export const MENTOR_PROCESSES = [
   },
   {
     cid: "CAND-B3M9",
-    company: "Vibra Latina",
+    organization: "Vibra Latina",
     role: "Diseñador Gráfico",
     stage: "Onboarding activo",
     stageColor: "#2D7D5F",
@@ -294,7 +294,7 @@ export const MENTOR_PROCESSES = [
   },
   {
     cid: "CAND-C1K4",
-    company: "Closer To The Stars Foundation",
+    organization: "Closer To The Stars Foundation",
     role: "Gerente de Administración de Sistemas",
     stage: "Período de prueba",
     stageColor: "#8B5C3A",
@@ -305,7 +305,7 @@ export const MENTOR_PROCESSES = [
 ];
 
 // MENTOR COMPANIES
-export const MENTOR_COMPANIES = [
+export const MENTOR_ORGANIZATIONS = [
   {
     name: "Vibra Latina",
     contact: "RRHH · María Torres",
@@ -326,7 +326,7 @@ export const MENTOR_COMPANIES = [
 export const ADMIN_STATS = {
   totalUsers: 4,
   totalCandidates: 1,
-  totalCompanies: 2,
+  totalOrganizations: 2,
   totalJobs: 3,
 };
 
@@ -347,10 +347,10 @@ export const ADMIN_USERS = [
     id: "demo-comp",
     full_name: "Vibra Latina",
     email: "empresa@astris.org",
-    role: "company",
+    role: "organization",
     completed_onboarding: true,
     deleted_at: null,
-    company_name: "Vibra Latina",
+    organization_name: "Vibra Latina",
     industry: "Audiovisual / Producción",
     city: "Austin, TX",
     country: "Estados Unidos"
@@ -374,10 +374,10 @@ export const ADMIN_USERS = [
 ];
 
 // ADMIN COMPANIES
-export const ADMIN_COMPANIES = [
+export const ADMIN_ORGANIZATIONS = [
   {
     user_id: "demo-comp",
-    company_name: "Vibra Latina",
+    organization_name: "Vibra Latina",
     industry: "Audiovisual / Producción",
     city: "Austin",
     country: "Estados Unidos",

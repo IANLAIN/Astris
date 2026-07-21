@@ -51,7 +51,7 @@ export function handleDemoRegister(
   if (selectedRole === "candidate") {
     setScreen("onboarding");
   } else {
-    setScreen(selectedRole === "company" ? "org-profile" : "dashboard");
+    setScreen(selectedRole === "organization" ? "org-profile" : "dashboard");
   }
 
   return true;
@@ -95,7 +95,7 @@ export function handleDemoLogin(
     if (email === "empresa@astris.org") {
       window.localStorage.setItem("astris_demo_user", email);
       window.localStorage.removeItem("astris_local_user");
-      setRole("company");
+      setRole("organization");
       setUserName("Vibra Latina");
       setLoggedIn(true);
       setModalStep("none");

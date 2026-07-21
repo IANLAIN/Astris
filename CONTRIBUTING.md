@@ -152,7 +152,7 @@ All demo content (no backend) lives in `src/services/demoData.ts`.
 
 | File | Purpose |
 |------|---------|
-| src/services/demoData.ts | All demo data: users, vacancies, mentors, companies |
+| src/services/demoData.ts | All demo data: users, vacancies, mentors, organizations |
 | src/services/supabase.ts | API that replaces Supabase: auth, matching, profiles, checkins, admin |
 | src/services/supabase-admin.ts | Admin functions that return demo data |
 
@@ -214,7 +214,7 @@ const stages = C(lang, "accompStages") as Array<{label: string; done: boolean; c
 
 ### i18n requirement for all dashboards
 
-Every dashboard (candidate, company, mentor, admin) must use `t()` for every user-visible string. Hardcoded text is prohibited. The following keys must exist in all 4 language files:
+Every dashboard (candidate, organization, mentor, admin) must use `t()` for every user-visible string. Hardcoded text is prohibited. The following keys must exist in all 4 language files:
 
 - profile.cognitive_profile
 - profile.flexible_hours
@@ -227,7 +227,7 @@ Every dashboard (candidate, company, mentor, admin) must use `t()` for every use
 - mentor.dash.accompaniment_hours
 - mentor.dash.completed_sessions
 - mentor.dash.active_candidates
-- mentor.dash.linked_companies
+- mentor.dash.linked_organizations
 
 ---
 
@@ -250,8 +250,8 @@ src/
   pages/                    # 1 page per file, organized by role
     public/                 # Landing, About, Support, Partners
     candidate/              # Onboarding, Quiz, Profile, Vacancies, etc.
-    company/                # OrgProfile, PostVacancy, Candidates, etc.
-    mentor/                 # Dashboard, Checkins, Companies
+    organization/           # OrgProfile, PostVacancy, Candidates, etc.
+    mentor/                 # Dashboard, Checkins, Organizations
     admin/                  # Dashboard + views/
     shared/                 # NotFound, Settings
 
@@ -334,7 +334,7 @@ git push origin feature/my-change
 | Prefix | Usage | Example |
 |--------|-------|---------|
 | fix: | Bug fix | fix: resolve crash in CandidateQuiz when selecting multi-option |
-| feat: | New feature | feat: add post-hire tracking view for companies |
+| feat: | New feature | feat: add post-hire tracking view for organizations |
 | refactor: | Refactoring without functional change | refactor: remove Supabase dependency, use demo data |
 | docs: | Documentation | docs: update ARCHITECTURE.md with new demo system |
 | i18n: | Translations | i18n: add onboarding keys in Portuguese and French |
@@ -410,8 +410,8 @@ npm run dev
 #    - Public landing page
 #    - Login as candidate (candidato@astris.org / Demo2026)
 #    - Candidate dashboard with Vibra Latina vacancies
-#    - Login as company (empresa@astris.org / Demo2026)
-#    - Company dashboard with candidates
+#    - Login as organization (organizacion@astris.org / Demo2026)
+#    - Organization dashboard with candidates
 #    - Login as mentor (mentor@astris.org / Demo2026)
 #    - Mentor dashboard with active processes
 

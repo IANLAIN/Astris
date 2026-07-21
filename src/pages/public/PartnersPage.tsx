@@ -38,8 +38,8 @@ export function PartnersPage({ lang, onNavigate, onOpenAuth, onLang, darkMode, o
           ) : (
             <form className="space-y-4" onSubmit={handleSubmit}>
               <div>
-                <label htmlFor="partner-company" className="mb-1 block text-sm font-semibold text-foreground">{t("partners.companyLabel")}</label>
-                <input id="partner-company" name="company" value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} required className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm outline-none focus:border-primary" style={{ color: "var(--foreground)" }} />
+                <label htmlFor="partner-organization" className="mb-1 block text-sm font-semibold text-foreground">{t("partners.companyLabel")}</label>
+                <input id="partner-organization" name="organization" value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} required className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm outline-none focus:border-primary" style={{ color: "var(--foreground)" }} />
               </div>
               <div>
                 <label htmlFor="partner-name" className="mb-1 block text-sm font-semibold text-foreground">{t("partners.nameLabel")}</label>

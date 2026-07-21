@@ -23,7 +23,7 @@ export function CandidateProfile({
   userId?: string;
 }) {
   const t = useT(lang);
-  const [isDemo, setIsDemo] = useState(false);
+  const [isDemoUser, setIsDemo] = useState(false);
   const [stats, setStats] = useState<CandidateDashboardStats>({ vacancies: 0, matches: 0, accompanimentActive: false });
   const [statsLoading, setStatsLoading] = useState(true);
 
@@ -52,7 +52,7 @@ export function CandidateProfile({
   const hasQuizAnswers = Object.keys(answers).length > 0;
   const radarData = hasQuizAnswers
     ? computeRadar(answers)
-    : isDemo
+    : isDemoUser
       ? CANDIDATE_RADAR_FINAL
       : computeRadar(answers);
 

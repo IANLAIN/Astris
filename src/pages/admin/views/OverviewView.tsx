@@ -5,7 +5,7 @@ interface OverviewProps {
   stats: {
     totalUsers: number;
     totalCandidates: number;
-    totalCompanies: number;
+    totalOrganizations: number;
     totalJobs: number;
   };
 }
@@ -18,7 +18,7 @@ export default function OverviewView({ stats }: OverviewProps) {
         {[
           { label: "Total Usuarios", val: stats.totalUsers, icon: Users, color: "text-blue-500", bg: "bg-blue-500/10" },
           { label: "Candidatos", val: stats.totalCandidates, icon: FileText, color: "text-green-500", bg: "bg-green-500/10" },
-          { label: "Empresas", val: stats.totalCompanies, icon: Building2, color: "text-purple-500", bg: "bg-purple-500/10" },
+          { label: "Empresas", val: stats.totalOrganizations, icon: Building2, color: "text-purple-500", bg: "bg-purple-500/10" },
           { label: "Vacantes", val: stats.totalJobs, icon: Briefcase, color: "text-orange-500", bg: "bg-orange-500/10" }
         ].map((s, i) => (
           <div key={i} className={"p-6 rounded-2xl bg-card border border-border shadow-sm flex items-center gap-4 "}>

@@ -17,7 +17,7 @@
   "role.sub": "Chaque profil possède son propre flux de travail",
   "role.candidate": "Je suis candidat/e",
   "role.candidate.sub": "Je cherche un emploi qui s'adapte à ma façon de mieux travailler",
-  "role.company": "Je suis une entreprise",
+  "role.company": "Je suis une organisation",
   "role.company.sub": "Je souhaite intégrer des talents de manière véritablement adaptative",
   "role.mentor": "Je suis mentor/e",
   "role.mentor.sub": "J'accompagne les processus d'insertion professionnelle adaptative",
@@ -32,7 +32,7 @@
   "nav.candidates": "Candidats",
   "nav.dashboard": "Tableau de bord",
   "nav.checkins": "Check-ins",
-  "nav.companies": "Entreprises",
+  "nav.companies": "Organisations",
   "nav.logout": "Se déconnecter",
   "dash.welcome": "Bienvenue,",
   "dash.suggested": "Offres suggérées",
@@ -49,14 +49,14 @@
   "landing.hero.t2": "pour connecter votre potentiel à l'endroit où il peut briller.",
   "landing.hero.sub": "",
   "landing.hero.cand": "Je suis candidat/e",
-  "landing.hero.comp": "Je suis une entreprise",
+  "landing.hero.comp": "Je suis une organisation",
   "landing.prob.title": "Les barrières invisibles du marché du travail",
   "landing.pillars.title": "Les quatre piliers d'Astris",
   "landing.how.title": "Comment ça marche",
   "landing.compare.title": "Modèle traditionnel vs. Astris",
   "landing.impact.title": "Impact attendu",
   "landing.impact.cand": "Pour les talents",
-  "landing.impact.comp": "Pour les entreprises",
+  "landing.impact.comp": "Pour les organisations",
   "onboarding.title": "Personnalisez votre interface",
   "onboarding.sub": "Choisissez la palette de couleurs avec laquelle vous vous sentez le plus à l'aise. Votre choix s'applique à tous les écrans de votre flux.",
   "onboarding.darkLabel": "Mode clair / Mode sombre",
@@ -101,7 +101,7 @@
   "mentor.sub": "Votre mentor vous accompagnera depuis la préparation jusqu'aux 60 premiers jours dans le rôle.",
   "mentor.choose": "Choisir comme mon mentor",
   "accomp.title": "Votre processus d'accompagnement",
-  "accomp.sub": "Le mentor coordonne chaque étape avec vous et l'entreprise.",
+  "accomp.sub": "Le mentor coordonne chaque étape avec vous et l'organisation.",
   "posthire.title": "Suivi post-embauche",
   "posthire.status": "Statut d'adaptation",
   "comp.org.title": "Profil organisationnel",
@@ -171,7 +171,7 @@
     {
       "id": "V-1042",
       "title": "Analyste de Données Junior",
-      "company": "Veritas Analytics",
+      "organization": "Veritas Analytics",
       "sector": "Technologie",
       "modality": "Distanciel",
       "type": "Temps plein",
@@ -184,12 +184,12 @@
         "Instructions écrites"
       ],
       "desc": "Analyse de bases de données, génération de rapports et visualisation de métriques clés. Environnement de travail calme, petite équipe de 6 personnes.",
-      "companyDesc": "Entreprise d'analyse de données avec 7 ans sur le marché. Culture de travail axée sur les résultats, et non sur la présence."
+      "organizationDesc": "Organisation d'analyse de données avec 7 ans sur le marché. Culture de travail axée sur les résultats, et non sur la présence."
     },
     {
       "id": "V-0873",
       "title": "Designer UX",
-      "company": "Forma Studio",
+      "organization": "Forma Studio",
       "sector": "Design",
       "modality": "Hybride",
       "type": "Temps plein",
@@ -201,7 +201,7 @@
         "Évaluation basée sur les livrables"
       ],
       "desc": "Conception d'expériences numériques pour des clients dans les domaines de la santé et de l'éducation. 3 jours à distance, 2 au bureau avec bureau individuel.",
-      "companyDesc": "Studio de design boutique axé sur l'accessibilité numérique. 45 collaborateurs, environnement flexible."
+      "organizationDesc": "Studio de design boutique axé sur l'accessibilité numérique. 45 collaborateurs, environnement flexible."
     }
   ],
   "mentors": [
@@ -219,7 +219,7 @@
       "specialty": "Apprentissage adaptatif en milieu d'entreprise",
       "years": 5,
       "modality": "Présentiel et virtuel",
-      "bio": "Consultant en inclusion avec une expérience dans la médiation entre entreprises et candidats. A accompagné plus de 60 processus d'embauche adaptative réussis."
+      "bio": "Consultant en inclusion avec une expérience dans la médiation organisation-candidat. A accompagné plus de 60 processus d'embauche adaptative réussis."
     }
   ],
   "candAdjustments": [
@@ -341,10 +341,10 @@
     "heroDesc": "",
     "purposeLabel": "Objectif",
     "purposeTitle": "Un droit, pas un privilège",
-    "purposeBody": "Garantir que l'emploi est un droit, et non un privilège. Nous facilitons une insertion professionnelle adaptative en accompagnant les personnes aux styles cognitifs divers pour renforcer leurs capacités et en aidant les entreprises à construire des espaces où toutes les façons de penser et d'apprendre sont valorisées.",
+    "purposeBody": "Garantir que l'emploi est un droit, et non un privilège. Nous facilitons une insertion professionnelle adaptative en accompagnant les personnes aux styles cognitifs divers pour renforcer leurs capacités et en aidant les organisations à construire des espaces où toutes les façons de penser et d'apprendre sont valorisées.",
     "missionLabel": "Mission",
     "missionTitle": "Le pont du talent",
-    "missionBody": "Être le pont entre les talents aux styles divers et les entreprises engagées dans l'insertion. Grâce à notre plateforme : nous formons et accompagnons les candidats ; nous sensibilisons les organisations pour parvenir à des processus de sélection plus équitables. Note centrale : Nous n'adaptons pas les personnes à des systèmes d'exclusion ; nous transformons les espaces de travail pour tirer parti de la richesse de la diversité cognitive.",
+    "missionBody": "Être le pont entre les talents aux styles divers et les organisations engagées dans l'insertion. Grâce à notre plateforme : nous formons et accompagnons les candidats ; nous sensibilisons les organisations pour parvenir à des processus de sélection plus équitables. Note centrale : Nous n'adaptons pas les personnes à des systèmes d'exclusion ; nous transformons les espaces de travail pour tirer parti de la richesse de la diversité cognitive.",
     "visionLabel": "Vision",
     "visionTitle": "Plateforme de référence",
     "visionBody": "D'ici 2036, être la plateforme de référence en insertion professionnelle.",
@@ -359,22 +359,22 @@
     "pillarsEyebrow": "Notre approche",
     "pillarsTitle": "Les quatre piliers d'Astris",
     "ctaTitle": "Rejoignez la communauté",
-    "ctaBody": "Que vous soyez un talent à la recherche de votre place idéale ou une entreprise engagée pour une véritable accessibilité, vous trouverez votre chemin sur Astris.",
+    "ctaBody": "Que vous soyez un talent à la recherche de votre place idéale ou une organisation engagée pour une véritable accessibilité, vous trouverez votre chemin sur Astris.",
     "ctaCandidate": "Je veux m'inscrire",
-    "ctaCompany": "Je suis une entreprise",
+    "ctaOrganization": "Je suis une organisation",
     "adaptar": {
       "title": "ADAPTER",
-      "body": "La technologie doit s'adapter aux personnes, et non l'inverse. C'est pourquoi nous proposons une interface personnalisable avec des palettes de couleurs accessibles, des modes clair et sombre, et des ajustements sensoriels. Chaque utilisateur configure la plateforme selon ses besoins, éliminant les barrières visuelles et cognitives dès le premier instant. De plus, les entreprises définissent les aménagements qu'elles peuvent offrir avant le début de tout processus, garantissant que l'environnement est prêt à accueillir des talents divers.",
+      "body": "La technologie doit s'adapter aux personnes, et non l'inverse. C'est pourquoi nous proposons une interface personnalisable avec des palettes de couleurs accessibles, des modes clair et sombre, et des ajustements sensoriels. Chaque utilisateur configure la plateforme selon ses besoins, éliminant les barrières visuelles et cognitives dès le premier instant. De plus, les organisations définissent les aménagements qu'elles peuvent offrir avant le début de tout processus, garantissant que l'environnement est prêt à accueillir des talents divers.",
       "values": [
         "Interface personnalisable",
         "Ajustements sensoriels",
-        "Entreprises préparées",
+        "Organisations préparées",
         "Accessibilité dès le départ"
       ]
     },
     "acompanar": {
       "title": "ACCOMPAGNER",
-      "body": "L'accompagnement humain est essentiel pour une insertion réussie. Nous attribuons des mentors spécialisés qui guident les candidats de la préparation jusqu'au suivi post-embauche. Nos mentors comprennent la diversité cognitive et facilitent la communication entre les talents et les entreprises, garantissant que les deux parties se sentent soutenues à chaque étape du processus. L'accompagnement ne s'arrête pas à l'embauche : nous surveillons l'adaptation pendant les 60 à 90 premiers jours.",
+      "body": "L'accompagnement humain est essentiel pour une insertion réussie. Nous attribuons des mentors spécialisés qui guident les candidats de la préparation jusqu'au suivi post-embauche. Nos mentors comprennent la diversité cognitive et facilitent la communication entre les talents et les organisations, garantissant que les deux parties se sentent soutenues à chaque étape du processus. L'accompagnement ne s'arrête pas à l'embauche : nous surveillons l'adaptation pendant les 60 à 90 premiers jours.",
       "values": [
         "Mentors spécialisés",
         "Accompagnement intégral",
@@ -394,7 +394,7 @@
     },
     "conectar": {
       "title": "CONNECTER",
-      "body": "Connecter les talents aux opportunités est notre objectif ultime. Notre système de matching croise les profils en fonction des compétences et des besoins environnementaux pour trouver de vraies compatibilités. De cette façon, nous nous assurons que la personne et l'environnement de travail sont compatibles, générant des relations durables et réussies. Les entreprises ont accès à des profils anonymes avec des données de compatibilité objectives, sans noms ni photos.",
+      "body": "Connecter les talents aux opportunités est notre objectif ultime. Notre système de matching croise les profils en fonction des compétences et des besoins environnementaux pour trouver de vraies compatibilités. De cette façon, nous nous assurons que la personne et l'environnement de travail sont compatibles, générant des relations durables et réussies. Les organisations ont accès à des profils anonymes avec des données de compatibilité objectives, sans noms ni photos.",
       "values": [
         "Matching objectif",
         "Profils basés sur les compétences",
@@ -407,12 +407,12 @@
     {
       "num": "02",
       "title": "Adapter",
-      "body": "L'entreprise définit exactement quels aménagements elle peut proposer avant d'entamer tout processus de sélection."
+      "body": "L'organisation définit exactement quels aménagements elle peut proposer avant d'entamer tout processus de sélection."
     },
     {
       "num": "03",
       "title": "Accompagner",
-      "body": "Un mentor humain guide le candidat et l'entreprise tout au long du processus, du match jusqu'au 60e jour."
+      "body": "Un mentor humain guide le candidat et l'organisation tout au long du processus, du match jusqu'au 60e jour."
     },
     {
       "num": "01",
@@ -434,7 +434,7 @@
   "how": [
     {
       "phase": "1. Profil et Adaptation",
-      "desc": "Le candidat caractérise son style de travail selon 4 axes. L'entreprise documente son environnement et les aménagements disponibles."
+      "desc": "Le candidat caractérise son style de travail selon 4 axes. L'organisation documente son environnement et les aménagements disponibles."
     },
     {
       "phase": "2. Matching Professionnel",
@@ -442,7 +442,7 @@
     },
     {
       "phase": "3. Formation Personnalisée",
-      "desc": "Le mentor accompagne la préparation au processus de sélection, adaptée au candidat et à l'entreprise."
+      "desc": "Le mentor accompagne la préparation au processus de sélection, adaptée au candidat et à l'organisation."
     },
     {
       "phase": "4. Insertion et Suivi",
@@ -494,7 +494,7 @@
     "Conseil continu du mentor tout au long de la période d'intégration"
   ],
   "privacyTitle": "Votre vie privée est le fondement, pas un ajout.",
-  "privacyBody": "Les informations personnelles ne sont jamais exposées directement. Les entreprises ne voient jamais de vrais noms ni de photographies — seulement des profils de compatibilité anonymes. Le candidat contrôle quelles informations sont visibles à chaque étape.",
+  "privacyBody": "Les informations personnelles ne sont jamais exposées directement. Les organisations ne voient jamais de vrais noms ni de photographies — seulement des profils de compatibilité anonymes. Le candidat contrôle quelles informations sont visibles à chaque étape.",
   "accompStages": [
     {
       "label": "Analyse du profil",
@@ -512,7 +512,7 @@
       "current": false
     },
     {
-      "label": "Réunion d'explication avec l'entreprise",
+      "label": "Réunion d'explication avec l'organisation",
       "done": false,
       "current": true
     },
@@ -582,14 +582,14 @@
     "politicas"
   ],
   "compPostHireStatus": "Statut d'adaptation",
-  "compPostHireObs": "Observations de l'entreprise",
+  "orgPostHireObs": "Observations de l'organisation",
   "compPostHireObsPlaceholder": "Rédigez vos observations sur le processus d'adaptation...",
   "compPostHireSend": "Envoyer les observations",
   "compPostHireContact": "Contacter le mentor",
   "compPostHireSendMsg": "Envoyer un message",
   "mentorProcesses": "Processus actifs",
   "mentorCheckins": "Prochains check-ins",
-  "mentorCompanies": "Entreprises",
+  "mentorCompanies": "Organisations",
   "mentorImpact": "Impact ce mois-ci",
   "activeFor": "Actif depuis",
   "sessionNotes": "Notes de session",
@@ -624,8 +624,8 @@
   "landing.footer.support": "Support & Contact",
   "checkinPageTitle": "Check-ins",
   "checkinPageSub": "Sessions planifiées avec vos candidats",
-  "companiesPageTitle": "Entreprises partenaires",
-  "companiesPageSub": "Entreprises actives dans des processus d'insertion",
+  "organizationsPageTitle": "Organisations partenaires",
+  "organizationsPageSub": "Organisations actives dans des processus d'insertion",
   "common.loading": "Chargement...",
   "common.loading_mentor": "Chargement des mentors...",
   "common.selected": "Sélectionné",
@@ -642,7 +642,7 @@
   "modality.in_person": "Présentiel",
   "vacancy.full_time": "Temps plein",
   "vacancy.compatible_vacancies": "offres compatibles",
-  "vacancy.about_company": "À propos de l'entreprise",
+  "vacancy.about_organization": "À propos de l'organisation",
   "vacancy.the_role": "Le poste",
   "vacancy.offered_adjustments": "Aménagements offerts",
   "vacancy.data_analyst": "Analyste de Données",
@@ -665,7 +665,7 @@
   "about.radarAxes.execution": "Exécution",
   "about.radarAxes.adjustments": "Ajustements",
   "about.missionBody1": "L'emploi comme droit, pas un privilège. Nous facilitons l'insertion adaptative.",
-  "about.missionBody2": "Pont entre les talents aux styles divers et les entreprises engagées.",
+  "about.missionBody2": "Pont entre les talents aux styles divers et les organisations engagées.",
   "about.missionBody3": "Être la plateforme de référence en insertion professionnelle d'ici 2036.",
   "about.pillarPreparar": "PRÉPARER",
   "about.pillarAdaptar": "ADAPTER",
@@ -684,7 +684,7 @@
   "about.pillarVal1c": "Connaissance de soi",
   "about.pillarVal2a": "Interface personnalisable",
   "about.pillarVal2b": "Ajustements sensoriels",
-  "about.pillarVal2c": "Entreprises préparées",
+  "about.pillarVal2c": "Organisations préparées",
   "about.pillarVal3a": "Mentors spécialisés",
   "about.pillarVal3b": "Accompagnement intégral",
   "about.pillarVal3c": "Suivi post-embauche",
@@ -696,7 +696,7 @@
   "about.stat15": "15%",
   "about.stat90text": "Rétention dans l'insertion adaptative",
   "about.stat140text": "Équipes diversifiées plus productives",
-  "about.stat15text": "Plus d'innovation dans les entreprises adaptatives",
+  "about.stat15text": "Plus d'innovation dans les organisations adaptatives",
   "about.stat90source": "HLB",
   "about.stat140source": "HLB / JPMorgan",
   "about.stat15source": "HLB",
@@ -705,11 +705,11 @@
   "about.ejecucion": "Exécution",
   "about.ajustes": "Aménagements",
   "support.seeLink": "Voir le lien",
-  "partners.subtitle": "Si votre entreprise souhaite s'associer à Astris, remplissez ce formulaire et nous vous contacterons pour discuter de la collaboration.",
-  "partners.companyLabel": "Nom de l'entreprise",
+  "partners.subtitle": "Si votre organisation souhaite s'associer à Astris, remplissez ce formulaire et nous vous contacterons pour discuter de la collaboration.",
+  "partners.organizationLabel": "Nom de l'organisation",
   "partners.nameLabel": "Votre nom",
   "partners.emailLabel": "E-mail",
-  "partners.whyLabel": "Pourquoi votre entreprise souhaite-t-elle faire partie d'Astris?",
+  "partners.whyLabel": "Pourquoi votre organisation souhaite-t-elle faire partie d'Astris?",
   "partners.submit": "Envoyer la proposition",
   "partners.thanksTitle": "Merci pour votre intérêt",
   "partners.thanksBody": "Nous avons reçu votre proposition. Nous vous contacterons bientôt pour explorer une collaboration avec Astris.",
@@ -728,7 +728,7 @@
       "accompaniment_hours": "Heures d'accompagnement",
       "completed_sessions": "Sessions terminées",
       "active_candidates": "Candidats actifs",
-      "linked_companies": "Entreprises liées"
+      "linked_organizations": "Organisations liées"
     }
   }
 }

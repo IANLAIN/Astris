@@ -15,7 +15,7 @@ export function GoogleAuthStep({
   const roleLabel =
     selectedRole === "candidate"
       ? t("role.candidate")
-      : selectedRole === "company"
+      : selectedRole === "organization"
         ? t("role.company")
         : t("role.mentor");
 

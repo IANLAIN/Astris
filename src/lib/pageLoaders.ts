@@ -69,29 +69,29 @@ export const NotFoundPage = lazy(() =>
     default: m.NotFoundPage,
   }))
 );
-export const CompanyOrgProfile = lazy(() =>
-  import("@/pages/company/CompanyOrgProfile").then((m) => ({
-    default: m.CompanyOrgProfile,
+export const OrganizationOrgProfile = lazy(() =>
+  import("@/pages/organization/OrganizationOrgProfile").then((m) => ({
+    default: m.OrganizationOrgProfile,
   }))
 );
-export const CompanyPostVacancy = lazy(() =>
-  import("@/pages/company/CompanyPostVacancy").then((m) => ({
-    default: m.CompanyPostVacancy,
+export const OrganizationPostVacancy = lazy(() =>
+  import("@/pages/organization/OrganizationPostVacancy").then((m) => ({
+    default: m.OrganizationPostVacancy,
   }))
 );
-export const CompanyCandidates = lazy(() =>
-  import("@/pages/company/CompanyCandidates").then((m) => ({
-    default: m.CompanyCandidates,
+export const OrganizationCandidates = lazy(() =>
+  import("@/pages/organization/OrganizationCandidates").then((m) => ({
+    default: m.OrganizationCandidates,
   }))
 );
-export const CompanyCandidateDetail = lazy(() =>
-  import("@/pages/company/CompanyCandidateDetail").then((m) => ({
-    default: m.CompanyCandidateDetail,
+export const OrganizationCandidateDetail = lazy(() =>
+  import("@/pages/organization/OrganizationCandidateDetail").then((m) => ({
+    default: m.OrganizationCandidateDetail,
   }))
 );
-export const CompanyPostHire = lazy(() =>
-  import("@/pages/company/CompanyPostHire").then((m) => ({
-    default: m.CompanyPostHire,
+export const OrganizationPostHire = lazy(() =>
+  import("@/pages/organization/OrganizationPostHire").then((m) => ({
+    default: m.OrganizationPostHire,
   }))
 );
 export const MentorDashboard = lazy(() =>
@@ -104,9 +104,9 @@ export const MentorCheckins = lazy(() =>
     default: m.MentorCheckins,
   }))
 );
-export const MentorCompanies = lazy(() =>
-  import("@/pages/mentor/MentorCompanies").then((m) => ({
-    default: m.MentorCompanies,
+export const MentorOrganizations = lazy(() =>
+  import("@/pages/mentor/MentorOrganizations").then((m) => ({
+    default: m.MentorOrganizations,
   }))
 );
 export const AdminDashboard = lazy(() =>

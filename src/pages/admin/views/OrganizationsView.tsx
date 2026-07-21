@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Search, Building2, Edit, Filter, Download } from "lucide-react";
-import { getAdminCompanies } from "@/services/supabase-admin";
+import { getAdminOrganizations } from "@/services/supabase-admin";
 
 interface CompanyProfile {
   user_id: string;
-  company_name: string;
+  organization_name: string;
   industry: string;
   city: string;
   country: string;
@@ -16,13 +16,13 @@ interface CompanyProfile {
   };
 }
 
-export default function CompaniesView() {
+export default function OrganizationsView() {
   const [companies, setCompanies] = useState<CompanyProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    getAdminCompanies().then(data => {
+    getAdminOrganizations().then(data => {
       setCompanies(data as CompanyProfile[]);
       setLoading(false);
     }).catch(err => {
@@ -31,23 +31,23 @@ export default function CompaniesView() {
     });
   }, []);
 
-  if (loading) return <div className="p-8 text-center text-muted-foreground font-medium anim-pulse">Cargando empresas...</div>;
+  if (loading) return <div className="p-8 text-center text-muted-foreground font-medium anim-pulse">Cargando organizaciones...</div>;
 
-  const filtered = companies.filter(c => c.company_name?.toLowerCase().includes(search.toLowerCase()));
+  const filtered = companies.filter(c => c.organization_name?.toLowerCase().includes(search.toLowerCase()));
 
   return (
     <div className="space-y-6 anim-fade-in flex flex-col h-full">
       <div className="flex sm:flex-row flex-col justify-between items-start sm:items-center gap-4">
-        <h1 className="text-3xl font-bold text-foreground">Gestión de Empresas</h1>
+        <h1 className="text-3xl font-bold text-foreground">Gestión de Organizaciones</h1>
         <div className="flex gap-3 w-full sm:w-auto">
           <div className="relative w-full sm:w-64">
             <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <input 
               id="search-companies"
               name="search"
-              aria-label="Buscar empresas"
+              aria-label="Buscar organizaciones"
               type="text" 
-              placeholder="Buscar por empresa, contacto..." 
+              placeholder="Buscar por organización, contacto..." 
               value={search}
               onChange={e => setSearch(e.target.value)}
               className="w-full pl-9 pr-4 py-2 rounded-xl border border-border bg-card text-sm"
@@ -88,7 +88,7 @@ export default function CompaniesView() {
                       <Building2 className="w-5 h-5" />
                     </div>
                     <div>
-                      <div className="text-foreground font-bold">{c.company_name || "Sin Nombre"}</div>
+                      <div className="text-foreground font-bold">{c.organization_name || "Sin Nombre"}</div>
                       <div className="text-xs text-muted-foreground">{c.users_profiles?.email}</div>
                     </div>
                   </td>
@@ -102,7 +102,7 @@ export default function CompaniesView() {
                   </td>
                   <td className="px-6 py-4 text-right">
                     <button 
-                      onClick={() => alert(`Detalles de ${c.company_name || 'la empresa'}`)}
+                      onClick={() => alert(`Detalles de ${c.organization_name || 'la organización'}`)}
                       className="text-primary hover:underline font-medium text-sm cursor-pointer mr-4"
                     >
                       Detalles
@@ -116,7 +116,7 @@ export default function CompaniesView() {
               {filtered.length === 0 && (
                 <tr>
                   <td colSpan={5} className="text-center py-12 text-muted-foreground">
-                    No se encontraron empresas.
+                    No se encontraron organizaciones.
                   </td>
                 </tr>
               )}

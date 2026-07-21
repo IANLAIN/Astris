@@ -91,7 +91,7 @@ export function AboutPage({ lang, onNavigate, onOpenAuth, onLang, darkMode, onDa
           <button onClick={() => onOpenAuth(undefined, "register")} className="inline-flex items-center justify-center gap-2 rounded-xl px-5 md:px-6 py-3 text-xs md:text-sm font-bold cursor-pointer border-0 transition-transform hover:scale-[1.02]" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}>
             {about.ctaCandidate}<ArrowRight size={14} className="md:w-4 md:h-4" />
           </button>
-          <button onClick={() => onOpenAuth("company", "register")} className="inline-flex items-center justify-center gap-2 rounded-xl border-2 px-5 md:px-6 py-3 text-xs md:text-sm font-bold cursor-pointer transition-transform hover:scale-[1.02]" style={{ backgroundColor: "var(--background)", color: "var(--foreground)", borderColor: "var(--border)" }}>
+          <button onClick={() => onOpenAuth("organization", "register")} className="inline-flex items-center justify-center gap-2 rounded-xl border-2 px-5 md:px-6 py-3 text-xs md:text-sm font-bold cursor-pointer transition-transform hover:scale-[1.02]" style={{ backgroundColor: "var(--background)", color: "var(--foreground)", borderColor: "var(--border)" }}>
             {about.ctaCompany}<ChevronRight size={14} className="md:w-4 md:h-4" />
           </button>
         </div>

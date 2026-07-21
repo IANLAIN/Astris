@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Role, QuizAnswers } from "@/types";
-import { getCurrentUser, loginUser, logoutUser, registerUser, USE_REAL_BACKEND, isDemoUser, getCandidateQuizAnswers } from "@/services/supabase";
+import { getCurrentUser, loginUser, logoutUser, registerUser, USE_REAL_BACKEND, isDemoUserUser, getCandidateQuizAnswers } from "@/services/supabase";
 import { handleDemoLogin, handleDemoRegister } from "@/services/demoAuth";
 
 export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) => void) {
@@ -50,7 +50,7 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
           setUserId(user.id);
           setModalStep("none");
 
-          const demo = isDemoUser(user.id);
+          const demo = isDemoUserUser(user.id);
 
           if (user.role === "candidate") {
             const savedAnswers = await getCandidateQuizAnswers(user.id);
@@ -70,7 +70,7 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
             } else {
               setScreen("vacancies");
             }
-          } else if (user.role === "company") {
+          } else if (user.role === "organization") {
             setScreen(demo ? "candidates" : "org-profile");
           } else if (user.role === "mentor") {
             setScreen(demo ? "dashboard" : "dashboard");
@@ -101,7 +101,7 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
       } else {
         const first = googleAuthUser.role === "candidate"
           ? "vacancies"
-          : googleAuthUser.role === "company" ? "org-profile" : "dashboard";
+          : googleAuthUser.role === "organization" ? "org-profile" : "dashboard";
         setScreen(first);
       }
       setGoogleAuthUser(null);
@@ -166,7 +166,7 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
       if (resolvedRole === "candidate" && !quizCompleted) {
         setScreen("onboarding");
       } else {
-        setScreen(resolvedRole === "candidate" ? "vacancies" : resolvedRole === "company" ? "candidates" : "dashboard");
+        setScreen(resolvedRole === "candidate" ? "vacancies" : resolvedRole === "organization" ? "candidates" : "dashboard");
       }
     } catch (err: any) {
       setAuthError(err.message ?? "Login failed. Please check your credentials.");

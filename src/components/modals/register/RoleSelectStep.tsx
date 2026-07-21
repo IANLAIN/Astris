@@ -4,7 +4,7 @@ import { Role } from "@/types";
 
 const ROLE_ROUTES: { role: Role; icon: typeof User; tKey: string; tSubKey: string }[] = [
   { role: "candidate", icon: User, tKey: "role.candidate", tSubKey: "role.candidate.sub" },
-  { role: "company", icon: Building2, tKey: "role.company", tSubKey: "role.company.sub" },
+  { role: "organization", icon: Building2, tKey: "role.company", tSubKey: "role.company.sub" },
   { role: "mentor", icon: Users, tKey: "role.mentor", tSubKey: "role.mentor.sub" },
 ];
 

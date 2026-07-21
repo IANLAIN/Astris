@@ -16,7 +16,7 @@ import { QuizBlocker } from "@/components/common/QuizBlocker";
 import { SuspenseFallback } from "@/components/common/SuspenseFallback";
 import { AppLoading } from "@/components/common/AppLoading";
 import { parseParams, setScreenParam } from "@/lib/parseParams";
-import { CANDIDATE_SCREENS, COMPANY_SCREENS, MENTOR_SCREENS } from "@/lib/constants";
+import { CANDIDATE_SCREENS, ORGANIZATION_SCREENS, MENTOR_SCREENS } from "@/lib/constants";
 import * as P from "@/lib/pageLoaders";
 
 
@@ -73,11 +73,11 @@ export default function App() {
 
   const handleNav = (s: string) => {
     if (s === "home" && loggedIn && role) {
-      const first = role === "candidate" ? "profile" : role === "company" ? "candidates" : "dashboard";
+      const first = role === "candidate" ? "profile" : role === "organization" ? "candidates" : "dashboard";
       setScreen(first);
       return;
     }
-    if (s === "tracking") { setScreen(role === "candidate" ? "post-hire" : "comp-post-hire"); return; }
+    if (s === "tracking") { setScreen(role === "candidate" ? "post-hire" : "org-post-hire"); return; }
     setScreen(s);
   };
 
@@ -147,20 +147,20 @@ export default function App() {
                     {role === "candidate" && screen === "mentor-select" && <P.MentorSelect lang={lang} onSelect={() => setScreen("accompaniment")} />}
                     {role === "candidate" && screen === "accompaniment" && <P.CandidateAccompaniment lang={lang} />}
                     {role === "candidate" && ["post-hire", "tracking"].includes(screen) && <P.CandidatePostHire lang={lang} />}
-                    {role === "company" && screen === "org-profile" && <P.CompanyOrgProfile lang={lang} />}
-                    {role === "company" && screen === "post-vacancy" && <P.CompanyPostVacancy lang={lang} />}
-                    {role === "company" && screen === "candidates" && <P.CompanyCandidates lang={lang} onSelect={(id: string) => { setSelectedCandidate(id); setScreen("candidate-detail"); }} />}
-                    {role === "company" && screen === "candidate-detail" && <P.CompanyCandidateDetail lang={lang} candidateId={selectedCandidate} onBack={() => handleBackTo("candidates")} onStart={() => setScreen("comp-post-hire")} />}
-                    {role === "company" && ["comp-post-hire", "post-hire"].includes(screen) && <P.CompanyPostHire lang={lang} />}
+                  {role === "organization" && screen === "org-profile" && <P.OrganizationOrgProfile lang={lang} />}
+                  {role === "organization" && screen === "post-vacancy" && <P.OrganizationPostVacancy lang={lang} />}
+                  {role === "organization" && screen === "candidates" && <P.OrganizationCandidates lang={lang} onSelect={(id: string) => { setSelectedCandidate(id); setScreen("candidate-detail"); }} />}
+                  {role === "organization" && screen === "candidate-detail" && <P.OrganizationCandidateDetail lang={lang} candidateId={selectedCandidate} onBack={() => handleBackTo("candidates")} onStart={() => setScreen("org-post-hire")} />}
+                  {role === "organization" && ["org-post-hire", "post-hire"].includes(screen) && <P.OrganizationPostHire lang={lang} />}
                     {role === "mentor" && screen === "dashboard" && <P.MentorDashboard lang={lang} />}
                     {role === "mentor" && screen === "checkins" && <P.MentorCheckins lang={lang} />}
-                    {role === "mentor" && screen === "companies" && <P.MentorCompanies lang={lang} />}
+                    {role === "mentor" && screen === "organizations" && <P.MentorOrganizations lang={lang} />}
                     {role === "mentor" && !MENTOR_SCREENS.includes(screen as any) && <P.MentorDashboard lang={lang} />}
                     {role === "admin" && <P.AdminDashboard onLogout={() => handleLogout(setPublicView)} onBack={() => handleBackTo("home")} />}
                     {screen === "settings" && <P.SettingsPage lang={lang} palette={palette} darkMode={darkMode} font={font} onPalette={setPalette} onDark={setDarkMode} onFont={setFont} onLogout={() => handleLogout(setPublicView)} />}
                     {screen !== "settings" &&
                       !(role === "candidate" && CANDIDATE_SCREENS.includes(screen as any)) &&
-                      !(role === "company" && COMPANY_SCREENS.includes(screen as any)) &&
+                      !(role === "organization" && ORGANIZATION_SCREENS.includes(screen as any)) &&
                       !(role === "mentor" && MENTOR_SCREENS.includes(screen as any)) &&
                       !(role === "admin") && (
                         <P.NotFoundPage lang={lang} onGoHome={() => handleNav("home")} />

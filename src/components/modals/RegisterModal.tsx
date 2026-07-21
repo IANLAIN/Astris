@@ -6,7 +6,7 @@ import { GoogleAuthStep } from "./register/GoogleAuthStep";
 import { RoleSelectStep } from "./register/RoleSelectStep";
 import { CredentialsStep } from "./register/CredentialsStep";
 
-const ROLE_ICON = { candidate: User, company: Building2, mentor: Users, admin: Shield } as const;
+const ROLE_ICON = { candidate: User, organization: Building2, mentor: Users, admin: Shield } as const;
 
 export function RegisterModal({
   lang,

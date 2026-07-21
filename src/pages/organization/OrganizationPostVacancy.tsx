@@ -2,7 +2,7 @@ import { Check } from "lucide-react";
 import { Lang } from "@/types";
 import { useT } from "@/i18n/useT";
 
-export function CompanyPostVacancy({ lang }: { lang: Lang }) {
+export function OrganizationPostVacancy({ lang }: { lang: Lang }) {
   const t = useT(lang);
   const SKILLS = ["Mecanografía", "Ofimática avanzada", "Lectura intensiva", "Redacción técnica", "Análisis de datos", "Diseño visual", "Comunicación verbal"];
   return (

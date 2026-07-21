@@ -31,7 +31,7 @@ export function CandidateVacancies({ lang, onSelect }: { lang: Lang; onSelect: (
           socialLevel: m.socialLevel || "Bajo",
           adjustments: m.adjustments || [],
           desc: m.desc || "",
-          companyDesc: m.companyDesc || "",
+          organizationDesc: m.organizationDesc || "",
         }));
         setVacancies(mapped.sort((a: any, b: any) => b.match - a.match));
       } else {

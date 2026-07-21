@@ -17,10 +17,10 @@
   "role.sub": "Each profile has its own workflow",
   "role.candidate": "I am a candidate",
   "role.candidate.sub": "I am looking for a job that adapts to how I work best",
-  "role.company": "I am a company",
+  "role.company": "I am an organization",
   "role.company.sub": "I want to hire talent in a genuinely adaptive way",
   "role.mentor": "I am a mentor",
-  "role.mentor.sub": "I accompany adaptive job placement processes",
+  "role.mentor.sub": "I acorganization adaptive job placement processes",
   "role.admin": "Admin",
   "nav.home": "Home",
   "nav.profile": "My profile",
@@ -32,7 +32,7 @@
   "nav.candidates": "Candidates",
   "nav.dashboard": "Dashboard",
   "nav.checkins": "Check-ins",
-  "nav.companies": "Companies",
+  "nav.companies": "Organizations",
   "nav.logout": "Log out",
   "dash.welcome": "Welcome,",
   "dash.suggested": "Suggested vacancies",
@@ -49,14 +49,14 @@
   "landing.hero.t2": "to connect your potential with the place where it can shine.",
   "landing.hero.sub": "",
   "landing.hero.cand": "I am a candidate",
-  "landing.hero.comp": "I am a company",
+  "landing.hero.comp": "I am an organization",
   "landing.prob.title": "The invisible barriers of the labor market",
   "landing.pillars.title": "The four pillars of Astris",
   "landing.how.title": "How it works",
   "landing.compare.title": "Traditional model vs. Astris",
   "landing.impact.title": "Expected impact",
   "landing.impact.cand": "For talent",
-  "landing.impact.comp": "For companies",
+  "landing.impact.comp": "For organizations",
   "onboarding.title": "Customize your interface",
   "onboarding.sub": "Choose the color palette you feel most comfortable with. Your choice applies to all screens in your flow.",
   "onboarding.darkLabel": "Light mode / Dark mode",
@@ -98,10 +98,10 @@
   "vacancy.why": "Why you are a match",
   "vacancy.start": "Start process",
   "mentor.title": "Choose your mentor",
-  "mentor.sub": "Your mentor will accompany you from preparation up to the first 60 days in the role.",
+  "mentor.sub": "Your mentor will acorganization you from preparation up to the first 60 days in the role.",
   "mentor.choose": "Choose as my mentor",
   "accomp.title": "Your accompaniment process",
-  "accomp.sub": "The mentor coordinates each stage with you and the company.",
+  "accomp.sub": "The mentor coordinates each stage with you and the organization.",
   "posthire.title": "Post-hire tracking",
   "posthire.status": "Adaptation status",
   "comp.org.title": "Organizational profile",
@@ -171,7 +171,7 @@
     {
       "id": "V-1042",
       "title": "Junior Data Analyst",
-      "company": "Veritas Analytics",
+      "organization": "Veritas Analytics",
       "sector": "Technology",
       "modality": "Remote",
       "type": "Full-time",
@@ -184,12 +184,12 @@
         "Written instructions"
       ],
       "desc": "Database analysis, report generation, and key metrics visualization. Quiet work environment, small team of 6 people.",
-      "companyDesc": "Data analysis company with 7 years in the market. Results-oriented work culture, not presence-oriented."
+      "organizationDesc": "Data analysis organization with 7 years in the market. Results-oriented work culture, not presence-oriented."
     },
     {
       "id": "V-0873",
       "title": "UX Designer",
-      "company": "Forma Studio",
+      "organization": "Forma Studio",
       "sector": "Design",
       "modality": "Hybrid",
       "type": "Full-time",
@@ -201,7 +201,7 @@
         "Deliverable-based evaluation"
       ],
       "desc": "Digital experience design for health and education clients. 3 days remote, 2 in office with individual desk.",
-      "companyDesc": "Boutique design studio focusing on digital accessibility. 45 employees, flexible environment."
+      "organizationDesc": "Boutique design studio focusing on digital accessibility. 45 employees, flexible environment."
     }
   ],
   "mentors": [
@@ -219,7 +219,7 @@
       "specialty": "Adaptive learning in corporate environments",
       "years": 5,
       "modality": "In-person and virtual",
-      "bio": "Accessibility consultant with experience in company-candidate mediation. Has accompanied more than 60 successful adaptive hiring processes."
+      "bio": "Accessibility consultant with experience in organization-candidate mediation. Has accompanied more than 60 successful adaptive hiring processes."
     }
   ],
   "candAdjustments": [
@@ -341,10 +341,10 @@
     "heroDesc": "",
     "purposeLabel": "Purpose",
     "purposeTitle": "A right, not a privilege",
-    "purposeBody": "Ensuring employment is a right, not a privilege. We facilitate adaptive labor insertion by accompanying individuals with diverse cognitive styles to enhance their capabilities and helping companies build spaces where all ways of thinking and learning are valued.",
+    "purposeBody": "Ensuring employment is a right, not a privilege. We facilitate adaptive labor insertion by acorganizationing individuals with diverse cognitive styles to enhance their capabilities and helping companies build spaces where all ways of thinking and learning are valued.",
     "missionLabel": "Mission",
     "missionTitle": "The bridge for talent",
-    "missionBody": "Being the bridge between talent with diverse styles and companies committed to accessibility. Through our platform: we train and accompany candidates; we sensitize organizations to achieve more equitable selection processes. Key note: We do not adapt people to exclusionary systems; we transform workspaces to harness the richness of cognitive diversity.",
+    "missionBody": "Being the bridge between talent with diverse styles and companies committed to accessibility. Through our platform: we train and acorganization candidates; we sensitize organizations to achieve more equitable selection processes. Key note: We do not adapt people to exclusionary systems; we transform workspaces to harness the richness of cognitive diversity.",
     "visionLabel": "Vision",
     "visionTitle": "Leading platform",
     "visionBody": "By 2036, to be the leading platform in labor insertion.",
@@ -359,9 +359,9 @@
     "pillarsEyebrow": "Our approach",
     "pillarsTitle": "The four pillars of Astris",
     "ctaTitle": "Join the community",
-    "ctaBody": "Whether you are talent looking for your ideal place or a company committed to real accessibility, you will find the way at Astris.",
+    "ctaBody": "Whether you are talent looking for your ideal place or a organization committed to real accessibility, you will find the way at Astris.",
     "ctaCandidate": "I want to register",
-    "ctaCompany": "I am a company",
+    "ctaOrganization": "I am an organization",
     "adaptar": {
       "title": "ADAPT",
       "body": "Technology should adapt to people, not the other way around. That is why we offer a customizable interface with accessible color palettes, light and dark modes, and sensory adjustments. Each user configures the platform according to their needs, eliminating visual and cognitive barriers from the very first moment. Furthermore, companies define the adjustments they can offer before starting any process, ensuring the environment is ready to welcome diverse talent.",
@@ -407,12 +407,12 @@
     {
       "num": "02",
       "title": "Adapt",
-      "body": "The company defines exactly what adjustments it can offer before starting any selection process."
+      "body": "The organization defines exactly what adjustments it can offer before starting any selection process."
     },
     {
       "num": "03",
-      "title": "Accompany",
-      "body": "A human mentor guides the candidate and the company throughout the entire process, from the match to day 60."
+      "title": "Acorganization",
+      "body": "A human mentor guides the candidate and the organization throughout the entire process, from the match to day 60."
     },
     {
       "num": "01",
@@ -434,7 +434,7 @@
   "how": [
     {
       "phase": "1. Profile and Adaptation",
-      "desc": "The candidate characterizes their work style across 4 axes. The company documents its environment and available adjustments."
+      "desc": "The candidate characterizes their work style across 4 axes. The organization documents its environment and available adjustments."
     },
     {
       "phase": "2. Labor Matching",
@@ -442,7 +442,7 @@
     },
     {
       "phase": "3. Personalized Training",
-      "desc": "The mentor accompanies the preparation for the selection process, adapted to the candidate and the company."
+      "desc": "The mentor accompanies the preparation for the selection process, adapted to the candidate and the organization."
     },
     {
       "phase": "4. Insertion and Tracking",
@@ -512,7 +512,7 @@
       "current": false
     },
     {
-      "label": "Explanation meeting with the company",
+      "label": "Explanation meeting with the organization",
       "done": false,
       "current": true
     },
@@ -582,14 +582,14 @@
     "politicas"
   ],
   "compPostHireStatus": "Adaptation status",
-  "compPostHireObs": "Company observations",
+  "orgPostHireObs": "Company observations",
   "compPostHireObsPlaceholder": "Write your observations about the adaptation process...",
   "compPostHireSend": "Send observations",
   "compPostHireContact": "Contact mentor",
   "compPostHireSendMsg": "Send message",
   "mentorProcesses": "Active processes",
   "mentorCheckins": "Upcoming check-ins",
-  "mentorCompanies": "Companies",
+  "mentorCompanies": "Organizations",
   "mentorImpact": "Impact this month",
   "activeFor": "Active for",
   "sessionNotes": "Session notes",
@@ -624,8 +624,8 @@
   "landing.footer.support": "Support & Contact",
   "checkinPageTitle": "Check-ins",
   "checkinPageSub": "Scheduled sessions with your candidates",
-  "companiesPageTitle": "Collaborating companies",
-  "companiesPageSub": "Active companies in insertion processes",
+  "organizationsPageTitle": "Collaborating organizations",
+  "organizationsPageSub": "Active companies in insertion processes",
   "common.loading": "Loading...",
   "common.loading_mentor": "Loading mentors...",
   "common.selected": "Selected",
@@ -642,7 +642,7 @@
   "modality.in_person": "In-person",
   "vacancy.full_time": "Full-time",
   "vacancy.compatible_vacancies": "compatible vacancies",
-  "vacancy.about_company": "About the company",
+  "vacancy.about_organization": "About the organization",
   "vacancy.the_role": "The role",
   "vacancy.offered_adjustments": "Offered adjustments",
   "vacancy.data_analyst": "Data Analyst",
@@ -705,11 +705,11 @@
   "about.ejecucion": "Execution",
   "about.ajustes": "Adjustments",
   "support.seeLink": "View link",
-  "partners.subtitle": "If your company wants to partner with Astris, fill out this form and we'll get in touch to discuss collaboration.",
-  "partners.companyLabel": "Company name",
+  "partners.subtitle": "If your organization wants to partner with Astris, fill out this form and we'll get in touch to discuss collaboration.",
+  "partners.organizationLabel": "Company name",
   "partners.nameLabel": "Your name",
   "partners.emailLabel": "Email",
-  "partners.whyLabel": "Why does your company want to be part of Astris?",
+  "partners.whyLabel": "Why does your organization want to be part of Astris?",
   "partners.submit": "Send proposal",
   "partners.thanksTitle": "Thank you for your interest",
   "partners.thanksBody": "We have received your proposal. We will contact you soon to explore a collaboration with Astris.",
@@ -728,7 +728,7 @@
       "accompaniment_hours": "Accompaniment hours",
       "completed_sessions": "Completed sessions",
       "active_candidates": "Active candidates",
-      "linked_companies": "Linked companies"
+      "linked_organizations": "Linked companies"
     }
   }
 }

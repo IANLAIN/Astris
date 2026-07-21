@@ -1,7 +1,7 @@
 import {
   getDashboardStats as realGetStats,
   getAdminUsers as realGetUsers,
-  getAdminCompanies as realGetCompanies,
+  getAdminOrganizations as realGetCompanies,
   getAdminCandidates as realGetCandidates,
   softDeleteUser as realSoftDelete,
   updateUserRole as realUpdateRole,
@@ -26,7 +26,7 @@ export async function getAdminUsers() {
   return realGetUsers();
 }
 
-export async function getAdminCompanies() {
+export async function getAdminOrganizations() {
   return realGetCompanies();
 }
 

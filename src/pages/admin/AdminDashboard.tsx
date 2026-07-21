@@ -3,13 +3,13 @@ import { LayoutDashboard, Users, Briefcase, FileText, LogOut, Loader2, Shield, B
 import { getCurrentUser } from "@/services/supabase";
 import { getDashboardStats, getAdminUsers, softDeleteUser, updateUserRole } from "@/services/supabase-admin";
 
-import CompaniesView from "./views/CompaniesView";
+import OrganizationsView from "./views/OrganizationsView";
 import CandidatesView from "./views/CandidatesView";
 import OverviewView from "./views/OverviewView";
 import UsersView from "./views/UsersView";
 import JobsView from "./views/JobsView";
 
-type ViewType = "overview" | "users" | "jobs" | "companies" | "candidates";
+type ViewType = "overview" | "users" | "jobs" | "organizations" | "candidates";
 
 interface AdminDashboardProps {
   onLogout: () => void;
@@ -38,7 +38,7 @@ export default function AdminDashboard({ onLogout, onBack }: AdminDashboardProps
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
 
   // Stats
-  const [stats, setStats] = useState({ totalUsers: 0, totalCandidates: 0, totalCompanies: 0, totalJobs: 0 });
+  const [stats, setStats] = useState({ totalUsers: 0, totalCandidates: 0, totalOrganizations: 0, totalJobs: 0 });
   
   // Users
   const [users, setUsers] = useState<UserProfile[]>([]);
@@ -127,7 +127,7 @@ export default function AdminDashboard({ onLogout, onBack }: AdminDashboardProps
           <button onClick={() => setView("users")} className={"w-full flex items-center px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors " + (view === "users" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted")}>
             <Users className="w-4 h-4 mr-3" /> Usuarios & Perfiles
           </button>
-          <button onClick={() => setView("companies")} className={"w-full flex items-center px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors " + (view === "companies" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted")}>
+          <button onClick={() => setView("organizations")} className={"w-full flex items-center px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors " + (view === "organizations" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted")}>
             <Building2 className="w-4 h-4 mr-3" /> Empresas
           </button>
           <button onClick={() => setView("candidates")} className={"w-full flex items-center px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors " + (view === "candidates" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted")}>
@@ -162,7 +162,7 @@ export default function AdminDashboard({ onLogout, onBack }: AdminDashboardProps
         <div className="flex-1 overflow-auto p-6 lg:p-10">
           {view === "overview" && <OverviewView stats={stats} />}
           {view === "users" && <UsersView users={users} onRoleChange={handleRoleChange} onSoftDelete={handleSoftDelete} />}
-          {view === "companies" && <CompaniesView />}
+          {view === "organizations" && <OrganizationsView />}
           {view === "candidates" && <CandidatesView />}
           {view === "jobs" && <JobsView />}
         </div>
