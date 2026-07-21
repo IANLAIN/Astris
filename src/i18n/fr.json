@@ -346,7 +346,7 @@
     "missionTitle": "Le pont du talent",
     "missionBody": "Être le pont entre les talents aux styles divers et les entreprises engagées dans l'insertion. Grâce à notre plateforme : nous formons et accompagnons les candidats ; nous sensibilisons les organisations pour parvenir à des processus de sélection plus équitables. Note centrale : Nous n'adaptons pas les personnes à des systèmes d'exclusion ; nous transformons les espaces de travail pour tirer parti de la richesse de la diversité cognitive.",
     "visionLabel": "Vision",
-    "visionTitle": "Plateforme de référence pour 2036",
+    "visionTitle": "Plateforme de référence",
     "visionBody": "D'ici 2036, être la plateforme de référence en matière d'insertion professionnelle et de diversité cognitive. Nous envisageons un monde sans barrières ni préjugés, où la diversité cognitive est reconnue comme un moteur d'innovation et de créativité. Nous aspirons à une société où chacun trouve un emploi digne qui favorise son bien-être et son autonomie, et où les entreprises offrent des environnements plus humains et accessibles à tous.",
     "philosophyTitle": "Notre Philosophie",
     "philosophyDesc": "",
@@ -358,16 +358,10 @@
     ],
     "pillarsEyebrow": "Notre approche",
     "pillarsTitle": "Les quatre piliers d'Astris",
-    "preparar": {
-      "title": "PRÉPARER",
-      "body": "Chez Astris, nous préparons les personnes à affronter l'environnement de travail avec confiance. Grâce à des outils de formation, des simulations et la connaissance de soi, nous renforçons leurs compétences et leur fournissons les bases d'une intégration réussie. Nous croyons que la connaissance et la préparation sont la première étape vers une insertion durable. Il ne s'agit pas de rentrer dans un moule, mais de découvrir et de renforcer les capacités uniques de chaque personne afin qu'elle puisse briller dans le bon environnement.",
-      "values": [
-        "Formation personnalisée",
-        "Simulations de travail",
-        "Connaissance de soi et confiance",
-        "Développement des compétences"
-      ]
-    },
+    "ctaTitle": "Rejoignez la communauté",
+    "ctaBody": "Que vous soyez un talent à la recherche de votre place idéale ou une entreprise engagée pour une véritable accessibilité, vous trouverez votre chemin sur Astris.",
+    "ctaCandidate": "Je veux m'inscrire",
+    "ctaCompany": "Je suis une entreprise",
     "adaptar": {
       "title": "ADAPTER",
       "body": "La technologie doit s'adapter aux personnes, et non l'inverse. C'est pourquoi nous proposons une interface personnalisable avec des palettes de couleurs accessibles, des modes clair et sombre, et des ajustements sensoriels. Chaque utilisateur configure la plateforme selon ses besoins, éliminant les barrières visuelles et cognitives dès le premier instant. De plus, les entreprises définissent les aménagements qu'elles peuvent offrir avant le début de tout processus, garantissant que l'environnement est prêt à accueillir des talents divers.",
@@ -388,6 +382,16 @@
         "Communication facilitée"
       ]
     },
+    "preparar": {
+      "title": "PRÉPARER",
+      "body": "Chez Astris, nous préparons les personnes à affronter l'environnement de travail avec confiance. Grâce à des outils de formation, des simulations et la connaissance de soi, nous renforçons leurs compétences et leur fournissons les bases d'une intégration réussie. Nous croyons que la connaissance et la préparation sont la première étape vers une insertion durable. Il ne s'agit pas de rentrer dans un moule, mais de découvrir et de renforcer les capacités uniques de chaque personne afin qu'elle puisse briller dans le bon environnement.",
+      "values": [
+        "Formation personnalisée",
+        "Simulations de travail",
+        "Connaissance de soi et confiance",
+        "Développement des compétences"
+      ]
+    },
     "conectar": {
       "title": "CONNECTER",
       "body": "Connecter les talents aux opportunités est notre objectif ultime. Notre système de matching croise les profils en fonction des compétences et des besoins environnementaux pour trouver de vraies compatibilités. De cette façon, nous nous assurons que la personne et l'environnement de travail sont compatibles, générant des relations durables et réussies. Les entreprises ont accès à des profils anonymes avec des données de compatibilité objectives, sans noms ni photos.",
@@ -397,18 +401,9 @@
         "Confidentialité totale",
         "Relations durables"
       ]
-    },
-    "ctaTitle": "Rejoignez la communauté",
-    "ctaBody": "Que vous soyez un talent à la recherche de votre place idéale ou une entreprise engagée pour une véritable accessibilité, vous trouverez votre chemin sur Astris.",
-    "ctaCandidate": "Je veux m'inscrire",
-    "ctaCompany": "Je suis une entreprise"
+    }
   },
   "pillars": [
-    {
-      "num": "01",
-      "title": "Préparer",
-      "body": "Nous caractérisons la façon de travailler de chaque personne et l'environnement dont elle a besoin."
-    },
     {
       "num": "02",
       "title": "Adapter",
@@ -418,6 +413,11 @@
       "num": "03",
       "title": "Accompagner",
       "body": "Un mentor humain guide le candidat et l'entreprise tout au long du processus, du match jusqu'au 60e jour."
+    },
+    {
+      "num": "01",
+      "title": "Préparer",
+      "body": "Nous caractérisons la façon de travailler de chaque personne et l'environnement dont elle a besoin."
     },
     {
       "num": "04",
@@ -660,6 +660,10 @@
   "about.radarTitle": "Votre profil en construction",
   "about.radarSub": "Se met à jour à chaque réponse",
   "about.radarHint": "Les valeurs apparaissent au fur et à mesure que vous répondez au questionnaire",
+  "about.radarAxes.processing": "Traitement",
+  "about.radarAxes.environment": "T. Environn.",
+  "about.radarAxes.execution": "Exécution",
+  "about.radarAxes.adjustments": "Ajustements",
   "about.missionBody1": "L'emploi comme droit, pas un privilège. Nous facilitons l'insertion adaptative.",
   "about.missionBody2": "Pont entre les talents aux styles divers et les entreprises engagées.",
   "about.missionBody3": "Être la plateforme de référence en insertion professionnelle d'ici 2036.",

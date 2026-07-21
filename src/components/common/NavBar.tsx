@@ -46,6 +46,13 @@ export function NavBar({ lang, role, screen, onNav, onLang, onLogout, darkMode, 
 
   return (
     <header className="sticky top-0 z-40 border-b border-border" style={{ backgroundColor: "var(--background)" }}>
+      {/* Enlace oculto de salto para usuarios de teclado */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:rounded-lg focus:bg-primary focus:text-primary-foreground focus:font-bold"
+      >
+        Saltar al contenido principal
+      </a>
       <div className="px-4 md:px-8 h-16 flex items-center justify-between">
         <div className="flex items-center gap-6">
           <button onClick={() => onNav("home")} className="flex items-center gap-2 text-xl font-bold text-foreground tracking-tight cursor-pointer bg-transparent border-0 p-0">
@@ -53,7 +60,7 @@ export function NavBar({ lang, role, screen, onNav, onLang, onLogout, darkMode, 
             <span>Astris</span>
           </button>
 
-          <nav className="hidden lg:flex items-center gap-2">
+          <nav className="hidden lg:flex items-center gap-2" aria-label="Navegación principal">
             {navItems.map((item) => {
               const active = screen === item.id;
               return (
@@ -113,6 +120,7 @@ export function NavBar({ lang, role, screen, onNav, onLang, onLogout, darkMode, 
             onClick={onLang}
             className="flex items-center justify-center gap-1.5 p-2 lg:px-3 lg:py-2 rounded-xl text-sm text-muted-foreground cursor-pointer border border-border"
             style={{ backgroundColor: "var(--background)" }}
+            aria-label={`Idioma: ${lang.toUpperCase()}. Cambiar idioma`}
           >
             <Globe size={16} aria-hidden="true" /><span className="hidden lg:inline">{lang.toUpperCase()}</span>
           </button>
@@ -152,7 +160,9 @@ export function NavBar({ lang, role, screen, onNav, onLang, onLogout, darkMode, 
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)} 
             className="flex lg:hidden items-center justify-center p-2 rounded-xl border border-border bg-transparent text-foreground cursor-pointer"
-            aria-label="Toggle Menu"
+            aria-label={mobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-nav-menu"
           >
             {mobileMenuOpen ? <X size={20} /> : (
               <div className="space-y-1.5">
@@ -167,7 +177,13 @@ export function NavBar({ lang, role, screen, onNav, onLang, onLogout, darkMode, 
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-border px-4 py-4 space-y-2 shadow-lg" style={{ backgroundColor: "var(--background)" }}>
+        <div
+          id="mobile-nav-menu"
+          className="lg:hidden border-t border-border px-4 py-4 space-y-2 shadow-lg"
+          style={{ backgroundColor: "var(--background)" }}
+          role="navigation"
+          aria-label="Menú móvil"
+        >
           {navItems.map((item) => {
             const active = screen === item.id;
             return (

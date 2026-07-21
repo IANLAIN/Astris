@@ -17,12 +17,18 @@ export function LandingPage({ lang, onOpenAuth, onLang, onNavigate, darkMode, on
     <div className="min-h-screen w-full overflow-x-hidden bg-background">
       {/* Fixed header */}
       <header className="fixed top-0 left-0 right-0 z-40 border-b border-border backdrop-blur-sm" style={{ backgroundColor: "var(--background)", opacity: 0.97 }}>
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:rounded-lg focus:bg-primary focus:text-primary-foreground focus:font-bold"
+        >
+          Saltar al contenido principal
+        </a>
         <div className="max-w-7xl mx-auto px-4 md:px-8 h-16 flex items-center justify-between">
           <button onClick={() => onNavigate("landing")} className="flex items-center gap-3 bg-transparent border-0 cursor-pointer p-0 text-left">
             <img src={astrisImg} alt="Astris Logo" className="w-12 h-12 md:w-14 md:h-14 object-contain" />
             <span className="text-lg md:text-xl font-bold text-foreground tracking-tight">Astris</span>
           </button>
-          <nav className="hidden lg:flex items-center gap-6">
+          <nav className="hidden lg:flex items-center gap-6" aria-label="Navegación pública">
             {[
               { key: "about", label: t("landing.nav.about") },
               { key: "support", label: t("landing.nav.support") },
@@ -70,25 +76,47 @@ export function LandingPage({ lang, onOpenAuth, onLang, onNavigate, darkMode, on
                 backgroundColor: font !== "inter" ? "color-mix(in srgb, var(--primary) 12%, transparent)" : "transparent",
                 color: font !== "inter" ? "var(--primary)" : "var(--foreground)",
               }}
+              aria-label={font === "opendyslexic" ? "OpenDyslexic activado" : "Tipografía normal"}
+              title={font === "opendyslexic" ? "OpenDyslexic activado" : "Tipografía normal"}
             >
-               <Type size={18} />
+               <Type size={18} aria-hidden="true" />
             </button>
-            <button onClick={onDarkToggle} className="flex items-center justify-center p-2 rounded-lg border border-border hover:bg-secondary cursor-pointer bg-transparent">
-               {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+            <button
+              onClick={onDarkToggle}
+              className="flex items-center justify-center p-2 rounded-lg border border-border hover:bg-secondary cursor-pointer bg-transparent"
+              aria-label={darkMode ? "Activar modo claro" : "Activar modo oscuro"}
+              title={darkMode ? "Activar modo claro" : "Activar modo oscuro"}
+            >
+               {darkMode ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />}
             </button>
-            <button onClick={onLang} className="flex items-center justify-center p-2 rounded-lg border border-border hover:bg-secondary cursor-pointer bg-transparent">
-               <Globe size={18} />
+            <button
+              onClick={onLang}
+              className="flex items-center justify-center p-2 rounded-lg border border-border hover:bg-secondary cursor-pointer bg-transparent"
+              aria-label={`Idioma: ${lang.toUpperCase()}. Cambiar idioma`}
+            >
+               <Globe size={18} aria-hidden="true" />
             </button>
-            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2 -mr-2 text-foreground cursor-pointer bg-transparent border-0">
-              {mobileMenuOpen ? <X size={24} /> : <div className="space-y-1.5"><div className="w-6 h-0.5 bg-foreground"></div><div className="w-6 h-0.5 bg-foreground"></div><div className="w-6 h-0.5 bg-foreground"></div></div>}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 -mr-2 text-foreground cursor-pointer bg-transparent border-0"
+              aria-label={mobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="landing-mobile-menu"
+            >
+              {mobileMenuOpen ? <X size={24} aria-hidden="true" /> : <div className="space-y-1.5" aria-hidden="true"><div className="w-6 h-0.5 bg-foreground"></div><div className="w-6 h-0.5 bg-foreground"></div><div className="w-6 h-0.5 bg-foreground"></div></div>}
             </button>
           </div>
         </div>
         
         {/* Mobile menu dropdown */}
         {mobileMenuOpen && (
-          <div className="lg:hidden border-t border-border bg-background px-4 py-6 space-y-6 shadow-xl h-screen overflow-y-auto pb-24">
-            <nav className="flex flex-col gap-4">
+          <div
+            id="landing-mobile-menu"
+            className="lg:hidden border-t border-border bg-background px-4 py-6 space-y-6 shadow-xl h-screen overflow-y-auto pb-24"
+            role="navigation"
+            aria-label="Menú móvil"
+          >
+            <nav className="flex flex-col gap-4" aria-label="Páginas públicas">
               {[
                 { key: "about", label: t("landing.nav.about") },
                 { key: "support", label: t("landing.nav.support") },
@@ -113,14 +141,19 @@ export function LandingPage({ lang, onOpenAuth, onLang, onNavigate, darkMode, on
 
       <div className="pt-16">
         {/* Hero */}
-        <section style={{ background: "linear-gradient(135deg, var(--background) 0%, color-mix(in srgb, var(--primary) 6%, var(--background)) 100%)" }} className="relative overflow-hidden">
+        <section
+          id="main-content"
+          style={{ background: "linear-gradient(135deg, var(--background) 0%, color-mix(in srgb, var(--primary) 6%, var(--background)) 100%)" }}
+          className="relative overflow-hidden"
+          aria-labelledby="hero-heading"
+        >
           {/* Decorative blobs */}
           <div className="pointer-events-none absolute -top-32 -right-32 h-[520px] w-[520px] rounded-full opacity-20" style={{ background: "radial-gradient(circle, var(--primary), transparent 70%)" }} />
           <div className="pointer-events-none absolute -bottom-20 -left-20 h-[340px] w-[340px] rounded-full opacity-10" style={{ background: "radial-gradient(circle, var(--accent), transparent 70%)" }} />
 
           <div className="relative max-w-7xl mx-auto px-5 md:px-10 py-14 flex flex-col lg:flex-row items-center justify-between gap-12">
             <div className="max-w-2xl">
-              <h1 className="text-4xl md:text-[52px] font-bold text-foreground leading-[1.1] mb-5" style={{ letterSpacing: "-0.02em" }}>
+              <h1 id="hero-heading" className="text-4xl md:text-[52px] font-bold text-foreground leading-[1.1] mb-5" style={{ letterSpacing: "-0.02em" }}>
                 {t("landing.hero.t1")}<br />
                 <span style={{ color: "var(--primary)" }}>{t("landing.hero.t2")}</span>
               </h1>
@@ -189,8 +222,8 @@ export function LandingPage({ lang, onOpenAuth, onLang, onNavigate, darkMode, on
               <div className="flex flex-col gap-4">
                 <span className="font-bold text-foreground text-sm uppercase tracking-wider">{t("landing.footer.support", "Soporte y Contacto")}</span>
                 <div className="flex flex-col gap-3 text-sm text-muted-foreground">
-                  <a href="https://www.vibralatinatx.com/contact-1" target="_blank" rel="noreferrer" className="hover:text-primary transition-colors flex items-center gap-2"><ArrowRight size={14} />Vibra Latina</a>
-                  <a href="https://closertothestars.org/" target="_blank" rel="noreferrer" className="hover:text-primary transition-colors flex items-center gap-2"><ArrowRight size={14} />Closer To The Stars</a>
+                  <a href="https://www.vibralatinatx.com/contact-1" target="_blank" rel="noreferrer" className="hover:text-primary transition-colors flex items-center gap-2" aria-label="Vibra Latina (abre en nueva pestaña)"><ArrowRight size={14} aria-hidden="true" />Vibra Latina</a>
+                  <a href="https://closertothestars.org/" target="_blank" rel="noreferrer" className="hover:text-primary transition-colors flex items-center gap-2" aria-label="Closer To The Stars (abre en nueva pestaña)"><ArrowRight size={14} aria-hidden="true" />Closer To The Stars</a>
                 </div>
               </div>
             </div>

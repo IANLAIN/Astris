@@ -346,7 +346,7 @@
     "missionTitle": "The bridge for talent",
     "missionBody": "Being the bridge between talent with diverse styles and companies committed to accessibility. Through our platform: we train and accompany candidates; we sensitize organizations to achieve more equitable selection processes. Key note: We do not adapt people to exclusionary systems; we transform workspaces to harness the richness of cognitive diversity.",
     "visionLabel": "Vision",
-    "visionTitle": "Leading platform by 2036",
+    "visionTitle": "Leading platform",
     "visionBody": "By 2036, to be the leading platform in labor insertion and cognitive diversity. We envision a world without barriers or prejudices, where cognitive diversity is recognized as an engine for innovation and creativity. We aspire to a society where each person finds dignified employment that drives their well-being and autonomy, and where companies offer more human and accessible environments for all.",
     "philosophyTitle": "Our Philosophy",
     "philosophyDesc": "",
@@ -358,16 +358,10 @@
     ],
     "pillarsEyebrow": "Our approach",
     "pillarsTitle": "The four pillars of Astris",
-    "preparar": {
-      "title": "PREPARE",
-      "body": "At Astris we prepare individuals to face the work environment with confidence. Through training tools, simulations, and self-knowledge, we enhance their skills and provide them with the foundation for successful incorporation. We believe knowledge and preparation are the first step towards sustainable insertion. It is not about fitting into a mold, but discovering and strengthening each person's unique capabilities so they can shine in the right environment.",
-      "values": [
-        "Personalized training",
-        "Work simulations",
-        "Self-knowledge and confidence",
-        "Skill development"
-      ]
-    },
+    "ctaTitle": "Join the community",
+    "ctaBody": "Whether you are talent looking for your ideal place or a company committed to real accessibility, you will find the way at Astris.",
+    "ctaCandidate": "I want to register",
+    "ctaCompany": "I am a company",
     "adaptar": {
       "title": "ADAPT",
       "body": "Technology should adapt to people, not the other way around. That is why we offer a customizable interface with accessible color palettes, light and dark modes, and sensory adjustments. Each user configures the platform according to their needs, eliminating visual and cognitive barriers from the very first moment. Furthermore, companies define the adjustments they can offer before starting any process, ensuring the environment is ready to welcome diverse talent.",
@@ -388,6 +382,16 @@
         "Facilitated communication"
       ]
     },
+    "preparar": {
+      "title": "PREPARE",
+      "body": "At Astris we prepare individuals to face the work environment with confidence. Through training tools, simulations, and self-knowledge, we enhance their skills and provide them with the foundation for successful incorporation. We believe knowledge and preparation are the first step towards sustainable insertion. It is not about fitting into a mold, but discovering and strengthening each person's unique capabilities so they can shine in the right environment.",
+      "values": [
+        "Personalized training",
+        "Work simulations",
+        "Self-knowledge and confidence",
+        "Skill development"
+      ]
+    },
     "conectar": {
       "title": "CONNECT",
       "body": "Connecting talent with opportunities is our ultimate goal. Our matching system cross-references profiles based on skills and environmental needs to find real matches. This way we ensure the person and the work environment are compatible, generating lasting and successful relationships. Companies access anonymous profiles with objective compatibility data, without names or photos.",
@@ -397,18 +401,9 @@
         "Total privacy",
         "Lasting relationships"
       ]
-    },
-    "ctaTitle": "Join the community",
-    "ctaBody": "Whether you are talent looking for your ideal place or a company committed to real accessibility, you will find the way at Astris.",
-    "ctaCandidate": "I want to register",
-    "ctaCompany": "I am a company"
+    }
   },
   "pillars": [
-    {
-      "num": "01",
-      "title": "Prepare",
-      "body": "We characterize how each person works and what environment they need."
-    },
     {
       "num": "02",
       "title": "Adapt",
@@ -418,6 +413,11 @@
       "num": "03",
       "title": "Accompany",
       "body": "A human mentor guides the candidate and the company throughout the entire process, from the match to day 60."
+    },
+    {
+      "num": "01",
+      "title": "Prepare",
+      "body": "We characterize how each person works and what environment they need."
     },
     {
       "num": "04",
@@ -660,9 +660,13 @@
   "about.radarTitle": "Your profile in construction",
   "about.radarSub": "Updates with each answer",
   "about.radarHint": "Values appear as you answer the questionnaire",
+  "about.radarAxes.processing": "Processing",
+  "about.radarAxes.environment": "Env. Toler.",
+  "about.radarAxes.execution": "Execution",
+  "about.radarAxes.adjustments": "Adjustments",
   "about.missionBody1": "Employment as a right, not a privilege. We facilitate adaptive insertion.",
   "about.missionBody2": "Bridge between talent with diverse styles and committed companies.",
-  "about.missionBody3": "Be the leading platform in labor insertion by 2036.",
+  "about.missionBody3": "Be the leading platform in labor insertion.",
   "about.pillarPreparar": "PREPARE",
   "about.pillarAdaptar": "ADAPT",
   "about.pillarAcompanar": "ACCOMPANY",

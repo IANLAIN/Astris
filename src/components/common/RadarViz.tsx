@@ -1,25 +1,38 @@
 import { useMemo } from "react";
 
-function polarToCartesian(
-  cx: number, cy: number, r: number, angleDeg: number
-): { x: number; y: number } {
+/** Convierte coordenadas polares a cartesianas, con 0° en la parte superior. */
+function polar(cx: number, cy: number, r: number, angleDeg: number) {
   const rad = ((angleDeg - 90) * Math.PI) / 180;
-  return {
-    x: cx + r * Math.cos(rad),
-    y: cy + r * Math.sin(rad),
-  };
+  return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+}
+
+/** Elige el anchor horizontal según la posición angular del vértice. */
+function anchorFor(angleDeg: number): "start" | "middle" | "end" {
+  const a = ((angleDeg % 360) + 360) % 360;
+  if (a > 345 || a < 15) return "middle";  // top
+  if (a > 165 && a < 195) return "middle"; // bottom
+  if (a >= 15 && a <= 165) return "start"; // right half
+  return "end";                             // left half
+}
+
+/** Desplazamiento vertical extra para que la etiqueta no tape el vértice. */
+function baselineFor(angleDeg: number): "auto" | "middle" | "hanging" {
+  const a = ((angleDeg % 360) + 360) % 360;
+  if (a > 345 || a < 15) return "auto";    // top → texto arriba
+  if (a > 165 && a < 195) return "hanging";// bottom → texto abajo
+  return "middle";
 }
 
 /**
- * Pure SVG radar chart — no recharts ResponsiveContainer,
- * so it never triggers infinite resize loops.
+ * Gráfico radar puro en SVG sin dependencias externas.
+ * El viewBox se calcula para que las etiquetas nunca queden recortadas.
  */
 export function RadarViz({
   data,
   height = 380,
-  color = "#1B4B7A",
+  color = "var(--primary)",
   outerRadius = 120,
-  fontSize = 14,
+  fontSize = 13,
 }: {
   data: Array<{ axis: string; value: number }>;
   height?: number;
@@ -27,166 +40,164 @@ export function RadarViz({
   outerRadius?: number;
   fontSize?: number;
 }) {
-  const cx = 140;
-  const cy = height / 2;
+  // El centro está exactamente en el medio del área de dibujo
+  const cx = 0;
+  const cy = 0;
 
-  const levels = 5; // concentric grid rings
+  // Margen alrededor del radar para que las etiquetas quepan
+  const labelGap = fontSize * 15; // espacio para texto multipalabra
+  const margin = outerRadius + labelGap;
 
-  const { polygonPoints, gridPolygons, axisLines, labels } = useMemo(() => {
+  const { polygonPoints, gridPolygons, axisLines, labelData } = useMemo(() => {
     const n = data.length;
     if (n === 0)
-      return { polygonPoints: "", gridPolygons: [], axisLines: [], labels: [] };
+      return { polygonPoints: "", gridPolygons: [], axisLines: [], labelData: [] };
 
-    const angleStep = 360 / n;
+    const step = 360 / n;
+    const levels = 5;
 
-    // Data polygon
     const pts = data
       .map((d, i) => {
         const r = (d.value / 100) * outerRadius;
-        const p = polarToCartesian(cx, cy, r, i * angleStep);
+        const p = polar(cx, cy, r, i * step);
         return `${p.x},${p.y}`;
       })
       .join(" ");
-    const polygonPoints = pts;
 
-    // Grid rings (for each level)
-    const gridPolygons: Array<{ points: string; level: number }> = [];
-    for (let level = 1; level <= levels; level++) {
-      const r = (level / levels) * outerRadius;
+    const gridPolygons: { points: string; level: number }[] = [];
+    for (let lv = 1; lv <= levels; lv++) {
+      const r = (lv / levels) * outerRadius;
       const pts2 = data
         .map((_, i) => {
-          const p = polarToCartesian(cx, cy, r, i * angleStep);
+          const p = polar(cx, cy, r, i * step);
           return `${p.x},${p.y}`;
         })
         .join(" ");
-      gridPolygons.push({ points: pts2, level });
+      gridPolygons.push({ points: pts2, level: lv });
     }
 
-    // Axis lines from center to vertices
-    const lines = data.map((_, i) => {
-      const p = polarToCartesian(cx, cy, outerRadius, i * angleStep);
+    const axisLines = data.map((_, i) => {
+      const p = polar(cx, cy, outerRadius, i * step);
       return { x1: cx, y1: cy, x2: p.x, y2: p.y };
     });
 
-    // Labels at the vertices (pushed slightly outward)
-    const lbls = data.map((d, i) => {
-      const labelR = outerRadius + 26;
-      const p = polarToCartesian(cx, cy, labelR, i * angleStep);
-      return { x: p.x, y: p.y, text: d.axis, anchor: getTextAnchor(i * angleStep), dy: getTextDy(i * angleStep) };
+    // Etiquetas: partimos el texto en múltiples líneas si es largo
+    const labelData = data.map((d, i) => {
+      const angleDeg = i * step;
+      const r = outerRadius + fontSize * 1.6;
+      const p = polar(cx, cy, r, angleDeg);
+      const words = d.axis.split(" ");
+      return {
+        x: p.x,
+        y: p.y,
+        words,
+        anchor: anchorFor(angleDeg),
+        baseline: baselineFor(angleDeg),
+      };
     });
 
-    return { polygonPoints, gridPolygons, axisLines: lines, labels: lbls };
-  }, [data, outerRadius, cx, cy]);
+    return { polygonPoints: pts, gridPolygons, axisLines, labelData };
+  }, [data, outerRadius, fontSize]);
 
   if (data.length === 0) {
     return (
-      <div style={{ height, width: "100%", display: "flex", alignItems: "center", justifyContent: "center", color: "#94A3B8", fontSize: 13 }}>
-        No data
+      <div style={{ height, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--muted-foreground)", fontSize: 13 }}>
+        —
       </div>
     );
   }
 
-  const svgW = cx + outerRadius + 60;
-  const svgH = height;
-  const inset = 40;
+  // viewBox centrado en (0,0), con margen simétrico
+  const vb = `-${margin} -${margin} ${margin * 2} ${margin * 2}`;
 
   return (
     <svg
       width="100%"
-      viewBox={`0 0 ${svgW + inset} ${svgH}`}
-      style={{ overflow: "visible", display: "block" }}
+      viewBox={vb}
+      style={{ display: "block", overflow: "hidden" }}
       role="img"
       aria-label="Radar chart"
     >
-      <g transform={`translate(${inset / 2}, 0)`}>
-        {/* Grid rings */}
-        {gridPolygons.map((g) => (
-          <polygon
-            key={g.level}
-            points={g.points}
-            fill="none"
-            stroke="#CBD5E1"
-            strokeWidth={g.level === levels ? 1.5 : 0.8}
-            opacity={0.6}
-          />
-        ))}
-
-        {/* Axis lines */}
-        {axisLines.map((line, i) => (
-          <line
-            key={i}
-            x1={line.x1}
-            y1={line.y1}
-            x2={line.x2}
-            y2={line.y2}
-            stroke="#94A3B8"
-            strokeWidth={0.8}
-            opacity={0.4}
-          />
-        ))}
-
-        {/* Data polygon */}
+      {/* Grid rings */}
+      {gridPolygons.map((g) => (
         <polygon
-          points={polygonPoints}
-          fill={color}
-          fillOpacity={0.2}
-          stroke={color}
-          strokeWidth={3}
-          strokeLinejoin="round"
+          key={g.level}
+          points={g.points}
+          fill="none"
+          stroke="var(--border)"
+          strokeWidth={g.level === 5 ? 1.5 : 0.8}
+          opacity={0.6}
         />
+      ))}
 
-        {/* Data dots */}
-        {data.map((d, i) => {
-          const r = (d.value / 100) * outerRadius;
-          const p = polarToCartesian(cx, cy, r, i * (360 / data.length));
-          return (
-            <circle
-              key={i}
-              cx={p.x}
-              cy={p.y}
-              r={5}
-              fill={color}
-              stroke="#fff"
-              strokeWidth={2}
-            />
-          );
-        })}
+      {/* Axis lines */}
+      {axisLines.map((l, i) => (
+        <line
+          key={i}
+          x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2}
+          stroke="var(--muted-foreground)"
+          strokeWidth={0.8}
+          opacity={0.4}
+        />
+      ))}
 
-        {/* Labels */}
-        {labels.map((lbl, i) => (
+      {/* Data polygon */}
+      <polygon
+        points={polygonPoints}
+        fill={color}
+        fillOpacity={0.2}
+        stroke={color}
+        strokeWidth={3}
+        strokeLinejoin="round"
+      />
+
+      {/* Data dots */}
+      {data.map((d, i) => {
+        const r = (d.value / 100) * outerRadius;
+        const p = polar(cx, cy, r, i * (360 / data.length));
+        return (
+          <circle
+            key={i}
+            cx={p.x} cy={p.y} r={5}
+            fill={color}
+            stroke="var(--background)"
+            strokeWidth={2}
+          />
+        );
+      })}
+
+      {/* Labels — wrapped into individual tspan lines */}
+      {labelData.map((lbl, i) => {
+        const lineH = fontSize * 1.25;
+        // Para labels en la parte superior desplazamos hacia arriba,
+        // para la parte inferior hacia abajo, para los lados centramos.
+        const totalLines = lbl.words.length;
+        const offsetY =
+          lbl.baseline === "auto"
+            ? -(totalLines * lineH)
+            : lbl.baseline === "hanging"
+              ? lineH * 0.2
+              : -(((totalLines - 1) * lineH) / 2);
+
+        return (
           <text
             key={i}
             x={lbl.x}
-            y={lbl.y}
-            textAnchor={lbl.anchor as any}
-            dominantBaseline="middle"
-            dy={lbl.dy}
-            fill="#1E293B"
+            y={lbl.y + offsetY}
+            textAnchor={lbl.anchor}
+            fill="var(--foreground)"
             fontSize={fontSize}
-            fontFamily="'Atkinson Hyperlegible', Inter, sans-serif"
+            fontFamily="'Inter', sans-serif"
             fontWeight={600}
           >
-            {lbl.text}
+            {lbl.words.map((word, wi) => (
+              <tspan key={wi} x={lbl.x} dy={wi === 0 ? 0 : lineH}>
+                {word}
+              </tspan>
+            ))}
           </text>
-        ))}
-      </g>
+        );
+      })}
     </svg>
   );
-}
-
-function getTextAnchor(angleDeg: number): string {
-  if (angleDeg === 0 || angleDeg === 360) return "start";
-  if (angleDeg > 170 && angleDeg < 190) return "end";
-  if (angleDeg > 80 && angleDeg < 100) return "middle";
-  if (angleDeg > 260 && angleDeg < 280) return "middle";
-  if (angleDeg > 180) return "end";
-  return "start";
-}
-
-function getTextDy(angleDeg: number): string {
-  if (angleDeg === 0 || angleDeg === 360) return "-0.35em";
-  if (angleDeg === 180) return "-0.35em";
-  if (angleDeg === 90 || angleDeg === 270) return "0.85em";
-  if (angleDeg > 90 && angleDeg < 270) return "1em";
-  return "-0.5em";
 }

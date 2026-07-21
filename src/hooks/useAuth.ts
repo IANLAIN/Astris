@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Role, QuizAnswers } from "@/types";
 import { getCurrentUser, loginUser, logoutUser, registerUser, USE_REAL_BACKEND, isDemoUser, getCandidateQuizAnswers } from "@/services/supabase";
-import { ADMIN_CREDENTIALS } from "@/services/demoData";
+import { handleDemoLogin, handleDemoRegister } from "@/services/demoAuth";
 
 export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) => void) {
   const [role, setRole] = useState<Role | null>(null);
@@ -20,15 +20,11 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
   const [loadedQuizAnswers, setLoadedQuizAnswers] = useState<QuizAnswers>({});
   const [userId, setUserId] = useState<string>("");
 
-  // Load quiz completion status from localStorage (used in both modes)
   useEffect(() => {
     const stored = window.localStorage.getItem("astris_quiz_completed");
-    if (stored === "true") {
-      setQuizCompleted(true);
-    }
+    if (stored === "true") setQuizCompleted(true);
   }, []);
 
-  // On mount: restore session
   useEffect(() => {
     (async () => {
       try {
@@ -56,21 +52,16 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
 
           const demo = isDemoUser(user.id);
 
-          // Load saved quiz answers for candidates (so radar/profile renders correctly)
           if (user.role === "candidate") {
             const savedAnswers = await getCandidateQuizAnswers(user.id);
             if (savedAnswers && Object.keys(savedAnswers).length > 0) {
               setLoadedQuizAnswers(savedAnswers);
-              // Also persist in localStorage for cross-session fallback
-              try {
-                window.localStorage.setItem("astris_quiz_answers", JSON.stringify(savedAnswers));
-              } catch { /* ignore */ }
+              try { window.localStorage.setItem("astris_quiz_answers", JSON.stringify(savedAnswers)); } catch { /* ignore */ }
             }
           }
 
           if (user.role === "candidate") {
             if (demo) {
-              // Demo candidate skips quiz
               setQuizCompleted(true);
               window.localStorage.setItem("astris_quiz_completed", "true");
               setScreen("profile");
@@ -118,59 +109,20 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
   };
 
   const handleRegister = async (email: string, password: string, name: string, selectedRole: Role, vocation: string) => {
-    // Admin backdoor (demo mode)
-    if (email === ADMIN_CREDENTIALS.email && !USE_REAL_BACKEND) {
-      setRole("admin");
-      setUserName("Admin Astris");
-      window.localStorage.setItem("astris_admin_session", "true");
-      setLoggedIn(true);
-      setModalStep("none");
-      setScreen("dashboard");
-      return;
+    if (!USE_REAL_BACKEND) {
+      const handled = handleDemoRegister(email, password, name, selectedRole, vocation, setRole, setUserName, setUserVocation, setLoggedIn, setModalStep, setQuizCompleted, setScreen);
+      if (handled) return;
     }
 
     setAuthLoading(true);
     setAuthError(null);
     try {
       await registerUser(email, password, name, selectedRole, vocation);
-      if (USE_REAL_BACKEND) {
-        // Supabase Auth sends confirmation email; show message
-        setAuthMessage("Registro exitoso. Revisa tu correo para confirmar tu cuenta.");
-        setTimeout(() => {
-          setAuthMessage(null);
-          setModalStep("login");
-        }, 4000);
-      } else {
-        // Demo: persist local user and auto-login
-        const userId = `user-${Date.now()}`;
-        const localUser = {
-          id: userId,
-          email,
-          name,
-          role: selectedRole,
-          password,
-          avatarUrl: "",
-          vocation,
-          completedOnboarding: false,
-        };
-        window.localStorage.setItem("astris_local_user", JSON.stringify(localUser));
-        window.localStorage.removeItem("astris_demo_user");
-        window.localStorage.removeItem("astris_admin_session");
-        window.localStorage.removeItem("astris_quiz_completed");
-
-        setRole(selectedRole);
-        setUserName(name);
-        setUserVocation(vocation);
-        setLoggedIn(true);
-        setModalStep("none");
-        setQuizCompleted(false);
-
-        if (selectedRole === "candidate") {
-          setScreen("onboarding");
-        } else {
-          setScreen(selectedRole === "company" ? "org-profile" : "dashboard");
-        }
-      }
+      setAuthMessage("Registro exitoso. Revisa tu correo para confirmar tu cuenta.");
+      setTimeout(() => {
+        setAuthMessage(null);
+        setModalStep("login");
+      }, 4000);
     } catch (err: any) {
       setAuthError(err.message ?? "Registration failed. Please try again.");
     } finally {
@@ -179,54 +131,9 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
   };
 
   const handleLogin = async (email?: string, password?: string) => {
-    // Demo mode shortcuts
-    if (!USE_REAL_BACKEND) {
-      if (email === ADMIN_CREDENTIALS.email && password === ADMIN_CREDENTIALS.password) {
-        setRole("admin");
-        setUserName("Admin Astris");
-        window.localStorage.setItem("astris_admin_session", "true");
-        setLoggedIn(true);
-        setModalStep("none");
-        setScreen("dashboard");
-        return;
-      }
-
-      if (password === "Demo2026") {
-        if (email === "candidato@astris.org") {
-          window.localStorage.setItem("astris_demo_user", email);
-          window.localStorage.removeItem("astris_local_user");
-          setRole("candidate");
-          setUserName("Bryan Gonzalez");
-          setUserVocation("Ingeniero de Sistemas y Computación");
-          setQuizCompleted(true);
-          window.localStorage.setItem("astris_quiz_completed", "true");
-          setLoggedIn(true);
-          setModalStep("none");
-          setScreen("profile");
-          return;
-        }
-        if (email === "empresa@astris.org") {
-          window.localStorage.setItem("astris_demo_user", email);
-          window.localStorage.removeItem("astris_local_user");
-          setRole("company");
-          setUserName("Vibra Latina");
-          setLoggedIn(true);
-          setModalStep("none");
-          setScreen("candidates");
-          return;
-        }
-        if (email === "mentor@astris.org") {
-          window.localStorage.setItem("astris_demo_user", email);
-          window.localStorage.removeItem("astris_local_user");
-          setRole("mentor");
-          setUserName("Elena Vargas");
-          setUserVocation("Especialista en Inclusión Laboral y Coaching Neurodivergente");
-          setLoggedIn(true);
-          setModalStep("none");
-          setScreen("dashboard");
-          return;
-        }
-      }
+    if (!USE_REAL_BACKEND && email && password) {
+      const handled = handleDemoLogin(email, password, setRole, setUserName, setUserVocation, setQuizCompleted, setLoggedIn, setModalStep, setScreen);
+      if (handled) return;
     }
 
     if (!email || !password) {
@@ -248,14 +155,11 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
       setLoggedIn(true);
       setModalStep("none");
 
-      // Load saved quiz answers for candidates
       if (resolvedRole === "candidate" && user?.id) {
         const savedAnswers = await getCandidateQuizAnswers(user.id);
         if (savedAnswers && Object.keys(savedAnswers).length > 0) {
           setLoadedQuizAnswers(savedAnswers);
-          try {
-            window.localStorage.setItem("astris_quiz_answers", JSON.stringify(savedAnswers));
-          } catch { /* ignore */ }
+          try { window.localStorage.setItem("astris_quiz_answers", JSON.stringify(savedAnswers)); } catch { /* ignore */ }
         }
       }
 
@@ -282,27 +186,7 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
   };
 
   return {
-    role,
-    pendingRole,
-    loggedIn,
-    authLoading,
-    authError,
-    appReady,
-    authMessage,
-    googleAuthUser,
-    requirePasswordUpdate,
-    userName,
-    userAvatar,
-    userVocation,
-    userId,
-    quizCompleted,
-    loadedQuizAnswers,
-    setQuizCompleted,
-    setPendingRole,
-    setRequirePasswordUpdate,
-    handleCompleteGoogleRegistration,
-    handleRegister,
-    handleLogin,
-    handleLogout
+    role, pendingRole, loggedIn, authLoading, authError, appReady, authMessage, googleAuthUser, requirePasswordUpdate, userName, userAvatar, userVocation, userId, quizCompleted, loadedQuizAnswers,
+    setQuizCompleted, setPendingRole, setRequirePasswordUpdate, handleCompleteGoogleRegistration, handleRegister, handleLogin, handleLogout
   };
 }

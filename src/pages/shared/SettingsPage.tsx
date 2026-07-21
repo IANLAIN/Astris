@@ -1,11 +1,21 @@
 import { useState, useEffect } from "react";
-import { Save, AlertTriangle, Moon, Sun, Type, Check, Trash2 } from "lucide-react";
 import { Lang, PaletteKey, FontKey } from "@/types";
-import { useT, getPaletteName } from "@/i18n/useT";
-import { PALETTES } from "@/i18n/content";
+import { useT } from "@/i18n/useT";
 import { getCurrentUser, updateProfile, deleteAccount } from "@/services/supabase";
+import { ProfileSettings } from "./settings/ProfileSettings";
+import { VisualSettings } from "./settings/VisualSettings";
+import { DangerZoneSettings } from "./settings/DangerZoneSettings";
 
-export function SettingsPage({ lang, palette, darkMode, font, onPalette, onDark, onFont, onLogout }: {
+export function SettingsPage({
+  lang,
+  palette,
+  darkMode,
+  font,
+  onPalette,
+  onDark,
+  onFont,
+  onLogout,
+}: {
   lang: Lang;
   palette: PaletteKey;
   darkMode: boolean;
@@ -22,7 +32,7 @@ export function SettingsPage({ lang, palette, darkMode, font, onPalette, onDark,
   const [userId, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState<{text: string, type: 'success'|'error'}|null>(null);
+  const [message, setMessage] = useState<{ text: string; type: "success" | "error" } | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
@@ -74,146 +84,48 @@ export function SettingsPage({ lang, palette, darkMode, font, onPalette, onDark,
       <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-8">{t("settings.title")}</h1>
 
       {message && (
-        <div className="mb-6 p-4 rounded-xl flex items-center gap-2 font-medium" style={{ backgroundColor: message.type === 'success' ? '#F0FDF4' : '#FEF2F2', color: message.type === 'success' ? '#166534' : '#C0392B' }}>
+        <div
+          className="mb-6 p-4 rounded-xl flex items-center gap-2 font-medium"
+          style={{
+            backgroundColor: message.type === "success" ? "#F0FDF4" : "#FEF2F2",
+            color: message.type === "success" ? "#166534" : "#C0392B",
+          }}
+        >
           {message.text}
         </div>
       )}
 
       <div className="space-y-8">
-        {/* Profile Info */}
-        <section className="p-6 md:p-8 rounded-[2rem] border border-border" style={{ backgroundColor: "var(--card)", boxShadow: "0 10px 40px rgba(0,0,0,0.05)" }}>
-          <h2 className="text-lg font-bold text-foreground mb-5">{t("settings.personal")}</h2>
-          <div className="max-w-md">
-            <label htmlFor="settings-name" className="block text-sm font-semibold text-foreground mb-2">{t("settings.name")}</label>
-            <input 
-              id="settings-name"
-              name="name"
-              type="text" 
-              value={name} 
-              onChange={(e) => setName(e.target.value)} 
-              className="w-full px-4 py-3 rounded-xl border-2 border-border text-foreground text-base mb-4" 
-              style={{ backgroundColor: "var(--input-background)" }} 
-            />
-            
-            <label htmlFor="settings-vocation" className="block text-sm font-semibold text-foreground mb-2">{t("comp.post.techReq")}</label>
-            <input 
-              id="settings-vocation"
-              name="vocation"
-              type="text" 
-              value={vocation} 
-              onChange={(e) => setVocation(e.target.value)} 
-              className="w-full px-4 py-3 rounded-xl border-2 border-border text-foreground text-base mb-4" 
-              style={{ backgroundColor: "var(--input-background)" }} 
-              placeholder={"Ej: Desarrollador Frontend"}
-            />
+        <ProfileSettings
+          t={t}
+          name={name}
+          setName={setName}
+          vocation={vocation}
+          setVocation={setVocation}
+          avatarUrl={avatarUrl}
+          setAvatarUrl={setAvatarUrl}
+          handleSaveProfile={handleSaveProfile}
+          saving={saving}
+        />
 
-            <label htmlFor="settings-avatarUrl" className="block text-sm font-semibold text-foreground mb-2">{"URL de foto de perfil"}</label>
-            <div className="flex gap-4 items-center mb-6">
-              {avatarUrl && (
-                <img src={avatarUrl} alt="Avatar Preview" className="w-12 h-12 rounded-full object-cover shrink-0 border border-border" />
-              )}
-              <input 
-                id="settings-avatarUrl"
-                name="avatarUrl"
-                type="text" 
-                value={avatarUrl} 
-                onChange={(e) => setAvatarUrl(e.target.value)} 
-                className="flex-1 w-full px-4 py-3 rounded-xl border-2 border-border text-foreground text-base" 
-                style={{ backgroundColor: "var(--input-background)" }} 
-                placeholder="https://..."
-              />
-            </div>
+        <VisualSettings
+          t={t}
+          lang={lang}
+          darkMode={darkMode}
+          onDark={onDark}
+          font={font}
+          onFont={onFont}
+          palette={palette}
+          onPalette={onPalette}
+        />
 
-            <button onClick={handleSaveProfile} disabled={saving} className="flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm cursor-pointer transition-all hover:scale-[1.02]" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}>
-              <Save size={16} /> {saving ? "..." : (t("save"))}
-            </button>
-          </div>
-        </section>
-
-        {/* Visual Preferences */}
-        <section className="p-6 md:p-8 rounded-[2rem] border border-border" style={{ backgroundColor: "var(--card)", boxShadow: "0 10px 40px rgba(0,0,0,0.05)" }}>
-          <h2 className="text-lg font-bold text-foreground mb-5">{t("settings.visual")}</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            
-            {/* Dark Mode */}
-            <div>
-              <h3 className="text-sm font-bold text-foreground mb-3 uppercase tracking-wide flex items-center gap-2"><Sun size={14} aria-hidden="true" /> {t("palette.dark")}</h3>
-              <button onClick={() => onDark(!darkMode)} className="w-full flex items-center justify-between p-4 rounded-2xl border-2 cursor-pointer transition-all hover:scale-[1.02]" style={{ borderColor: "var(--border)", backgroundColor: "var(--background)" }}>
-                <div className="flex items-center gap-3">
-                  {darkMode ? <Moon size={18} aria-hidden="true" /> : <Sun size={18} aria-hidden="true" />}
-                  <span className="font-semibold text-foreground">{darkMode ? (t("settings.dark")) : (t("settings.light"))}</span>
-                </div>
-                <div className="w-12 h-6 rounded-full relative shrink-0" style={{ backgroundColor: darkMode ? "var(--primary)" : "var(--muted)" }}>
-                  <div className="absolute top-0.5 w-5 h-5 rounded-full bg-white" style={{ left: darkMode ? "calc(100% - 22px)" : "2px", transition: "left 200ms ease" }} />
-                </div>
-              </button>
-            </div>
-
-            {/* Typography */}
-            <div>
-              <h3 className="text-sm font-bold text-foreground mb-3 uppercase tracking-wide flex items-center gap-2"><Type size={14} aria-hidden="true" /> {t("palette.font")}</h3>
-              {([["inter", "Inter (Default)"], ["opendyslexic", "OpenDyslexic (Dislexia)"]] as const).map(([fk, fname]) => {
-                const sel = font === fk;
-                const ff = fk === "opendyslexic" ? "'OpenDyslexic', 'Inter', sans-serif" : "'Inter', sans-serif";
-                return (
-                  <button key={fk} onClick={() => onFont(fk)} className="w-full flex items-center gap-3 p-3 rounded-2xl border-2 cursor-pointer text-left mb-2 transition-all hover:scale-[1.02]" style={{ borderColor: sel ? "var(--primary)" : "var(--border)", backgroundColor: sel ? "var(--background)" : "transparent" }}>
-                    <div className="flex-1 font-semibold text-sm" style={{ fontFamily: ff }}>{fname}</div>
-                    {sel && <div className="w-4 h-4 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: "var(--primary)" }}><Check size={10} style={{ color: "var(--primary-foreground)" }} /></div>}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Palettes */}
-            <div className="md:col-span-2">
-              <h3 className="text-sm font-bold text-foreground mb-3 uppercase tracking-wide flex items-center gap-2"><div className="w-3 h-3 rounded-full bg-accent" /> {t("settings.palette")}</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                {(Object.keys(PALETTES) as PaletteKey[]).map((key) => {
-                  const p = PALETTES[key];
-                  const sel = palette === key;
-                  return (
-                    <button key={key} onClick={() => onPalette(key)} className="w-full flex items-center gap-3 p-3.5 rounded-2xl border-2 cursor-pointer text-left transition-all hover:scale-[1.02]" style={{ borderColor: sel ? "var(--primary)" : "var(--border)", backgroundColor: sel ? "var(--background)" : "transparent" }}>
-                      <div className="w-8 h-8 rounded-lg shrink-0 border" style={{ backgroundColor: p.bg, borderColor: p.border }} />
-                      <div className="flex-1 min-w-0">
-                        <div className="font-semibold text-foreground text-sm leading-tight">{getPaletteName(key, lang)}</div>
-                      </div>
-                      {sel && <Check size={14} style={{ color: "var(--primary)" }} />}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-          </div>
-        </section>
-
-        {/* Danger Zone */}
-        <section className="p-6 md:p-8 rounded-[2rem] border-2 border-red-500/20 bg-red-500/5">
-          <h2 className="text-lg font-bold text-red-600 dark:text-red-400 mb-2 flex items-center gap-2"><AlertTriangle size={20} /> {t("settings.danger")}</h2>
-          <p className="text-sm text-red-600/80 dark:text-red-400/80 mb-5 max-w-xl">
-            {t("settings.deleteWarn")}
-          </p>
-          
-          {!showDeleteConfirm ? (
-            <button onClick={() => setShowDeleteConfirm(true)} className="flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm cursor-pointer transition-all bg-red-500 text-white hover:bg-red-600">
-              <Trash2 size={16} /> {t("settings.delete")}
-            </button>
-          ) : (
-            <div className="p-5 rounded-2xl border border-red-200 bg-red-50 dark:bg-red-950/20 dark:border-red-900 flex flex-col gap-4 max-w-md">
-              <p className="font-bold text-red-600 dark:text-red-400 text-sm">
-                {t("settings.deleteConfirm")}
-              </p>
-              <div className="flex gap-3">
-                <button onClick={handleDeleteAccount} disabled={saving} className="flex-1 py-2.5 rounded-lg font-bold text-sm bg-red-600 text-white hover:bg-red-700 disabled:opacity-50">
-                  {saving ? "..." : (t("settings.deleteYes"))}
-                </button>
-                <button onClick={() => setShowDeleteConfirm(false)} disabled={saving} className="flex-1 py-2.5 rounded-lg font-bold text-sm bg-gray-200 text-gray-800 hover:bg-gray-300 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700">
-                  {t("settings.deleteCancel")}
-                </button>
-              </div>
-            </div>
-          )}
-        </section>
+        <DangerZoneSettings
+          t={t}
+          showDeleteConfirm={showDeleteConfirm}
+          setShowDeleteConfirm={setShowDeleteConfirm}
+          handleDeleteAccount={handleDeleteAccount}
+          saving={saving}
+        />
       </div>
     </div>
   );

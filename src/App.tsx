@@ -120,7 +120,7 @@ export default function App() {
           {loggedIn && role && (
             <div>
               <NavBar lang={lang} role={role} screen={screen} onNav={handleNav} onLang={() => setModalStep("language")} onLogout={() => handleLogout(setPublicView)} darkMode={darkMode} onDarkToggle={() => setDarkMode((d) => !d)} font={font} onFontToggle={() => setFont(cycleFont(font))} userName={userName} userAvatar={userAvatar} />
-              <main style={rootStyle as React.CSSProperties}>
+              <main id="main-content" tabIndex={-1} style={rootStyle as React.CSSProperties}>
                 {role === "candidate" && screen === "onboarding" && <P.CandidateOnboarding lang={lang} palette={palette} darkMode={darkMode} font={font} onPalette={setPalette} onDark={setDarkMode} onFont={setFont} onContinue={() => { setQuizAxis(0); setScreen("quiz"); }} />}
                 {role === "candidate" && screen === "quiz" && (
                   <P.CandidateQuiz lang={lang} axisIndex={quizAxis} answers={quizAnswers} onAnswer={handleAnswer}
