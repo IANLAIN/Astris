@@ -33,14 +33,14 @@ export function QuizRadarPanel({ t, radarData, answers, progressPct }: any) {
         </div>
 
         <div className="flex flex-col xl:flex-row items-center xl:items-stretch justify-center gap-x-8 gap-y-10 xl:gap-x-12">
-          <div className="w-full xl:w-[420px] shrink-0">
-            <div className="relative">
+          <div className="w-full xl:w-[480px] shrink-0">
+            <div className="relative flex items-center justify-center">
               <div
-                className="absolute inset-0 rounded-full blur-[80px] opacity-20 pointer-events-none"
+                className="absolute inset-0 rounded-full blur-[90px] opacity-20 pointer-events-none"
                 style={{ background: "radial-gradient(circle, var(--primary), transparent 70%)" }}
                 aria-hidden="true"
               />
-              <RadarViz data={radarData} height={350} outerRadius={115} fontSize={12} />
+              <RadarViz data={radarData} height={440} outerRadius={150} fontSize={14} />
             </div>
           </div>
 
@@ -56,7 +56,7 @@ export function QuizRadarPanel({ t, radarData, answers, progressPct }: any) {
                         {d.axis}
                       </span>
                       <span
-                        className="text-sm md:text-base font-bold font-mono tabular-nums ml-2 text-right"
+                        className="text-sm md:text-base font-bold font-mono tabular-nums ml-2 mr-3.5 text-right"
                         style={{
                           color: answered ? c : "var(--muted-foreground)",
                           minWidth: "2.5ch",
