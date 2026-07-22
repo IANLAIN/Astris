@@ -6,10 +6,10 @@ const BAR_COLORS = ["#3D7A56", "#4CAF70", "#2E86AB", "#C9830A"] as const;
 
 export function QuizRadarPanel({ t, radarData, answers, progressPct }: any) {
   return (
-    <div className="w-full shrink-0 px-4 md:px-6 lg:px-0 lg:pr-6 xl:pr-8 py-2 lg:py-0 lg:max-h-[calc(100vh-11rem)] lg:overflow-y-auto">
+    <div className="w-full lg:w-[400px] xl:w-[480px] shrink-0 px-4 md:px-6 lg:px-0 lg:pr-6 xl:pr-8 py-2 lg:py-0 lg:max-h-[calc(100vh-11rem)] lg:overflow-y-auto">
       <div className="w-full rounded-3xl border-2 border-border/60 bg-card shadow-lg">
-        <div className="pt-1.5 md:pt-2 lg:pt-2 px-4 md:px-6 lg:px-8 pb-0">
-          <div className="flex items-center justify-between mb-1">
+        <div className="pt-1.5 md:pt-2 lg:pt-2 px-4 md:px-6 lg:px-8 pb-4">
+          <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2.5">
               <div
                 className="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm"
@@ -33,19 +33,19 @@ export function QuizRadarPanel({ t, radarData, answers, progressPct }: any) {
             </div>
           </div>
 
-          <div className="flex flex-col lg:flex-row items-center lg:items-stretch lg:justify-center gap-x-6 lg:gap-x-10">
-            <div className="w-full max-w-full lg:max-w-[520px] shrink-0">
+          <div className="flex flex-col items-center gap-y-6">
+            <div className="w-full shrink-0">
               <div className="relative">
                 <div
                   className="absolute inset-0 rounded-full blur-[60px] opacity-20 pointer-events-none"
                   style={{ background: "radial-gradient(circle, var(--primary), transparent 70%)" }}
                   aria-hidden="true"
                 />
-                <RadarViz data={radarData} height={320} outerRadius={110} fontSize={11} />
+                <RadarViz data={radarData} height={280} outerRadius={90} fontSize={10} />
               </div>
             </div>
 
-            <div className="w-full lg:max-w-[300px] shrink-0 flex flex-col justify-between self-stretch">
+            <div className="w-full shrink-0 flex flex-col justify-between self-stretch">
               <div className="space-y-0.5">
                 {radarData.map((d: any, i: number) => {
                   const answered = answers[i] && Object.keys(answers[i]).length > 0;
