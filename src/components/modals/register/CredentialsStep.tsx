@@ -24,8 +24,8 @@ export function CredentialsStep({
 }: any) {
   return (
     <Overlay>
-      <div className="w-[95%] sm:w-full max-w-md rounded-2xl mx-auto bg-card border border-border">
-        <div className="px-4 md:px-8 py-7 border-b border-border">
+      <div className="w-[95%] sm:w-full max-w-md rounded-2xl mx-auto bg-card border border-border flex flex-col max-h-[90vh]">
+        <div className="px-5 md:px-8 py-5 border-b border-border shrink-0">
           <button
             onClick={handleBack}
             className="flex items-center gap-1.5 text-sm text-muted-foreground cursor-pointer mb-4 hover:text-foreground"
@@ -33,24 +33,24 @@ export function CredentialsStep({
             <ChevronLeft size={15} aria-hidden="true" />{t("register.back")}
           </button>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-primary text-primary-foreground">
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-primary text-primary-foreground shrink-0">
               <Icon size={18} aria-hidden="true" />
             </div>
             <h2 className="text-xl font-bold text-foreground">{t("register.title")}</h2>
           </div>
         </div>
 
-        <div className="p-4 md:p-8 flex flex-col gap-5">
+        <div className="px-5 md:px-8 py-6 flex flex-col gap-5 overflow-y-auto custom-scrollbar">
           <div role="alert" aria-live="assertive" aria-atomic="true">
             {error && (
               <div className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300">
-                <AlertCircle size={15} aria-hidden="true" />{error}
+                <AlertCircle size={15} aria-hidden="true" className="shrink-0" />{error}
               </div>
             )}
           </div>
 
           <div>
-            <label htmlFor="register-name" className="block text-sm font-semibold text-foreground mb-2">
+            <label htmlFor="register-name" className="block text-sm font-semibold text-foreground mb-1.5">
               {t("register.name")}
             </label>
             <input
@@ -59,13 +59,13 @@ export function CredentialsStep({
               value={name}
               onChange={(e) => setName(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="w-full px-4 py-3 rounded-xl border-2 border-border bg-input-background text-foreground text-base"
+              className="w-full px-4 py-3 rounded-xl border-2 border-border bg-input-background text-foreground text-sm focus:border-primary focus:outline-none transition-colors"
               placeholder="Jane Doe"
             />
           </div>
 
           <div>
-            <label htmlFor="register-email" className="block text-sm font-semibold text-foreground mb-2">
+            <label htmlFor="register-email" className="block text-sm font-semibold text-foreground mb-1.5">
               {t("register.email")}
             </label>
             <input
@@ -74,13 +74,13 @@ export function CredentialsStep({
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="w-full px-4 py-3 rounded-xl border-2 border-border bg-input-background text-foreground text-base"
+              className="w-full px-4 py-3 rounded-xl border-2 border-border bg-input-background text-foreground text-sm focus:border-primary focus:outline-none transition-colors"
               placeholder="nombre@correo.com"
             />
           </div>
 
           <div>
-            <label htmlFor="register-password" className="block text-sm font-semibold text-foreground mb-2">
+            <label htmlFor="register-password" className="block text-sm font-semibold text-foreground mb-1.5">
               {t("register.password")}
             </label>
             <PasswordInput
@@ -88,13 +88,13 @@ export function CredentialsStep({
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="w-full px-4 py-3 rounded-xl border-2 border-border bg-input-background text-foreground text-base"
+              className="w-full px-4 py-3 rounded-xl border-2 border-border bg-input-background text-foreground text-sm focus:border-primary focus:outline-none transition-colors"
               placeholder="••••••••"
             />
           </div>
 
           <div>
-            <label htmlFor="register-vocation" className="block text-sm font-semibold text-foreground mb-2">
+            <label htmlFor="register-vocation" className="block text-sm font-semibold text-foreground mb-1.5">
               {t("register.vocation")}
             </label>
             <input
@@ -103,7 +103,7 @@ export function CredentialsStep({
               value={vocation}
               onChange={(e) => setVocation(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="w-full px-4 py-3 rounded-xl border-2 border-border bg-input-background text-foreground text-base"
+              className="w-full px-4 py-3 rounded-xl border-2 border-border bg-input-background text-foreground text-sm focus:border-primary focus:outline-none transition-colors"
               placeholder={t("register.vocationPlaceholder")}
             />
           </div>
@@ -111,14 +111,14 @@ export function CredentialsStep({
           <button
             onClick={() => onRegister(email, password, name, selectedRole!, vocation)}
             disabled={loading || !email || !password || !selectedRole}
-            className="w-full py-4 rounded-xl font-bold text-base bg-primary text-primary-foreground disabled:opacity-60 disabled:cursor-not-allowed hover:opacity-90"
+            className="w-full py-3.5 mt-2 rounded-xl font-bold text-sm bg-primary text-primary-foreground disabled:opacity-60 disabled:cursor-not-allowed hover:opacity-90 shadow-lg shadow-primary/20 transition-all"
           >
             {loading ? "..." : t("register.submit")}
           </button>
 
-          <div className="relative flex items-center py-2">
+          <div className="relative flex items-center py-1">
             <div className="flex-grow border-t border-border" aria-hidden="true" />
-            <span className="flex-shrink-0 mx-4 text-muted-foreground text-sm font-medium">
+            <span className="flex-shrink-0 mx-4 text-muted-foreground text-xs font-bold uppercase tracking-wider">
               {t("register.or")}
             </span>
             <div className="flex-grow border-t border-border" aria-hidden="true" />
@@ -129,10 +129,10 @@ export function CredentialsStep({
               try { await signInWithGoogle(selectedRole!, "register"); } catch {}
             }}
             disabled={loading || !selectedRole}
-            className="w-full py-4 rounded-xl font-bold text-base flex items-center justify-center gap-3 border-2 border-border bg-card text-foreground hover:bg-secondary disabled:opacity-60 cursor-pointer"
+            className="w-full py-3.5 mb-2 rounded-xl font-bold text-sm flex items-center justify-center gap-3 border-2 border-border bg-card text-foreground hover:bg-secondary hover:border-primary/30 disabled:opacity-60 cursor-pointer transition-colors"
             aria-label="Registrarse con Google"
           >
-            <svg className="w-5 h-5" viewBox="0 0 24 24" aria-hidden="true">
+            <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" aria-hidden="true">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
               <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
               <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
