@@ -38,7 +38,7 @@ export function PartnersPage({ lang, onNavigate, onOpenAuth, onLang, darkMode, o
           ) : (
             <form className="space-y-4" onSubmit={handleSubmit}>
               <div>
-                <label htmlFor="partner-organization" className="mb-1 block text-sm font-semibold text-foreground">{t("partners.companyLabel")}</label>
+                <label htmlFor="partner-organization" className="mb-1 block text-sm font-semibold text-foreground">{t("partners.organizationLabel")}</label>
                 <input id="partner-organization" name="organization" value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} required className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm outline-none focus:border-primary" style={{ color: "var(--foreground)" }} />
               </div>
               <div>

@@ -73,7 +73,7 @@ export default function OrganizationsView() {
           <table className="w-full text-left text-sm whitespace-nowrap">
             <thead className="bg-muted/50 border-b border-border text-muted-foreground font-semibold">
               <tr>
-                <th className="px-6 py-4">Empresa</th>
+                <th className="px-6 py-4">Organización</th>
                 <th className="px-6 py-4">Industria</th>
                 <th className="px-6 py-4">Ubicación</th>
                 <th className="px-6 py-4">Índices ESG</th>

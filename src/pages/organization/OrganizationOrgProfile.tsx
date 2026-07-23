@@ -29,7 +29,7 @@ export function OrganizationOrgProfile({ lang }: { lang: Lang }) {
   const POLITICAS: string[] = ["Pausas activas programadas", "Flexibilidad de horario"];
 
   // Load Vibra Latina demo data
-  const demoProfile: any = DEMO_USERS["organizacion@astris.org"]?.profile || DEMO_USERS["empresa@astris.org"]?.profile;
+  const demoProfile: any = DEMO_USERS["organizacion@astris.org"]?.profile;
   const [formData, setFormData] = useState<Record<string, any>>({
     organization_name: demoProfile?.organization_name || "Vibra Latina",
     industry: demoProfile?.industry || "Audiovisual / Producción",

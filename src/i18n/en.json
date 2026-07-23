@@ -582,7 +582,7 @@
     "politicas"
   ],
   "compPostHireStatus": "Adaptation status",
-  "orgPostHireObs": "Company observations",
+  "orgPostHireObs": "Organization observations",
   "compPostHireObsPlaceholder": "Write your observations about the adaptation process...",
   "compPostHireSend": "Send observations",
   "compPostHireContact": "Contact mentor",
@@ -625,7 +625,7 @@
   "checkinPageTitle": "Check-ins",
   "checkinPageSub": "Scheduled sessions with your candidates",
   "organizationsPageTitle": "Collaborating organizations",
-  "organizationsPageSub": "Active companies in insertion processes",
+  "organizationsPageSub": "Active organizations in insertion processes",
   "common.loading": "Loading...",
   "common.loading_mentor": "Loading mentors...",
   "common.selected": "Selected",
@@ -706,7 +706,7 @@
   "about.ajustes": "Adjustments",
   "support.seeLink": "View link",
   "partners.subtitle": "If your organization wants to partner with Astris, fill out this form and we'll get in touch to discuss collaboration.",
-  "partners.organizationLabel": "Company name",
+  "partners.organizationLabel": "Organization name",
   "partners.nameLabel": "Your name",
   "partners.emailLabel": "Email",
   "partners.whyLabel": "Why does your organization want to be part of Astris?",
@@ -728,7 +728,7 @@
       "accompaniment_hours": "Accompaniment hours",
       "completed_sessions": "Completed sessions",
       "active_candidates": "Active candidates",
-      "linked_organizations": "Linked companies"
+      "linked_organizations": "Linked organizations"
     }
   }
 }

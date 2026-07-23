@@ -128,7 +128,7 @@ export default function AdminDashboard({ onLogout, onBack }: AdminDashboardProps
             <Users className="w-4 h-4 mr-3" /> Usuarios & Perfiles
           </button>
           <button onClick={() => setView("organizations")} className={"w-full flex items-center px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors " + (view === "organizations" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted")}>
-            <Building2 className="w-4 h-4 mr-3" /> Empresas
+            <Building2 className="w-4 h-4 mr-3" /> Organizaciones
           </button>
           <button onClick={() => setView("candidates")} className={"w-full flex items-center px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors " + (view === "candidates" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted")}>
             <FileText className="w-4 h-4 mr-3" /> Candidatos
