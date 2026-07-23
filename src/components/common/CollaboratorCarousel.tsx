@@ -124,7 +124,11 @@ export function CollaboratorCarousel({ lang, darkMode }: { lang: Lang; darkMode:
                   src={item.imgSrc}
                   alt={item.name}
                   className="object-contain transition-transform duration-500"
-                  style={{ maxWidth: "90%", maxHeight: "90%" }}
+                  style={{
+                    maxWidth: "90%",
+                    maxHeight: "90%",
+                    transform: item.name === "Closer To The Stars" ? "scale(2)" : "none",
+                  }}
                 />
             </a>
           );

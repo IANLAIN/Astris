@@ -207,6 +207,7 @@ export function LandingPage({ lang, onOpenAuth, onLang, onNavigate, darkMode, on
                 <img src={astrisImg} alt="Astris" className="w-9 h-9 object-contain" /> Astris
               </div>
               <div className="text-xs text-muted-foreground">&copy; {new Date().getFullYear()} Astris. {t("landing.footer.rights", "Todos los derechos reservados.")}</div>
+              <div className="text-xs text-muted-foreground mt-1">Closer To The Stars Educational Program</div>
             </div>
 
             <div className="flex gap-16">
