@@ -1,28 +1,48 @@
+<div align="center">
+  <img src="src/assets/vibralatina.png" alt="VibraLatina" height="120" />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="src/assets/closertothestarscircle.png" alt="Closer to the Stars" height="120" />
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="src/assets/astris.svg" alt="Astris" height="120" />
+</div>
+
 # Astris
 
 Conectando talento con entornos laborales adaptativos.
 
-Astris es una plataforma web SPA que empareja talento diverso con organizaciones comprometidas con la inclusion laboral real, mediante un sistema de matching basado en estilos de trabajo, necesidades ambientales y ajustes razonables — no en diagnosticos.
+Astris es una plataforma web SPA que empareja talento diverso con **organizaciones** (privadas, públicas, educativas, sociales) comprometidas con la inclusión laboral real. No evalúa diagnósticos clínicos — evalúa **realidades operativas y necesidades de entorno** mediante un sistema de matching basado en estilos de trabajo, necesidades ambientales y ajustes razonables.
 
 ---
 
-## Caracteristicas
+## Los 4 Pilares de Astris
 
-- Perfilado en 4 ejes: Procesamiento, Tolerancia Ambiental, Ejecucion y Ajustes Razonables — cuestionario interactivo en 4 pasos
-- Matching inteligente: Compatibilidades calculadas objetivamente entre candidatos y organizaciones segun modalidad, ajustes y entorno
-- Acompanamiento con mentor: Guia personalizada desde la preparacion hasta el dia 60 post-contratacion, con check-ins y seguimiento
-- 4 idiomas: Espanol (base), Ingles, Portugues y Frances — con deteccion automatica del navegador
+| # | Pilar | Descripción |
+|---|-------|-------------|
+| 1 | **Adaptar** | Perfilado en 4 ejes operativos (Procesamiento, Tolerancia Ambiental, Ejecución, Ajustes Razonables) mediante cuestionario interactivo |
+| 2 | **Acompañar** | Guía personalizada con mentor desde la preparación hasta el día 60 post-contratación, con check-ins y seguimiento estructurado |
+| 3 | **Preparar** | Matching inteligente: compatibilidades calculadas objetivamente entre candidatos y organizaciones según modalidad, ajustes y entorno |
+| 4 | **Conectar** | Matching, selección y post-contratación que cierra el ciclo inclusivo |
+
+---
+
+## Características
+
+- Perfilado en 4 ejes: Procesamiento, Tolerancia Ambiental, Ejecución y Ajustes Razonables — cuestionario interactivo en 4 pasos
+- Matching inteligente: Compatibilidades calculadas objetivamente entre candidatos y organizaciones según modalidad, ajustes y entorno
+- Acompañamiento con mentor: Guía personalizada desde la preparación hasta el día 60 post-contratación, con check-ins y seguimiento
+- 4 idiomas: Español (base), Inglés, Portugués y Francés — con detección automática del navegador
 - Interfaz accesible: 4 paletas de colores personalizables (Calm Blue, Warm Earth, High Contrast, Natural Green), modo oscuro, fuente para dislexia (OpenDyslexic)
-- Modo demo completo: Explora la plataforma sin backend con credenciales predefinidas para candidato, organizacion, mentor y admin
-- Sin backend requerido: Todo funciona offline con datos de demostracion
-- Admin dashboard: Panel administrativo con gestion de usuarios, organizaciones, candidatos y vacantes
-- Code Splitting: Cada pagina se carga bajo demanda con React.lazy() — chunks de menos de 10 KB por pagina
+- Modo demo completo: Explora la plataforma sin backend con credenciales predefinidas para candidato, organización y mentor
+- Sin backend requerido: Todo funciona offline con datos de demostración
+- Code Splitting: Cada página se carga bajo demanda con React.lazy() — chunks de menos de 10 KB por página
+- **Principio de Parametrización Universal**: Sin campos de texto libre — todo mediante selección parametrizada (SelectableCard, SelectableChip, CustomSlider)
+- **Patrón Wizard + SplitScreen**: Flujos multi-paso con preview en vivo (60/40)
 
 ---
 
-## Stack Tecnologico
+## Stack Tecnológico
 
-| Capa | Tecnologia | Version |
+| Capa | Tecnología | Versión |
 |------|-----------|---------|
 | Framework | React | 18 |
 | Lenguaje | TypeScript | 6 (strict: true) |
@@ -32,15 +52,15 @@ Astris es una plataforma web SPA que empareja talento diverso con organizaciones
 | UI | Radix UI + Lucide Icons | latest |
 | i18n | i18next + react-i18next | latest |
 | Backend | Demo offline (sin backend) | — |
-| Graficos | Recharts (RadarChart) | 3 |
+| Gráficos | Recharts (RadarChart) | 3 |
 | Animaciones | Framer Motion | 12 |
 | Formularios | react-hook-form | 7 |
 
-Ver ARCHITECTURE.md para detalles tecnicos completos.
+Ver ARCHITECTURE.md para detalles técnicos completos.
 
 ---
 
-## Instalacion
+## Instalación
 
 ```bash
 git clone https://github.com/IANLAIN/Astris.git
@@ -49,22 +69,22 @@ npm install
 npm run dev
 ```
 
-La aplicacion estara disponible en http://localhost:5173.
+La aplicación estará disponible en http://localhost:5173.
 
 ### Requisitos
 
 - Node.js 18+
 - npm 9+
-- No se necesita conexion a internet ni variables de entorno. Todo funciona offline.
+- No se necesita conexión a internet ni variables de entorno. Todo funciona offline.
 
 ---
 
 ## Comandos Disponibles
 
-| Comando | Descripcion |
+| Comando | Descripción |
 |---------|------------|
 | npm run dev | Inicia servidor de desarrollo Vite con HMR |
-| npm run build | Compila para produccion (type-check + bundle) |
+| npm run build | Compila para producción (type-check + bundle) |
 | npm run deploy | Despliega a GitHub Pages |
 | npm run update-logo | Actualiza el logo desde SVG/PNG vectorizado |
 
@@ -72,21 +92,24 @@ La aplicacion estara disponible en http://localhost:5173.
 
 ## Modo Demo (sin backend)
 
-Astris funciona completamente offline con datos de demostracion. No necesitas configurar Supabase ni ninguna base de datos.
+Astris funciona completamente offline con datos de demostración. No necesitas configurar Supabase ni ninguna base de datos.
 
 ### Usuarios demo
 
-| Rol | Email | Contrasena | Que veras |
+La pantalla de inicio de sesión incluye botones de **acceso rápido** (Candidato, Organización, Mentor) traducidos en los 4 idiomas. También puedes ingresar manualmente:
+
+| Rol | Email | Contraseña | Qué verás |
 |-----|-------|-----------|-----------|
-| Candidato | candidato@astris.org | Demo2026 | Perfil de Bryan Gonzalez (TDAH, Ing. Sistemas), radar de compatibilidad, vacantes de Vibra Latina y Closer To The Stars con % de match |
-| Organizacion | organizacion@astris.org | Demo2026 | Dashboard de Vibra Latina, candidatos con compatibilidad, vacantes activas (Full Stack + Disenador Grafico) |
-| Mentor | mentor@astris.org | Demo2026 | Dashboard de Elena Vargas, procesos activos, check-ins, organizaciones vinculadas |
-| Admin | johansttivelinaresb@gmail.com | Astris2026 | Panel administrativo con usuarios, organizaciones, candidatos y vacantes |
+| Candidato | candidato@astris.org | Demo2026 | Perfil de Bryan González (TDAH, Ing. Sistemas), radar de compatibilidad, vacantes de organizaciones asociadas con % de match |
+| Organización | organizacion@astris.org | Demo2026 | Dashboard de organizaciones, candidatos con compatibilidad, vacantes activas |
+| Mentor | mentor@astris.org | Demo2026 | Dashboard de mentores, procesos activos, check-ins, organizaciones vinculadas |
+
+> **Nota:** El email `empresa@astris.org` sigue funcionando como alias de organización para compatibilidad con versiones anteriores.
 
 ### Organizaciones demo
 
-- **Vibra Latina** — Corporacion audiovisual con sede en Houston, TX. Especializada en produccion de contenido sobre responsabilidad social, educacion y STEM para la comunidad hispana bilingue. Vacantes: Desarrollador Full Stack (94% match) y Disenador Grafico (87% match).
-- **Closer To The Stars Foundation** — Fundacion sin fines de lucro dedicada a la divulgacion cientifica y exploracion espacial. Vacante: Gerente de Administracion de Sistemas (82% match).
+- **Vibra Latina** — Corporación audiovisual con sede en Houston, TX. Especializada en producción de contenido sobre responsabilidad social, educación y STEM para la comunidad hispana bilingüe. Vacantes: Desarrollador Full Stack (94% match) y Diseñador Gráfico (87% match).
+- **Closer To The Stars Foundation** — Fundación sin fines de lucro dedicada a la divulgación científica y exploración espacial. Vacante: Gerente de Administración de Sistemas (82% match).
 
 ---
 
@@ -94,17 +117,17 @@ Astris funciona completamente offline con datos de demostracion. No necesitas co
 
 ### Candidato
 1. Onboarding: Configura paleta de colores, modo oscuro y fuente
-2. Quiz de caracterizacion: 4 ejes x 4 preguntas sobre estilo de trabajo y necesidades
+2. Quiz de caracterización: 4 ejes × 4 preguntas sobre estilo de trabajo y necesidades
 3. Perfil: Visualiza tu radar de compatibilidad con ajustes recomendados
-4. Vacantes: Explora ofertas con porcentaje de match (Vibra Latina, Closer To The Stars)
-5. Seleccion de mentor: Elige acompanamiento profesional
-6. Acompanamiento: Seguimiento pre y post-contratacion
+4. Vacantes: Explora ofertas con porcentaje de match (organizaciones asociadas)
+5. Selección de mentor: Elige acompañamiento profesional
+6. Acompañamiento: Seguimiento pre y post-contratación
 
-### Organizacion
-1. Perfil organizacional: Define filosofia, ajustes y entorno laboral
+### Organización
+1. Perfil organizacional: Define filosofía, ajustes y entorno laboral
 2. Publicar vacantes: Describe el rol, modalidad y ajustes ofrecidos
 3. Explorar candidatos: Visualiza perfiles con porcentajes de compatibilidad
-4. Seleccion y post-contratacion: Proceso de acompanamiento
+4. Selección y post-contratación: Proceso de acompañamiento
 
 ### Mentor
 1. Dashboard: Visualiza procesos activos y candidatos asignados con reportes de actividad
@@ -117,25 +140,25 @@ Astris funciona completamente offline con datos de demostracion. No necesitas co
 
 ```
 src/
-  App.tsx                   # Raiz: enrutamiento condicional + lazy loading + modales + tema
+  App.tsx                   # Raíz: enrutamiento condicional + lazy loading + modales + tema
   main.tsx                  # Entry point: BrowserRouter + render
-  assets/                   # Imagenes estaticas optimizadas
+  assets/                   # Imágenes estáticas optimizadas
   components/
-    common/                 # Componentes compartidos (NavBar, MatchBadge, RadarViz, etc.)
+    common/                 # Componentes compartidos (NavBar, MatchBadge, RadarViz, SplitScreenLayout,
+                            #   SelectableCard, SelectableChip, CustomSlider, etc.)
     modals/                 # LanguageModal, LoginModal, RegisterModal, UpdatePasswordModal
     ui/                     # Radix UI wrappers (button, dialog, card, dropdown-menu, etc.)
   hooks/                    # useAuth, useTheme, useCanGoBack
-  i18n/                     # Traducciones (es, en, pt, fr) + configuracion + datos estaticos
+  i18n/                     # Traducciones (es, en, pt, fr) + configuración + datos estáticos
   services/
-    demoData.ts             # TODOS los datos de demostracion
-    supabase.ts             # API demo: auth, matching, checkins, admin
-    supabase-admin.ts       # Funciones admin demo
-  pages/                    # Paginas organizadas por rol
+    demoData.ts             # TODOS los datos de demostración
+    supabase.ts             # API demo: auth, matching, checkins
+  pages/                    # Páginas organizadas por rol
     public/                 # LandingPage, AboutPage, SupportPage, PartnersPage
     candidate/              # Onboarding, Quiz, Profile, Vacancies, Mentor, Accompaniment
-    organization/           # OrgProfile, PostVacancy, Candidates, PostHire
+    organization/           # OrgOnboarding (wizard), OrgProfile, PostVacancy (wizard),
+                            #   Candidates, CandidateDetail, PostHire
     mentor/                 # Dashboard, Checkins, Organizations
-    admin/                  # AdminDashboard + subvistas
     shared/                 # NotFoundPage, SettingsPage
   styles/                   # CSS global (Tailwind v4, tema, fuentes)
   types/                    # Tipos TypeScript compartidos
@@ -152,33 +175,36 @@ npm run deploy
 
 El sitio se publica en https://astris.port0.org.
 
-Tambien puedes copiar el contenido de dist/ a cualquier hosting estatico (Netlify, Vercel, Cloudflare Pages).
+También puedes copiar el contenido de dist/ a cualquier hosting estático (Netlify, Vercel, Cloudflare Pages).
 
-Nota: Al ser una app 100% offline con datos demo, no se necesita configuracion de servidor backend ni variables de entorno.
+Nota: Al ser una app 100% offline con datos demo, no se necesita configuración de servidor backend ni variables de entorno.
 
 ---
 
 ## Principios de Desarrollo
 
-| Principio | Descripcion |
+| Principio | Descripción |
 |-----------|-------------|
-| Code Splitting | Toda pagina se carga con React.lazy(). Prohibido imports estaticos de paginas. |
-| DRY | Logica repetida a hooks. API calls a servicios. JSX repetido a componentes. |
+| Code Splitting | Toda página se carga con React.lazy(). Prohibido imports estáticos de páginas. |
+| Parametrización Universal | Ningún campo en perfiles puede ser texto libre. Todo mediante selección parametrizada (SelectableCard, SelectableChip, CustomSlider). |
+| Wizard + SplitScreen | Flujos multi-paso con preview en vivo 60/40, no scroll infinito. |
+| DRY | Lógica repetida a hooks. API calls a servicios. JSX repetido a componentes. |
 | Modularidad | 1 archivo = 1 componente/hook/servicio. Carpetas por rol y tipo. |
-| Limite de tamano | Archivos maximo 150 lineas. Funciones maximo 40 lineas. Componentes maximo 100 lineas JSX. |
+| Límite de tamaño | Archivos máximo 150 líneas. Funciones máximo 40 líneas. Componentes máximo 100 líneas JSX. |
 | i18n first | Todo texto visible en 4 idiomas. Prohibido texto hardcodeado. |
 | Sin archivos basura | Sin .bak, .old, temporales, logs, o datos personales en el repo. |
 | Sin store global | Estado local en hooks + URL + localStorage. Sin Context API, Redux o Zustand. |
 | Sin backend | Todo funciona offline con datos demo. No hay dependencia externa. |
+| Nomenclatura | "Organización", no "Empresa". Usa `organization` en variables, rutas y traducciones. |
 
-Ver CONTRIBUTING.md para la guia completa de contribucion.
+Ver CONTRIBUTING.md para la guía completa de contribución.
 
 ---
 
-## Documentacion
+## Documentación
 
-- ARCHITECTURE.md — Decisiones tecnicas, estructura del codigo, flujos de autenticacion y enrutamiento
-- CONTRIBUTING.md — Guia para contribuir: estandares de codigo, code splitting, i18n, DRY, limpieza de archivos
+- ARCHITECTURE.md — Decisiones técnicas, estructura del código, flujos de autenticación y enrutamiento
+- CONTRIBUTING.md — Guía para contribuir: estándares de código, code splitting, i18n, DRY, limpieza de archivos
 
 ---
 
@@ -190,6 +216,6 @@ ISC 2025-2026 Astris
 
 ## Agradecimientos
 
-- Vibra Latina (https://www.vibralatinatx.com/) — Inspiracion y apoyo
-- The Genuine Foundation (https://genuinecup.org/) — Colaboracion en inclusion laboral
+- Vibra Latina (https://www.vibralatinatx.com/) — Inspiración y apoyo
+- The Genuine Foundation (https://genuinecup.org/) — Colaboración en inclusión laboral
 - Todos los contribuyentes y personas que hacen posible este proyecto

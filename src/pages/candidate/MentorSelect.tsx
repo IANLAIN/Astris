@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { User, Star, MapPin, Check, ShieldAlert } from "lucide-react";
 import { Lang, MentorItem } from "@/types";
 import { useT } from "@/i18n/useT";
-import { getMentors } from "@/services/supabase";
+import { getMentors } from "@/services/dataSource";
 
 export function MentorSelect({ lang, onSelect }: { lang: Lang; onSelect: () => void }) {
   const t = useT(lang);

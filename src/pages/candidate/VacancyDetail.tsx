@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Clock, MapPin, Check, X, ArrowRight, ChevronLeft, ShieldAlert } from "lucide-react";
 import { Lang, VacancyItem } from "@/types";
 import { useT } from "@/i18n/useT";
-import { getMatchesForCandidate, getCurrentUser } from "@/services/supabase";
+import { getMatchesForCandidate, getCurrentUser } from "@/services/dataSource";
 import { MatchBadge } from "@/components/common/MatchBadge";
 
 export function VacancyDetail({ lang, vacancyId, onStart, onBack }: { lang: Lang; vacancyId: string; onStart: () => void; onBack: () => void }) {
@@ -20,7 +20,7 @@ export function VacancyDetail({ lang, vacancyId, onStart, onBack }: { lang: Lang
         setV({
           id: found.jobId,
           title: found.title,
-          company: found.company,
+          organization: found.company,
           sector: found.sector || "Tecnología",
           modality: found.modality,
           type: found.type,
@@ -68,7 +68,7 @@ export function VacancyDetail({ lang, vacancyId, onStart, onBack }: { lang: Lang
         <div className="flex items-center gap-3 md:gap-6">
           <div className="flex-1">
             <h1 className="text-2xl font-bold text-foreground">{v.title}</h1>
-            <p className="text-muted-foreground mt-0.5">{v.company} · {v.sector}</p>
+            <p className="text-muted-foreground mt-0.5">{v.organization} · {v.sector}</p>
           </div>
           <MatchBadge value={v.match} size="lg" />
         </div>

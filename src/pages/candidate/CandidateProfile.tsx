@@ -1,11 +1,53 @@
-import { useState, useEffect } from "react";
-import { User, Briefcase, CheckCircle, HeartHandshake, Loader2 } from "lucide-react";
+import { useState, useEffect, useCallback, useRef, useMemo, KeyboardEvent } from "react";
+import { User, Briefcase, CheckCircle, HeartHandshake, Loader2, X, MessageSquare, Target, Eye, SlidersHorizontal, Sparkles } from "lucide-react";
 import { Lang, QuizAnswers } from "@/types";
 import { useT, computeRadar } from "@/i18n/useT";
-import { getCurrentUser, getCandidateDashboardStats, CandidateDashboardStats } from "@/services/supabase";
-import { CANDIDATE_RADAR_FINAL } from "@/services/demoData";
+import { getCurrentUser, getCandidateDashboardStats } from "@/services/dataSource";
+import type { CandidateDashboardStats } from "@/services/dataSource";
+import { CANDIDATE_RADAR_FINAL, CANDIDATE_ADJUSTMENTS } from "@/services/demoData";
 import { RadarViz } from "@/components/common/RadarViz";
 import { QUIZ_AXES } from "@/i18n/content";
+import { getAffirmationKey, AFFIRMATION_AXIS_LABELS, AFFIRMATION_ICONS } from "@/lib/affirmations";
+
+// ── Skill with seniority level ──
+export type SkillLevel = "junior" | "semi_senior" | "senior";
+
+export interface SkillItem {
+  name: string;
+  level: SkillLevel;
+}
+
+const LEVEL_I18N_KEYS: Record<SkillLevel, { label: string; desc: string }> = {
+  junior: { label: "profile.skillJunior", desc: "profile.skillJuniorDesc" },
+  semi_senior: { label: "profile.skillSemiSenior", desc: "profile.skillSemiSeniorDesc" },
+  senior: { label: "profile.skillSenior", desc: "profile.skillSeniorDesc" },
+};
+
+const LEVEL_ORDER: SkillLevel[] = ["junior", "semi_senior", "senior"];
+
+// Level → border opacity class for subtle visual distinction
+const LEVEL_STYLE: Record<SkillLevel, string> = {
+  junior: "border-primary/30",
+  semi_senior: "border-primary/60",
+  senior: "border-primary",
+};
+
+const DEMO_SKILLS: SkillItem[] = [
+  { name: "Análisis de Datos", level: "senior" },
+  { name: "Python", level: "semi_senior" },
+  { name: "SQL", level: "semi_senior" },
+  { name: "Power BI", level: "junior" },
+  { name: "Excel Avanzado", level: "senior" },
+];
+
+// ── Icons ──
+const ICON_MAP = { MessageSquare, Target, Eye, SlidersHorizontal, Sparkles } as const;
+type IconName = keyof typeof ICON_MAP;
+
+function AxisIcon({ name, className }: { name: string; className?: string }) {
+  const Icon = ICON_MAP[name as IconName] || Sparkles;
+  return <Icon size={18} className={className} />;
+}
 
 export function CandidateProfile({
   lang,
@@ -23,43 +65,57 @@ export function CandidateProfile({
   userId?: string;
 }) {
   const t = useT(lang);
+  const skillInputRef = useRef<HTMLInputElement>(null);
+
   const [isDemoUser, setIsDemo] = useState(false);
   const [stats, setStats] = useState<CandidateDashboardStats>({ vacancies: 0, matches: 0, accompanimentActive: false });
   const [statsLoading, setStatsLoading] = useState(true);
 
+  // Skill stack — structured { name, level }[]
+  const [skills, setSkills] = useState<SkillItem[]>([]);
+  const [skillInput, setSkillInput] = useState("");
+  // When user types a skill and presses Enter, this holds the name until level is chosen
+  const [pendingSkill, setPendingSkill] = useState<string | null>(null);
+
   useEffect(() => {
     getCurrentUser().then((u) => {
       setIsDemo(
-        u?.id === "demo-cand" ||
-          u?.id === "demo-comp" ||
-          u?.id === "demo-ment" ||
-          u?.id === "admin-backdoor"
+        u?.id === "demo-cand" || u?.id === "demo-comp" || u?.id === "demo-ment"
       );
     });
   }, []);
 
-  // Fetch live dashboard stats
   useEffect(() => {
     if (!userId) return;
     getCandidateDashboardStats(userId).then((s) => {
       setStats(s);
       setStatsLoading(false);
-    }).catch(() => {
-      setStatsLoading(false);
-    });
+    }).catch(() => setStatsLoading(false));
   }, [userId]);
 
   const hasQuizAnswers = Object.keys(answers).length > 0;
-  const radarData = hasQuizAnswers
-    ? computeRadar(answers)
-    : isDemoUser
-      ? CANDIDATE_RADAR_FINAL
-      : computeRadar(answers);
+  const radarData = useMemo(() => {
+    const raw = hasQuizAnswers ? computeRadar(answers) : isDemoUser ? CANDIDATE_RADAR_FINAL : computeRadar(answers);
+    return raw.map((d: { axis: string; value: number }) => ({ ...d }));
+  }, [answers, hasQuizAnswers, isDemoUser]);
 
   const firstName = userName ? userName.split(" ")[0] : t("role.candidate");
 
-  // Compute active adjustments from axis 4
-  const adjustments: string[] = (() => {
+  // Affirmations
+  const affirmations = useMemo(() => {
+    return radarData.map((d: { value: number }, i: number) => {
+      const key = getAffirmationKey(i as 0 | 1 | 2 | 3, d.value);
+      return {
+        text: t(key),
+        labelKey: AFFIRMATION_AXIS_LABELS[i],
+        iconName: AFFIRMATION_ICONS[i],
+        value: d.value,
+      };
+    });
+  }, [radarData, t]);
+
+  // Adjustments
+  const adjustments: string[] = useMemo(() => {
     const axis = QUIZ_AXES[3];
     const active: string[] = [];
     if (answers[3]) {
@@ -67,9 +123,7 @@ export function CandidateProfile({
         const qIdx = Number(qi);
         if (Array.isArray(ans) && qIdx < axis.questions.length) {
           ans.forEach((oi: number) => {
-            const oText =
-              axis.questions[qIdx].opts[lang]?.[oi] ??
-              axis.questions[qIdx].opts.es[oi];
+            const oText = axis.questions[qIdx].opts[lang]?.[oi] ?? axis.questions[qIdx].opts.es[oi];
             if (oText && oi !== axis.questions[qIdx].opts.es.length - 1) {
               active.push(oText);
             }
@@ -77,19 +131,49 @@ export function CandidateProfile({
         }
       });
     }
-    if (active.length === 0) {
-      active.push(
-        t("profile.flexible_hours"),
-        t("profile.async_comm"),
-        t("profile.quiet_environment")
-      );
+    if (active.length === 0 && isDemoUser) return CANDIDATE_ADJUSTMENTS;
+    return active.length > 0 ? active : [t("profile.flexible_hours"), t("profile.async_comm"), t("profile.quiet_environment")];
+  }, [answers, lang, t, isDemoUser]);
+
+  // ── Skill handlers ──
+  const commitSkill = useCallback((level: SkillLevel) => {
+    if (!pendingSkill) return;
+    const trimmed = pendingSkill.trim();
+    if (trimmed && !skills.some((s) => s.name === trimmed)) {
+      setSkills((prev) => [...prev, { name: trimmed, level }]);
     }
-    return active;
-  })();
+    setPendingSkill(null);
+    setSkillInput("");
+    skillInputRef.current?.focus();
+  }, [pendingSkill, skills]);
+
+  const cancelPending = useCallback(() => {
+    setPendingSkill(null);
+    setSkillInput("");
+    skillInputRef.current?.focus();
+  }, []);
+
+  const removeSkill = useCallback((name: string) => {
+    setSkills((prev) => prev.filter((s) => s.name !== name));
+  }, []);
+
+  const handleSkillKeyDown = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
+    if ((e.key === "Enter" || e.key === ",") && skillInput.trim()) {
+      e.preventDefault();
+      // If name already exists, ignore
+      if (skills.some((s) => s.name === skillInput.trim())) {
+        setSkillInput("");
+        return;
+      }
+      setPendingSkill(skillInput.trim());
+    }
+  }, [skillInput, skills]);
+
+  const displayedSkills = skills.length > 0 ? skills : isDemoUser ? DEMO_SKILLS : [];
 
   return (
     <div className="min-h-screen w-full overflow-x-hidden flex flex-col bg-background">
-      {/* Dashboard Header */}
+      {/* Header */}
       <div className="px-4 lg:px-12 py-8 border-b border-border bg-card">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="flex items-center gap-5">
@@ -97,133 +181,168 @@ export function CandidateProfile({
               {userAvatar ? (
                 <img src={userAvatar} alt="" className="w-full h-full object-cover" />
               ) : (
-                <User size={32} className="text-muted-foreground" aria-hidden="true" />
+                <User size={32} className="text-muted-foreground" />
               )}
             </div>
             <div>
               <h1 className="text-2xl md:text-3xl font-bold text-foreground">
-                {t("dash.welcome")}{" "}
-                <span className="text-primary">{firstName}</span>
+                {t("dash.welcome")} <span className="text-primary">{firstName}</span>
               </h1>
-              {vocation && (
-                <p className="text-muted-foreground mt-1 text-sm md:text-base font-medium">
-                  {vocation}
-                </p>
-              )}
+              {vocation && <p className="text-muted-foreground mt-1 text-sm md:text-base font-medium">{vocation}</p>}
             </div>
           </div>
         </div>
-
-        {/* Quick Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-8">
           <div className="rounded-xl border border-border bg-background p-5 flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-primary text-primary-foreground shrink-0">
-              <Briefcase size={20} aria-hidden="true" />
-            </div>
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-primary text-primary-foreground shrink-0"><Briefcase size={20} /></div>
             <div className="min-w-0">
-              <div className="text-sm font-semibold text-muted-foreground truncate">
-                {t("dash.suggested")}
-              </div>
-              {statsLoading ? (
-                <Loader2 size={20} className="mt-2 text-muted-foreground animate-spin" />
-              ) : (
-                <div className="text-2xl font-bold text-foreground mt-1">{stats.vacancies}</div>
-              )}
+              <div className="text-sm font-semibold text-muted-foreground truncate">{t("dash.suggested")}</div>
+              {statsLoading ? <Loader2 size={20} className="mt-2 text-muted-foreground animate-spin" /> : <div className="text-2xl font-bold text-foreground mt-1">{stats.vacancies}</div>}
             </div>
           </div>
-
           <div className="rounded-xl border border-border bg-background p-5 flex items-center gap-4">
-            <div
-              className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
-              style={{ backgroundColor: "rgba(245,196,66,0.15)", color: "#F5C442" }}
-            >
-              <CheckCircle size={20} aria-hidden="true" />
-            </div>
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: "rgba(245,196,66,0.15)", color: "#F5C442" }}><CheckCircle size={20} /></div>
             <div className="min-w-0">
-              <div className="text-sm font-semibold text-muted-foreground truncate">
-                {t("dash.matches")}
-              </div>
-              {statsLoading ? (
-                <Loader2 size={20} className="mt-2 text-muted-foreground animate-spin" />
-              ) : (
-                <div className="text-2xl font-bold text-foreground mt-1">{stats.matches}</div>
-              )}
+              <div className="text-sm font-semibold text-muted-foreground truncate">{t("dash.matches")}</div>
+              {statsLoading ? <Loader2 size={20} className="mt-2 text-muted-foreground animate-spin" /> : <div className="text-2xl font-bold text-foreground mt-1">{stats.matches}</div>}
             </div>
           </div>
-
           <div className="rounded-xl border border-border bg-background p-5 flex items-center gap-4">
-            <div
-              className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
-              style={{ backgroundColor: "rgba(16,185,129,0.15)", color: "#10B981" }}
-            >
-              <HeartHandshake size={20} aria-hidden="true" />
-            </div>
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: "rgba(16,185,129,0.15)", color: "#10B981" }}><HeartHandshake size={20} /></div>
             <div className="min-w-0">
-              <div className="text-sm font-semibold text-muted-foreground truncate">
-                {t("dash.mentor")}
-              </div>
-              {statsLoading ? (
-                <Loader2 size={20} className="mt-2 text-muted-foreground animate-spin" />
-              ) : (
-                <div className="text-lg font-bold mt-1 text-emerald-500 truncate">
-                  {stats.accompanimentActive ? t("dash.active") : t("dash.inactive")}
-                </div>
-              )}
+              <div className="text-sm font-semibold text-muted-foreground truncate">{t("dash.mentor")}</div>
+              {statsLoading ? <Loader2 size={20} className="mt-2 text-muted-foreground animate-spin" /> : <div className="text-lg font-bold mt-1 text-emerald-500 truncate">{stats.accompanimentActive ? t("dash.active") : t("dash.inactive")}</div>}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Main Dashboard Content */}
-      <div className="flex-1 px-4 lg:px-12 py-10 flex flex-col lg:flex-row gap-8 max-w-[1600px] w-full mx-auto">
-        {/* Left: Radar */}
-        <div className="w-full lg:w-[340px] xl:w-[380px] shrink-0 space-y-6">
-          <div className="rounded-2xl border border-border bg-card p-6">
-            <h2 className="text-lg font-bold text-foreground mb-4 text-center">
-              {t("profile.cognitive_profile")}
-            </h2>
-            <div className="flex justify-center items-center w-full overflow-hidden">
-              <RadarViz data={radarData} height={280} outerRadius={85} fontSize={10} />
+      {/* Main */}
+      <div className="flex-1 px-4 lg:px-12 py-10 max-w-[1400px] w-full mx-auto">
+        <div className="flex flex-col lg:flex-row gap-8 mb-10">
+          {/* Radar */}
+          <div className="w-full lg:w-[340px] xl:w-[380px] shrink-0">
+            <div className="rounded-2xl border-2 border-border bg-card p-6 shadow-sm">
+              <h2 className="text-lg font-bold text-foreground mb-4 text-center">{t("profile.cognitive_profile")}</h2>
+              <div className="flex justify-center items-center w-full overflow-hidden">
+                <RadarViz data={radarData} height={280} outerRadius={85} fontSize={10} />
+              </div>
+            </div>
+            <div className="mt-6 rounded-2xl border-2 border-border bg-card p-6 shadow-sm">
+              <h2 className="text-sm font-bold text-foreground mb-4">{t("profile.adjustments")}</h2>
+              <div className="flex flex-wrap gap-2">
+                {adjustments.length > 0 ? adjustments.map((adj, idx) => (
+                  <span key={idx} className="text-xs font-semibold px-3 py-1.5 rounded-full bg-primary/10 text-primary border border-primary/20">{adj}</span>
+                )) : <span className="text-sm text-muted-foreground">—</span>}
+              </div>
+            </div>
+          </div>
+
+          {/* Affirmations */}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-5">
+              <Sparkles size={18} className="text-primary" />
+              <h2 className="text-lg font-bold text-foreground">{t("profile.affirmationTitle")}</h2>
+            </div>
+            <p className="text-xs text-muted-foreground mb-5">{t("profile.affirmationSub")}</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {affirmations.map((a, i) => (
+                <div key={i} className="rounded-2xl border-2 border-border bg-card p-5 shadow-sm transition-all hover:shadow-md">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-primary/10 text-primary">
+                      <AxisIcon name={a.iconName} />
+                    </div>
+                    <span className="text-xs font-bold text-muted-foreground uppercase tracking-wide">{t(a.labelKey)}</span>
+                    <span className="ml-auto text-xs font-bold font-mono tabular-nums text-primary">{a.value}%</span>
+                  </div>
+                  <p className="text-sm text-foreground leading-relaxed">{a.text}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* Right: Adjustments & Activity */}
-        <div className="flex-1 space-y-6 min-w-0">
-          <div className="rounded-[2rem] border border-border bg-card p-6 md:p-8">
-            <h2 className="text-xl font-bold text-foreground mb-6">
-              {t("profile.adjustments")}
-            </h2>
-            {adjustments.length > 0 ? (
-              <div className="flex flex-wrap gap-3">
-                {adjustments.map((adj, idx) => (
-                  <span
-                    key={idx}
-                    className="text-sm font-semibold px-4 py-2.5 rounded-xl bg-primary/10 text-primary border border-primary/20"
-                  >
-                    {adj}
-                  </span>
-                ))}
-              </div>
-            ) : (
-              <span className="text-sm text-muted-foreground">—</span>
-            )}
+        {/* ── Skill Stack with Seniority ── */}
+        <div className="rounded-2xl border-2 border-border bg-card p-6 md:p-8 shadow-sm">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-bold text-foreground">{t("profile.skillsStack")}</h2>
+            <span className="text-xs text-muted-foreground font-semibold">{displayedSkills.length} {t("profile.skillsTitle")}</span>
           </div>
 
-          <div className="rounded-[2rem] border border-border bg-card p-6 md:p-8">
-            <h2 className="text-xl font-bold text-foreground mb-4">
-              {t("profile.recent_activity")}
-            </h2>
-            <div className="flex flex-col items-center justify-center py-10 text-center border-2 border-dashed border-border rounded-xl">
-              <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mb-3">
-                <User className="text-muted-foreground" size={24} aria-hidden="true" />
-              </div>
-              <p className="text-foreground font-semibold">{t("profile.up_to_date")}</p>
-              <p className="text-sm text-muted-foreground mt-1 max-w-sm">
-                {t("profile.explore_vacancies")}
-              </p>
-            </div>
+          {/* Input */}
+          <div className="relative mb-4">
+            <input
+              ref={skillInputRef}
+              type="text"
+              value={skillInput}
+              onChange={(e) => setSkillInput(e.target.value)}
+              onKeyDown={handleSkillKeyDown}
+              className="w-full px-4 py-3 rounded-xl border-2 border-border bg-input-background text-foreground text-sm focus:border-primary focus:outline-none transition-colors"
+              placeholder={t("profile.skillsPlaceholder")}
+              disabled={!!pendingSkill}
+            />
           </div>
+          <p className="text-xs text-muted-foreground mb-4">{t("profile.skillsHint")}</p>
+
+          {/* Level selector — shown when skill name is pending */}
+          {pendingSkill && (
+            <div className="mb-5 p-4 rounded-xl border-2 border-primary/20 bg-primary/5">
+              <p className="text-xs font-bold text-foreground mb-3">
+                <span className="font-semibold text-primary">{pendingSkill}</span> — {t("profile.skillSelectLevel")}
+              </p>
+              <div className="flex gap-2.5">
+                {LEVEL_ORDER.map((lvl) => {
+                  const info = LEVEL_I18N_KEYS[lvl];
+                  const selected = false; // no pre-selection
+                  return (
+                    <button
+                      key={lvl}
+                      onClick={() => commitSkill(lvl)}
+                      className={`flex-1 px-3 py-2.5 rounded-xl border-2 text-xs font-bold cursor-pointer transition-all text-center ${
+                        selected
+                          ? "border-primary bg-primary/10 text-foreground"
+                          : "border-border bg-card text-muted-foreground hover:border-primary/50 hover:text-foreground"
+                      }`}
+                    >
+                      <div>{t(info.label)}</div>
+                      <div className="text-[10px] font-normal text-muted-foreground/70 mt-0.5">{t(info.desc)}</div>
+                    </button>
+                  );
+                })}
+                <button
+                  onClick={cancelPending}
+                  className="px-3 py-2 rounded-xl border-2 border-border bg-card text-muted-foreground hover:text-foreground cursor-pointer text-xs font-semibold"
+                >
+                  <X size={14} />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Skills chips with level badge */}
+          {displayedSkills.length > 0 ? (
+            <div className="flex flex-wrap gap-2">
+              {displayedSkills.map((sk) => {
+                const info = LEVEL_I18N_KEYS[sk.level];
+                const borderStyle = LEVEL_STYLE[sk.level];
+                return (
+                  <span
+                    key={sk.name}
+                    className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-primary/5 text-primary border-2 ${borderStyle} cursor-default`}
+                  >
+                    <span>{sk.name}</span>
+                    <span className="text-[10px] font-bold text-muted-foreground/60 mx-0.5">•</span>
+                    <span className="text-[10px] font-bold text-muted-foreground/80">{t(info.label)}</span>
+                    <button onClick={() => removeSkill(sk.name)} className="p-0.5 rounded-full hover:bg-primary/20 cursor-pointer border-0 bg-transparent text-primary ml-0.5" aria-label={`Remove ${sk.name}`}>
+                      <X size={12} />
+                    </button>
+                  </span>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground/60 italic">{t("profile.skillsEmpty")}</p>
+          )}
         </div>
       </div>
     </div>

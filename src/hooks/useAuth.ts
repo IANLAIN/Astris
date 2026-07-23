@@ -1,6 +1,13 @@
 import { useState, useEffect } from "react";
 import { Role, QuizAnswers } from "@/types";
-import { getCurrentUser, loginUser, logoutUser, registerUser, USE_REAL_BACKEND, isDemoUserUser, getCandidateQuizAnswers } from "@/services/supabase";
+import {
+  getCurrentUser,
+  loginUser,
+  logoutUser,
+  registerUser,
+  getCandidateQuizAnswers,
+  isDemoUserId,
+} from "@/services/dataSource";
 import { handleDemoLogin, handleDemoRegister } from "@/services/demoAuth";
 
 export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) => void) {
@@ -50,7 +57,7 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
           setUserId(user.id);
           setModalStep("none");
 
-          const demo = isDemoUserUser(user.id);
+          const demo = isDemoUserId(user.id);
 
           if (user.role === "candidate") {
             const savedAnswers = await getCandidateQuizAnswers(user.id);
@@ -74,9 +81,6 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
             setScreen(demo ? "candidates" : "org-profile");
           } else if (user.role === "mentor") {
             setScreen(demo ? "dashboard" : "dashboard");
-          } else if (user.role === "admin") {
-            window.localStorage.setItem("astris_admin_session", "true");
-            setScreen("dashboard");
           }
         }
       } catch {
@@ -109,11 +113,11 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
   };
 
   const handleRegister = async (email: string, password: string, name: string, selectedRole: Role, vocation: string) => {
-    if (!USE_REAL_BACKEND) {
-      const handled = handleDemoRegister(email, password, name, selectedRole, vocation, setRole, setUserName, setUserVocation, setLoggedIn, setModalStep, setQuizCompleted, setScreen);
-      if (handled) return;
-    }
+    // Try local registration (non-demo) first
+    const handled = handleDemoRegister(email, password, name, selectedRole, vocation, setRole, setUserName, setUserVocation, setLoggedIn, setModalStep, setQuizCompleted, setScreen);
+    if (handled) return;
 
+    // Otherwise delegate to dataSource -> supabase
     setAuthLoading(true);
     setAuthError(null);
     try {
@@ -131,7 +135,8 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
   };
 
   const handleLogin = async (email?: string, password?: string) => {
-    if (!USE_REAL_BACKEND && email && password) {
+    // Demo mode: always try local demo accounts first
+    if (email && password) {
       const handled = handleDemoLogin(email, password, setRole, setUserName, setUserVocation, setQuizCompleted, setLoggedIn, setModalStep, setScreen);
       if (handled) return;
     }
@@ -144,8 +149,13 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
     setAuthLoading(true);
     setAuthError(null);
     try {
+      // Delegate to dataSource — it handles both local (non-demo) and supabase login
       await loginUser(email, password);
       const user = await getCurrentUser();
+      if (!user) {
+        setAuthError("Credenciales inválidas. Verifica tu correo y contraseña.");
+        return;
+      }
       const resolvedRole = user?.role ?? "candidate";
       setRole(resolvedRole);
       setUserName(user?.name ?? "");
@@ -175,6 +185,11 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
     }
   };
 
+  /** Demo quick-login: directly log in as a demo user by role */
+  const handleDemoQuickLogin = (demoEmail: string) => {
+    return handleDemoLogin(demoEmail, "Demo2026", setRole, setUserName, setUserVocation, setQuizCompleted, setLoggedIn, setModalStep, setScreen);
+  };
+
   const handleLogout = async (setPublicView: (s: any) => void) => {
     try { await logoutUser(); } catch { /* ignore */ }
     setLoggedIn(false);
@@ -187,6 +202,6 @@ export function useAuth(setScreen: (s: string) => void, setModalStep: (s: any) =
 
   return {
     role, pendingRole, loggedIn, authLoading, authError, appReady, authMessage, googleAuthUser, requirePasswordUpdate, userName, userAvatar, userVocation, userId, quizCompleted, loadedQuizAnswers,
-    setQuizCompleted, setPendingRole, setRequirePasswordUpdate, handleCompleteGoogleRegistration, handleRegister, handleLogin, handleLogout
+    setQuizCompleted, setPendingRole, setRequirePasswordUpdate, handleCompleteGoogleRegistration, handleRegister, handleLogin, handleDemoQuickLogin, handleLogout
   };
 }

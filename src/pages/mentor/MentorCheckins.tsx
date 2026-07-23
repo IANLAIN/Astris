@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Calendar, MessageSquare, ShieldAlert, CalendarDays, Clock, Video } from "lucide-react";
 import { Lang } from "@/types";
 import { useT, C } from "@/i18n/useT";
-import { getCurrentUser, isDemoUserUser } from "@/services/supabase";
+import { getCurrentUser, isDemoUserUser } from "@/services/dataSource";
 
 export function MentorCheckins({ lang }: { lang: Lang }) {
   const t = useT(lang);

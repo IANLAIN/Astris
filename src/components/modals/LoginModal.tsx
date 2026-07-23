@@ -3,14 +3,15 @@ import { ChevronLeft, AlertCircle, UserPlus } from "lucide-react";
 import { Lang } from "@/types";
 import { useT } from "@/i18n/useT";
 import { Overlay } from "../common/Overlay";
-import { signInWithGoogle, resetPasswordForEmail } from "@/services/supabase";
+import { signInWithGoogle, resetPasswordForEmail } from "@/services/dataSource";
 import { PasswordInput } from "../ui/PasswordInput";
 
-export function LoginModal({ lang, onLogin, onBack, onRegister, error, loading }: {
+export function LoginModal({ lang, onLogin, onBack, onRegister, onDemoQuickLogin, error, loading }: {
   lang: Lang;
   onLogin: (email?: string, password?: string) => void;
   onBack: () => void;
   onRegister?: () => void;
+  onDemoQuickLogin?: (demoEmail: string) => void;
   error?: string | null;
   loading?: boolean;
 }) {
@@ -71,7 +72,7 @@ export function LoginModal({ lang, onLogin, onBack, onRegister, error, loading }
 
   return (
     <Overlay label={t("login.title")} onClose={onBack}>
-      <div className="w-[95%] sm:w-full max-w-md rounded-2xl overflow-hidden mx-auto" style={{ backgroundColor: "var(--card)" }}>
+      <div className="w-full max-w-md rounded-2xl mx-auto bg-card border border-border flex flex-col" style={{ maxHeight: "85vh" }}>
         <div className="px-4 md:px-8 py-7 border-b border-border">
           <button onClick={() => {
             if (mode === "forgot") { setMode("login"); setResetSent(false); setLocalError(null); }
@@ -81,7 +82,7 @@ export function LoginModal({ lang, onLogin, onBack, onRegister, error, loading }
           </button>
           <div className="text-xl font-bold text-foreground">{mode === "forgot" ? (t("login.forgotTitle")) : t("login.title")}</div>
         </div>
-        <div className="p-4 md:p-8 flex flex-col gap-5">
+        <div className="p-4 md:p-8 flex flex-col gap-5 overflow-y-auto custom-scrollbar">
           <div role="alert" aria-live="assertive" aria-atomic="true">
             {displayError && (
               <div className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm" style={{ backgroundColor: "#FEF2F2", color: "#C0392B" }}>
@@ -160,6 +161,31 @@ export function LoginModal({ lang, onLogin, onBack, onRegister, error, loading }
             <button onClick={handleReset} disabled={isBusy || resetSent} className="w-full py-4 rounded-xl font-bold text-base cursor-pointer" style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)", opacity: (isBusy || resetSent) ? 0.6 : 1 }}>
               {isBusy ? "..." : (t("login.sendLink"))}
             </button>
+          )}
+
+          {/* ── Demo Quick Access Buttons ── */}
+          {onDemoQuickLogin && (
+            <div className="mt-4 pt-5 border-t border-border">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3 text-center">
+                {t("login.demoTitle")}
+              </p>
+              <div className="flex flex-col gap-2">
+                {[
+                  { key: "candidato@astris.org", label: t("login.demoCandidate") },
+                  { key: "organizacion@astris.org", label: t("login.demoOrganization") },
+                  { key: "mentor@astris.org", label: t("login.demoMentor") },
+                ].map((demo) => (
+                  <button
+                    key={demo.key}
+                    onClick={() => onDemoQuickLogin(demo.key)}
+                    className="w-full py-3 rounded-xl font-semibold text-sm cursor-pointer transition-all hover:scale-[1.01] border-2 border-border hover:border-primary/50 hover:bg-primary/5"
+                    style={{ backgroundColor: "var(--card)", color: "var(--foreground)" }}
+                  >
+                    {demo.label}
+                  </button>
+                ))}
+              </div>
+            </div>
           )}
         </div>
       </div>

@@ -3,7 +3,7 @@ import { AlertCircle } from "lucide-react";
 import { Lang } from "@/types";
 import { useT } from "@/i18n/useT";
 import { Overlay } from "../common/Overlay";
-import { updatePassword } from "@/services/supabase";
+import { updatePassword } from "@/services/dataSource";
 import { PasswordInput } from "../ui/PasswordInput";
 
 export function UpdatePasswordModal({ lang, onComplete }: {

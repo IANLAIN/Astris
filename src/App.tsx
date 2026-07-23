@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, Suspense } from "react";
 import { Lang, ModalStep, QuizAnswers, FontKey } from "@/types";
 import { getInitialLang, getInitialModalStep } from "@/i18n/useT";
 import { QUIZ_AXES } from "@/i18n/content";
-import { saveCandidateProfile, getCurrentUser } from "@/services/supabase";
+import { saveCandidateProfile, getCurrentUser } from "@/services/dataSource";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@/hooks/useTheme";
@@ -51,7 +51,7 @@ export default function App() {
     googleAuthUser, requirePasswordUpdate, userName, userAvatar, userVocation,
     userId, quizCompleted, loadedQuizAnswers, setQuizCompleted, setPendingRole,
     setRequirePasswordUpdate, handleCompleteGoogleRegistration,
-    handleRegister, handleLogin, handleLogout,
+    handleRegister, handleLogin, handleDemoQuickLogin, handleLogout,
   } = useAuth(setScreen, setModalStep);
 
   useEffect(() => {
@@ -105,7 +105,7 @@ export default function App() {
         <RegisterModal lang={lang} role={pendingRole} onRegister={handleRegister} onBack={() => setModalStep("none")} error={authError} loading={authLoading} googleAuthUser={googleAuthUser} onCompleteGoogle={handleCompleteGoogleRegistration} />
       )}
       {modalStep === "login" && (
-        <LoginModal lang={lang} onLogin={handleLogin} onBack={() => setModalStep("none")} onRegister={() => setModalStep("register")} error={authError} loading={authLoading} />
+        <LoginModal lang={lang} onLogin={handleLogin} onBack={() => setModalStep("none")} onRegister={() => setModalStep("register")} onDemoQuickLogin={handleDemoQuickLogin} error={authError} loading={authLoading} />
       )}
       {requirePasswordUpdate && <UpdatePasswordModal lang={lang} onComplete={() => setRequirePasswordUpdate(false)} />}
 
@@ -147,6 +147,12 @@ export default function App() {
                     {role === "candidate" && screen === "mentor-select" && <P.MentorSelect lang={lang} onSelect={() => setScreen("accompaniment")} />}
                     {role === "candidate" && screen === "accompaniment" && <P.CandidateAccompaniment lang={lang} />}
                     {role === "candidate" && ["post-hire", "tracking"].includes(screen) && <P.CandidatePostHire lang={lang} />}
+                  {role === "organization" && screen === "org-onboarding" && (
+                    <P.OrganizationOnboarding
+                      lang={lang}
+                      onComplete={() => setScreen("org-profile")}
+                    />
+                  )}
                   {role === "organization" && screen === "org-profile" && <P.OrganizationOrgProfile lang={lang} />}
                   {role === "organization" && screen === "post-vacancy" && <P.OrganizationPostVacancy lang={lang} />}
                   {role === "organization" && screen === "candidates" && <P.OrganizationCandidates lang={lang} onSelect={(id: string) => { setSelectedCandidate(id); setScreen("candidate-detail"); }} />}
@@ -156,13 +162,11 @@ export default function App() {
                     {role === "mentor" && screen === "checkins" && <P.MentorCheckins lang={lang} />}
                     {role === "mentor" && screen === "organizations" && <P.MentorOrganizations lang={lang} />}
                     {role === "mentor" && !MENTOR_SCREENS.includes(screen as any) && <P.MentorDashboard lang={lang} />}
-                    {role === "admin" && <P.AdminDashboard onLogout={() => handleLogout(setPublicView)} onBack={() => handleBackTo("home")} />}
                     {screen === "settings" && <P.SettingsPage lang={lang} palette={palette} darkMode={darkMode} font={font} onPalette={setPalette} onDark={setDarkMode} onFont={setFont} onLogout={() => handleLogout(setPublicView)} />}
                     {screen !== "settings" &&
                       !(role === "candidate" && CANDIDATE_SCREENS.includes(screen as any)) &&
                       !(role === "organization" && ORGANIZATION_SCREENS.includes(screen as any)) &&
-                      !(role === "mentor" && MENTOR_SCREENS.includes(screen as any)) &&
-                      !(role === "admin") && (
+                      !(role === "mentor" && MENTOR_SCREENS.includes(screen as any)) && (
                         <P.NotFoundPage lang={lang} onGoHome={() => handleNav("home")} />
                       )}
                   </>

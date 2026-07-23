@@ -1,6 +1,6 @@
 export type Lang = "es" | "en" | "pt" | "fr";
 export type ModalStep = "language" | "register" | "login" | "none";
-export type Role = "candidate" | "organization" | "mentor" | "admin";
+export type Role = "candidate" | "organization" | "mentor";
 export type PaletteKey = "azul" | "tierra" | "contraste" | "verde";
 export type FontKey = "inter" | "opendyslexic";
 export type PublicView = "landing" | "about" | "support" | "partners";

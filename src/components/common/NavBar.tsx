@@ -34,11 +34,8 @@ export function NavBar({ lang, role, screen, onNav, onLang, onLogout, darkMode, 
     { id: "checkins", label: t("nav.checkins"), Icon: Calendar },
     { id: "organizations", label: t("nav.companies"), Icon: Building2 },
   ];
-  const ADMIN_NAV = [
-    { id: "dashboard", label: "Dashboard", Icon: BarChart2 }
-  ];
-  const navItems = role === "candidate" ? CANDIDATE_NAV : role === "organization" ? ORGANIZATION_NAV : role === "mentor" ? MENTOR_NAV : ADMIN_NAV;
-  const ROLE_LABELS: Record<Role, string> = { candidate: t("role.candidate"), company: t("role.company"), mentor: t("role.mentor"), admin: t("role.admin") };
+  const navItems = role === "candidate" ? CANDIDATE_NAV : role === "organization" ? ORGANIZATION_NAV : MENTOR_NAV;
+  const ROLE_LABELS: Record<Role, string> = { candidate: t("role.candidate"), company: t("role.company"), mentor: t("role.mentor") };
 
   const darkLabel = darkMode
     ? (t("settings.light"))

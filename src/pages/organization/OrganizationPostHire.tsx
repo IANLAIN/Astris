@@ -2,7 +2,7 @@ import { useState } from "react";
 import { User, MessageSquare } from "lucide-react";
 import { Lang } from "@/types";
 import { useT, C } from "@/i18n/useT";
-import { saveCheckin } from "@/services/supabase";
+import { saveCheckin } from "@/services/dataSource";
 
 export function OrganizationPostHire({ lang }: { lang: Lang }) {
   const t = useT(lang);
@@ -40,7 +40,7 @@ export function OrganizationPostHire({ lang }: { lang: Lang }) {
           <p className="text-sm text-muted-foreground leading-relaxed">{t("comp.posthire.candObs")}</p>
         </div>
         <div className="rounded-2xl border border-border p-7" style={{ backgroundColor: "var(--card)" }}>
-          <h2 className="font-bold text-foreground mb-4">{C(lang, "compPostHireObs") as string}</h2>
+          <h2 className="font-bold text-foreground mb-4">{C(lang, "orgPostHireObs") as string}</h2>
           <textarea 
             value={obs}
             onChange={(e) => setObs(e.target.value)}

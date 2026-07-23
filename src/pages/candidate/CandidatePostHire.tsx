@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Activity, TrendingUp, CheckCircle, Sparkles } from "lucide-react";
 import { Lang } from "@/types";
 import { useT, C } from "@/i18n/useT";
-import { saveCheckin } from "@/services/supabase";
+import { saveCheckin } from "@/services/dataSource";
 
 const STATUS_CONFIG = [
   { Icon: Activity, labelKey: "statusLabels.0", descKey: "statusDesc.0", color: "#F59E0B" },

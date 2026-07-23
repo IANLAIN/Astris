@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { ChevronRight, ShieldAlert } from "lucide-react";
 import { Lang } from "@/types";
 import { useT } from "@/i18n/useT";
-import { getMatchesForOrganization, getCurrentUser } from "@/services/supabase";
+import { getMatchesForOrganization, getCurrentUser } from "@/services/dataSource";
 import { MatchBadge } from "@/components/common/MatchBadge";
 
 export function OrganizationCandidates({ lang, onSelect }: { lang: Lang; onSelect: (id: string) => void }) {

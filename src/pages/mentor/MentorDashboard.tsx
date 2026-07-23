@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { MessageSquare, Calendar, Activity, BarChart2, ShieldAlert, CheckCircle2, Clock, Users, ArrowRight, UserCircle } from "lucide-react";
 import { Lang } from "@/types";
 import { useT, C } from "@/i18n/useT";
-import { getCurrentUser, isDemoUserUser } from "@/services/supabase";
+import { getCurrentUser, isDemoUserUser } from "@/services/dataSource";
 import { MENTOR_PROCESSES } from "@/services/demoData";
 
 export function MentorDashboard({ lang }: { lang: Lang }) {

@@ -7,35 +7,28 @@ export const CANDIDATE_SCREENS = [
 ] as const;
 
 export const ORGANIZATION_SCREENS = [
-  "org-profile", "post-vacancy", "candidates", "candidate-detail",
+  "org-onboarding", "org-profile", "post-vacancy", "candidates", "candidate-detail",
   "org-post-hire", "post-hire",
 ] as const;
 
 export const MENTOR_SCREENS = ["dashboard", "checkins", "organizations"] as const;
 
-export const ADMIN_SCREENS = [
-  "dashboard", "organizations", "candidates", "mentors", "mentorships", "activity",
-] as const;
-
 export type CandidateScreen = (typeof CANDIDATE_SCREENS)[number];
 export type OrganizationScreen = (typeof ORGANIZATION_SCREENS)[number];
 export type MentorScreen = (typeof MENTOR_SCREENS)[number];
-export type AdminScreen = (typeof ADMIN_SCREENS)[number];
 
 /** Role → initial screen after login (when user already has data) */
 export const ROLE_HOME_SCREEN: Record<Role, string> = {
   candidate: "profile",
   organization: "candidates",
   mentor: "dashboard",
-  admin: "dashboard",
 };
 
 /** Role → first-screen after fresh registration (quiz not completed) */
 export const ROLE_REGISTER_SCREEN: Record<Role, string> = {
   candidate: "onboarding",
-  organization: "org-profile",
+  organization: "org-onboarding",
   mentor: "dashboard",
-  admin: "dashboard",
 };
 
 /** Screen → label key for NavBar */
@@ -57,7 +50,6 @@ export const NAV_ITEMS: Record<Role, Array<{ id: string; labelKey: string; icon:
     { id: "checkins", labelKey: "nav.checkins", icon: "Calendar" },
     { id: "organizations", labelKey: "nav.companies", icon: "Building2" },
   ],
-  admin: [{ id: "dashboard", labelKey: "nav.dashboard", icon: "BarChart2" }],
 };
 
 export const PUBLIC_VIEWS = ["landing", "about", "support", "partners"] as const;

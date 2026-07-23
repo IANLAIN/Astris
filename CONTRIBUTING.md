@@ -26,6 +26,72 @@
 
 ---
 
+## ⚠️ Principio de Parametrización Universal (Regla Obligatoria)
+
+> Ningún campo en perfiles (Candidato, Organización, Mentor, Oportunidad) puede ser de **texto libre sin estructura**.
+
+Está **prohibido** usar `<textarea>` o `<input type="text">` para:
+- Descripciones de cargo, funciones o perfiles
+- Misiones, visiones o valores organizacionales
+- Habilidades blandas o descripciones de estilo de trabajo
+- Diagnósticos clínicos o etiquetas médicas
+- Cualquier bloque de texto descriptivo largo
+
+**Todo debe implementarse mediante**:
+
+| Componente | Uso |
+|-----------|-----|
+| `SelectableCard` | Selección única entre opciones visuales (tamaño de organización, modalidad, horario, nivel de experiencia) |
+| `SelectableChip` | Selección múltiple de etiquetas (ajustes razonables, habilidades, preferencias de entorno) |
+| `CustomSlider` | Rangos continuos con tooltip flotante (ejes operativos, nivel de alineación con el rol) |
+| Radix UI `Select` | Dropdowns parametrizados (sector, país, tipo de contrato) |
+| `SplitScreenLayout` | Preview en vivo del lado derecho mientras se configura el izquierdo (wizards) |
+
+**Excepción**: Solo se permiten campos de texto corto para nombres propios, títulos de rol y ubicación (país/ciudad). Cualquier descripción larga debe reemplazarse por **bloques modulares de lectura rápida** compuestos por chips, sliders y cards seleccionables.
+
+**Sanción**: Cualquier PR que introduzca un `<textarea>` o campo de texto libre para contenido descriptivo será rechazado automáticamente.
+
+---
+
+## Pautas de Diseño UI Obligatorias
+
+### Espacio negativo (breathing room)
+- Usa márgenes amplios: `px-4 lg:px-12`, `py-10`, `gap-8`. Los elementos deben "respirar".
+- No amontones información. Un paso del Wizard debe contener máximo 4-5 controles.
+- Entre secciones, usa `mt-8` o `space-y-6` para separación vertical consistente.
+- Los contenedores de selección (SelectableCard, SelectableChip) deben tener `gap-3` entre elementos.
+
+### Tipografía
+- Fuente principal: **Inter** (predeterminada del sistema vía `globals.css`). Alternativa: OpenDyslexic para accesibilidad (toggle en Settings).
+- Usa la jerarquía tipográfica definida:
+  - `text-xs` (12-13px) para micro-copy y textos de ayuda
+  - `text-sm` (14px) para etiquetas, badges y metadata
+  - `text-base` (16px) para cuerpo de texto
+  - `text-lg` (18px), `text-xl` (20px), `text-2xl` (24px) para títulos
+- Títulos de paso en wizards: `text-xl font-semibold`
+- Descripciones: `text-sm text-muted-foreground`
+
+### Micro-copy
+- Todo label debe tener un texto de ayuda sutil debajo en `text-xs text-muted-foreground`.
+- Ejemplo: debajo de "Nombre de la Organización" → "El nombre legal o comercial de tu organización".
+- Los botones deben incluir texto descriptivo (no solo iconos) o tener un `aria-label`.
+- Los placeholders deben ser propositivos, no genéricos.
+
+### Paletas de color
+- Todos los componentes deben usar exclusivamente las variables CSS definidas en `src/styles/theme.css`.
+- **Nunca uses colores hardcodeados** (ej. `#2563EB`, `text-blue-500`, `bg-red-400`). Siempre usa `var(--primary)`, `bg-primary`, `text-foreground`, etc.
+- Soporta las 4 paletas: Calm Blue (`azul`), Warm Earth (`tierra`), High Contrast (`contraste`), Natural Green (`verde`).
+- Soporta modo oscuro (`dark` class en `<html>`). Verifica que tu componente se vea bien en ambos modos.
+- Los componentes interactivos deben usar `hover:bg-accent`, `focus-visible:ring-ring` para consistencia.
+
+### Responsive
+- Usa Tailwind breakpoints: `sm` (640px), `md` (768px), `lg` (1024px).
+- En mobile, los wizards deben ser de una sola columna (sin SplitScreen).
+- Los sliders deben ser touch-friendly (altura mínima 44px).
+- SelectableCards deben adaptarse a 2 columnas en mobile y 3+ en desktop.
+
+---
+
 ## Code Standards — Mandatory Rules
 
 ### TypeScript
@@ -34,6 +100,7 @@
 - `any` is prohibited — every function, prop, variable, and state must have an explicit type
 - Use the `@/` alias for imports from `src/` (configured in tsconfig.json and vite.config.ts)
 - Semantic naming: verbs for functions, nouns for types
+- Arrays must be handled immutably: spread operator (`[...prev, item]`), `filter`, `map` — never direct mutation
 
 ### File Structure — Golden Rule
 
@@ -76,6 +143,12 @@
 | Files (hooks/services) | camelCase | useAuth.ts, supabase.ts |
 | Constants | UPPER_SNAKE_CASE | VACANCIES_FALLBACK |
 
+### Nomenclatura Obligatoria
+
+- Usa siempre **Organization** en nombres de archivo, variables, rutas, tipos y traducciones. El término "Company" / "Empresa" está deprecado globalmente.
+- Correcto: `OrganizationOnboarding`, `organization.profile`, `org-onboarding`, `OrgProfile`
+- Incorrecto: `CompanyOnboarding`, `company.profile`, `empresa-profile`, `CompanyCandidates`
+
 ### Import Rules
 
 ```tsx
@@ -113,9 +186,6 @@ In src/App.tsx:
 const CandidateProfile = lazy(() =>
   import("@/pages/candidate/CandidateProfile").then(m => ({ default: m.CandidateProfile }))
 );
-
-// For components with default export:
-const AdminDashboard = lazy(() => import("@/pages/admin/AdminDashboard"));
 ```
 
 ### Rendering
@@ -140,8 +210,6 @@ The build automatically separates libraries into chunks to maximize caching:
 | vendor-radix | @radix-ui/* |
 | vendor-core | React, React DOM, React Router, i18next, etc. |
 
-Note: The vendor-supabase chunk was removed since the project no longer depends on Supabase.
-
 ---
 
 ## Demo Data System
@@ -153,8 +221,7 @@ All demo content (no backend) lives in `src/services/demoData.ts`.
 | File | Purpose |
 |------|---------|
 | src/services/demoData.ts | All demo data: users, vacancies, mentors, organizations |
-| src/services/supabase.ts | API that replaces Supabase: auth, matching, profiles, checkins, admin |
-| src/services/supabase-admin.ts | Admin functions that return demo data |
+| src/services/supabase.ts | API that replaces Supabase: auth, matching, profiles, checkins |
 
 ### How to add demo data
 
@@ -214,20 +281,7 @@ const stages = C(lang, "accompStages") as Array<{label: string; done: boolean; c
 
 ### i18n requirement for all dashboards
 
-Every dashboard (candidate, organization, mentor, admin) must use `t()` for every user-visible string. Hardcoded text is prohibited. The following keys must exist in all 4 language files:
-
-- profile.cognitive_profile
-- profile.flexible_hours
-- profile.async_comm
-- profile.quiet_environment
-- profile.recent_activity
-- profile.up_to_date
-- profile.explore_vacancies
-- mentor.dash.report
-- mentor.dash.accompaniment_hours
-- mentor.dash.completed_sessions
-- mentor.dash.active_candidates
-- mentor.dash.linked_organizations
+Every dashboard (candidate, organization, mentor) must use `t()` for every user-visible string. Hardcoded text is prohibited.
 
 ---
 
@@ -237,7 +291,7 @@ Every dashboard (candidate, organization, mentor, admin) must use `t()` for ever
 |-----------|----------|---------|
 | Same logic in multiple components | Extract to hook | useAuth, useTheme |
 | Same API call in multiple places | Centralize in service | supabase.ts — getCurrentUser(), saveCandidateProfile() |
-| Same JSX in multiple components | Extract to shared component | MatchBadge, RadarViz, NavBar |
+| Same JSX in multiple components | Extract to shared component | MatchBadge, RadarViz, NavBar, SplitScreenLayout |
 | Same repeated config | Shared constant or type | types/index.ts, content.ts |
 | Same repeated style | Reusable Tailwind class or CSS variable | var(--primary), btn-primary |
 
@@ -250,18 +304,17 @@ src/
   pages/                    # 1 page per file, organized by role
     public/                 # Landing, About, Support, Partners
     candidate/              # Onboarding, Quiz, Profile, Vacancies, etc.
-    organization/           # OrgProfile, PostVacancy, Candidates, etc.
+    organization/           # OrgOnboarding, OrgProfile, PostVacancy, Candidates, etc.
     mentor/                 # Dashboard, Checkins, Organizations
-    admin/                  # Dashboard + views/
     shared/                 # NotFound, Settings
 
   components/               # Reusable components
-    common/                 # NavBar, MatchBadge, RadarViz, etc.
+    common/                 # SplitScreenLayout, SelectableCard, SelectableChip, CustomSlider, RadarViz, NavBar, MatchBadge, etc.
     modals/                 # LanguageModal, LoginModal, etc.
     ui/                     # Radix wrappers (button, dialog, card, etc.)
 
   hooks/                    # 1 hook per file
-  services/                 # demoData.ts + supabase.ts (demo API) + supabase-admin.ts
+  services/                 # demoData.ts + supabase.ts (demo API)
   i18n/                     # Translations + config + static data
   types/                    # Global types (1 file if manageable)
   mock/                     # Demo data re-export
@@ -312,6 +365,7 @@ git checkout -b feature/my-change
 #    - DRY applied
 #    - Translations in all 4 languages
 #    - No junk files
+#    - Principio de Parametrización Universal aplicado
 
 # 3. Verify build
 npm run build
@@ -358,11 +412,14 @@ git push origin feature/my-change
 
 ## How to Add a New Component
 
-1. Identify if it is: **common** (shared between pages), **modal**, or **UI primitive**
-2. Create the file in the corresponding folder: `components/common/Name.tsx`
-3. Export `export function Name(props: NameProps)`
-4. Use Tailwind CSS + CSS variables for styles
-5. If it contains visible text, use `useT()` or receive `lang` as a prop
+1. Check if a reusable component already exists in `src/components/common/` before creating a new one
+2. Identify if it is: **common** (shared between pages), **modal**, or **UI primitive**
+3. Create the file in the corresponding folder: `components/common/Name.tsx`
+4. Export `export function Name(props: NameProps)`
+5. Use Tailwind CSS + CSS variables for styles
+6. If it contains visible text, use `useT()` or receive `lang` as a prop
+7. If the component is a selector/input, prefer parametrized selection over free text
+8. Verify the component respects all 4 color palettes and dark mode
 
 ---
 
@@ -380,8 +437,7 @@ git push origin feature/my-change
 
 1. If the service needs demo data, add it in `src/services/demoData.ts`
 2. Create the function in `src/services/supabase.ts` that returns the data
-3. If administrative, use `src/services/supabase-admin.ts`
-4. Export `async` functions with explicit return types
+3. Export `async` functions with explicit return types
 
 ---
 
@@ -442,8 +498,13 @@ Every new feature must be reflected in:
 | Files > 150 lines | Prohibited (refactor) |
 | Functions > 40 lines | Prohibited (extract) |
 | Hardcoded visible text | Prohibited (use i18n) |
+| Textareas / free-text descriptions in profiles | **Prohibited** (use parametrized selection) |
 | console.log for debugging | Prohibited in commits |
 | Commented code | Prohibited in commits |
 | .bak, .old, temp files | Prohibited in repo |
 | Tokens, keys, emails in code | Prohibited (use .env) |
 | Context API / global store | Prohibited (use hooks + props) |
+| "Company" / "Empresa" nomenclature | **Prohibited** (use "Organization" / "Organización") |
+| Hardcoded colors (hex, Tailwind color classes) | **Prohibited** (use CSS variables) |
+| Non-parametrized input fields | **Prohibited** (see Parametrización Universal) |
+| Admin role / admin dashboard | **Prohibited** (no admin role exists) |

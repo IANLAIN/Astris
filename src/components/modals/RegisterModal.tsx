@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { User, Building2, Users, Shield } from "lucide-react";
+import { User, Building2, Users } from "lucide-react";
 import { Lang, Role } from "@/types";
 import { useT } from "@/i18n/useT";
 import { GoogleAuthStep } from "./register/GoogleAuthStep";
 import { RoleSelectStep } from "./register/RoleSelectStep";
 import { CredentialsStep } from "./register/CredentialsStep";
 
-const ROLE_ICON = { candidate: User, organization: Building2, mentor: Users, admin: Shield } as const;
+const ROLE_ICON = { candidate: User, organization: Building2, mentor: Users } as const;
 
 export function RegisterModal({
   lang,

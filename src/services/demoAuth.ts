@@ -1,29 +1,37 @@
-import { ADMIN_CREDENTIALS } from "@/services/demoData";
-import { Role } from "@/types";
+/**
+ * Demo Auth Compatibility Layer
+ *
+ * Thin wrapper over dataSource.ts for backward compatibility.
+ * Deprecated — new code should import directly from @/services/dataSource.
+ */
 
+import { Role } from "@/types";
+import {
+  loginUser as dsLoginUser,
+  registerUser as dsRegisterUser,
+  isDemoEmail,
+} from "./dataSource";
+
+/**
+ * Handles demo user registration for LOCAL non-demo users.
+ * Demo accounts themselves cannot be registered.
+ */
 export function handleDemoRegister(
   email: string,
   password: string,
   name: string,
   selectedRole: Role,
   vocation: string,
-  setRole: any,
-  setUserName: any,
-  setUserVocation: any,
-  setLoggedIn: any,
-  setModalStep: any,
-  setQuizCompleted: any,
-  setScreen: any
-) {
-  if (email === ADMIN_CREDENTIALS.email) {
-    setRole("admin");
-    setUserName("Admin Astris");
-    window.localStorage.setItem("astris_admin_session", "true");
-    setLoggedIn(true);
-    setModalStep("none");
-    setScreen("dashboard");
-    return true;
-  }
+  setRole: (r: Role) => void,
+  setUserName: (n: string) => void,
+  setUserVocation: (v: string) => void,
+  setLoggedIn: (v: boolean) => void,
+  setModalStep: (s: string) => void,
+  setQuizCompleted: (v: boolean) => void,
+  setScreen: (s: string) => void
+): boolean {
+  // Reject demo emails for registration
+  if (isDemoEmail(email)) return false;
 
   const userId = `user-${Date.now()}`;
   const localUser = {
@@ -38,7 +46,6 @@ export function handleDemoRegister(
   };
   window.localStorage.setItem("astris_local_user", JSON.stringify(localUser));
   window.localStorage.removeItem("astris_demo_user");
-  window.localStorage.removeItem("astris_admin_session");
   window.localStorage.removeItem("astris_quiz_completed");
 
   setRole(selectedRole);
@@ -57,63 +64,76 @@ export function handleDemoRegister(
   return true;
 }
 
+/**
+ * Handles demo user login for the 3 hardcoded demo accounts.
+ * Delegates the actual auth to dataSource.ts loginUser which
+ * intercepts demo emails.
+ */
 export function handleDemoLogin(
   email: string,
   password: string,
-  setRole: any,
-  setUserName: any,
-  setUserVocation: any,
-  setQuizCompleted: any,
-  setLoggedIn: any,
-  setModalStep: any,
-  setScreen: any
-) {
-  if (email === ADMIN_CREDENTIALS.email && password === ADMIN_CREDENTIALS.password) {
-    setRole("admin");
-    setUserName("Admin Astris");
-    window.localStorage.setItem("astris_admin_session", "true");
-    setLoggedIn(true);
-    setModalStep("none");
-    setScreen("dashboard");
-    return true;
+  setRole: (r: Role) => void,
+  setUserName: (n: string) => void,
+  setUserVocation: (v: string) => void,
+  setQuizCompleted: (v: boolean) => void,
+  setLoggedIn: (v: boolean) => void,
+  setModalStep: (s: string) => void,
+  setScreen: (s: string) => void
+): boolean {
+  // Only handle demo emails
+  if (!isDemoEmail(email)) return false;
+  if (password !== "Demo2026") return false;
+
+  // Map demo email to profile data for the callback setters
+  const profiles: Record<string, { role: Role; name: string; vocation: string; screen: string; quizDone: boolean }> = {
+    "candidato@astris.org": {
+      role: "candidate",
+      name: "Bryan Gonzalez",
+      vocation: "Ingeniero de Sistemas y Computación",
+      screen: "profile",
+      quizDone: true,
+    },
+    "empresa@astris.org": {
+      role: "organization",
+      name: "Vibra Latina",
+      vocation: "",
+      screen: "candidates",
+      quizDone: false,
+    },
+    "organizacion@astris.org": {
+      role: "organization",
+      name: "Vibra Latina",
+      vocation: "",
+      screen: "candidates",
+      quizDone: false,
+    },
+    "mentor@astris.org": {
+      role: "mentor",
+      name: "Elena Vargas",
+      vocation: "Especialista en Inclusión Laboral y Coaching Neurodivergente",
+      screen: "dashboard",
+      quizDone: false,
+    },
+  };
+
+  const profile = profiles[email];
+  if (!profile) return false;
+
+  // Persist session
+  window.localStorage.setItem("astris_demo_user", email);
+  window.localStorage.removeItem("astris_local_user");
+
+  if (profile.quizDone) {
+    window.localStorage.setItem("astris_quiz_completed", "true");
   }
 
-  if (password === "Demo2026") {
-    if (email === "candidato@astris.org") {
-      window.localStorage.setItem("astris_demo_user", email);
-      window.localStorage.removeItem("astris_local_user");
-      setRole("candidate");
-      setUserName("Bryan Gonzalez");
-      setUserVocation("Ingeniero de Sistemas y Computación");
-      setQuizCompleted(true);
-      window.localStorage.setItem("astris_quiz_completed", "true");
-      setLoggedIn(true);
-      setModalStep("none");
-      setScreen("profile");
-      return true;
-    }
-    if (email === "empresa@astris.org") {
-      window.localStorage.setItem("astris_demo_user", email);
-      window.localStorage.removeItem("astris_local_user");
-      setRole("organization");
-      setUserName("Vibra Latina");
-      setLoggedIn(true);
-      setModalStep("none");
-      setScreen("candidates");
-      return true;
-    }
-    if (email === "mentor@astris.org") {
-      window.localStorage.setItem("astris_demo_user", email);
-      window.localStorage.removeItem("astris_local_user");
-      setRole("mentor");
-      setUserName("Elena Vargas");
-      setUserVocation("Especialista en Inclusión Laboral y Coaching Neurodivergente");
-      setLoggedIn(true);
-      setModalStep("none");
-      setScreen("dashboard");
-      return true;
-    }
-  }
+  setRole(profile.role);
+  setUserName(profile.name);
+  setUserVocation(profile.vocation);
+  setQuizCompleted(profile.quizDone);
+  setLoggedIn(true);
+  setModalStep("none");
+  setScreen(profile.screen);
 
-  return false;
+  return true;
 }

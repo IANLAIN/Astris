@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Lang } from "@/types";
 import { useT } from "@/i18n/useT";
 import vibralatinaImg from "@/assets/vibralatina.png";
-import closerImg from "/closertothestars.jpeg";
+import closerImg from "@/assets/closertothestarscircle.png";
 
 interface Collaborator {
   name: string;

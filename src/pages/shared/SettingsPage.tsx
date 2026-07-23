@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { Lang, PaletteKey, FontKey } from "@/types";
+import { Lang, PaletteKey, FontKey, Role } from "@/types";
 import { useT } from "@/i18n/useT";
-import { getCurrentUser, updateProfile, deleteAccount } from "@/services/supabase";
+import { getCurrentUser, updateProfile, deleteAccount, isDemoUserId } from "@/services/dataSource";
 import { ProfileSettings } from "./settings/ProfileSettings";
 import { VisualSettings } from "./settings/VisualSettings";
 import { DangerZoneSettings } from "./settings/DangerZoneSettings";
@@ -104,6 +104,9 @@ export function SettingsPage({
           setVocation={setVocation}
           avatarUrl={avatarUrl}
           setAvatarUrl={setAvatarUrl}
+          userId={userId || undefined}
+          userName={name}
+          isDemo={isDemoUserId(userId || "")}
           handleSaveProfile={handleSaveProfile}
           saving={saving}
         />

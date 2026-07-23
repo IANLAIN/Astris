@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { ChevronLeft, Shield, Users, Check, X } from "lucide-react";
 import { Lang } from "@/types";
 import { useT } from "@/i18n/useT";
-import { getMatchesForOrganization, getCurrentUser } from "@/services/supabase";
+import { getMatchesForOrganization, getCurrentUser } from "@/services/dataSource";
 import { CANDIDATE_RADAR_FINAL } from "@/services/demoData";
 import { MatchBadge } from "@/components/common/MatchBadge";
 import { RadarViz } from "@/components/common/RadarViz";

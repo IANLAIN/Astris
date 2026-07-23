@@ -1,7 +1,6 @@
 /** Re-exports all demo data from the central demoData service */
 export {
   DEMO_USERS,
-  ADMIN_CREDENTIALS,
   VACANCIES_FALLBACK,
   MENTORS_FALLBACK,
   CANDIDATE_RADAR_FINAL,
@@ -9,8 +8,4 @@ export {
   ORGANIZATION_CANDIDATES_DATA,
   MENTOR_PROCESSES,
   MENTOR_ORGANIZATIONS,
-  ADMIN_STATS,
-  ADMIN_USERS,
-  ADMIN_ORGANIZATIONS,
-  ADMIN_CANDIDATES
 } from "@/services/demoData";

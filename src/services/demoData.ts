@@ -5,7 +5,7 @@ export const DEMO_USERS: Record<string, {
   email: string;
   password: string;
   id: string;
-  role: "candidate" | "organization" | "mentor" | "admin";
+  role: "candidate" | "organization" | "mentor";
   name: string;
   avatarUrl?: string;
   vocation: string;
@@ -72,6 +72,48 @@ export const DEMO_USERS: Record<string, {
       }
     }
   },
+  "organizacion@astris.org": {
+    email: "organizacion@astris.org",
+    password: "Demo2026",
+    id: "demo-comp",
+    role: "organization",
+    name: "Vibra Latina",
+    avatarUrl: "",
+    vocation: "",
+    completedOnboarding: true,
+    profile: {
+      organization_name: "Vibra Latina",
+      industry: "Audiovisual / Producción",
+      organization_size: "10-50 empleados",
+      country: "Estados Unidos",
+      city: "Houston, TX",
+      philosophy: "Somos una corporación comprometida con la producción audiovisual y la distribución de contenido. En Vibra Latina tenemos un propósito claro: promover el cambio social y la inserción laboral a través del poder de las historias. Con sede en Houston, Texas, y una sólida presencia en Latinoamérica, nos especializamos en desarrollar obras que abordan temas fundamentales enfocados en la responsabilidad social corporativa, la educación, innovaciones y STEM. Nuestra misión es mostrar historias inspiradoras de comunidades, líderes y personalidades, especialmente dentro de la comunidad hispana bilingüe.",
+      noise: "Moderado (ambiente creativo controlado)",
+      light: "Luz LED ajustable + luz natural",
+      layout: "Espacios abiertos con zonas de enfoque individual",
+      accommodations: [
+        "Audífonos con cancelación de ruido",
+        "Horario flexible",
+        "Trabajo remoto o híbrido",
+        "Comunicación asíncrona",
+        "Salas de descanso sensorial"
+      ],
+      policies: [
+        "Flexibilidad de horario",
+        "Pausas activas programadas",
+        "Reuniones con agenda previa"
+      ],
+      work_environment: {
+        noise: "Moderado (ambiente creativo controlado)",
+        light: "Luz LED ajustable + luz natural",
+        layout: "Espacios abiertos con zonas de enfoque individual",
+        policies: ["Flexibilidad de horario", "Pausas activas programadas", "Reuniones con agenda previa"],
+        organization_size: "10-50 empleados",
+        country: "Estados Unidos",
+        city: "Houston, TX"
+      }
+    }
+  },
   "mentor@astris.org": {
     email: "mentor@astris.org",
     password: "Demo2026",
@@ -89,13 +131,6 @@ export const DEMO_USERS: Record<string, {
       bio: "Psicóloga organizacional con amplia experiencia en acompañamiento de personas con estilos diversos en entornos corporativos y creativos."
     }
   }
-};
-
-// ADMIN BACKDOOR
-export const ADMIN_CREDENTIALS = {
-  email: "johansttivelinaresb@gmail.com",
-  password: "Astris2026",
-  id: "admin-backdoor",
 };
 
 // DEMO VACANCIES
@@ -196,10 +231,10 @@ export const MENTORS_FALLBACK: MentorItem[] = [
 
 // CANDIDATE RADAR (Bryan Gonzalez)
 export const CANDIDATE_RADAR_FINAL = [
-  { axis: "Procesamiento", value: 85 },
-  { axis: "T. Ambiental", value: 35 },
-  { axis: "Ejecución", value: 82 },
-  { axis: "Ajustes", value: 78 },
+  { axis: "Procesamiento", value: 78 },
+  { axis: "T. Ambiental", value: 37 },
+  { axis: "Ejecución", value: 80 },
+  { axis: "Ajustes", value: 86 },
 ];
 
 // CANDIDATE ADJUSTMENTS
@@ -220,10 +255,10 @@ export const ORGANIZATION_CANDIDATES_DATA = [
     match: 94,
     strengths: "Alto enfoque en tareas detalladas. Prefiere entorno silencioso y comunicación asíncrona. Experiencia en desarrollo full stack con React, Node.js y TypeScript. Capacidad de hiperenfoque en problemas complejos.",
     radar: [
-      { axis: "Procesamiento", value: 85 },
-      { axis: "T. Ambiental", value: 35 },
-      { axis: "Ejecución", value: 82 },
-      { axis: "Ajustes", value: 78 }
+      { axis: "Procesamiento", value: 78 },
+      { axis: "T. Ambiental", value: 37 },
+      { axis: "Ejecución", value: 80 },
+      { axis: "Ajustes", value: 86 }
     ],
     env: [
       { req: "Trabajo remoto disponible", met: true },
@@ -319,82 +354,5 @@ export const MENTOR_ORGANIZATIONS = [
     status: "En proceso",
     color: "#1B4B7A",
     processes: 1
-  }
-];
-
-// ADMIN STATS
-export const ADMIN_STATS = {
-  totalUsers: 4,
-  totalCandidates: 1,
-  totalOrganizations: 2,
-  totalJobs: 3,
-};
-
-// ADMIN USERS
-export const ADMIN_USERS = [
-  {
-    id: "demo-cand",
-    full_name: "Bryan Gonzalez",
-    email: "candidato@astris.org",
-    role: "candidate",
-    completed_onboarding: true,
-    deleted_at: null,
-    neurotype: "TDAH",
-    work_preference: "Remoto / Híbrido",
-    interests: ["Tecnología", "Desarrollo web", "Accesibilidad", "Sistemas distribuidos"]
-  },
-  {
-    id: "demo-comp",
-    full_name: "Vibra Latina",
-    email: "empresa@astris.org",
-    role: "organization",
-    completed_onboarding: true,
-    deleted_at: null,
-    organization_name: "Vibra Latina",
-    industry: "Audiovisual / Producción",
-    city: "Austin, TX",
-    country: "Estados Unidos"
-  },
-  {
-    id: "demo-ment",
-    full_name: "Elena Vargas",
-    email: "mentor@astris.org",
-    role: "mentor",
-    completed_onboarding: true,
-    deleted_at: null
-  },
-  {
-    id: "admin-backdoor",
-    full_name: "Admin Astris",
-    email: "johansttivelinaresb@gmail.com",
-    role: "admin",
-    completed_onboarding: true,
-    deleted_at: null
-  }
-];
-
-// ADMIN COMPANIES
-export const ADMIN_ORGANIZATIONS = [
-  {
-    user_id: "demo-comp",
-    organization_name: "Vibra Latina",
-    industry: "Audiovisual / Producción",
-    city: "Austin",
-    country: "Estados Unidos",
-    esg_retention_rate: 92,
-    esg_wellness_index: 88,
-    email: "empresa@astris.org"
-  }
-];
-
-// ADMIN CANDIDATES
-export const ADMIN_CANDIDATES = [
-  {
-    user_id: "demo-cand",
-    neurotype: "TDAH",
-    work_preference: "Remoto / Híbrido",
-    interests: ["Tecnología", "Desarrollo web", "Accesibilidad", "Sistemas distribuidos"],
-    full_name: "Bryan Gonzalez",
-    email: "candidato@astris.org"
   }
 ];

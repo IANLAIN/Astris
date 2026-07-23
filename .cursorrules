@@ -1,10 +1,45 @@
 Eres un agente de IA que trabaja en el proyecto Astris. Sigue estas reglas estrictamente:
 
-1. **Arquitectura y Code Splitting**: Carga todos los componentes de página usando `React.lazy()` en `App.tsx`. Mantén el tamaño del bundle (`chunk size`) minimizado.
-2. **DRY & Limpieza**: Extrae lógica repetitiva a hooks (`src/hooks/`) o servicios. ¡No crees código espagueti! Está terminantemente prohibido dejar archivos basura, temporales (`.bak`, `.old`), o huérfanos.
-3. **Internacionalización (i18n)**: Todo texto visible DEBE extraerse y registrarse en `src/i18n/content.ts` en 4 idiomas (es, en, pt, fr). Usa el hook `useT`.
-4. **Diseño Ético**: Aplica la filosofía "Mostrar, no decir". Evita etiquetas clínicas ("neurodivergente", "autista") en las descripciones; enfócate en necesidades ambientales y ajustes razonables. No infantilices la comunicación.
-5. **Estilos**: Usa Tailwind CSS (v4) y Radix UI. Las imágenes deben ir en `src/assets/`, ser relevantes, sin texto incrustado, y pesar menos de 200 KB.
-6. **Verificación**: Siempre ejecuta `npm run build` para asegurar que Vite compile correctamente antes de dar por terminada una tarea.
+1. **Nomenclatura obligatoria — "Organización" no "Empresa"**: Usa siempre `organization` en variables, rutas, tipos, URLs y traducciones. El término "company" o "empresa" está deprecado globalmente. Los nombres de archivo deben usar `Organization` como prefijo (ej. `OrganizationOnboarding`, `OrganizationCandidates`). Rechaza cualquier sugerencia o código que use "company" — es un error de diseño.
+
+2. **Arquitectura y Code Splitting**: Carga todos los componentes de página usando `React.lazy()` en `App.tsx`. Mantén el tamaño del bundle (`chunk size`) minimizado. No hagas imports estáticos de páginas. Cada chunk de página debe ser < 10 KB.
+
+3. **Principio de Parametrización Universal**: Ningún campo nuevo en perfiles (Candidato, Organización, Mentor, Oportunidad) puede ser de texto libre sin estructura. Todo debe hacerse mediante selección parametrizada: `SelectableCard`, `SelectableChip`, `CustomSlider`, dropdowns de Radix UI, o `SelectableCard`. Prohibido usar `<textarea>` para descripciones de cargo, funciones o perfiles. Las descripciones largas se reemplazan por bloques modulares y de lectura rápida. Cualquier sugerencia de `<textarea>` debe ser rechazada automáticamente.
+
+4. **Patrón Wizard + SplitScreen**: Los flujos de varios pasos (onboarding, publicación de oportunidades) deben usar el patrón Wizard paso a paso con `SplitScreenLayout` (60% formulario / 40% preview en vivo). No uses scroll infinito ni formularios de una sola página vertical. El estado del wizard debe mantenerse en `useState` local del componente, no elevado a App.tsx.
+
+5. **Componentes de UI reutilizables**: Usa los componentes existentes en `src/components/common/` antes de crear nuevos:
+   - `SplitScreenLayout` — layout 60/40 con preview en vivo
+   - `CustomSlider` — control deslizante personalizado con tooltip flotante
+   - `SelectableChip` — tags/chips seleccionables con estado activo/inactivo
+   - `SelectableCard` — tarjetas seleccionables con icono y check
+   - `RadarViz` — gráfico radar SVG nativo para perfiles
+   - `MatchBadge` — badge de porcentaje de compatibilidad
+
+6. **Internacionalización (i18n) — Validación obligatoria**: Todo texto visible DEBE registrarse en `src/i18n/{es,en,pt,fr}.json` en los 4 idiomas. Usa el hook `useT` o la función `C(lang, "key")`. Sigue el formato de claves semánticas `scope.key`. Prohibido texto hardcodeado. Antes de dar una tarea por terminada, verifica que no haya ni una sola cadena visible sin su correspondiente entrada i18n en los 4 archivos de idioma.
+
+7. **Diseño Ético**: Aplica la filosofía "Mostrar, no decir". No uses etiquetas clínicas ("neurodivergente", "autista", "TDAH") en las descripciones visibles para usuarios. Enfócate en necesidades ambientales y ajustes razonables. Las afirmaciones del perfil del candidato están en primera persona ("Cómo opero a mi máximo nivel") y describen estilos de trabajo, no diagnósticos.
+
+8. **Paletas inclusivas — Validación obligatoria**: Todos los nuevos componentes deben respetar las 4 paletas de color del sistema: Calm Blue (`azul`), Warm Earth (`tierra`), High Contrast (`contraste`), Natural Green (`verde`). Usa exclusivamente las variables CSS (`--primary`, `--background`, `--card`, `--border`, `--accent`, `--muted`, `--ring`) definidas en `src/styles/theme.css`. **Nunca uses colores hardcodeados** (ni hex como `#2563EB`, ni clases Tailwind directas como `text-blue-500`, `bg-red-400`). Soporta modo oscuro (`dark` class). Valida esto antes de finalizar.
+
+9. **Tipado estricto — Validación obligatoria**: TypeScript 6 con `strict: true`. `any` está prohibido — toda función, prop y variable debe tener un tipo explícito. Define interfaces exportables en el mismo archivo o en `src/types/index.ts`. Los arrays deben manejarse de forma inmutable (spread operator, `filter`, `map` — nunca mutación directa). Ejecuta `tsc --noEmit` y corrige cualquier error de tipo antes de finalizar.
+
+10. **Verificación**: Siempre ejecuta `npm run build` para asegurar que Vite compile correctamente antes de dar por terminada una tarea. Verifica que no haya errores de tipos, chunks faltantes o advertencias. Si hay errores, corrígelos antes de continuar.
+
+11. **DRY & Limpieza**: Extrae lógica repetitiva a hooks (`src/hooks/`) o servicios. Prohibido dejar archivos basura, temporales (`.bak`, `.old`, `temp`), o huérfanos. Sin `console.log` en commits. Sin código comentado.
+
+12. **Validación de integración**: Antes de finalizar cualquier tarea, asegúrate de que el nuevo código sea alcanzable: nuevas páginas deben agregarse al router, nuevos endpoints deben conectarse al cliente, nuevos componentes deben exportarse e importarse correctamente. Nunca entregues código que funcione en aislamiento pero sea inalcanzable en el sistema en ejecución.
+
+13. **Prohibición del rol admin — Regla estricta**: El rol de "Administrador" fue eliminado del proyecto. **Nunca** generes código que:
+    - Cree un panel de administración global
+    - Introduzca un rol "admin" en tipos, rutas, autenticación o UI
+    - Referencie al usuario "Johan Linares" o el correo "johansttivelinaresb@gmail.com"
+    - Use la contraseña "Astris2026"
+    - Haga referencia a un panel administrativo con gestión de usuarios, organizaciones o candidatos
+    - Cualquier mención al rol admin debe ser rechazada automáticamente como error de diseño.
+
+14. **Soporte completo de internacionalización**: Todo nuevo componente debe verificar que sus textos se registren en `src/i18n/{es,en,pt,fr}.json`. Sin traducciones completas en los 4 idiomas, el componente no puede considerarse terminado.
+
+15. **Orden de los 4 pilares**: Los pilares de Astris siguen este orden estricto: 1. Adaptar, 2. Acompañar, 3. Preparar, 4. Conectar. Cualquier mención a los pilares debe respetar este orden.
 
 Consulta [CONTRIBUTING.md](./CONTRIBUTING.md) y [ARCHITECTURE.md](./ARCHITECTURE.md) para lineamientos detallados y decisiones técnicas del proyecto.

@@ -94,6 +94,11 @@ export const OrganizationPostHire = lazy(() =>
     default: m.OrganizationPostHire,
   }))
 );
+export const OrganizationOnboarding = lazy(() =>
+  import("@/pages/organization/OrganizationOnboarding").then((m) => ({
+    default: m.OrganizationOnboarding,
+  }))
+);
 export const MentorDashboard = lazy(() =>
   import("@/pages/mentor/MentorDashboard").then((m) => ({
     default: m.MentorDashboard,
@@ -108,7 +113,4 @@ export const MentorOrganizations = lazy(() =>
   import("@/pages/mentor/MentorOrganizations").then((m) => ({
     default: m.MentorOrganizations,
   }))
-);
-export const AdminDashboard = lazy(() =>
-  import("@/pages/admin/AdminDashboard")
 );

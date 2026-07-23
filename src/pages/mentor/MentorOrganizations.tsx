@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { MessageSquare, ShieldAlert, Building2, MapPin } from "lucide-react";
 import { Lang } from "@/types";
 import { useT, C } from "@/i18n/useT";
-import { getCurrentUser, isDemoUserUser } from "@/services/supabase";
+import { getCurrentUser, isDemoUserUser } from "@/services/dataSource";
 import { MENTOR_ORGANIZATIONS } from "@/services/demoData";
 
 export function MentorOrganizations({ lang }: { lang: Lang }) {

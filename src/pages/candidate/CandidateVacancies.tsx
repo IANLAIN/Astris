@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Clock, MapPin, Check, ArrowRight, ShieldAlert, SlidersHorizontal, X } from "lucide-react";
 import { Lang, VacancyItem } from "@/types";
 import { useT } from "@/i18n/useT";
-import { getMatchesForCandidate, getCurrentUser } from "@/services/supabase";
+import { getMatchesForCandidate, getCurrentUser } from "@/services/dataSource";
 import { MatchBadge } from "@/components/common/MatchBadge";
 
 export function CandidateVacancies({ lang, onSelect }: { lang: Lang; onSelect: (id: string) => void }) {
@@ -23,6 +23,7 @@ export function CandidateVacancies({ lang, onSelect }: { lang: Lang; onSelect: (
         const mapped: VacancyItem[] = matches.map((m: any) => ({
           id: m.jobId,
           title: m.title,
+          organization: m.company,
           company: m.company,
           sector: m.sector || "Tecnología",
           modality: m.modality || t("modality.remote"),
@@ -186,7 +187,7 @@ export function CandidateVacancies({ lang, onSelect }: { lang: Lang; onSelect: (
                         {v.title}
                       </h3>
                       <div className="text-sm text-muted-foreground break-words">
-                        {v.company} · {v.sector}
+                        {v.organization} · {v.sector}
                       </div>
                     </div>
                     <div className="flex items-center gap-3 text-xs md:text-sm text-muted-foreground shrink-0 flex-wrap">
